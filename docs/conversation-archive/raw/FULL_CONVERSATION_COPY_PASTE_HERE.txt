@@ -1,0 +1,20 @@
+PASTE THE FULL VISIBLE CONVERSATION HERE.
+
+This file is intentionally plain text so the user can paste a complete chat export without worrying about Markdown formatting.
+
+Recommended format:
+
+SESSION DATE:
+SOURCE:
+PURPOSE:
+
+USER:
+
+ASSISTANT:
+
+DECISIONS:
+
+NEXT TASK:
+
+IMPORTANT FILES:
+

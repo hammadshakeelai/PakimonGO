@@ -1,0 +1,17 @@
+type(scope): short imperative summary
+
+Why:
+- 
+
+What:
+- 
+
+Verification:
+- 
+
+AI-Agent: Codex GPT-5
+AI-Work-Mode: autonomous
+AI-Commit-Time: YYYY-MM-DDTHH:mm:ss+05:00
+Work-Package: WP-000
+Requirements: 
+Process-Docs-Updated: yes|no
