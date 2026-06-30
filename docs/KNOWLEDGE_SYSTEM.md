@@ -61,6 +61,10 @@ Treat the repo as an Obsidian-compatible vault:
 
 Obsidian is for thinking, browsing, and human navigation; the repo remains the source of truth.
 
+Current vault home:
+
+- `docs/OBSIDIAN_VAULT_INDEX.md`
+
 ### Graphify
 
 Use Graphify or equivalent code-graph tooling after code exists. Store generated outputs under `knowledge/graph/graphify-out/`.
@@ -75,6 +79,14 @@ Planned uses:
 - Produce a quick-read `GRAPH_REPORT.md` and deeper `graph.json`.
 
 Graphify should read code and docs; it should not become the only source of truth.
+
+Current Graphify plan:
+
+- `tools/graphify/GRAPHIFY_PLAN.md`
+
+Current OKF export plan:
+
+- `tools/okf-export/OKF_EXPORT_PLAN.md`
 
 ## Required State Files
 
