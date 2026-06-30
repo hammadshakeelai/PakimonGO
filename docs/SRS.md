@@ -1,282 +1,157 @@
-# Agile Software Requirements Specification
+# Software Requirements Specification
 
-## 1. Purpose
+## 1. Introduction
 
-PakimonGO is a 13+ mobile animal photography, discovery, scoring, collection, map, and social competition app. This SRS defines the current gated Alpha-0 baseline for phased Agile delivery.
+### 1.1 Purpose
+
+This SRS defines PakimonGO, a 13+ mobile animal photography, discovery, scoring, collection, map, and social competition app. It follows the reusable Software Engineering methodology from `C:/Users/HP/Documents/GitHub/projects/SE-Hakari-Bankai/docs/Software Engineering Process/METHODOLOGY.md`.
+
+### 1.2 Product Overview
+
+PakimonGO lets users safely photograph real animals, submit context, receive server-side surprise scoring, build collections, share selectively, and compete through privacy-safe leaderboards and map activity.
+
+### 1.3 Problem Statement
+
+- Existing animal apps are split between scientific observation, social posting, and fictional location games.
+- Playful animal discovery can accidentally reward unsafe or invasive behavior if scoring is poorly designed.
+- Real animal photos, exact locations, pet ownership, teen users, and social content create serious privacy and moderation risks.
+- Fair scoring needs evidence, duplicate controls, zoo/captive handling, appeals, and auditability.
+- A large AI-assisted project needs traceable requirements and small, modular implementation units to avoid context loss.
+
+### 1.4 Vision
+
+A cross-platform mobile system that turns safe real-world animal observations into scored collections, learning, and social competition through privacy-preserving capture, AI-assisted evidence, and server-authoritative game rules for 13+ users.
 
 ## 2. Scope
 
-The system will let users photograph real animals, submit context, receive server-scored points, build collections, share posts selectively, explore privacy-safe animal activity on a map, and compete on global, country, local, and friends leaderboards.
-
-Android APK/internal testing comes first. Android App Bundle, Google Play release, iOS/TestFlight, and App Store release come later.
-
-## 3. Product Goals
-
-- Make real animal discovery playful and rewarding.
-- Encourage safe, respectful, honest animal observation.
-- Build fair scoring that resists spam, duplicate farming, zoo farming, and collusive social abuse.
-- Preserve privacy around exact locations, homes, pets, schools, minors, routines, and sensitive species.
-- Support long-term growth into groups, social feeds, collections, and competitive leaderboards.
-- Keep the codebase modular enough for many humans and AI agents to extend safely.
-
-## 4. Product Non-Goals For Alpha-0
-
-- No under-13 accounts.
-- No background location.
-- No exact public animal pins.
-- No public release without moderation.
-- No LLM-only scoring.
-- No client-side final scoring.
-- No required contacts import.
-- No scientific authority claims.
-- No reward for unsafe animal interaction.
-- No unreviewed public rare/sensitive animal map.
-
-## 5. Users And Stakeholders
-
-- Player: captures animals, earns points, posts, and competes.
-- Teen player: 13-17 user with stricter privacy/social defaults.
-- Friend: interacts through leaderboards, groups, comments, likes, and shared posts.
-- Pet owner: can receive tagged credit after consent when another user photographs their pet.
-- Moderator: reviews reports, unsafe content, scoring appeals, and suspicious activity.
-- Admin: manages taxonomies, scoring versions, geofences, policies, and operations.
-- Bystanders/landowners: protected from unwanted location and social exposure.
-- Animals and sensitive habitats: protected through safety rules and suppressed location behavior.
-
-## 6. Gated Alpha-0 Boundaries
-
-Alpha-0 is a product specification, not an unlimited public launch. Full social is planned in the design, but public/global exposure is feature-flagged until safety gates pass.
-
-Initial implementation should prioritize:
-
-- 13+ onboarding and safety education.
-- Google and email/password auth.
-- Camera draft capture.
-- Foreground location only.
-- Signed upload.
-- Private collection.
-- Pending score and score result state.
-- Basic deterministic score event path.
-- Duplicate and zoo/captive prechecks.
-- Privacy-safe map cells.
-- Invite-only friends path.
-- Report/block foundations.
-
-Social, groups, public feed, public comments, reposts, and global leaderboards are enabled only after moderation, privacy, and abuse gates pass.
-
-## 7. Epics
-
-### Epic 1: Identity, Age, And Consent
-
-Users can create, access, recover, export, and delete accounts while respecting age and consent constraints.
-
-Related requirements: `FR-AUTH-*`, `FR-AGE-*`, `FR-CONSENT-*`.
-
-Acceptance:
-
-- Google sign-in works.
-- Email/password works.
-- Password reset works.
-- 13+ gate blocks under-13 accounts.
-- Account deletion and export flows exist before store release.
-- Consent version is stored before posting.
-
-### Epic 2: Onboarding And Permissions
-
-Users understand safety, privacy, scoring honesty, and permissions before capture or posting.
-
-Related requirements: `FR-ONB-*`, `FR-PERM-*`.
-
-Acceptance:
-
-- Camera, foreground location, and optional contacts are explained just in time.
-- Permission denial has usable fallbacks.
-- Background location is not requested in Alpha-0.
-
-### Epic 3: Capture, Drafts, Uploads, And Media
-
-Users can capture animal photos, save drafts, add context, and upload safely.
-
-Related requirements: `FR-CAP-*`.
-
-Acceptance:
-
-- Draft survives restart.
-- Upload uses scoped signed URL and idempotent completion.
-- Originals remain private.
-- Public derivatives strip GPS EXIF.
-- Unsupported files fail clearly.
-
-### Epic 4: Taxonomy And Animal Context
-
-The system stores user-provided names separately from AI/taxonomy evidence and supports corrections.
-
-Related requirements: `FR-TAX-*`.
-
-Acceptance:
-
-- Taxon candidates and confidence are versioned.
-- Low-confidence identification caps score or enters review.
-- Sensitive species rules can override map behavior.
-
-### Epic 5: Scoring And Economy
-
-The server evaluates evidence, creates immutable score events, and updates leaderboards from valid events only.
-
-Related requirements: `FR-SCORE-*`.
-
-Acceptance:
-
-- Client never assigns final score.
-- Users do not see final points until scoring completes.
-- Score explanation, formula version, evidence IDs, and state are stored.
-- Zoo, pet, social, wild, and participation scoring remain separated.
-
-### Epic 6: Duplicate And Zoo/Captive Controls
-
-The system detects duplicate/repost farming and classifies zoo, captive, pet, and wild eligibility.
-
-Related requirements: `FR-DUP-*`, `FR-ZOO-*`.
-
-Acceptance:
-
-- Hash, perceptual hash, crop, embedding, and encounter windows are modeled.
-- Duplicate edges are stored and appealable.
-- Zoo/captive uncertainty routes to capped/review state rather than brittle punishment.
-
-### Epic 7: Collections, Profiles, And Privacy
-
-Users can manage captures, collection pages, visibility, and profile exposure.
-
-Related requirements: `FR-COL-*`.
-
-Acceptance:
-
-- Private captures remain private unless published.
-- Visibility changes affect feed, map, and derivatives.
-- Profiles show only user-approved content.
-
-### Epic 8: Social, Friends, Groups, And UGC
-
-Users can share selectively and interact with content behind trust and moderation gates.
-
-Related requirements: `FR-SOC-*`.
-
-Acceptance:
-
-- Visibility supports private, public, friends, and selected friends.
-- Invite links work before contacts import.
-- Report/block/hide/delete are available before public exposure.
-- Groups cannot bypass block or visibility rules.
-
-### Epic 9: Maps, Routes, And Location Privacy
-
-Users can explore game-like map activity without exposing exact animal locations.
-
-Related requirements: `FR-MAP-*`.
-
-Acceptance:
-
-- Public map uses cells, clusters, delay, fuzzing, and suppression.
-- Waypoint route targets general areas, not exact pins.
-- Map queries are viewport bounded.
-- Provider content terms are respected.
-
-### Epic 10: Leaderboards And Competition
-
-Users can compete globally, by country, locally, and with friends from server-valid score events.
-
-Related requirements: `FR-LB-*`.
-
-Acceptance:
-
-- Quarantined scores do not rank.
-- Rollbacks update projections.
-- Local regions are privacy-safe.
-- Social score cannot dominate wild discovery rank.
-
-### Epic 11: Moderation, Appeals, Safety, And Admin
-
-The system handles UGC abuse, unsafe animal interaction, scoring appeals, and admin policy operations.
-
-Related requirements: `FR-MOD-*`.
-
-Acceptance:
-
-- Reports, blocks, appeals, takedowns, restoration, quarantine, rollback, and audit exist.
-- Critical incidents can disable public posting, map, or rank features.
-- Moderators only see case-needed evidence.
-
-### Epic 12: Notifications, Settings, And Support
-
-Users can manage notifications, privacy settings, blocked users, deletion/export, and support paths.
-
-Related requirements: `FR-NOTIF-*`, `FR-SET-*`, `FR-SUP-*`.
-
-Acceptance:
-
-- Notification categories are opt-out.
-- Notifications do not reveal exact sensitive locations.
-- Privacy center exposes core choices and account actions.
-
-## 8. Non-Functional Baseline
-
-Use `docs/REQUIREMENTS.md` as the authoritative NFR catalogue. Launch-blocking NFR themes:
-
-- Performance: startup, feed/rank, map query, upload pending state, async scoring latency.
-- Scale: beta DAU/concurrency, leaderboard event volume, duplicate/vector lookup.
-- Reliability: API availability, retry recovery, no visible capture loss.
+### 2.1 In Scope
+
+- 13+ onboarding, safety education, consent, and privacy defaults.
+- Google sign-in and email/password auth; Apple sign-in later for iOS.
+- Camera capture, local drafts, upload retry, and media derivatives.
+- Foreground location only; exact coordinates stored privately.
+- Server-authoritative scoring with duplicate, zoo/captive, pet, rarity, safety, quality, and review states.
+- Collections, profiles, visibility controls, friends, groups, posts, comments, likes, reposts, hashtags, reports, blocks, and appeals.
+- Privacy-safe map cells/clusters and simple waypoint routing.
+- Global, country, local, and friends leaderboards behind readiness gates.
+- Admin/moderation tools, audit logs, score rollback, and incident switches.
+- Android APK first, Android App Bundle later, iOS/TestFlight/App Store after Android readiness.
+
+### 2.2 Out Of Scope For Alpha-0
+
+- Under-13 accounts or family mode.
+- Background location.
+- Exact public animal pins.
+- Public launch without moderation.
+- LLM-only final scoring.
+- Client-side final score or leaderboard writes.
+- Required contacts import.
+- Scientific authority claims.
+- Rewards for unsafe interaction with animals.
+- Unreviewed public rare/sensitive animal maps.
+
+## 3. Users And Roles
+
+| Actor | Primary Goal | Characteristics |
+|---|---|---|
+| Player | Capture animals, earn points, build collections, and compete. | Mobile-first, may be casual or competitive. |
+| Teen Player | Use the game with stricter privacy defaults. | 13-17; needs extra privacy and safety defaults. |
+| Friend | Interact through shared posts, friend leaderboard, and groups. | Must respect visibility and block rules. |
+| Pet Owner | Receive optional shared credit for their pet. | Consent required before public owner-credit display. |
+| Moderator | Review reports, appeals, unsafe behavior, and suspicious scores. | Needs purpose-limited evidence access. |
+| Admin | Manage policies, geofences, taxonomy, scoring versions, regions, and incident switches. | Requires elevated audited access. |
+| Store Reviewer | Validate app behavior and policy compliance. | Needs demo data and safe review flows. |
+| External Provider | Supplies auth, map, storage, AI, or taxonomy evidence. | Never canonical product truth. |
+
+## 4. Functional Requirements
+
+The authoritative functional catalogue is `docs/REQUIREMENTS.md`. All requirements use stable IDs and are grouped as:
+
+- `FR-AUTH-*`: identity, recovery, deletion, export, and provider linking.
+- `FR-AGE-*`: 13+ launch and teen defaults.
+- `FR-CONSENT-*`: policies, consent versions, and analytics opt-out.
+- `FR-ONB-*`: onboarding, animal safety, privacy, scoring honesty, and AI fallibility.
+- `FR-PERM-*`: just-in-time camera, location, and contacts permissions.
+- `FR-CAP-*`: capture, drafts, uploads, media privacy, EXIF, and deletion.
+- `FR-TAX-*`: taxonomy candidates, aliases, regional status, sensitivity, and appeals.
+- `FR-SCORE-*`: server scoring, score states, ledgers, versioning, caps, rollback, and fairness.
+- `FR-DUP-*`: duplicate, repost, encounter grouping, and appeal behavior.
+- `FR-ZOO-*`: zoo, captive, pet, wild eligibility, geofences, honesty, and appeals.
+- `FR-COL-*`: collection pages, profile privacy, visibility changes, and state labels.
+- `FR-SOC-*`: posts, friends, groups, UGC, visibility, reports, blocks, hashtags, and appeals.
+- `FR-MAP-*`: map activity, privacy cells, waypoint routing, provider terms, and suppression.
+- `FR-LB-*`: global, country, local, friends leaderboards, windows, rollbacks, and gates.
+- `FR-MOD-*`: moderation console, reports, appeals, admin policy, audits, and incident response.
+- `FR-NOTIF-*`, `FR-SET-*`, `FR-SUP-*`: notifications, settings, support, deletion/export, and store-review support.
+
+## 5. Non-Functional Requirements
+
+The authoritative NFR catalogue is `docs/REQUIREMENTS.md`. Quality groups:
+
+- Performance: startup, feed/rank reads, map queries, upload pending state, scoring latency.
+- Scale: beta DAU, concurrent users, read peak, leaderboard volume, vector lookup.
+- Reliability: API uptime, retry recovery, capture durability.
 - Privacy: exact coordinates private, public cells coarse/delayed, EXIF stripped, deletion target.
-- Security: server-authoritative writes, authz, attestation, rate limits, no secrets.
+- Security: server-authoritative writes, authorization, App Check, rate limits, no secrets.
 - Accessibility: WCAG 2.2 AA-equivalent mobile behavior and screen-reader labels.
-- Maintainability: usually <=300-line source files, module READMEs, tests, traceability.
-- Observability: trace IDs, Crashlytics, alerts, audit trails, cost telemetry.
-- Portability: iOS compile spike before Android production.
+- Maintainability: small source files, module READMEs, traceability, local tests.
+- Observability: trace IDs, Crashlytics, alerts, audit records, cost telemetry.
+- Portability: iOS compile spike and reproducible backend setup.
+- Energy/localization: no lingering camera/GPS, strings externalized, RTL/long-string smoke tests.
 
-## 9. Agile Delivery Model
+## 6. Constraints And Business Rules
 
-Use small work packages and short-burst semantic commits. Each coding task must have:
+### 6.1 Hard Domain Invariants
 
-- Work package ID.
-- Requirement IDs.
-- Owned files/modules.
-- Acceptance criteria.
-- Test plan.
-- Privacy/security notes.
-- Rollback plan.
-- State-doc update plan.
-- Commit plan with AI attribution trailers where AI-authored.
+- Final scores and leaderboard writes are server-authoritative.
+- Exact capture coordinates are never returned by public APIs for normal posts.
+- Public animal activity is cell-based, clustered, delayed, fuzzed, or suppressed.
+- Zoo/captive photos can be saved but do not earn normal wild leaderboard score.
+- Honest zoo disclosure may earn only tiny bounded participation credit.
+- Unsafe animal interaction can reduce score or trigger review.
+- Sensitive species rules can suppress or coarsen map and local rank behavior.
+- Duplicate decisions are stored as relationships and must be appealable.
+- Score events are immutable; corrections use reversal or adjustment events.
+- Public social exposure requires report, block, hide/delete, moderation, appeals, and audit.
+- Under-13 users are blocked until a family mode is intentionally designed.
 
-## 10. Definition Of Ready
+### 6.2 Technology Constraints
 
-A story is ready only when:
+- Mobile direction: Flutter.
+- Backend direction: FastAPI-style modular monolith plus workers.
+- Data direction: PostgreSQL with PostGIS and pgvector.
+- Auth direction: Firebase Auth with App Check and Play Integrity on Android.
+- Storage direction: object storage for originals, derivatives, crops, and moderation evidence.
+- Map direction: Mapbox-first prototype, Google Maps challenger.
+- AI direction: hybrid deterministic checks plus structured vision evidence.
 
-- Requirement IDs are known.
-- UX flow or API contract is clear.
-- Data changes are described.
-- Security/privacy impact is reviewed.
-- Test approach is known.
-- Dependencies are identified.
-- Feature flags/readiness gates are defined where exposure is risky.
+### 6.3 Process Constraints
 
-## 11. Definition Of Done
+- Follow the traceability chain: requirement -> use case -> domain concept -> class/operation -> SSD -> operation contract -> test.
+- No production feature code before work package readiness.
+- Keep implementation files usually <=300 lines.
+- Use short-burst semantic commits with AI attribution trailers.
+- Update current task, next task, thinking, backlog, risk, debt, and conversation archive when direction changes.
 
-A story is done only when:
+## 7. Validation Criteria
 
-- Code is implemented in the correct module boundary.
-- Tests are written and passing where practical.
-- Manual verification is recorded for device, camera, map, or permission flows.
-- Relevant docs, ADRs, OKF files, and state files are updated.
-- No unresolved critical security/privacy issue remains.
-- Commit is semantic, scoped, and includes required AI/handoff trailers when applicable.
+The SRS is valid only when:
 
-## 12. Open Questions
+- Every FR is testable and appears in `docs/TRACEABILITY_MATRIX.md`.
+- Every Alpha-0 story has acceptance criteria and a test plan.
+- Conflicts are resolved as scope decisions, not silent implementation choices.
+- Risks around safety, privacy, scoring, moderation, and AI cost have explicit gates.
+- ADR-001 through ADR-016 are accepted, revised, or deferred before feature implementation.
 
-- Which backend framework ADR is formally accepted?
-- Will Mapbox or Google Maps win the prototype?
-- Which AI provider mix gives best cost/accuracy/privacy?
-- What is the first rarity taxonomy?
-- What exact catch-up formula keeps the game fair?
-- Which countries/regions are enabled first?
-- What retention periods apply to originals, AI evidence, moderation evidence, and backups?
-- Who moderates beta reports?
+## 8. Related Artifacts
+
+- Inception: `docs/software-engineering/00_INCEPTION.md`
+- Process model: `docs/software-engineering/01_PROCESS_MODEL.md`
+- Use cases: `docs/software-engineering/02_USE_CASES.md`
+- Domain model: `docs/software-engineering/03_DOMAIN_MODEL.md`
+- DFDs: `docs/software-engineering/04_DATA_FLOW_DIAGRAMS.md`
+- Design classes: `docs/software-engineering/05_DESIGN_CLASS_DIAGRAM.md`
+- SSDs: `docs/software-engineering/06_SYSTEM_SEQUENCE_DIAGRAMS.md`
+- Operation contracts: `docs/software-engineering/07_OPERATION_CONTRACTS.md`
+- Packages and CRC: `docs/software-engineering/08_PACKAGES_CRC.md`
+- Final report plan: `docs/software-engineering/09_FINAL_REPORT_PLAN.md`

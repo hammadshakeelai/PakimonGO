@@ -208,7 +208,7 @@ Stage 8: production and iOS.
 | ID | Work Package | Owner Type | Dependencies | Acceptance |
 |---|---|---|---|---|
 | WP-001 | Repair Git/repo health | Dev lead | none | `git status` works or repo intentionally initialized. |
-| WP-002 | Expand SRS/requirements | Product/BA | blueprint | 100+ requirements accepted. |
+| WP-002 | Expand SRS/requirements | Product/BA | blueprint | 196 functional requirements accepted as the working catalogue. |
 | WP-003 | ADR completion pack | Architect | SRS | missing ADRs drafted. |
 | WP-004 | UX safety blueprint | UX lead | age policy | core flows and states approved. |
 | WP-005 | Security/privacy model | Security lead | data model | threat model and controls mapped. |
