@@ -29,7 +29,7 @@ The user wants PakimonGO planned and scaffolded as a large-scale, modular, AI-ag
 - Added root `README.md`, `.editorconfig`, `.gitignore`, and `.gitmessage.txt`.
 - Added `docs/COMMIT_POLICY.md` for short-burst semantic commits with AI trailers.
 - Added `docs/EXPANDED_BLUEPRINT.md`.
-- Replaced `docs/REQUIREMENTS.md` with the expanded 145-functional-requirement catalogue and measurable NFRs.
+- Replaced `docs/REQUIREMENTS.md` with the expanded 196-functional-requirement catalogue and measurable NFRs.
 - Replaced `docs/SRS.md` with the gated Alpha-0 SRS.
 - Added this conversation archive area.
 

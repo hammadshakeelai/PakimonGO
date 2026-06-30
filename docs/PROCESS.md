@@ -39,6 +39,18 @@ Do not skip phases unless an ADR explains why.
 19. Phase 18: iOS/TestFlight adaptation.
 20. Phase 19: App Store production.
 
+## Software Engineering Methodology Rule
+
+The project follows the reusable methodology from `C:/Users/HP/Documents/GitHub/projects/SE-Hakari-Bankai/docs/Software Engineering Process/METHODOLOGY.md`.
+
+Maintain this chain for every real feature:
+
+```txt
+Requirement -> Use Case -> Domain Concept -> Design Class/Operation -> SSD -> Operation Contract -> Test
+```
+
+The methodology artifacts live in `docs/software-engineering/`, and the coverage table lives in `docs/TRACEABILITY_MATRIX.md`.
+
 ## Work Package Rules
 
 Every coding task must be defined as a work package before implementation.

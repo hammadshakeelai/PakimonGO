@@ -2,7 +2,7 @@
 
 ## Working Thesis
 
-PakimonGO should now move from deep planning into careful scaffold-first implementation readiness. The repo has enough structure to avoid chaotic growth, but feature coding should wait until the missing ADRs and first Alpha-0 work package are accepted.
+PakimonGO should now move from deep planning into methodology-verified scaffold-first implementation readiness. The repo has enough structure to avoid chaotic growth, but feature coding should wait until ADRs and the first Alpha-0 work package are accepted.
 
 ## Current Baseline
 
@@ -22,6 +22,8 @@ PakimonGO should now move from deep planning into careful scaffold-first impleme
 - AI-authored commits must include agent/time/work-package/requirements/process-doc trailers.
 - Full visible conversations or summaries should be archived in `docs/conversation-archive/` when they change direction or decisions.
 - Empty scaffold folders use `.gitkeep` so future agents see intended module boundaries.
+- The external Software Engineering methodology is now a required artifact chain.
+- `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test planning.
 
 ## Internal Debate Log
 
@@ -39,4 +41,4 @@ PakimonGO should now move from deep planning into careful scaffold-first impleme
 
 ## Current Implementation Posture
 
-Scaffold-only work is allowed. Production feature implementation should begin only after the ADR completion pack and first Alpha-0 vertical slice are defined.
+Scaffold-only and spec-only work is allowed. Production feature implementation should begin only after the ADR review pack is accepted/revised and WP-015 is explicitly opened.

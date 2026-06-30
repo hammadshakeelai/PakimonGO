@@ -54,5 +54,7 @@ New ideas must be added here before implementation. Each item should later becom
 - Add docs lint and link-check workflow.
 - Add max-file-size warning workflow once code exists.
 - Add full visible conversation text to `docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt` after user pastes export.
-- Create traceability matrix mapping requirements to modules, tests, ADRs, and work packages.
 - Create first Alpha-0 vertical slice work package before feature code.
+- Add OpenAPI linting and schema consistency checks.
+- Add a script to verify every `FR-*` in requirements appears in `docs/TRACEABILITY_MATRIX.md`.
+- Add a generated final Software Engineering report after artifacts are accepted.

@@ -8,6 +8,8 @@ Do not start production code before the SRS and architecture decisions are accep
 
 Preserve conversation context. When a user prompt, AI answer, or decision changes product direction, implementation process, requirements, architecture, or risks, update `docs/conversation-archive/` with either the full visible conversation text or a concise summary. Never store secrets, hidden system/developer instructions, private photos, or exact sensitive locations.
 
+Follow the Software Engineering methodology artifacts in `docs/software-engineering/`. New requirements must maintain the traceability chain: requirement -> use case -> domain concept -> design class/operation -> SSD -> operation contract -> test.
+
 ## Project Structure & Module Organization
 
 This is planned as a large modular monorepo. Target layout:
@@ -31,6 +33,7 @@ No app tooling is installed yet. When scaffolding begins, document exact command
 - `flutter build apk` for Android test APKs.
 - `flutter build appbundle` for Google Play release artifacts.
 - Backend commands will be added after the backend framework ADR.
+- `docs/api/OPENAPI_DRAFT.yaml` should be validated once an OpenAPI linter is added.
 
 Avoid committing generated dependency folders such as `node_modules/`, virtual environments, or build outputs.
 

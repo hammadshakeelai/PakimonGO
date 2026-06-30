@@ -30,6 +30,19 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 4. Read `docs/PROCESS.md`.
 5. Read the relevant module README before editing.
 
+## Planning And Design Artifacts
+
+- Methodology-aligned SRS: `docs/SRS.md`
+- Full requirement catalogue: `docs/REQUIREMENTS.md`
+- Traceability matrix: `docs/TRACEABILITY_MATRIX.md`
+- Software Engineering artifacts: `docs/software-engineering/`
+- OpenAPI draft: `docs/api/OPENAPI_DRAFT.yaml`
+- Database ERD: `docs/data/DATABASE_ERD.md`
+- Threat model: `docs/security/THREAT_MODEL.md`
+- UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
+- Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
+- Obsidian vault home: `docs/OBSIDIAN_VAULT_INDEX.md`
+
 ## Build Status
 
 No runnable app or backend exists yet. Do not expect `flutter test`, backend tests, or CI to pass until toolchains are scaffolded in a later task.

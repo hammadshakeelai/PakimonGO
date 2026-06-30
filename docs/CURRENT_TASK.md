@@ -2,13 +2,13 @@
 
 ## Active Phase
 
-Phase 5: Repo scaffold and implementation readiness.
+Phase 5: Repo scaffold, methodology alignment, and implementation readiness.
 
 Production feature code has not started. The repository now contains a planning baseline plus a scaffolded monorepo structure that future implementation work can fill in.
 
 ## Active Task
 
-Implement the expanded planning baseline as repository files and create the scaffold-only project structure for PakimonGO.
+Apply the external Software Engineering methodology to PakimonGO, strengthen the SRS, and create the pre-code planning artifacts needed before Alpha-0 implementation.
 
 ## Current Inputs
 
@@ -40,7 +40,18 @@ Implement the expanded planning baseline as repository files and create the scaf
 - Updated `AGENTS.md` and `docs/PROCESS.md` with conversation archive and short-burst commit rules.
 - Added ADR-007 through ADR-016 as proposed decision drafts.
 - Added `docs/ALPHA_0_VERTICAL_SLICE.md` and `docs/WORK_PACKAGES.md`.
+- Read the Hakari Bankai methodology file and aligned the PakimonGO SRS/artifact chain to it.
+- Added `docs/software-engineering/` artifacts for inception, process model, use cases, domain model, DFDs, design classes, SSDs, operation contracts, packages/CRC, and final-report plan.
+- Added `docs/TRACEABILITY_MATRIX.md` with every functional requirement mapped to use case, concept, operation, and planned test.
+- Added `docs/WORK_PACKAGE_BOARD.md`.
+- Added `docs/api/OPENAPI_DRAFT.yaml`.
+- Added `docs/data/DATABASE_ERD.md`.
+- Added `docs/security/THREAT_MODEL.md`.
+- Added `docs/ux/UX_FLOW_SPEC.md`.
+- Added `docs/qa/TESTING_MASTER_PLAN.md`.
+- Added `data/goldsets/MANIFEST_SCHEMA.md`.
+- Added `docs/ADR_REVIEW_PACK.md`, `docs/AGENT_HANDOFF_SYSTEM.md`, `docs/OBSIDIAN_VAULT_INDEX.md`, OKF trace files, Graphify plan, and OKF export plan.
 
 ## Current Next Action
 
-Review and accept the ADR completion pack, then begin WP-015: Alpha-0 private capture slice.
+Review and accept/revise ADR-001 through ADR-016, validate the methodology artifacts, then decide whether WP-015 starts with OpenAPI/contracts or actual Flutter/FastAPI toolchain scaffolding.

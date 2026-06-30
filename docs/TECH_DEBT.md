@@ -19,6 +19,8 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - Actual Flutter and FastAPI project toolchains are not scaffolded yet; only repo boundaries exist.
 - CI workflows are placeholders until runnable app/backend tooling exists.
 - Conversation archive contains a summary and paste target, but not yet the complete full visible chat export.
+- OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
+- Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
 
 ## Future Debt Controls
 

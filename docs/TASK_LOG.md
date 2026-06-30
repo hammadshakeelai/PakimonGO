@@ -46,7 +46,7 @@ Promoted the expanded PakimonGO blueprint into repository docs, repaired Git met
 
 ### Decisions Made
 
-- Treat the expanded 145-requirement catalogue as the active requirements baseline.
+- Treat the expanded 196-functional-requirement catalogue as the active requirements baseline.
 - Treat gated Alpha-0 as the active SRS posture.
 - Preserve empty scaffold folders with `.gitkeep`.
 - Require short-burst semantic commits with AI attribution trailers.
@@ -62,3 +62,35 @@ Promoted the expanded PakimonGO blueprint into repository docs, repaired Git met
 ### Next Exact Action
 
 Review ADR-001 through ADR-016, then decide whether WP-015 starts with Flutter/FastAPI toolchain scaffold or OpenAPI/contracts.
+
+## 2026-07-01: Methodology-Aligned Pre-Code Specification
+
+### Status
+
+In progress.
+
+### Summary
+
+Read the external Software Engineering methodology from the Hakari Bankai project and applied its artifact chain to PakimonGO. Rebuilt the SRS around the methodology structure and added the analysis/design artifacts needed before code.
+
+### Artifacts Added
+
+- Methodology SRS.
+- Software Engineering artifact folder.
+- Traceability matrix.
+- Work package board.
+- OpenAPI draft.
+- Database ERD.
+- Threat model.
+- UX flow spec.
+- Testing master plan.
+- Goldset manifest schema.
+- ADR review pack.
+- Agent handoff system.
+- Obsidian vault index.
+- OKF traceability/methodology entries.
+- Graphify and OKF export plans.
+
+### Next Exact Action
+
+Review and accept/revise ADR-001 through ADR-016, then open WP-015 with a clear choice between contract generation and Flutter/FastAPI toolchain scaffolding.
