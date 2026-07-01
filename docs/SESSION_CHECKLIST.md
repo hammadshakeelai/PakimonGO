@@ -35,3 +35,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 29 | Sprint 16 goldset integration | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 2 manifests (18 scenarios), goldset_runner, 12 tests, CI job |
 | 30 | Sprint 17 API pagination/filter/sort | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 3 endpoints enhanced, 7 tests updated, 136 total tests |
 | 31 | Sprint 18 OPENAPI_DRAFT.yaml update | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 4 new schemas, 3 endpoints documented, 31 schemas total |
+| 32 | Sprint 19 sensitive species suppression | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | SensitiveSpecies model, location suppression, 4 tests |

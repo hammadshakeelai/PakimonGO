@@ -15,6 +15,7 @@ from src.infrastructure.database.repositories import get_all_submission_sha256s
 from src.infrastructure.database.repositories import get_latest_score_event
 from src.infrastructure.database.repositories import get_media_asset
 from src.infrastructure.database.repositories import get_submission as db_get_submission
+from src.infrastructure.database.repositories import is_sensitive_species
 from src.infrastructure.database.repositories import update_submission_status
 from src.infrastructure.database.session import get_db
 from src.infrastructure.queue.queue import get_queue
@@ -29,12 +30,31 @@ router = APIRouter(prefix="/v1/submissions", tags=["submissions"])
 _scoring = StubScoringService()
 
 
-def _build_submission_response(sub, attr, score_event=None) -> dict:
+def _build_submission_response(sub, attr, score_event=None, db: Session | None = None) -> dict:
     status = sub.status or "pending"
     animal_context = attr.animal_context if attr else "unknown"
+    real_name = attr.real_name if attr else ""
     points = score_event.points if score_event else None
     explanation = score_event.explanation_category if score_event else "Scoring is pending."
     ledger = score_event.ledger if score_event else (animal_context if animal_context != "unknown" else None)
+
+    # Check if species is sensitive
+    is_sensitive = False
+    if db and real_name:
+        is_sensitive = is_sensitive_species(db, real_name)
+
+    # For sensitive species, suppress exact location in public APIs
+    if is_sensitive:
+        public_location = {
+            "cellId": "cell_suppressed",
+            "precisionLabel": "suppressed",
+            "suppressedReason": "sensitive_species",
+        }
+    else:
+        public_location = {
+            "cellId": f"cell_{uuid.uuid4().hex[:8]}",
+            "precisionLabel": "coarse",
+        }
 
     return {
         "submissionId": sub.id,
@@ -46,10 +66,7 @@ def _build_submission_response(sub, attr, score_event=None) -> dict:
             "ledger": ledger,
         },
         "visibility": "private",
-        "publicLocation": {
-            "cellId": f"cell_{uuid.uuid4().hex[:8]}",
-            "precisionLabel": "coarse",
-        },
+        "publicLocation": public_location,
     }
 
 
@@ -103,7 +120,7 @@ def create_submission_endpoint(
     if suggested.value == "ai_evaluated":
         _enqueue_score_job(sub.id, media_asset_id, animal_context,
                            precheck_result.explanation_category, current_user.user_id)
-        return _build_submission_response(sub, attr)
+        return _build_submission_response(sub, attr, db=db)
 
     scoring_result = _scoring.evaluate(animal_context, precheck_result.explanation_category)
     new_state = "capped"
@@ -120,7 +137,7 @@ def create_submission_endpoint(
         previous_state=suggested.value,
         new_state=new_state,
     )
-    return _build_submission_response(sub, attr, score_event)
+    return _build_submission_response(sub, attr, score_event, db)
 
 
 def _enqueue_score_job(
@@ -151,4 +168,4 @@ def get_submission_endpoint(
         raise HTTPException(status_code=404, detail="Submission not found")
     sub, attr = result
     score_event = get_latest_score_event(db, submission_id)
-    return _build_submission_response(sub, attr, score_event)
+    return _build_submission_response(sub, attr, score_event, db)

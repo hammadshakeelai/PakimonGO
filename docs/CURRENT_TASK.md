@@ -193,6 +193,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 19 Progress
+
+- S19-001: ✅ DONE — SensitiveSpecies model with scientific_name (unique), common_name, suppression_level, reason
+- S19-002: ✅ DONE — `is_sensitive_species` and `get_or_create_sensitive_species` repository functions
+- S19-003: ✅ DONE — `_build_submission_response` checks sensitivity and returns suppressed location (cell_suppressed, precisionLabel=suppressed)
+- S19-004: ✅ DONE — `create_sensitive_species` and `get_or_create_sensitive_species` for seeding
+- S19-005: ✅ DONE — 4 tests: detection, suppression, normal cell, create response
+- S19-006: (Pending) — Update collection/leaderboard to handle sensitive species (optional)
+- 65 API tests + 61 scoring-rules + 14 Flutter = **140 total tests, all passing**
+
 ## Sprint 18 Progress
 
 - S18-001: ✅ DONE — Added Pagination, PaginatedCollectionResponse, PaginatedLeaderboardResponse, PaginatedSubmissionListResponse schemas
@@ -248,4 +258,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 19 — Sensitive species suppression or API versioning.
+Sprint 20 — Sensitive species in collection/leaderboard or API versioning.
