@@ -31,19 +31,17 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 17 is complete.**
+**Sprint 18 is complete.**
 
-Sprint 17 delivered:
-- `GET /v1/users/me/collection` with pagination, context filter, sorting
-- `GET /v1/leaderboard` with pagination, sorting
-- `GET /v1/submissions` list endpoint with pagination, status filter, sorting
-- Repository functions return `(items, total)` tuples for pagination metadata
-- 7 updated tests for pagination/filtering/sorting
+Sprint 18 delivered:
+- OPENAPI_DRAFT.yaml updated with pagination parameters for 3 endpoints
+- 4 new paginated response schemas (Pagination, PaginatedCollectionResponse, PaginatedLeaderboardResponse, PaginatedSubmissionListResponse)
+- 31 total schemas (up from 27), 20 paths
 
-Sprint 0-17 stats:
+Sprint 0-18 stats:
 - 136 total tests (61 API + 61 scoring-rules + 14 Flutter)
 - 20 real endpoints + 8 planned in OpenAPI
 - 8 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
 
-Next: Sprint 18 — OPENAPI_DRAFT.yaml update for pagination params + sensitive species suppression.
+Next: Sprint 19 — Sensitive species suppression or API versioning.

@@ -3,7 +3,7 @@ info:
   title: PakimonGO API Draft
   version: 0.2.0-alpha0
   description: >
-    OpenAPI draft reflecting Sprint 1-15 implemented endpoints.
+    OpenAPI draft reflecting Sprint 1-17 implemented endpoints.
     Endpoints marked `x-status: planned` are future features not yet implemented.
     This is a living document — update when new endpoints are added.
 servers:
@@ -266,13 +266,44 @@ paths:
       x-status: implemented
       x-requirements:
         - FR-LB-005
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 500
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: context
+          in: query
+          schema:
+            type: string
+            enum: [wild, zoo, pet, unknown]
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum: [totalPoints, species, captureCount, lastCaptured]
+            default: totalPoints
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
       responses:
         "200":
           description: User collection of scored species
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CollectionResponse"
+                $ref: "#/components/schemas/PaginatedCollectionResponse"
 
   /leaderboard:
     get:
@@ -290,13 +321,76 @@ paths:
             default: 100
             minimum: 1
             maximum: 500
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum: [totalScore, userId, submissionCount]
+            default: totalScore
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
       responses:
-        "200":
-          description: Leaderboard entries
+        "200: description: Leaderboard entries
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardResponse"
+                $ref: "#/components/schemas/PaginatedLeaderboardResponse"
+
+  /submissions:
+    get:
+      summary: List user submissions
+      operationId: listSubmissions
+      x-status: implemented
+      x-requirements:
+        - FR-CAP-005
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, prechecked, ai_evaluated, scored, capped, review, rejected, rolled_back]
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum: [createdAt, submittedAt, status, points, species]
+            default: createdAt
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        "200":
+          description: Paginated list of submissions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedSubmissionListResponse"
 
   # ── Planned endpoints ──────────────────────────────────
 
@@ -730,6 +824,53 @@ components:
           enum: [adult, teen]
         homeRegion:
           type: string
+
+    # ── Pagination ────────────────────────────────────────────
+    Pagination:
+      type: object
+      required: [limit, offset, total]
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        total:
+          type: integer
+
+    PaginatedCollectionResponse:
+      type: object
+      required: [userId, species, pagination]
+      properties:
+        userId:
+          type: string
+        species:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionEntry"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+
+    PaginatedLeaderboardResponse:
+      type: object
+      required: [entries, pagination]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeaderboardEntry"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+
+    PaginatedSubmissionListResponse:
+      type: object
+      required: [submissions, pagination]
+      properties:
+        submissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Submission"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
 
     # ── Future / Planned ──────────────────────────────────
     DeletionRequest:

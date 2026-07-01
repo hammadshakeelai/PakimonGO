@@ -193,6 +193,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 18 Progress
+
+- S18-001: ✅ DONE — Added Pagination, PaginatedCollectionResponse, PaginatedLeaderboardResponse, PaginatedSubmissionListResponse schemas
+- S18-002: ✅ DONE — Updated GET /v1/users/me/collection with limit, offset, context, sort_by, sort_order params
+- S18-003: ✅ DONE — Updated GET /v1/leaderboard with limit, offset, sort_by, sort_order params
+- S18-004: ✅ DONE — Added GET /v1/submissions list endpoint with pagination, status filter, sorting
+- S18-005: ✅ DONE — Added PaginatedSubmissionListResponse schema
+- OPENAPI_DRAFT.yaml: 20 paths, 31 schemas (up from 27)
+
 ## Sprint 17 Progress
 
 - S17-001: ✅ DONE — `GET /v1/users/me/collection` with pagination (limit/offset), filtering (context), sorting (totalPoints, species, captureCount, lastCaptured asc/desc)
@@ -239,4 +248,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 18 — OPENAPI_DRAFT.yaml update for pagination params + sensitive species suppression.
+Sprint 19 — Sensitive species suppression or API versioning.
