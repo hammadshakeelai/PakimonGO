@@ -2,7 +2,7 @@
 id: system-architecture
 type: architecture_summary
 title: System Architecture
-status: proposed
+status: reviewed
 updated: 2026-07-01
 source_docs:
   - docs/ARCHITECTURE.md
@@ -17,7 +17,7 @@ related:
 
 ## Summary
 
-PakimonGO is server-authoritative. The Flutter app captures evidence and displays experiences. Backend services own scoring, moderation, privacy, leaderboards, and trust decisions.
+PakimonGO is server-authoritative. The Flutter app captures evidence and displays experiences. Backend services own scoring, moderation, privacy, leaderboards, and trust decisions. Core architecture ADRs are accepted enough to start Sprint 0 scaffold work.
 
 ## Main Components
 
@@ -37,3 +37,8 @@ PakimonGO is server-authoritative. The Flutter app captures evidence and display
 - Public map data is fuzzed or clustered.
 - AI provider details do not leak into core domain models.
 - Map provider SDK types do not leak into backend contracts.
+
+## Deferred Boundaries
+
+- Final map provider choice waits for the Mapbox vs Google spike.
+- Final production deployment approval waits for cloud project, budget, region, and compliance review.

@@ -2,7 +2,9 @@
 
 ## Status
 
-Proposed
+Revised
+
+The minimized-retention posture is accepted. Exact retention periods remain deferred until legal/privacy review.
 
 ## Context
 

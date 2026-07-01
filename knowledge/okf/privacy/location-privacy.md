@@ -2,11 +2,12 @@
 id: location-privacy
 type: privacy_rule
 title: Location Privacy
-status: proposed
+status: accepted
 updated: 2026-07-01
 source_docs:
   - docs/SECURITY_PRIVACY_PLAN.md
   - docs/ARCHITECTURE.md
+  - docs/adr/ADR-005-location-privacy.md
 related:
   - requirements-core
   - system-architecture
@@ -36,3 +37,7 @@ PakimonGO stores exact capture coordinates privately but exposes only privacy-sa
 
 - Geofence zoos, aquariums, petting zoos, safari parks, sanctuaries, and exhibits.
 - If capture overlaps a zoo boundary by GPS uncertainty, mark uncertain or review instead of automatic penalty.
+
+## Decision State
+
+ADR-005 is accepted. Exact coordinates are private; public map output must be cell/cluster/delay/fuzz/suppression based.

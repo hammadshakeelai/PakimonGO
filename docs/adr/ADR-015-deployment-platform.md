@@ -2,7 +2,9 @@
 
 ## Status
 
-Proposed
+Deferred
+
+Google Cloud/Firebase-first remains the accepted alpha planning direction. Final production deployment approval is deferred until cloud project, budget, region, and compliance review.
 
 ## Context
 

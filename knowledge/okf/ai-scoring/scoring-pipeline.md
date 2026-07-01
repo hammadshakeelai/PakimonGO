@@ -2,11 +2,12 @@
 id: scoring-pipeline
 type: ai_scoring
 title: AI Scoring Pipeline
-status: proposed
+status: accepted
 updated: 2026-07-01
 source_docs:
   - docs/ARCHITECTURE.md
   - docs/QA_AND_TEST_STRATEGY.md
+  - docs/adr/ADR-004-ai-scoring-pipeline.md
 related:
   - requirements-core
   - location-privacy
@@ -38,3 +39,7 @@ Scoring uses a layered server-side evidence pipeline, not one AI call. Determini
 - Score explanations are stored.
 - Social popularity score is capped and separate from wild rarity.
 - Uncertain cases go to review.
+
+## Decision State
+
+ADR-004 is accepted. Exact provider mix, prompt format, and scoring formula remain future work.

@@ -2,7 +2,9 @@
 
 ## Status
 
-Proposed
+Deferred
+
+Final map provider selection is deferred. Mapbox-first prototyping remains the accepted spike direction, with Google Maps Platform retained as challenger.
 
 ## Context
 
