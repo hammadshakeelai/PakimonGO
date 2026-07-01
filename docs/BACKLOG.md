@@ -58,6 +58,12 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S10-001: Review ADR-003~~ ✅ DONE
 - ~~S10-002: Review ADR-015~~ ✅ DONE
 - ~~S10-003: Update ADR review pack~~ ✅ DONE
+- ~~S11-001: VisionProvider protocol~~ ✅ DONE
+- ~~S11-002: AIScoringService~~ ✅ DONE
+- ~~S11-003: DummyVisionProvider~~ ✅ DONE
+- ~~S11-004: GoogleVisionProvider placeholder~~ ✅ DONE
+- ~~S11-005: Wire into routes~~ ✅ DONE
+- ~~S11-006: Tests~~ ✅ DONE
 - Create database schema and migrations.
 - Create object storage layout for originals, thumbnails, and AI crops.
 - Create AI scoring service contract with structured outputs.

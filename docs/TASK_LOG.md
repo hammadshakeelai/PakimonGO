@@ -744,6 +744,42 @@ Reviewed and accepted the two deferred ADRs:
 
 Sprint 11 — Real AI provider integration or map prototype spike.
 
+## 2026-07-01: Sprint 11 — AI Provider Adapter Framework
+
+### Status
+
+Complete.
+
+### Summary
+
+Built the AI provider adapter framework: VisionProvider protocol with AnalysisResult dataclass, DummyVisionProvider for CI/testing, AIScoringService (uses vision provider for context-based scoring, falls back to stub for capped paths), and GoogleVisionProvider placeholder. Wired AIScoringService into the submission flow with VISION_PROVIDER env var for provider selection.
+
+### Changes Made
+
+- `packages/scoring-rules/src/vision_provider.py` — NEW: VisionProvider protocol, AnalysisResult dataclass, DummyVisionProvider
+- `packages/scoring-rules/src/scoring_service.py` — MODIFIED: added media_path param to protocol, added AIScoringService
+- `packages/scoring-rules/src/google_vision_provider.py` — NEW: placeholder requiring GOOGLE_VISION_API_KEY env var
+- `packages/scoring-rules/tests/test_scoring_service.py` — MODIFIED: 6 new AIScoringService tests
+- `packages/scoring-rules/tests/test_vision_provider.py` — NEW: 5 tests
+- `services/api/src/modules/submissions/api/routes.py` — MODIFIED: wired AIScoringService with DummyVisionProvider; VISION_PROVIDER env var for Google
+- `docs/sprints/SPRINT_11_PLAN.md` — NEW
+
+### Verification
+
+- Scoring-rules tests: 43 passed (8 precheck + 18 score_state + 12 scoring_service + 5 vision_provider)
+- API tests: 54 passed (unchanged)
+- Worker tests: 1 passed (unchanged)
+- Flutter tests: 14 passed (unchanged)
+- Total: 112 tests, all passing
+- Ruff: clean
+- Mypy: clean
+- QA validations: 3/3 PASS
+- Pre-task check: PASS
+
+### Next
+
+Sprint 12 — Map prototype spike or real Google Vision provider implementation.
+
 ## 2026-07-01: Sprint 9 — AI Scoring Pipeline Stub
 
 ### Status

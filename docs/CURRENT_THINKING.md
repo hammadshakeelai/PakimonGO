@@ -48,21 +48,21 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 10 is complete.** All 3 tasks (S10-001 through S10-003) done and verified.
+**Sprint 11 is complete.** All 6 tasks (S11-001 through S11-006) done and verified.
 
-Sprint 10 delivered:
-- ADR-003 (map provider): Accepted Mapbox-first prototyping direction. Final commitment after prototype.
-- ADR-015 (deployment platform): Accepted Google Cloud/Firebase-first for alpha/beta. Detailed architecture during beta prep.
-- ADR_REVIEW_PACK.md updated: All 17 ADRs now accepted or revised. Zero deferred ADRs remain.
-- No code changes — pure documentation review.
+Sprint 11 delivered:
+- `vision_provider.py` — VisionProvider protocol, AnalysisResult dataclass, DummyVisionProvider
+- `scoring_service.py` — AIScoringService (uses vision provider for context, falls back to stub for capped paths)
+- `google_vision_provider.py` — placeholder requiring GOOGLE_VISION_API_KEY env var
+- `test_vision_provider.py` — 5 tests (DummyVisionProvider, AnalysisResult, GoogleVisionProvider init)
+- Routes updated: AIScoringService wired with DummyVisionProvider by default; VISION_PROVIDER=google selects GCP
+- 11 new tests, 112 total, ruff + mypy clean, all QA validations PASS
 
-**101 total tests all passing. Ruff and mypy clean.**
-
-Sprint 0-10 stats:
-- 101 total tests (54 API + 1 worker + 32 scoring-rules + 14 Flutter)
+Sprint 0-11 stats:
+- 112 total tests (54 API + 1 worker + 43 scoring-rules + 14 Flutter)
 - 11 real endpoints + 8 planned in OpenAPI
 - 7 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
-- Complete submission pipeline: upload → precheck → stub scoring → ScoreEvent → response
+- Submission pipeline: upload → precheck → AI vision provider → ScoreEvent → response
 
-Next: Sprint 11 — Real AI provider integration or map prototype spike.
+Next: Sprint 12 — Map prototype spike or real Google Vision provider implementation.

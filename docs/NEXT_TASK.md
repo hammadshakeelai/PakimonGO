@@ -2,13 +2,14 @@
 
 ## Current Next Task
 
-Sprint 11 — Real AI provider integration or map prototype spike.
+Sprint 12 — Map prototype spike or real Google Vision provider implementation.
 
-## Sprint 2-10 Complete
+## Sprint 2-11 Complete
 
-Sprints 2-10 are **complete**.  
-Sprint 10 delivered: Deferred ADR review — ADR-003 (Mapbox-first prototyping) and ADR-015 (Google Cloud/Firebase-first alpha/beta) accepted. All 17 ADRs now resolved. **101 total tests all passing.**
+Sprints 2-11 are **complete**.  
+Sprint 11 delivered: AI provider adapter framework — VisionProvider protocol, AIScoringService, DummyVisionProvider, GoogleVisionProvider placeholder. **112 total tests all passing.**
 
 Next sprint candidates:
-- **Real AI provider integration** — replace StubScoringService with actual AI provider (Vision API, local model)
-- **Map prototype spike** — begin Mapbox Flutter SDK exploration (Sprint 12+ target)
+- **Map prototype spike** — begin Mapbox Flutter SDK exploration
+- **Real Google Vision implementation** — wire actual Vision API calls
+- **Worker async scoring** — move scoring into the worker for non-blocking submission flow

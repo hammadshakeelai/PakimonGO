@@ -2,9 +2,9 @@
 
 ## Active Phase
 
-Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, stub scoring, and all ADRs resolved.
+Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, and all ADRs resolved.
 
-Sprints 1-10 complete. 54 API tests, 101 total tests all passing.
+Sprints 1-11 complete. 112 total tests all passing.
 
 ## Active Task
 
@@ -176,6 +176,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S10-002: ✅ DONE — Reviewed ADR-015 (deployment platform): Accepted Google Cloud/Firebase-first alpha/beta direction
 - S10-003: ✅ DONE — Updated ADR_REVIEW_PACK.md: All 17 ADRs now accepted or revised; zero deferred
 
+## Sprint 11 Progress
+
+- S11-001: ✅ DONE — VisionProvider protocol + AnalysisResult + DummyVisionProvider
+- S11-002: ✅ DONE — AIScoringService using VisionProvider + scoring rules
+- S11-003: ✅ DONE — DummyVisionProvider for CI/testing
+- S11-004: ✅ DONE — GoogleVisionProvider placeholder with env-var config
+- S11-005: ✅ DONE — Wired AIScoringService into submission routes (VISION_PROVIDER env var)
+- S11-006: ✅ DONE — 11 new tests; 112 total all passing
+
 ## Current Next Action
 
-Sprint 11 — Real AI provider integration (replace StubScoringService) or map prototype spike.
+Sprint 12 — Map prototype spike or real Google Vision provider implementation.

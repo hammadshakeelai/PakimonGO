@@ -27,3 +27,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 21 | Sprint 8 CI expansion | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | ruff 16→0, mypy 38→0, CI 5→7 jobs |
 | 22 | Sprint 9 AI scoring pipeline stub | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 101 total tests, scoring wired into submissions |
 | 23 | Sprint 10 deferred ADR review | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | ADR-003 + ADR-015 accepted; zero deferred remain |
+| 24 | Sprint 11 AI provider adapter framework | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 112 total tests, AIScoringService wired |
