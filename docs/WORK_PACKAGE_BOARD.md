@@ -13,14 +13,15 @@ This board turns the expanded plan into agent-ready work before production codin
 | WP-003 | Complete | ADR completion pack | NFR-MAINT-003 | Architect | ADR review |
 | WP-013 | Complete | Monorepo scaffold | NFR-MAINT-001..003 | Dev lead | toolchain scaffold |
 | WP-014 | Complete | Commit workflow policy | NFR-MAINT-003 | Dev lead | use in every commit |
-| WP-015 | Ready for review | Alpha-0 private capture slice | FR-CAP, FR-SCORE, FR-DUP, FR-ZOO | Mobile/backend pair | choose contracts vs toolchain first |
+| WP-015 | Ready | Alpha-0 private capture slice | FR-CAP, FR-SCORE, FR-DUP, FR-ZOO | Mobile/backend pair | start Sprint 0 |
 | WP-016 | Complete draft | Contract-first API draft | FR-CAP-011, FR-CAP-012, FR-SCORE-008 | Backend lead | OpenAPI review |
-| WP-017 | Complete draft | Database ERD and schema plan | data, privacy, scoring, social | Data lead | migration tool choice |
+| WP-017 | Complete draft | Database ERD and data dictionary | data, privacy, scoring, social | Data lead | migration tool choice |
 | WP-018 | Complete draft | Threat model and abuse cases | NFR-SEC, NFR-PRIV | Security lead | mitigation checklist |
 | WP-019 | Complete draft | UX flow specification | onboarding, capture, map, social | UX lead | wireframe/prototype |
 | WP-020 | Complete draft | Testing master plan | all FR/NFR | QA lead | first CI checks |
 | WP-021 | Complete draft | Goldset manifest standard | FR-DUP, FR-ZOO, FR-TAX, FR-SCORE | AI/data lead | seed data policy |
 | WP-022 | Complete draft | Obsidian/OKF/Graphify setup | NFR-MAINT-003 | Docs/knowledge lead | automation scripts later |
+| WP-023 | Complete draft | Sprint 0 implementation plan | WP-015 | TPM/architect | begin Sprint 0 |
 
 ## WP-016: Contract-First API Draft
 

@@ -23,7 +23,7 @@
 
 - Status: Complete
 - Acceptance: missing ADR drafts exist.
-- Notes: ADR-007 through ADR-016 were added as proposed decisions.
+- Notes: ADR-001 through ADR-016 were reviewed on 2026-07-01; 13 accepted, 1 revised, 2 deferred.
 
 ## WP-013: Scaffold Monorepo Skeleton
 
@@ -39,9 +39,9 @@
 
 ## WP-015: Alpha-0 Private Capture Slice
 
-- Status: Proposed
+- Status: Ready
 - Acceptance: see `docs/ALPHA_0_VERTICAL_SLICE.md`.
-- Notes: This is the recommended next implementation package.
+- Notes: This is the next implementation package and should start through `docs/sprints/SPRINT_0_PLAN.md`.
 
 ## WP-016: Contract-First API Draft
 
@@ -52,8 +52,8 @@
 ## WP-017: Database ERD And Schema Plan
 
 - Status: Complete draft
-- Acceptance: canonical domains, table clusters, ERD, indexes, and restricted data classes documented.
-- Notes: See `docs/data/DATABASE_ERD.md`.
+- Acceptance: canonical domains, table clusters, ERD, indexes, restricted data classes, table-level fields, privacy classes, and first migration slice documented.
+- Notes: See `docs/data/DATABASE_ERD.md` and `docs/data/DATA_DICTIONARY.md`.
 
 ## WP-018: Threat Model
 
@@ -84,3 +84,9 @@
 - Status: Complete draft
 - Acceptance: vault index, OKF trace files, Graphify plan, and OKF export plan exist.
 - Notes: See `docs/OBSIDIAN_VAULT_INDEX.md`, `knowledge/okf/`, and `tools/graphify/GRAPHIFY_PLAN.md`.
+
+## WP-023: Sprint 0 Implementation Plan
+
+- Status: Complete draft
+- Acceptance: Sprint goal, scope, tasks, file ownership, commit sequence, tests, privacy/security notes, rollback, and definition of done are documented.
+- Notes: See `docs/sprints/SPRINT_0_PLAN.md`.

@@ -7,22 +7,42 @@ updated: 2026-07-01
 source_docs:
   - docs/CURRENT_TASK.md
   - docs/NEXT_TASK.md
+  - docs/sprints/SPRINT_0_PLAN.md
 related:
   - agent-process
+  - adr-summary
 ---
 
 # Current Task
 
 ## Summary
 
-The project is in Phase 0-2 planning: discovery, requirements derivation, Agile SRS, architecture direction, process design, and knowledge-system setup.
+The project is in Phase 5: scaffold, methodology alignment, and implementation readiness. ADR review, data dictionary, diagram pack, traceability matrix, and Sprint 0 plan are complete drafts.
 
-## Do Not Do Yet
+## Ready Next
 
-- Do not scaffold production app code until SRS direction is accepted.
-- Do not choose final map provider without prototype/cost/legal validation.
-- Do not build social public launch without moderation requirements.
+Begin Sprint 0: Alpha-0 toolchain and contract foundation.
 
-## Next
+Allowed next work:
 
-Review the generated planning package with the user. Accept or revise the SRS and proposed ADRs before scaffolding production code.
+- Flutter app shell.
+- FastAPI API shell.
+- Worker shell.
+- Contract package shell.
+- OpenAPI validation.
+- Public DTO privacy tests.
+- Score state model shell.
+- Capture draft model shell.
+
+## Still Gated
+
+- Public social features.
+- Final map provider implementation.
+- Production deployment.
+- Final retention workflows.
+- Final scoring formula.
+- Real AI provider calls.
+
+## Handoff
+
+Read `docs/sprints/SPRINT_0_PLAN.md` before coding.

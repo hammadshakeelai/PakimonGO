@@ -38,9 +38,11 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - Software Engineering artifacts: `docs/software-engineering/`
 - OpenAPI draft: `docs/api/OPENAPI_DRAFT.yaml`
 - Database ERD: `docs/data/DATABASE_ERD.md`
+- Data dictionary: `docs/data/DATA_DICTIONARY.md`
 - Threat model: `docs/security/THREAT_MODEL.md`
 - UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
 - Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
+- Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
 - Obsidian vault home: `docs/OBSIDIAN_VAULT_INDEX.md`
 - Mermaid diagram pack: `docs/diagrams/README.md`
 

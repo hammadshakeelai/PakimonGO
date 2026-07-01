@@ -127,3 +127,29 @@ Added a canonical Mermaid diagram pack under `docs/diagrams/` and linked it from
 ### Next Exact Action
 
 Review diagrams for report inclusion and render them later when generating the final Software Engineering report.
+
+## 2026-07-01: ADR Acceptance, Data Dictionary, Sprint 0 Plan
+
+### Status
+
+Complete draft.
+
+### Summary
+
+Completed the ADR acceptance pass, added the implementation data dictionary, and wrote the Sprint 0 implementation plan. This converts the pre-code package into an executable starting point for scaffold/toolchain work.
+
+### Decisions
+
+- Accepted ADRs: ADR-001, ADR-002, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-010, ADR-011, ADR-012, ADR-013, ADR-014, ADR-016.
+- Revised ADR: ADR-009; minimized retention accepted, exact retention periods deferred.
+- Deferred ADRs: ADR-003 final map provider, ADR-015 final production deployment approval.
+
+### Artifacts Added
+
+- `docs/data/DATA_DICTIONARY.md`
+- `docs/sprints/README.md`
+- `docs/sprints/SPRINT_0_PLAN.md`
+
+### Next Exact Action
+
+Begin Sprint 0 with toolchain availability checks and short-burst scaffold commits.

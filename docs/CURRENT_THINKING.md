@@ -24,6 +24,8 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 - Empty scaffold folders use `.gitkeep` so future agents see intended module boundaries.
 - The external Software Engineering methodology is now a required artifact chain.
 - `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test planning.
+- ADR review is complete enough to begin Sprint 0: 13 accepted, 1 revised, 2 deferred.
+- Data dictionary and Sprint 0 plan are the current rails for first migrations/toolchain work.
 
 ## Internal Debate Log
 
@@ -41,4 +43,4 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 
 ## Current Implementation Posture
 
-Scaffold-only and spec-only work is allowed. Production feature implementation should begin only after the ADR review pack is accepted/revised and WP-015 is explicitly opened.
+Sprint 0 scaffold work is now allowed. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.

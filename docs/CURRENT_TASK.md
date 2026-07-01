@@ -52,7 +52,10 @@ Apply the external Software Engineering methodology to PakimonGO, strengthen the
 - Added `data/goldsets/MANIFEST_SCHEMA.md`.
 - Added `docs/ADR_REVIEW_PACK.md`, `docs/AGENT_HANDOFF_SYSTEM.md`, `docs/OBSIDIAN_VAULT_INDEX.md`, OKF trace files, Graphify plan, and OKF export plan.
 - Added `docs/diagrams/` as the canonical Mermaid diagram pack for system context, C4 containers, architecture, release process, methodology, use cases, domain, DFDs, ERD, API sequence, scoring, privacy, threat model, UX, package dependencies, and deployment.
+- Completed ADR acceptance pass: 13 accepted, 1 revised, 2 deferred.
+- Added `docs/data/DATA_DICTIONARY.md`.
+- Added `docs/sprints/SPRINT_0_PLAN.md`.
 
 ## Current Next Action
 
-Review and accept/revise ADR-001 through ADR-016, validate the methodology artifacts, then decide whether WP-015 starts with OpenAPI/contracts or actual Flutter/FastAPI toolchain scaffolding.
+Begin Sprint 0 with short-burst toolchain and contract scaffolding, starting from `docs/sprints/SPRINT_0_PLAN.md`.

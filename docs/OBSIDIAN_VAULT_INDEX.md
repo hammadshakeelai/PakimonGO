@@ -56,10 +56,13 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 - [[docs/ALPHA_0_VERTICAL_SLICE]]
 - [[docs/api/OPENAPI_DRAFT.yaml]]
 - [[docs/data/DATABASE_ERD]]
+- [[docs/data/DATA_DICTIONARY]]
 - [[docs/security/THREAT_MODEL]]
 - [[docs/ux/UX_FLOW_SPEC]]
 - [[docs/qa/TESTING_MASTER_PLAN]]
 - [[data/goldsets/MANIFEST_SCHEMA]]
+- [[docs/sprints/README]]
+- [[docs/sprints/SPRINT_0_PLAN]]
 
 ## Decisions
 

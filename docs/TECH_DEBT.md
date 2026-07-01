@@ -21,6 +21,8 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - Conversation archive contains a summary and paste target, but not yet the complete full visible chat export.
 - OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
 - Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
+- Data dictionary is a planning dictionary, not final migrations.
+- Sprint 0 plan assumes Flutter/Python tooling availability, which still must be checked locally.
 
 ## Future Debt Controls
 
