@@ -39,13 +39,16 @@ New ideas must be added here before implementation. Each item should later becom
 - Prototype Mapbox and Google Maps map UX/cost/legal constraints.
 - Prototype AI scoring schema on a small licensed/local image set.
 - Build first duplicate/zoo gold dataset.
+- Implement tests from `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md` once public DTO schemas exist.
+- Implement tests from `docs/qa/SCORING_STATE_TEST_SPEC.md` once score state code exists.
+- Implement benchmark runners from `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md` once fixture manifests exist.
 
 ## Process Backlog
 
 - Create task-state update checklist.
 - Create ADR template.
 - Create story template.
-- Create test-plan template.
+- Create test-plan template. (Initial ready/done and Sprint 0 templates now exist in `docs/qa/`; expand when issue tracker exists.)
 - Create release checklist.
 - Create AI handoff template.
 - Create Obsidian vault index.

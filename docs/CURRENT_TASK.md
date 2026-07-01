@@ -58,7 +58,8 @@ Apply the external Software Engineering methodology to PakimonGO, strengthen the
 - Added `docs/tooling/TOOLCHAIN_READINESS.md`.
 - Added `tools/qa/validate_docs.py` and `tools/qa/check_toolchain.ps1`.
 - Added per-task Sprint 0 packets under `docs/sprints/sprint-0/`.
+- Added the pre-code QA spec pack under `docs/qa/`: requirement-to-test matrix, Sprint 0 test plan, privacy contract spec, scoring state spec, goldset governance, zoo/duplicate benchmark spec, Android manual QA, security checklist, CI gate design, and ready/done rules.
 
 ## Current Next Action
 
-Begin Sprint 0 coding/scaffolding with S0-001 or S0-002, using the task packets in `docs/sprints/sprint-0/`.
+Begin Sprint 0 coding/scaffolding with S0-001 or S0-002. Before editing code, read `docs/qa/README.md`, `docs/qa/SPRINT_0_TEST_PLAN.md`, and the focused spec for the module being changed.

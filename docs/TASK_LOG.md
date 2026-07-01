@@ -184,3 +184,31 @@ Checked local toolchain readiness, added validation scripts, and split Sprint 0 
 ### Next Exact Action
 
 Begin Sprint 0 implementation with S0-001 Flutter shell or S0-002 FastAPI shell.
+
+## 2026-07-01: Pre-Code Test Architecture Pack
+
+### Status
+
+Complete.
+
+### Summary
+
+Added focused QA specs so tests can be implemented directly from the docs once Sprint 0 scaffold code appears.
+
+### Artifacts Added
+
+- `docs/qa/README.md`
+- `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`
+- `docs/qa/SPRINT_0_TEST_PLAN.md`
+- `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`
+- `docs/qa/SCORING_STATE_TEST_SPEC.md`
+- `docs/qa/GOLDSET_GOVERNANCE_PLAN.md`
+- `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md`
+- `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`
+- `docs/qa/SECURITY_TEST_CHECKLIST.md`
+- `docs/qa/CI_GATE_DESIGN.md`
+- `docs/qa/DEFINITION_OF_READY_DONE.md`
+
+### Next Exact Action
+
+Begin Sprint 0 scaffold work and create the first real tests from the Sprint 0, privacy contract, and scoring state specs.

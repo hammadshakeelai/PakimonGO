@@ -42,6 +42,14 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - Threat model: `docs/security/THREAT_MODEL.md`
 - UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
 - Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
+- QA spec index: `docs/qa/README.md`
+- Requirement-to-test matrix: `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`
+- Sprint 0 test plan: `docs/qa/SPRINT_0_TEST_PLAN.md`
+- Privacy contract test spec: `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`
+- Scoring state test spec: `docs/qa/SCORING_STATE_TEST_SPEC.md`
+- Goldset governance and zoo/duplicate benchmarks: `docs/qa/GOLDSET_GOVERNANCE_PLAN.md`, `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md`
+- Manual Android and security checklists: `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`, `docs/qa/SECURITY_TEST_CHECKLIST.md`
+- CI gates and ready/done rules: `docs/qa/CI_GATE_DESIGN.md`, `docs/qa/DEFINITION_OF_READY_DONE.md`
 - Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
 - Sprint 0 task packets: `docs/sprints/sprint-0/`
 - Toolchain readiness: `docs/tooling/TOOLCHAIN_READINESS.md`

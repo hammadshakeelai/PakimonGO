@@ -96,3 +96,9 @@
 - Status: Complete
 - Acceptance: toolchain readiness recorded, validation scripts pass, and Sprint 0 is split into individual task packets.
 - Notes: See `docs/tooling/TOOLCHAIN_READINESS.md`, `tools/qa/`, and `docs/sprints/sprint-0/`.
+
+## WP-025: Pre-Code Test Architecture Pack
+
+- Status: Complete
+- Acceptance: requirement-to-test matrix, Sprint 0 test plan, privacy contract spec, scoring state spec, goldset governance, zoo/duplicate benchmark spec, manual Android QA, security checklist, CI gate design, and ready/done rules exist.
+- Notes: See `docs/qa/README.md` and the focused specs under `docs/qa/`.

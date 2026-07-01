@@ -19,6 +19,8 @@ related:
 
 The project is in Phase 5: scaffold, methodology alignment, and implementation readiness. ADR review, data dictionary, diagram pack, traceability matrix, and Sprint 0 plan are complete drafts.
 
+The QA test architecture is now expanded with focused specs under `docs/qa/`, including requirement-to-test mapping, Sprint 0 tests, privacy contract tests, scoring state tests, goldset governance, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
+
 ## Ready Next
 
 Begin Sprint 0: Alpha-0 toolchain and contract foundation.
@@ -34,6 +36,7 @@ Allowed next work:
 - Score state model shell.
 - Capture draft model shell.
 - Use task packets in `docs/sprints/sprint-0/`.
+- Use QA specs in `docs/qa/` before writing code.
 - Run `python tools/qa/validate_docs.py` before and after scaffold work.
 
 ## Still Gated
@@ -47,4 +50,4 @@ Allowed next work:
 
 ## Handoff
 
-Read `docs/sprints/SPRINT_0_PLAN.md` before coding.
+Read `docs/sprints/SPRINT_0_PLAN.md` and `docs/qa/README.md` before coding.

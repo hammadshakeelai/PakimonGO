@@ -24,6 +24,8 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - Data dictionary is a planning dictionary, not final migrations.
 - GitHub Actions are not yet configured to run `tools/qa/validate_docs.py`.
 - Direct `adb` is not on PATH; use the SDK path or add platform-tools to PATH when direct device commands are needed.
+- QA specs are now detailed, but the actual pytest/Dart/benchmark tests do not exist until Sprint 0 code scaffolds the modules.
+- Exact pass thresholds for zoo/duplicate/species goldsets are planning gates only until licensed fixtures and benchmark reports exist.
 
 ## Future Debt Controls
 
