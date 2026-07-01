@@ -1,0 +1,57 @@
+name: Test Gap
+description: Record missing, weak, flaky, or deferred test coverage.
+title: "[Test Gap]: "
+labels: ["test-gap", "qa", "triage"]
+body:
+  - type: input
+    id: test_id
+    attributes:
+      label: Test ID
+      description: Example TC-SCORE-STATE-001.
+    validations:
+      required: true
+  - type: input
+    id: requirement
+    attributes:
+      label: Requirement IDs
+      description: Example FR-SCORE-008.
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 launch blocker
+        - P1 alpha blocker
+        - P2 beta blocker
+        - P3 backlog
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: Gap
+      description: What is missing or unreliable?
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk
+      description: What could regress without this test?
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: Proposed Test Plan
+    validations:
+      required: true
+  - type: input
+    id: expiry
+    attributes:
+      label: Quarantine/Deferral Expiry
+      description: Required if this is a flaky or deferred P0/P1 test.
+    validations:
+      required: false

@@ -1,0 +1,63 @@
+name: Bug Report
+description: Report a defect, regression, privacy issue, or failing test.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: input
+    id: requirement
+    attributes:
+      label: Requirement/Test IDs
+      description: Example FR-MAP-004, TC-PRIV-DTO-001.
+    validations:
+      required: false
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - P0 launch blocker
+        - P1 alpha blocker
+        - P2 beta blocker
+        - P3 backlog
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction Steps
+      description: Include commands, device, account state, or data fixture.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Result
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy/Security Impact
+      description: Mention exact location, private media, auth, score, moderation, or secret impact.
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Logs, screenshots, test output, commit, build, or device info.
+    validations:
+      required: false

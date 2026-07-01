@@ -1,13 +1,17 @@
 # GitHub Workflows
 
-CI workflows will be added after runnable app/backend scaffolds exist.
+## Current Workflow
 
-Planned checks:
+- `docs-validation.yml`: runs planning docs validation, JSON example validation, and lightweight secret scanning.
 
-- Docs link/format checks.
-- Max source-file size warnings.
-- Flutter format/analyze/test.
-- Backend lint/type/test.
-- Contract schema validation.
-- Security and secret scanning.
-- Goldset benchmark smoke tests.
+## Planned Future Checks
+
+- Flutter format/analyze/test after mobile scaffold exists.
+- Backend lint/type/test after API/worker scaffold exists.
+- Contract schema validation after contract tooling exists.
+- Dedicated secret scanning such as gitleaks before external collaboration.
+- Goldset benchmark smoke tests after fixtures and runners exist.
+
+## Branch Protection
+
+Repository settings should later require the docs validation workflow before merge. This cannot be enforced from the local repo alone.

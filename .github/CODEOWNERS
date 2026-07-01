@@ -1,0 +1,34 @@
+# PakimonGO ownership map.
+#
+# These entries use placeholder team names until real GitHub teams/users exist.
+# Future agents should respect the area boundaries even before GitHub enforces them.
+
+* @pakimongo/lead-maintainers
+
+/AGENTS.md @pakimongo/lead-maintainers
+/README.md @pakimongo/lead-maintainers
+/docs/ @pakimongo/docs-process
+/docs/adr/ @pakimongo/architecture
+/docs/qa/ @pakimongo/qa
+/docs/security/ @pakimongo/security-privacy
+/docs/api/ @pakimongo/contracts
+/docs/data/ @pakimongo/data
+/docs/sprints/ @pakimongo/tpm
+/docs/conversation-archive/ @pakimongo/docs-process
+
+/apps/mobile/ @pakimongo/mobile
+/services/api/ @pakimongo/backend
+/services/workers/ @pakimongo/workers
+/packages/contracts/ @pakimongo/contracts
+/packages/scoring-rules/ @pakimongo/scoring
+/packages/geo-privacy/ @pakimongo/security-privacy
+/packages/moderation-rules/ @pakimongo/trust-safety
+/packages/taxonomy/ @pakimongo/data
+
+/infrastructure/ @pakimongo/platform
+/.github/ @pakimongo/lead-maintainers
+/tools/qa/ @pakimongo/qa
+/tools/graphify/ @pakimongo/code-intelligence
+/tools/okf-export/ @pakimongo/knowledge
+/knowledge/ @pakimongo/knowledge
+/data/goldsets/ @pakimongo/ai-data
