@@ -10,6 +10,8 @@ Required now:
 
 ```powershell
 python tools\qa\validate_docs.py
+python tools\qa\validate_json_examples.py
+python tools\qa\scan_secrets.py
 ```
 
 Checks:
@@ -19,6 +21,8 @@ Checks:
 - Markdown and Obsidian local links resolve
 - Mermaid diagram files contain Mermaid blocks
 - source files do not exceed hard file-size limits
+- API examples and QA fixtures parse as JSON
+- obvious committed secrets are blocked
 
 ## Phase 2: Scaffold CI
 

@@ -6,6 +6,8 @@ This folder holds lightweight repository validation tools. These are pre-code gu
 
 ```powershell
 python tools/qa/validate_docs.py
+python tools/qa/validate_json_examples.py
+python tools/qa/scan_secrets.py
 powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
 ```
 
@@ -16,6 +18,8 @@ powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
 - Local Markdown links resolve where they use normal Markdown link syntax.
 - Mermaid diagram files contain Mermaid blocks.
 - Future source files over 300/500 lines are reported.
+- API examples and QA fixtures parse as JSON.
+- Obvious committed secrets are reported.
 
 ## Notes
 
