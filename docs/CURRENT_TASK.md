@@ -64,7 +64,9 @@ Pre-code preparation is complete enough. The active task is to begin Sprint 0 im
 - Added test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, and pre-code completion audit.
 - Added CODEOWNERS plus GitHub PR, bug, feature, and test-gap templates.
 - Added story, test plan, task-state update, and release-gate evidence templates.
+- Completed S0-001 Flutter shell.
+- Completed S0-002 FastAPI shell.
 
 ## Current Next Action
 
-Begin Sprint 0 coding/scaffolding with S0-001 or S0-002. No additional pre-code planning is currently blocking implementation.
+Continue Sprint 0 coding/scaffolding with S0-003, S0-004, or S0-005. No additional pre-code planning is currently blocking implementation.
