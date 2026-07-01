@@ -26,7 +26,7 @@ Created the initial planning package for PakimonGO before implementation. Captur
 - Review and approve SRS direction.
 - Create remaining ADRs.
 - Validate map provider options with prototype/cost/legal review.
-- Choose backend framework.
+- Backend framework is now accepted as FastAPI-style modular monolith for Sprint 0.
 - Define scoring point ranges.
 - Define first gold datasets.
 
@@ -238,3 +238,29 @@ Added concrete pre-code test cases, acceptance scenarios, fixture payloads, API 
 ### Next Exact Action
 
 Begin Sprint 0 implementation and convert the documented tests into real pytest/Dart tests as each scaffold module appears.
+
+## 2026-07-01: Final Pre-Code Closure
+
+### Status
+
+Complete.
+
+### Summary
+
+Closed remaining pre-code governance gaps: test tooling standards, harness layout, coverage/flaky policy, local PR checklist, architecture fitness rules, ownership map, GitHub templates, workflow README update, and repeated pre-code completion audit.
+
+### Artifacts Added
+
+- `docs/adr/ADR-017-test-tooling-standards.md`
+- `docs/qa/TEST_HARNESS_ARCHITECTURE.md`
+- `docs/qa/COVERAGE_AND_FLAKY_POLICY.md`
+- `docs/qa/LOCAL_PR_CHECKLIST.md`
+- `docs/qa/ARCHITECTURE_FITNESS_RULES.md`
+- `docs/qa/PRECODE_COMPLETION_AUDIT.md`
+- `.github/CODEOWNERS`
+- `.github/PULL_REQUEST_TEMPLATE.md`
+- `.github/ISSUE_TEMPLATE/`
+
+### Next Exact Action
+
+Start Sprint 0 code with S0-001 Flutter shell or S0-002 FastAPI shell. Further useful test work now requires actual scaffold/code files.

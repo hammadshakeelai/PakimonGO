@@ -53,8 +53,13 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - Manual Android and security checklists: `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`, `docs/qa/SECURITY_TEST_CHECKLIST.md`
 - CI gates and ready/done rules: `docs/qa/CI_GATE_DESIGN.md`, `docs/qa/DEFINITION_OF_READY_DONE.md`
 - Failure and release gates: `docs/qa/FAILURE_MODE_MATRIX.md`, `docs/qa/RELEASE_GATE_CHECKLIST.md`
+- Test harness, coverage, checklist, and fitness rules: `docs/qa/TEST_HARNESS_ARCHITECTURE.md`, `docs/qa/COVERAGE_AND_FLAKY_POLICY.md`, `docs/qa/LOCAL_PR_CHECKLIST.md`, `docs/qa/ARCHITECTURE_FITNESS_RULES.md`
+- Pre-code completion audit: `docs/qa/PRECODE_COMPLETION_AUDIT.md`
+- Test tooling ADR: `docs/adr/ADR-017-test-tooling-standards.md`
 - API examples: `docs/api/examples/`
 - QA JSON fixtures: `docs/qa/fixtures/`
+- Reusable templates: `docs/templates/`
+- GitHub templates and ownership: `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/`, `.github/CODEOWNERS`
 - Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
 - Sprint 0 task packets: `docs/sprints/sprint-0/`
 - Toolchain readiness: `docs/tooling/TOOLCHAIN_READINESS.md`
@@ -74,3 +79,5 @@ python tools/qa/validate_json_examples.py
 python tools/qa/scan_secrets.py
 powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
 ```
+
+Pre-code planning is now complete enough for Sprint 0 implementation. Remaining test work requires actual scaffold/code files.

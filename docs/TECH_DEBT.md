@@ -6,8 +6,8 @@ No production code exists yet. Current debt is planning debt and decision debt.
 
 ## Decision Debt
 
-- Exact Flutter package structure is not selected yet.
-- Backend framework is not selected yet.
+- Exact Flutter generated package structure will be locked during S0-001, using the feature-first direction already documented.
+- Backend framework is selected for Sprint 0: FastAPI modular monolith. Revisit only if ADR-007 reversal conditions appear.
 - Map provider decision needs cost and SDK prototype validation.
 - Firebase Data Connect vs direct Cloud SQL access needs current pricing, limits, and local development validation.
 - AI provider mix needs cost, latency, accuracy, and privacy testing.
@@ -16,17 +16,18 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - Scoring point ranges and economy formulas are intentionally undefined until product review.
 - Moderation staffing/tooling is undefined.
 - Graphify integration is planned but not validated because no code exists yet.
-- Actual Flutter and FastAPI project toolchains are not scaffolded yet; only repo boundaries exist.
-- CI workflows are placeholders until runnable app/backend tooling exists.
-- Conversation archive contains a summary and paste target, but not yet the complete full visible chat export.
+- Actual Flutter and FastAPI project code is not scaffolded yet; only repo boundaries and tooling standards exist.
+- CI currently covers docs, JSON examples, and lightweight secret scan; Flutter/backend test jobs wait until runnable scaffold code exists.
+- Conversation archive contains summaries and a paste target; the complete full visible chat export depends on a user-provided paste/export.
 - OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
 - Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
 - Data dictionary is a planning dictionary, not final migrations.
-- GitHub Actions workflow exists for docs validation, JSON example validation, and lightweight secret scanning, but repository branch protection is not configured here.
+- GitHub Actions workflow exists for docs validation, JSON example validation, and lightweight secret scanning; branch protection must be enabled later in GitHub repository settings.
 - Direct `adb` is not on PATH; use the SDK path or add platform-tools to PATH when direct device commands are needed.
 - QA specs are now detailed, but the actual pytest/Dart/benchmark tests do not exist until Sprint 0 code scaffolds the modules.
 - Exact pass thresholds for zoo/duplicate/species goldsets are planning gates only until licensed fixtures and benchmark reports exist.
 - API examples and QA fixtures are syntax-validated only; schema validation should be added after contract tooling/generation exists.
+- GitHub CODEOWNERS uses placeholder teams until real repository users/teams exist.
 
 ## Future Debt Controls
 

@@ -53,7 +53,9 @@ Tests should live near the module or in that app/service test folder. Required t
 
 Every feature needs requirement IDs, acceptance criteria, automated tests where practical, and documented manual verification for camera/map/device behavior.
 
-Before code, read `docs/qa/README.md`, `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`, `docs/qa/TEST_CASE_CATALOGUE.md`, and the relevant focused spec. Public API work must satisfy `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`; scoring work must satisfy `docs/qa/SCORING_STATE_TEST_SPEC.md`; Android APK work must satisfy `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`.
+Before code, read `docs/qa/README.md`, `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`, `docs/qa/TEST_CASE_CATALOGUE.md`, `docs/qa/LOCAL_PR_CHECKLIST.md`, and the relevant focused spec. Public API work must satisfy `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`; scoring work must satisfy `docs/qa/SCORING_STATE_TEST_SPEC.md`; Android APK work must satisfy `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`.
+
+Respect `.github/CODEOWNERS` boundaries even before GitHub branch protection exists. Use `.github/PULL_REQUEST_TEMPLATE.md` and issue templates for future PR/issue drafting.
 
 ## Commit & Pull Request Guidelines
 

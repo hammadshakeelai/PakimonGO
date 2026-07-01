@@ -108,3 +108,9 @@
 - Status: Complete
 - Acceptance: concrete test catalogue, BDD scenarios, API examples, QA fixtures, failure mode matrix, release gates, JSON validation, secret scan, and docs validation workflow exist.
 - Notes: See `docs/qa/TEST_CASE_CATALOGUE.md`, `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md`, `docs/api/examples/`, `docs/qa/fixtures/`, and `.github/workflows/docs-validation.yml`.
+
+## WP-027: Final Pre-Code Closure
+
+- Status: Complete
+- Acceptance: test tooling ADR, test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, CODEOWNERS, GitHub PR/issue templates, reusable docs templates, and pre-code completion audit exist.
+- Notes: See `docs/adr/ADR-017-test-tooling-standards.md`, `docs/qa/TEST_HARNESS_ARCHITECTURE.md`, `docs/qa/COVERAGE_AND_FLAKY_POLICY.md`, `docs/qa/LOCAL_PR_CHECKLIST.md`, `docs/qa/ARCHITECTURE_FITNESS_RULES.md`, `docs/qa/PRECODE_COMPLETION_AUDIT.md`, `docs/templates/`, and `.github/`.

@@ -75,8 +75,18 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 - [[docs/qa/DEFINITION_OF_READY_DONE]]
 - [[docs/qa/FAILURE_MODE_MATRIX]]
 - [[docs/qa/RELEASE_GATE_CHECKLIST]]
+- [[docs/qa/TEST_HARNESS_ARCHITECTURE]]
+- [[docs/qa/COVERAGE_AND_FLAKY_POLICY]]
+- [[docs/qa/LOCAL_PR_CHECKLIST]]
+- [[docs/qa/ARCHITECTURE_FITNESS_RULES]]
+- [[docs/qa/PRECODE_COMPLETION_AUDIT]]
 - [[docs/qa/fixtures/README]]
 - [[docs/api/examples/README]]
+- [[docs/templates/README]]
+- [[docs/templates/STORY_TEMPLATE]]
+- [[docs/templates/TEST_PLAN_TEMPLATE]]
+- [[docs/templates/TASK_STATE_UPDATE_CHECKLIST]]
+- [[docs/templates/RELEASE_GATE_EVIDENCE_TEMPLATE]]
 - [[data/goldsets/MANIFEST_SCHEMA]]
 - [[docs/sprints/README]]
 - [[docs/sprints/SPRINT_0_PLAN]]
@@ -104,6 +114,7 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 - [[docs/adr/ADR-014-analytics-minimization]]
 - [[docs/adr/ADR-015-deployment-platform]]
 - [[docs/adr/ADR-016-release-process]]
+- [[docs/adr/ADR-017-test-tooling-standards]]
 
 ## Knowledge Layers
 

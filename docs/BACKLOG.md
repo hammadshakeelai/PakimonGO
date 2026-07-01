@@ -24,17 +24,16 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
-- Choose Flutter project template and package structure.
-- Choose backend framework and API style.
+- Generate Flutter project template and lock exact package structure during S0-001.
+- Implement FastAPI project scaffold using ADR-007 and ADR-017 standards.
 - Create database schema and migrations.
 - Create object storage layout for originals, thumbnails, and AI crops.
 - Create AI scoring service contract with structured outputs.
 - Create duplicate matching benchmark dataset.
 - Create zoo/geofence test dataset.
-- Create CI pipeline for lint, tests, security checks, and generated docs validation.
+- Extend CI pipeline for lint, tests, security checks, and generated docs validation after scaffold code exists.
 - Create local development environment using Docker Compose.
-- Create ADRs for platform, database, maps, AI scoring, auth, and storage.
-- Create ADRs for backend framework, moderation platform, deployment, analytics, and release process.
+- Add future ADRs for final map provider, migration tooling, scoring formula, and production deployment when those decisions become implementation blockers.
 - Prototype Flutter camera plus foreground location on Android.
 - Prototype Mapbox and Google Maps map UX/cost/legal constraints.
 - Prototype AI scoring schema on a small licensed/local image set.
@@ -48,20 +47,11 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Process Backlog
 
-- Create task-state update checklist.
-- Create ADR template.
-- Create story template.
-- Create test-plan template. (Initial ready/done and Sprint 0 templates now exist in `docs/qa/`; expand when issue tracker exists.)
-- Create release checklist.
-- Create AI handoff template.
-- Create Obsidian vault index.
-- Create OKF export files.
+- Expand templates only when a real process gap appears during implementation.
 - Add Graphify generation workflow after first code exists.
-- Add docs lint and link-check workflow.
+- Extend docs lint and link-check workflow if Markdown formatting rules become necessary.
 - Make `.github/workflows/docs-validation.yml` a required branch check once repository settings are configured.
 - Add max-file-size warning workflow once code exists.
 - Add full visible conversation text to `docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt` after user pastes export.
-- Create first Alpha-0 vertical slice work package before feature code.
 - Add OpenAPI linting and schema consistency checks.
-- Add a script to verify every `FR-*` in requirements appears in `docs/TRACEABILITY_MATRIX.md`.
 - Add a generated final Software Engineering report after artifacts are accepted.

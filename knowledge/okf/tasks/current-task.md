@@ -23,6 +23,8 @@ The QA test architecture is now expanded with focused specs under `docs/qa/`, in
 
 The concrete test layer now includes a test case catalogue, BDD scenarios, failure-mode matrix, release gates, API examples, QA JSON fixtures, JSON validation, secret scan, and docs validation workflow.
 
+Final pre-code closure adds ADR-017 test tooling standards, harness layout, coverage/flaky policy, local PR checklist, architecture fitness rules, CODEOWNERS, GitHub issue/PR templates, and the pre-code completion audit.
+
 ## Ready Next
 
 Begin Sprint 0: Alpha-0 toolchain and contract foundation.
@@ -40,6 +42,7 @@ Allowed next work:
 - Use task packets in `docs/sprints/sprint-0/`.
 - Use QA specs in `docs/qa/` before writing code.
 - Run `python tools/qa/validate_docs.py`, `python tools/qa/validate_json_examples.py`, and `python tools/qa/scan_secrets.py` before and after scaffold work.
+- Do not add more planning-only layers unless a new blocker is discovered.
 
 ## Still Gated
 
@@ -52,4 +55,4 @@ Allowed next work:
 
 ## Handoff
 
-Read `docs/sprints/SPRINT_0_PLAN.md` and `docs/qa/README.md` before coding.
+Read `docs/sprints/SPRINT_0_PLAN.md`, `docs/qa/README.md`, and `docs/qa/PRECODE_COMPLETION_AUDIT.md` before coding.

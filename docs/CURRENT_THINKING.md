@@ -2,7 +2,7 @@
 
 ## Working Thesis
 
-PakimonGO should now move from deep planning into methodology-verified scaffold-first implementation readiness. The repo has enough structure to avoid chaotic growth, but feature coding should wait until ADRs and the first Alpha-0 work package are accepted.
+PakimonGO should now move from pre-code planning into Sprint 0 scaffold implementation. The repo has enough structure to avoid chaotic growth, and additional useful test work now depends on actual scaffold/code files.
 
 ## Current Baseline
 
@@ -30,6 +30,7 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 - Sprint 0 tasks are now split into individual agent packets.
 - Pre-code QA is now operationalized with focused specs for requirement-to-test coverage, Sprint 0 validation, privacy contracts, scoring state, goldsets, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
 - The test layer now has a concrete catalogue, BDD acceptance scenarios, API examples, JSON fixtures, failure-mode matrix, release gates, a JSON syntax validator, secret scanner, and GitHub Actions docs workflow.
+- Final pre-code governance now includes ADR-017 test tooling standards, test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, CODEOWNERS, PR/issue templates, reusable docs templates, and a pre-code completion audit.
 
 ## Internal Debate Log
 
@@ -47,4 +48,4 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 
 ## Current Implementation Posture
 
-Sprint 0 scaffold work is now allowed. Start with S0-001 or S0-002, but each agent must read the relevant QA spec and test catalogue before changing code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.
+Sprint 0 scaffold work should start now with S0-001 or S0-002. Additional real test artifacts should be created alongside scaffold code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.

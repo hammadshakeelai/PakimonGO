@@ -25,6 +25,7 @@ This board turns the expanded plan into agent-ready work before production codin
 | WP-024 | Complete | Toolchain, QA scripts, and Sprint 0 packets | WP-015 | Dev lead | start S0-001 or S0-002 |
 | WP-025 | Complete | Pre-code test architecture pack | WP-020, WP-015 | QA lead | implement first tests in Sprint 0 |
 | WP-026 | Complete | Concrete test catalogue and CI guardrails | WP-020, WP-025 | QA/DevOps lead | start Sprint 0 code with tests |
+| WP-027 | Complete | Final pre-code closure | WP-015, WP-020, WP-026 | Lead/QA/DevOps | start Sprint 0 code now |
 
 ## WP-016: Contract-First API Draft
 

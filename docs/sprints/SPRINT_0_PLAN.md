@@ -56,7 +56,7 @@ Toolchain readiness snapshot: `docs/tooling/TOOLCHAIN_READINESS.md`.
 | S0-006 | Add public DTO privacy tests | `services/api/tests/`, `packages/contracts/` | production scoring logic | tests assert public DTO schemas omit exact lat/lng/private URLs | pytest or schema check |
 | S0-007 | Add score state enum/model shell | `packages/scoring-rules/`, `services/api/src/modules/scoring/` | final score formula | pending/prechecked/ai_evaluated/scored/capped/review/rejected represented | unit tests |
 | S0-008 | Add capture draft model shell | `apps/mobile/pakimon_go_app/lib/features/capture/` | real camera plugin flow | draft metadata model exists and references requirements | Dart unit test if Flutter available |
-| S0-009 | Add CI placeholder workflow | `.github/workflows/` | deploy secrets | docs/OpenAPI/test commands described or wired as non-deploy checks | local command parity |
+| S0-009 | Extend CI validation workflow | `.github/workflows/` | deploy secrets | docs/OpenAPI/test commands described or wired as non-deploy checks | local command parity |
 | S0-010 | Update traceability and state docs | `docs/` | none | current/next/thinking/task log reflect sprint start/close | git diff review |
 
 ## File Ownership

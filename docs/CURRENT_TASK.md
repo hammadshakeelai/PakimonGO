@@ -4,11 +4,11 @@
 
 Phase 5: Repo scaffold, methodology alignment, and implementation readiness.
 
-Production feature code has not started. The repository now contains a planning baseline plus a scaffolded monorepo structure that future implementation work can fill in.
+Production feature code has not started. The repository now contains a complete pre-code planning, QA, process, ownership, and scaffold-readiness baseline for Sprint 0.
 
 ## Active Task
 
-Apply the external Software Engineering methodology to PakimonGO, strengthen the SRS, and create the pre-code planning artifacts needed before Alpha-0 implementation.
+Pre-code preparation is complete enough. The active task is to begin Sprint 0 implementation using the existing packets, QA catalogue, and local validation guardrails.
 
 ## Current Inputs
 
@@ -60,7 +60,11 @@ Apply the external Software Engineering methodology to PakimonGO, strengthen the
 - Added per-task Sprint 0 packets under `docs/sprints/sprint-0/`.
 - Added the pre-code QA spec pack under `docs/qa/`: requirement-to-test matrix, Sprint 0 test plan, privacy contract spec, scoring state spec, goldset governance, zoo/duplicate benchmark spec, Android manual QA, security checklist, CI gate design, and ready/done rules.
 - Added concrete test catalogue, BDD acceptance scenarios, failure-mode matrix, release gate checklist, API examples, QA JSON fixtures, JSON validation, secret scan, and the first docs validation GitHub Actions workflow.
+- Added ADR-017 for test tooling standards.
+- Added test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, and pre-code completion audit.
+- Added CODEOWNERS plus GitHub PR, bug, feature, and test-gap templates.
+- Added story, test plan, task-state update, and release-gate evidence templates.
 
 ## Current Next Action
 
-Begin Sprint 0 coding/scaffolding with S0-001 or S0-002. Before editing code, read `docs/qa/README.md`, `docs/qa/TEST_CASE_CATALOGUE.md`, `docs/qa/SPRINT_0_TEST_PLAN.md`, and the focused spec for the module being changed.
+Begin Sprint 0 coding/scaffolding with S0-001 or S0-002. No additional pre-code planning is currently blocking implementation.

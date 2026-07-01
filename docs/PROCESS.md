@@ -160,6 +160,8 @@ Use `docs/qa/TEST_CASE_CATALOGUE.md` as the source for concrete test IDs and `do
 
 Launch-blocking areas include privacy DTOs, score state, duplicate/zoo checks, upload idempotency, moderation/report/block flows, and exact-location leak prevention. If these tests fail, stop feature exposure until the contract or implementation is fixed.
 
+Use `docs/qa/LOCAL_PR_CHECKLIST.md` before commits/PRs and `docs/qa/ARCHITECTURE_FITNESS_RULES.md` when adding module boundaries. Test harness structure follows `docs/qa/TEST_HARNESS_ARCHITECTURE.md`; coverage and flaky-test decisions follow `docs/qa/COVERAGE_AND_FLAKY_POLICY.md`.
+
 ## AI Agent Handoff Rules
 
 When handing work to another AI agent:
