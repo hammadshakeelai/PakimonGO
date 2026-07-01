@@ -22,6 +22,7 @@ This board turns the expanded plan into agent-ready work before production codin
 | WP-021 | Complete draft | Goldset manifest standard | FR-DUP, FR-ZOO, FR-TAX, FR-SCORE | AI/data lead | seed data policy |
 | WP-022 | Complete draft | Obsidian/OKF/Graphify setup | NFR-MAINT-003 | Docs/knowledge lead | automation scripts later |
 | WP-023 | Complete draft | Sprint 0 implementation plan | WP-015 | TPM/architect | begin Sprint 0 |
+| WP-024 | Complete | Toolchain, QA scripts, and Sprint 0 packets | WP-015 | Dev lead | start S0-001 or S0-002 |
 
 ## WP-016: Contract-First API Draft
 

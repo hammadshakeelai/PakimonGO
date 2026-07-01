@@ -22,7 +22,8 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
 - Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
 - Data dictionary is a planning dictionary, not final migrations.
-- Sprint 0 plan assumes Flutter/Python tooling availability, which still must be checked locally.
+- GitHub Actions are not yet configured to run `tools/qa/validate_docs.py`.
+- Direct `adb` is not on PATH; use the SDK path or add platform-tools to PATH when direct device commands are needed.
 
 ## Future Debt Controls
 

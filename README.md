@@ -43,9 +43,19 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
 - Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
 - Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
+- Sprint 0 task packets: `docs/sprints/sprint-0/`
+- Toolchain readiness: `docs/tooling/TOOLCHAIN_READINESS.md`
+- QA validation tools: `tools/qa/`
 - Obsidian vault home: `docs/OBSIDIAN_VAULT_INDEX.md`
 - Mermaid diagram pack: `docs/diagrams/README.md`
 
 ## Build Status
 
 No runnable app or backend exists yet. Do not expect `flutter test`, backend tests, or CI to pass until toolchains are scaffolded in a later task.
+
+Current pre-code validation:
+
+```powershell
+python tools/qa/validate_docs.py
+powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
+```

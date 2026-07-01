@@ -8,6 +8,10 @@ Create the first runnable technical foundation for PakimonGO without implementin
 
 Planned. Not started.
 
+Task packets are split under `docs/sprints/sprint-0/`.
+
+Toolchain readiness snapshot: `docs/tooling/TOOLCHAIN_READINESS.md`.
+
 ## Sprint Inputs
 
 - Accepted ADRs: ADR-001, ADR-002, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-010, ADR-011, ADR-012, ADR-013, ADR-014, ADR-016.

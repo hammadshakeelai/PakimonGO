@@ -90,3 +90,9 @@
 - Status: Complete draft
 - Acceptance: Sprint goal, scope, tasks, file ownership, commit sequence, tests, privacy/security notes, rollback, and definition of done are documented.
 - Notes: See `docs/sprints/SPRINT_0_PLAN.md`.
+
+## WP-024: Toolchain, QA Scripts, And Sprint 0 Packets
+
+- Status: Complete
+- Acceptance: toolchain readiness recorded, validation scripts pass, and Sprint 0 is split into individual task packets.
+- Notes: See `docs/tooling/TOOLCHAIN_READINESS.md`, `tools/qa/`, and `docs/sprints/sprint-0/`.

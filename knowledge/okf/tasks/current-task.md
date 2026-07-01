@@ -33,6 +33,8 @@ Allowed next work:
 - Public DTO privacy tests.
 - Score state model shell.
 - Capture draft model shell.
+- Use task packets in `docs/sprints/sprint-0/`.
+- Run `python tools/qa/validate_docs.py` before and after scaffold work.
 
 ## Still Gated
 

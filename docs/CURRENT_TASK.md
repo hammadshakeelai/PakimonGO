@@ -55,7 +55,10 @@ Apply the external Software Engineering methodology to PakimonGO, strengthen the
 - Completed ADR acceptance pass: 13 accepted, 1 revised, 2 deferred.
 - Added `docs/data/DATA_DICTIONARY.md`.
 - Added `docs/sprints/SPRINT_0_PLAN.md`.
+- Added `docs/tooling/TOOLCHAIN_READINESS.md`.
+- Added `tools/qa/validate_docs.py` and `tools/qa/check_toolchain.ps1`.
+- Added per-task Sprint 0 packets under `docs/sprints/sprint-0/`.
 
 ## Current Next Action
 
-Begin Sprint 0 with short-burst toolchain and contract scaffolding, starting from `docs/sprints/SPRINT_0_PLAN.md`.
+Begin Sprint 0 coding/scaffolding with S0-001 or S0-002, using the task packets in `docs/sprints/sprint-0/`.

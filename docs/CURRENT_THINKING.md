@@ -26,6 +26,8 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 - `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test planning.
 - ADR review is complete enough to begin Sprint 0: 13 accepted, 1 revised, 2 deferred.
 - Data dictionary and Sprint 0 plan are the current rails for first migrations/toolchain work.
+- Toolchain readiness is checked: Flutter doctor passes, Python is available, and docs validation scripts pass.
+- Sprint 0 tasks are now split into individual agent packets.
 
 ## Internal Debate Log
 
@@ -43,4 +45,4 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 
 ## Current Implementation Posture
 
-Sprint 0 scaffold work is now allowed. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.
+Sprint 0 scaffold work is now allowed. Start with S0-001 or S0-002. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.

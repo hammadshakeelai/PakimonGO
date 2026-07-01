@@ -63,6 +63,9 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 - [[data/goldsets/MANIFEST_SCHEMA]]
 - [[docs/sprints/README]]
 - [[docs/sprints/SPRINT_0_PLAN]]
+- [[docs/sprints/sprint-0/README]]
+- [[docs/tooling/TOOLCHAIN_READINESS]]
+- [[tools/qa/README]]
 
 ## Decisions
 
