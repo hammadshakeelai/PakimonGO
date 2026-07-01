@@ -30,6 +30,7 @@ The final Software Engineering report should follow the methodology order:
 | Operation contracts | `docs/software-engineering/07_OPERATION_CONTRACTS.md` |
 | Packages and CRC | `docs/software-engineering/08_PACKAGES_CRC.md` |
 | Supporting material | ADRs, threat model, OpenAPI, data model, QA plan, traceability matrix |
+| Diagram appendix | `docs/diagrams/` |
 
 ## Build Principle
 
@@ -41,3 +42,13 @@ The final report should be assembled from the same source docs instead of being 
 - `.docx` report with generated table of contents.
 - PDF export for visual QA.
 - Diagram images or rendered Mermaid diagrams with figure captions.
+
+## Mermaid Diagram Sources
+
+Use the canonical Mermaid sources in `docs/diagrams/` when assembling the report:
+
+- System context and C4 containers.
+- Methodology chain and use case overview.
+- Domain model, DFDs, design class view, ERD.
+- API sequence, scoring pipeline, privacy location flow.
+- Threat model, UX flows, package dependencies, deployment view.

@@ -42,6 +42,7 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
 - Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
 - Obsidian vault home: `docs/OBSIDIAN_VAULT_INDEX.md`
+- Mermaid diagram pack: `docs/diagrams/README.md`
 
 ## Build Status
 

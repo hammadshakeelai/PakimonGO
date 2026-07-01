@@ -65,6 +65,10 @@ Current vault home:
 
 - `docs/OBSIDIAN_VAULT_INDEX.md`
 
+Current canonical Mermaid diagram pack:
+
+- `docs/diagrams/README.md`
+
 ### Graphify
 
 Use Graphify or equivalent code-graph tooling after code exists. Store generated outputs under `knowledge/graph/graphify-out/`.

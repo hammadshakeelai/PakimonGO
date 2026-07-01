@@ -155,3 +155,4 @@ The SRS is valid only when:
 - Operation contracts: `docs/software-engineering/07_OPERATION_CONTRACTS.md`
 - Packages and CRC: `docs/software-engineering/08_PACKAGES_CRC.md`
 - Final report plan: `docs/software-engineering/09_FINAL_REPORT_PLAN.md`
+- Mermaid diagram pack: `docs/diagrams/README.md`

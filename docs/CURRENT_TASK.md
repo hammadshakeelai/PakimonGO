@@ -51,6 +51,7 @@ Apply the external Software Engineering methodology to PakimonGO, strengthen the
 - Added `docs/qa/TESTING_MASTER_PLAN.md`.
 - Added `data/goldsets/MANIFEST_SCHEMA.md`.
 - Added `docs/ADR_REVIEW_PACK.md`, `docs/AGENT_HANDOFF_SYSTEM.md`, `docs/OBSIDIAN_VAULT_INDEX.md`, OKF trace files, Graphify plan, and OKF export plan.
+- Added `docs/diagrams/` as the canonical Mermaid diagram pack for system context, C4 containers, architecture, release process, methodology, use cases, domain, DFDs, ERD, API sequence, scoring, privacy, threat model, UX, package dependencies, and deployment.
 
 ## Current Next Action
 

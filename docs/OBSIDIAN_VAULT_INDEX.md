@@ -30,6 +30,26 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 - [[docs/software-engineering/08_PACKAGES_CRC]]
 - [[docs/software-engineering/09_FINAL_REPORT_PLAN]]
 
+## Mermaid Diagrams
+
+- [[docs/diagrams/README]]
+- [[docs/diagrams/SYSTEM_CONTEXT]]
+- [[docs/diagrams/C4_CONTAINERS]]
+- [[docs/diagrams/ARCHITECTURE_FLOW]]
+- [[docs/diagrams/RELEASE_PROCESS]]
+- [[docs/diagrams/METHODOLOGY_CHAIN]]
+- [[docs/diagrams/USE_CASE_OVERVIEW]]
+- [[docs/diagrams/DOMAIN_MODEL]]
+- [[docs/diagrams/DATA_FLOW]]
+- [[docs/diagrams/DATABASE_ERD]]
+- [[docs/diagrams/API_SEQUENCE_CAPTURE]]
+- [[docs/diagrams/SCORING_PIPELINE]]
+- [[docs/diagrams/PRIVACY_LOCATION_FLOW]]
+- [[docs/diagrams/THREAT_MODEL]]
+- [[docs/diagrams/UX_FLOWS]]
+- [[docs/diagrams/PACKAGE_DEPENDENCIES]]
+- [[docs/diagrams/DEPLOYMENT_VIEW]]
+
 ## Implementation Readiness
 
 - [[docs/WORK_PACKAGE_BOARD]]

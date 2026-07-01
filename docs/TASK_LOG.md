@@ -94,3 +94,36 @@ Read the external Software Engineering methodology from the Hakari Bankai projec
 ### Next Exact Action
 
 Review and accept/revise ADR-001 through ADR-016, then open WP-015 with a clear choice between contract generation and Flutter/FastAPI toolchain scaffolding.
+
+## 2026-07-01: Mermaid Diagram Pack
+
+### Status
+
+Complete draft.
+
+### Summary
+
+Added a canonical Mermaid diagram pack under `docs/diagrams/` and linked it from the SRS, Software Engineering report plan, Obsidian vault index, README, and knowledge system docs.
+
+### Diagrams Added
+
+- System context.
+- C4 containers.
+- Architecture flow.
+- Release process.
+- Methodology chain.
+- Use case overview.
+- Domain model.
+- Data flow.
+- Database ERD.
+- API capture sequence.
+- Scoring pipeline.
+- Privacy location flow.
+- Threat model.
+- UX flows.
+- Package dependencies.
+- Deployment view.
+
+### Next Exact Action
+
+Review diagrams for report inclusion and render them later when generating the final Software Engineering report.

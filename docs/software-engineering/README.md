@@ -26,6 +26,7 @@ Inception -> Requirements/SRS -> Process Model -> Use Cases -> Domain Model
 - `07_OPERATION_CONTRACTS.md`: Larman-style contracts for system operations.
 - `08_PACKAGES_CRC.md`: package dependencies and CRC cards.
 - `09_FINAL_REPORT_PLAN.md`: final assembled report order and build plan.
+- `../diagrams/`: canonical Mermaid diagram pack for report and Obsidian reuse.
 
 ## Traceability Rule
 
