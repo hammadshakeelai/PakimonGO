@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  db:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dummy_local_password
+      POSTGRES_DB: pakimongo_local
+    ports:
+      - "5432:5432"
