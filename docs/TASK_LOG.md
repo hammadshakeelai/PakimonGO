@@ -780,6 +780,41 @@ Built the AI provider adapter framework: VisionProvider protocol with AnalysisRe
 
 Sprint 12 — Map prototype spike or real Google Vision provider implementation.
 
+## 2026-07-01: Sprint 12 — Async Worker Scoring
+
+### Status
+
+Complete.
+
+### Summary
+
+Moved scoring from synchronous HTTP handler to async worker queue. Created JobQueue protocol + InMemoryJobQueue, ScoringWorker that polls the queue and runs AIScoringService in a background thread, and refactored POST /v1/submissions to enqueue scoring for wild submissions while scoring zoo/pet/duplicate synchronously.
+
+### Changes Made
+
+- `services/api/src/infrastructure/queue/__init__.py` — NEW
+- `services/api/src/infrastructure/queue/queue.py` — NEW: Job dataclass, JobQueue protocol, InMemoryJobQueue with process_pending(), get_queue() singleton
+- `services/api/src/infrastructure/worker/__init__.py` — NEW
+- `services/api/src/infrastructure/worker/scoring_worker.py` — NEW: process_score_job(), process_pending_jobs(), AIScoringService with DummyVisionProvider
+- `services/api/src/modules/submissions/api/routes.py` — MODIFIED: wild submissions enqueue job, return ai_evaluated; capped paths scored synchronously with StubScoringService
+- `services/api/src/main.py` — MODIFIED: FastAPI lifespan starts background worker thread (500ms poll)
+- `services/api/tests/test_submission.py` — MODIFIED: wild test calls _process_pending() then GETs; duplicate test uses async pattern for first submission
+
+### Verification
+
+- API tests: 54 passed (updated for async flow)
+- Scoring-rules tests: 43 passed (unchanged)
+- Worker tests: 1 passed (unchanged)
+- Flutter tests: 14 passed (unchanged)
+- Total: 112 tests, all passing
+- Ruff: clean
+- Mypy: clean
+- QA validations: 3/3 PASS
+
+### Next
+
+Sprint 13 — Map prototype spike or real Google Vision provider implementation.
+
 ## 2026-07-01: Sprint 9 — AI Scoring Pipeline Stub
 
 ### Status

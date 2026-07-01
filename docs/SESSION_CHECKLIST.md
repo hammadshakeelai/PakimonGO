@@ -28,3 +28,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 22 | Sprint 9 AI scoring pipeline stub | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 101 total tests, scoring wired into submissions |
 | 23 | Sprint 10 deferred ADR review | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | ADR-003 + ADR-015 accepted; zero deferred remain |
 | 24 | Sprint 11 AI provider adapter framework | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 112 total tests, AIScoringService wired |
+| 25 | Sprint 12 async worker scoring | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 112 tests, worker thread, async scoring |

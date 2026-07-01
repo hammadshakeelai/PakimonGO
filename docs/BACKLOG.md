@@ -64,6 +64,11 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S11-004: GoogleVisionProvider placeholder~~ ✅ DONE
 - ~~S11-005: Wire into routes~~ ✅ DONE
 - ~~S11-006: Tests~~ ✅ DONE
+- ~~S12-001: JobQueue protocol~~ ✅ DONE
+- ~~S12-002: ScoringWorker~~ ✅ DONE
+- ~~S12-003: Async submission flow~~ ✅ DONE
+- ~~S12-004: Background worker thread~~ ✅ DONE
+- ~~S12-005: Tests~~ ✅ DONE
 - Create database schema and migrations.
 - Create object storage layout for originals, thumbnails, and AI crops.
 - Create AI scoring service contract with structured outputs.

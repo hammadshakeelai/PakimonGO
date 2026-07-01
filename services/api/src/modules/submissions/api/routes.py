@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import sys
 import uuid
 from pathlib import Path
@@ -18,25 +17,16 @@ from src.infrastructure.database.repositories import get_media_asset
 from src.infrastructure.database.repositories import get_submission as db_get_submission
 from src.infrastructure.database.repositories import update_submission_status
 from src.infrastructure.database.session import get_db
+from src.infrastructure.queue.queue import get_queue
 
 _score_pkg = Path(__file__).resolve().parents[6] / "packages" / "scoring-rules" / "src"
 sys.path.insert(0, str(_score_pkg))
 
 from precheck import run_precheck  # noqa: E402
-from scoring_service import AIScoringService  # noqa: E402
-from vision_provider import DummyVisionProvider  # noqa: E402
-
-_VISION_IMPL = DummyVisionProvider()
-_vision_provider_env = os.environ.get("VISION_PROVIDER", "dummy").lower()
-if _vision_provider_env in ("google", "gcp"):
-    try:
-        from google_vision_provider import GoogleVisionProvider  # noqa: E402
-        _VISION_IMPL = GoogleVisionProvider()
-    except (ImportError, ValueError):
-        pass
+from scoring_service import StubScoringService  # noqa: E402
 
 router = APIRouter(prefix="/v1/submissions", tags=["submissions"])
-_scoring = AIScoringService(vision_provider=_VISION_IMPL)
+_scoring = StubScoringService()
 
 
 def _build_submission_response(sub, attr, score_event=None) -> dict:
@@ -110,21 +100,14 @@ def create_submission_endpoint(
     suggested = precheck_result.suggested_state
     update_submission_status(db, sub.id, suggested.value)
 
-    upload_base = os.environ.get("UPLOAD_BASE", "data/uploads")
-    media_path = None
-    if asset and asset.storage_key:
-        candidate = Path(upload_base) / asset.storage_key
-        if candidate.exists():
-            media_path = str(candidate)
+    if suggested.value == "ai_evaluated":
+        _enqueue_score_job(sub.id, media_asset_id, animal_context,
+                           precheck_result.explanation_category, current_user.user_id)
+        return _build_submission_response(sub, attr)
 
-    scoring_result = _scoring.evaluate(
-        animal_context,
-        precheck_result.explanation_category,
-        media_path=media_path,
-    )
-    new_state = "scored" if suggested.value == "ai_evaluated" else "capped"
+    scoring_result = _scoring.evaluate(animal_context, precheck_result.explanation_category)
+    new_state = "capped"
     update_submission_status(db, sub.id, new_state)
-
     score_event = create_score_event(
         db=db,
         submission_id=sub.id,
@@ -137,8 +120,24 @@ def create_submission_endpoint(
         previous_state=suggested.value,
         new_state=new_state,
     )
-
     return _build_submission_response(sub, attr, score_event)
+
+
+def _enqueue_score_job(
+    submission_id: str,
+    media_asset_id: str,
+    animal_context: str,
+    explanation_category: str,
+    user_id: str | None = None,
+) -> None:
+    queue = get_queue()
+    queue.enqueue("score_submission", {
+        "submission_id": submission_id,
+        "media_asset_id": media_asset_id,
+        "animal_context": animal_context,
+        "explanation_category": explanation_category,
+        "user_id": user_id,
+    })
 
 
 @router.get("/{submission_id}")

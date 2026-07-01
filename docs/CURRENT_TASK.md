@@ -2,9 +2,9 @@
 
 ## Active Phase
 
-Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, and all ADRs resolved.
+Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, async worker scoring, and all ADRs resolved.
 
-Sprints 1-11 complete. 112 total tests all passing.
+Sprints 1-12 complete. 112 total tests all passing.
 
 ## Active Task
 
@@ -185,6 +185,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S11-005: ✅ DONE — Wired AIScoringService into submission routes (VISION_PROVIDER env var)
 - S11-006: ✅ DONE — 11 new tests; 112 total all passing
 
+## Sprint 12 Progress
+
+- S12-001: ✅ DONE — JobQueue protocol + InMemoryJobQueue with process_pending()
+- S12-002: ✅ DONE — ScoringWorker (polls queue, runs AIScoringService, stores result in DB)
+- S12-003: ✅ DONE — Async submission flow: precheck sync, scoring async via queue
+- S12-004: ✅ DONE — Background worker thread in FastAPI lifespan
+- S12-005: ✅ DONE — Tests updated for async flow (process_pending after POST, GET to verify)
+
 ## Current Next Action
 
-Sprint 12 — Map prototype spike or real Google Vision provider implementation.
+Sprint 13 — Map prototype spike or real Google Vision provider implementation.

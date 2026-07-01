@@ -48,21 +48,20 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 11 is complete.** All 6 tasks (S11-001 through S11-006) done and verified.
+**Sprint 12 is complete.** All 5 tasks done and verified.
 
-Sprint 11 delivered:
-- `vision_provider.py` — VisionProvider protocol, AnalysisResult dataclass, DummyVisionProvider
-- `scoring_service.py` — AIScoringService (uses vision provider for context, falls back to stub for capped paths)
-- `google_vision_provider.py` — placeholder requiring GOOGLE_VISION_API_KEY env var
-- `test_vision_provider.py` — 5 tests (DummyVisionProvider, AnalysisResult, GoogleVisionProvider init)
-- Routes updated: AIScoringService wired with DummyVisionProvider by default; VISION_PROVIDER=google selects GCP
-- 11 new tests, 112 total, ruff + mypy clean, all QA validations PASS
+Sprint 12 delivered:
+- `services/api/src/infrastructure/queue/queue.py` — JobQueue protocol + InMemoryJobQueue with `process_pending()`
+- `services/api/src/infrastructure/worker/scoring_worker.py` — `process_score_job()` creates DB session, runs AIScoringService, stores ScoreEvent
+- `services/api/src/modules/submissions/api/routes.py` — wild submissions enqueue scoring job and return `ai_evaluated` immediately; capped paths scored synchronously
+- `services/api/src/main.py` — background worker thread polls queue every 500ms via FastAPI lifespan
+- `services/api/tests/test_submission.py` — wild test creates, then calls `_process_pending()`, then GETs to verify scored state
+- 112 total tests all passing, ruff + mypy clean, all QA validations PASS
 
-Sprint 0-11 stats:
+Sprint 0-12 stats:
 - 112 total tests (54 API + 1 worker + 43 scoring-rules + 14 Flutter)
 - 11 real endpoints + 8 planned in OpenAPI
 - 7 GitHub Actions CI jobs
-- All 17 ADRs accepted or revised
-- Submission pipeline: upload → precheck → AI vision provider → ScoreEvent → response
+- Submission pipeline: POST (precheck sync + enqueue) → worker thread (scoring async) → GET (ScoreEvent)
 
-Next: Sprint 12 — Map prototype spike or real Google Vision provider implementation.
+Next: Sprint 13 — Map prototype spike or real Google Vision provider implementation.
