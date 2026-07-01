@@ -48,4 +48,4 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-Sprint 0 scaffold work is underway. S0-001 Flutter shell and S0-002 FastAPI shell are complete. Next steps are S0-003, S0-004, or S0-005. Additional real test artifacts should be created alongside scaffold code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.
+Sprint 0 scaffold work is underway. S0-001 to S0-005 are complete. Next steps are S0-006, S0-007, or S0-008. Additional real test artifacts should be created alongside scaffold code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.

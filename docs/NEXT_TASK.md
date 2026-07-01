@@ -12,7 +12,7 @@ Begin Sprint 0: Alpha-0 toolchain and contract foundation. Pre-code preparation 
 4. For backend/contract work, read `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md` and `docs/api/examples/README.md`.
 5. For scoring work, read `docs/qa/SCORING_STATE_TEST_SPEC.md`.
 6. Read `docs/qa/LOCAL_PR_CHECKLIST.md` and `docs/qa/ARCHITECTURE_FITNESS_RULES.md`.
-7. Start S0-003 worker shell, S0-004 local config, or S0-005 contract package in a short-burst commit.
+7. Start S0-006 privacy DTO tests, S0-007 score state model, or S0-008 capture draft model in a short-burst commit.
 8. Run `python tools/qa/validate_docs.py`, `python tools/qa/validate_json_examples.py`, and `python tools/qa/scan_secrets.py` before and after scaffold changes.
 9. Keep public/social/map-provider-specific implementation out of Sprint 0.
 10. Update `docs/conversation-archive/` with the full visible conversation if the user pastes it into the prepared raw text file.

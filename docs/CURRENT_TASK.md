@@ -66,7 +66,11 @@ Pre-code preparation is complete enough. The active task is to begin Sprint 0 im
 - Added story, test plan, task-state update, and release-gate evidence templates.
 - Completed S0-001 Flutter shell.
 - Completed S0-002 FastAPI shell.
+- Completed S0-003 worker shell.
+- Completed S0-004 local config.
+- Completed S0-005 contract package shell.
+
 
 ## Current Next Action
 
-Continue Sprint 0 coding/scaffolding with S0-003, S0-004, or S0-005. No additional pre-code planning is currently blocking implementation.
+Continue Sprint 0 coding/scaffolding with S0-006, S0-007, or S0-008. No additional pre-code planning is currently blocking implementation.
