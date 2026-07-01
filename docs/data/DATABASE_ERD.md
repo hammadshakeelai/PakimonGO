@@ -4,6 +4,8 @@
 
 PostgreSQL is the canonical product database. Use PostGIS for geospatial/geofence queries and pgvector for similarity search. Photos and derivatives live in object storage.
 
+Detailed table guidance lives in `docs/data/DATA_DICTIONARY.md`.
+
 ## ERD
 
 ```mermaid
