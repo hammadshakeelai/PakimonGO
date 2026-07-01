@@ -69,6 +69,11 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S12-003: Async submission flow~~ ✅ DONE
 - ~~S12-004: Background worker thread~~ ✅ DONE
 - ~~S12-005: Tests~~ ✅ DONE
+- ~~S13-001: Mapbox dependency~~ ✅ DONE
+- ~~S13-002: AppConfig token setup~~ ✅ DONE
+- ~~S13-003: MapScreen widget~~ ✅ DONE
+- ~~S13-004: Update main.dart~~ ✅ DONE
+- ~~S13-005: Widget tests~~ ✅ DONE
 - Create database schema and migrations.
 - Create object storage layout for originals, thumbnails, and AI crops.
 - Create AI scoring service contract with structured outputs.

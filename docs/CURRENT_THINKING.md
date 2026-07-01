@@ -48,20 +48,21 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 12 is complete.** All 5 tasks done and verified.
+**Sprint 13 is complete.** All 5 tasks done and verified.
 
-Sprint 12 delivered:
-- `services/api/src/infrastructure/queue/queue.py` — JobQueue protocol + InMemoryJobQueue with `process_pending()`
-- `services/api/src/infrastructure/worker/scoring_worker.py` — `process_score_job()` creates DB session, runs AIScoringService, stores ScoreEvent
-- `services/api/src/modules/submissions/api/routes.py` — wild submissions enqueue scoring job and return `ai_evaluated` immediately; capped paths scored synchronously
-- `services/api/src/main.py` — background worker thread polls queue every 500ms via FastAPI lifespan
-- `services/api/tests/test_submission.py` — wild test creates, then calls `_process_pending()`, then GETs to verify scored state
-- 112 total tests all passing, ruff + mypy clean, all QA validations PASS
+Sprint 13 delivered:
+- `mapbox_maps_flutter 2.25.0` added to pubspec.yaml
+- `lib/core/config/app_config.dart` — `AppConfig.mapboxAccessToken` from `MAPBOX_ACCESS_TOKEN` env var
+- `lib/features/map/presentation/map_screen.dart` — `MapScreen` with `MapWidget` (Mapbox map with fallback message if no token)
+- `lib/main.dart` — `PakimonGoApp` with MapScreen as home, `MapboxOptions.setAccessToken` on load
+- `test/widget_test.dart` — updated for new app structure (checks "PakimonGO Map" title)
+- Without a token, the app renders a placeholder message instead of crashing
+- 14 Flutter tests all passing
 
-Sprint 0-12 stats:
-- 112 total tests (54 API + 1 worker + 43 scoring-rules + 14 Flutter)
+Sprint 0-13 stats:
+- 112 Python tests + 14 Flutter tests = 126 total
 - 11 real endpoints + 8 planned in OpenAPI
 - 7 GitHub Actions CI jobs
-- Submission pipeline: POST (precheck sync + enqueue) → worker thread (scoring async) → GET (ScoreEvent)
+- Mapbox Flutter SDK wired for prototyping
 
-Next: Sprint 13 — Map prototype spike or real Google Vision provider implementation.
+Next: Sprint 14 — Real Google Vision provider implementation or collection/leaderboard endpoints.

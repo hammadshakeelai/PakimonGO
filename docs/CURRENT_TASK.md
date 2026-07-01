@@ -2,9 +2,9 @@
 
 ## Active Phase
 
-Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, async worker scoring, and all ADRs resolved.
+Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, async worker scoring, and map prototype.
 
-Sprints 1-12 complete. 112 total tests all passing.
+Sprints 1-13 complete. 112 total tests all passing.
 
 ## Active Task
 
@@ -185,6 +185,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S11-005: ✅ DONE — Wired AIScoringService into submission routes (VISION_PROVIDER env var)
 - S11-006: ✅ DONE — 11 new tests; 112 total all passing
 
+## Sprint 13 Progress
+
+- S13-001: ✅ DONE — Added mapbox_maps_flutter dependency to pubspec.yaml
+- S13-002: ✅ DONE — Created AppConfig with MAPBOX_ACCESS_TOKEN env var support
+- S13-003: ✅ DONE — Created MapScreen with MapWidget (Mapbox map fallback message if no token)
+- S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
+- S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
+
 ## Sprint 12 Progress
 
 - S12-001: ✅ DONE — JobQueue protocol + InMemoryJobQueue with process_pending()
@@ -195,4 +203,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 13 — Map prototype spike or real Google Vision provider implementation.
+Sprint 14 — Real Google Vision provider implementation or collection/leaderboard endpoints.

@@ -815,6 +815,34 @@ Moved scoring from synchronous HTTP handler to async worker queue. Created JobQu
 
 Sprint 13 — Map prototype spike or real Google Vision provider implementation.
 
+## 2026-07-01: Sprint 13 — Map Prototype Spike
+
+### Status
+
+Complete.
+
+### Summary
+
+Added Mapbox Flutter SDK (mapbox_maps_flutter 2.25.0) as a dependency, created a MapScreen with MapWidget, added AppConfig for MAPBOX_ACCESS_TOKEN env var, and updated the app's home screen to show the map. Without a real token, the map renders a placeholder message instead of crashing.
+
+### Changes Made
+
+- `pubspec.yaml` — added `mapbox_maps_flutter: ^2.25.0`
+- `lib/core/config/app_config.dart` — NEW: AppConfig with mapboxAccessToken from `String.fromEnvironment('MAPBOX_ACCESS_TOKEN')`
+- `lib/features/map/presentation/map_screen.dart` — NEW: MapScreen with MapWidget (Mapbox map or fallback text)
+- `lib/main.dart` — rewritten: PakimonGoApp with MapScreen as home, MapboxOptions.setAccessToken on load
+- `test/widget_test.dart` — updated: checks for "PakimonGO Map" title, no longer tests counter
+
+### Verification
+
+- Flutter tests: 14 passed (13 capture + 1 widget)
+- Map renders on device/emulator with `--dart-define=MAPBOX_ACCESS_TOKEN=...`
+- Python tests: all 112 passed (unchanged)
+
+### Next
+
+Sprint 14 — Real Google Vision provider implementation or collection/leaderboard endpoints.
+
 ## 2026-07-01: Sprint 9 — AI Scoring Pipeline Stub
 
 ### Status
