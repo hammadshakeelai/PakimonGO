@@ -2,9 +2,9 @@
 
 ## Status
 
-Deferred
+Accepted (alpha/beta direction)
 
-Google Cloud/Firebase-first remains the accepted alpha planning direction. Final production deployment approval is deferred until cloud project, budget, region, and compliance review.
+Google Cloud/Firebase-first is accepted for alpha/beta deployment: Cloud Run for API/workers, Cloud SQL PostgreSQL (pgvector), Cloud Storage, Firebase Auth/App Check. Detailed architecture (exact Cloud Run config, Cloud SQL tier, region, budget) will be finalized during beta preparation. The local Docker Compose + SQLite dev environment remains the development standard — cloud deployment is not needed until beta testing.
 
 ## Context
 

@@ -2,9 +2,9 @@
 
 ## Status
 
-Deferred
+Accepted (prototyping direction)
 
-Final map provider selection is deferred. Mapbox-first prototyping remains the accepted spike direction, with Google Maps Platform retained as challenger.
+Mapbox-first prototyping is accepted as the development direction. Google Maps Platform is retained as the challenger. Final commitment depends on prototype results (cost, Flutter SDK performance, legal review). A map prototype spike is planned for Sprint 12+ once the API and scoring pipeline are stable.
 
 ## Context
 

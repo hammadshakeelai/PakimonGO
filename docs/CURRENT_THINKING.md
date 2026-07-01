@@ -48,4 +48,21 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-Sprint 0 scaffold work is underway. S0-001 to S0-005 are complete. Next steps are S0-006, S0-007, or S0-008. Additional real test artifacts should be created alongside scaffold code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.
+**Sprint 10 is complete.** All 3 tasks (S10-001 through S10-003) done and verified.
+
+Sprint 10 delivered:
+- ADR-003 (map provider): Accepted Mapbox-first prototyping direction. Final commitment after prototype.
+- ADR-015 (deployment platform): Accepted Google Cloud/Firebase-first for alpha/beta. Detailed architecture during beta prep.
+- ADR_REVIEW_PACK.md updated: All 17 ADRs now accepted or revised. Zero deferred ADRs remain.
+- No code changes — pure documentation review.
+
+**101 total tests all passing. Ruff and mypy clean.**
+
+Sprint 0-10 stats:
+- 101 total tests (54 API + 1 worker + 32 scoring-rules + 14 Flutter)
+- 11 real endpoints + 8 planned in OpenAPI
+- 7 GitHub Actions CI jobs
+- All 17 ADRs accepted or revised
+- Complete submission pipeline: upload → precheck → stub scoring → ScoreEvent → response
+
+Next: Sprint 11 — Real AI provider integration or map prototype spike.
