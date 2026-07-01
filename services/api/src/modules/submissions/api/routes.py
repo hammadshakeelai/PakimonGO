@@ -4,7 +4,7 @@ import sys
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
@@ -15,6 +15,7 @@ from src.infrastructure.database.repositories import get_all_submission_sha256s
 from src.infrastructure.database.repositories import get_latest_score_event
 from src.infrastructure.database.repositories import get_media_asset
 from src.infrastructure.database.repositories import get_submission as db_get_submission
+from src.infrastructure.database.repositories import get_submissions
 from src.infrastructure.database.repositories import is_sensitive_species
 from src.infrastructure.database.repositories import update_submission_status
 from src.infrastructure.database.session import get_db
@@ -169,3 +170,38 @@ def get_submission_endpoint(
     sub, attr = result
     score_event = get_latest_score_event(db, submission_id)
     return _build_submission_response(sub, attr, score_event, db)
+
+
+@router.get("")
+def list_submissions_endpoint(
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    status: str | None = Query(
+        default=None,
+        enum=[
+            "pending",
+            "prechecked",
+            "ai_evaluated",
+            "scored",
+            "capped",
+            "review",
+            "rejected",
+            "rolled_back",
+        ],
+    ),
+    sort_by: str = Query(default="createdAt", enum=["createdAt", "submittedAt", "status", "points", "species"]),
+    sort_order: str = Query(default="desc", enum=["asc", "desc"]),
+):
+    items, total = get_submissions(
+        db=db,
+        user_id=current_user.user_id,
+        limit=limit,
+        offset=offset,
+        status=status,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        include_sensitive=False,
+    )
+    return {"submissions": items, "pagination": {"limit": limit, "offset": offset, "total": total}}

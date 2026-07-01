@@ -32,11 +32,14 @@ def get_my_profile(
 def get_my_collection(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
-    limit: int = Query(default=100, ge=1, le=500),
+    limit: int = Query(default=20, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
     context: str | None = Query(default=None, enum=["wild", "zoo", "pet", "unknown"]),
     sort_by: str = Query(default="totalPoints", enum=["totalPoints", "species", "captureCount", "lastCaptured"]),
     sort_order: str = Query(default="desc", enum=["asc", "desc"]),
+    include_sensitive: bool = Query(
+        default=False, description="Include sensitive species (requires elevated permissions)"
+    ),
 ):
     collection, total = get_user_collection(
         db=db,
@@ -46,6 +49,7 @@ def get_my_collection(
         context=context,
         sort_by=sort_by,
         sort_order=sort_order,
+        include_sensitive=include_sensitive,
     )
     return {
         "userId": current_user.user_id,

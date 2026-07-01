@@ -2,23 +2,28 @@
 
 ## Current Next Task
 
-Sprint 20 — Sensitive species handling in collection/leaderboard or API versioning.
+Sprint 21 — OPENAPI_DRAFT.yaml update for include_sensitive params + API versioning.
 
 ## Sprint 2-13 Complete
 
 Sprints 2-13 delivered: DB-backed services, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI update, CI expansion, AI scoring, ADR review, AI adapter framework, async worker scoring, and Mapbox prototype. 112 Python + 14 Flutter tests all passing.
 
-## Sprint 14-19 Complete
+## Sprint 14-20 Complete
+
+### Sprint 20 Complete
+
+Sprint 20 delivered: **Sensitive species filtering in collection/leaderboard**.
+
+- `get_user_collection`: excludes sensitive species by default, `include_sensitive` flag
+- `get_leaderboard`: excludes sensitive species submissions, `include_sensitive` flag
+- `get_submissions`: filters sensitive species, `include_sensitive` param (default false)
+- 6 new tests for collection/leaderboard sensitive species exclusion
+- Refactored repositories into 7 modules (media_asset, submission, score_event, user, collection, submission_list, sensitive_species)
+- 69 API tests + 61 scoring-rules + 14 Flutter = **144 total tests, all passing**
 
 ### Sprint 19 Complete
 
 Sprint 19 delivered: **Sensitive species location suppression**.
-
-- `SensitiveSpecies` model: scientific_name (unique), common_name, suppression_level, reason
-- Repository: `is_sensitive_species`, `get_or_create_sensitive_species`, `create_sensitive_species`
-- Response suppression: sensitive species get `cellId="cell_suppressed"`, `precisionLabel="suppressed"`, `suppressedReason="sensitive_species"`
-- 4 tests: detection, suppression, normal cell, create response
-- 65 API tests + 61 scoring-rules + 14 Flutter = **140 total tests, all passing**
 
 ### Sprint 18 Complete
 
@@ -41,5 +46,5 @@ Sprint 15 delivered: **Collection and Leaderboard Endpoints**.
 Sprint 14 delivered: **Real Google Vision Provider implementation**.
 
 Next sprint candidates:
-- **Sensitive species in collection/leaderboard** — exclude or flag sensitive species in public listings
+- **OPENAPI_DRAFT.yaml update** — document include_sensitive params
 - **API versioning** — v1/v2 strategy for breaking changes

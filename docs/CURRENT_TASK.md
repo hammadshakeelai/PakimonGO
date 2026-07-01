@@ -193,6 +193,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 20 Progress
+
+- S20-001: ✅ DONE — `get_user_collection` excludes sensitive species by default, optional `include_sensitive` flag
+- S20-002: ✅ DONE — `get_leaderboard` excludes sensitive species submissions, `include_sensitive` flag
+- S20-003: ✅ DONE — `get_submissions` filters sensitive species, `include_sensitive` param (default false)
+- S20-004: ✅ DONE — 6 new tests for collection/leaderboard sensitive species exclusion
+- S20-005: (Pending) — OPENAPI_DRAFT.yaml update for include_sensitive params
+- Refactored repositories into 7 modules (media_asset, submission, score_event, user, collection, submission_list, sensitive_species)
+- 69 API tests + 61 scoring-rules + 14 Flutter = **144 total tests, all passing**
+
 ## Sprint 19 Progress
 
 - S19-001: ✅ DONE — SensitiveSpecies model with scientific_name (unique), common_name, suppression_level, reason
@@ -258,4 +268,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 20 — Sensitive species in collection/leaderboard or API versioning.
+Sprint 21 — OPENAPI_DRAFT.yaml update for include_sensitive params + API versioning.

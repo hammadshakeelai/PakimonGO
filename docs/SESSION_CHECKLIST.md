@@ -36,3 +36,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 30 | Sprint 17 API pagination/filter/sort | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 3 endpoints enhanced, 7 tests updated, 136 total tests |
 | 31 | Sprint 18 OPENAPI_DRAFT.yaml update | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 4 new schemas, 3 endpoints documented, 31 schemas total |
 | 32 | Sprint 19 sensitive species suppression | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | SensitiveSpecies model, location suppression, 4 tests |
+| 33 | Sprint 20 sensitive species filtering | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | Filtering in collection/leaderboard/submissions, 6 tests, 7 repo modules |

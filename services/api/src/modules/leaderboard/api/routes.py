@@ -16,6 +16,9 @@ def get_leaderboard_endpoint(
     offset: int = Query(default=0, ge=0),
     sort_by: str = Query(default="totalScore", enum=["totalScore", "userId", "submissionCount"]),
     sort_order: str = Query(default="desc", enum=["asc", "desc"]),
+    include_sensitive: bool = Query(
+        default=False, description="Include sensitive species (requires elevated permissions)"
+    ),
     db: Session = Depends(get_db),
     _=Depends(get_optional_user),
 ):
@@ -25,6 +28,7 @@ def get_leaderboard_endpoint(
         offset=offset,
         sort_by=sort_by,
         sort_order=sort_order,
+        include_sensitive=include_sensitive,
     )
     return {
         "entries": entries,
