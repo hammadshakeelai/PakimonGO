@@ -26,8 +26,10 @@ Keep source files usually around 200-300 lines. Split by feature/domain before f
 
 ## Build, Test, and Development Commands
 
-No app tooling is installed yet. When scaffolding begins, document exact commands here and in `README.md`. Expected future commands:
+The local toolchain has been checked, but no runnable app/backend scaffold exists yet. When scaffolding begins, document exact commands here and in `README.md`. Expected future commands:
 
+- `python tools\qa\validate_docs.py` to validate planning docs, OpenAPI parsing, links, Mermaid files, and file-size guardrails.
+- `powershell -ExecutionPolicy Bypass -File tools\qa\check_toolchain.ps1` to recheck local toolchain readiness.
 - `flutter pub get` to install mobile dependencies.
 - `flutter test` to run mobile unit/widget tests.
 - `flutter build apk` for Android test APKs.
@@ -48,6 +50,8 @@ Flutter/Dart code should follow Dart formatting. Backend style will be defined w
 Tests should live near the module or in that app/service test folder. Required test areas include scoring rules, duplicate detection, zoo/geofence detection, privacy transforms, auth, upload, map queries, and moderation flows.
 
 Every feature needs requirement IDs, acceptance criteria, automated tests where practical, and documented manual verification for camera/map/device behavior.
+
+Before code, read `docs/qa/README.md`, `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`, and the relevant focused spec. Public API work must satisfy `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`; scoring work must satisfy `docs/qa/SCORING_STATE_TEST_SPEC.md`; Android APK work must satisfy `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`.
 
 ## Commit & Pull Request Guidelines
 

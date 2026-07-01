@@ -152,6 +152,12 @@ No feature is complete until:
 - State docs are updated.
 - Next task is written.
 
+## Testing Architecture Rule
+
+Before coding a module, read `docs/qa/README.md` and the relevant QA spec. Add or update test IDs before implementing behavior if the current spec does not describe the expected tests.
+
+Launch-blocking areas include privacy DTOs, score state, duplicate/zoo checks, upload idempotency, moderation/report/block flows, and exact-location leak prevention. If these tests fail, stop feature exposure until the contract or implementation is fixed.
+
 ## AI Agent Handoff Rules
 
 When handing work to another AI agent:
