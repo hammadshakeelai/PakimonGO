@@ -212,3 +212,29 @@ Added focused QA specs so tests can be implemented directly from the docs once S
 ### Next Exact Action
 
 Begin Sprint 0 scaffold work and create the first real tests from the Sprint 0, privacy contract, and scoring state specs.
+
+## 2026-07-01: Concrete Test Catalogue And CI Guardrails
+
+### Status
+
+Complete.
+
+### Summary
+
+Added concrete pre-code test cases, acceptance scenarios, fixture payloads, API examples, failure and release gate docs, secret scanning, JSON validation, and a GitHub Actions workflow for docs validation.
+
+### Artifacts Added
+
+- `docs/qa/TEST_CASE_CATALOGUE.md`
+- `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md`
+- `docs/qa/FAILURE_MODE_MATRIX.md`
+- `docs/qa/RELEASE_GATE_CHECKLIST.md`
+- `docs/api/examples/`
+- `docs/qa/fixtures/`
+- `tools/qa/validate_json_examples.py`
+- `tools/qa/scan_secrets.py`
+- `.github/workflows/docs-validation.yml`
+
+### Next Exact Action
+
+Begin Sprint 0 implementation and convert the documented tests into real pytest/Dart tests as each scaffold module appears.

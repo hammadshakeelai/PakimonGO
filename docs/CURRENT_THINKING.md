@@ -29,6 +29,7 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 - Toolchain readiness is checked: Flutter doctor passes, Python is available, and docs validation scripts pass.
 - Sprint 0 tasks are now split into individual agent packets.
 - Pre-code QA is now operationalized with focused specs for requirement-to-test coverage, Sprint 0 validation, privacy contracts, scoring state, goldsets, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
+- The test layer now has a concrete catalogue, BDD acceptance scenarios, API examples, JSON fixtures, failure-mode matrix, release gates, a JSON syntax validator, secret scanner, and GitHub Actions docs workflow.
 
 ## Internal Debate Log
 
@@ -46,4 +47,4 @@ PakimonGO should now move from deep planning into methodology-verified scaffold-
 
 ## Current Implementation Posture
 
-Sprint 0 scaffold work is now allowed. Start with S0-001 or S0-002, but each agent must read the relevant QA spec before changing code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.
+Sprint 0 scaffold work is now allowed. Start with S0-001 or S0-002, but each agent must read the relevant QA spec and test catalogue before changing code. Public/social/map-provider-specific implementation should still wait until the relevant deferred decisions and gates are resolved.

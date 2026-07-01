@@ -102,3 +102,9 @@
 - Status: Complete
 - Acceptance: requirement-to-test matrix, Sprint 0 test plan, privacy contract spec, scoring state spec, goldset governance, zoo/duplicate benchmark spec, manual Android QA, security checklist, CI gate design, and ready/done rules exist.
 - Notes: See `docs/qa/README.md` and the focused specs under `docs/qa/`.
+
+## WP-026: Concrete Test Catalogue And CI Guardrails
+
+- Status: Complete
+- Acceptance: concrete test catalogue, BDD scenarios, API examples, QA fixtures, failure mode matrix, release gates, JSON validation, secret scan, and docs validation workflow exist.
+- Notes: See `docs/qa/TEST_CASE_CATALOGUE.md`, `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md`, `docs/api/examples/`, `docs/qa/fixtures/`, and `.github/workflows/docs-validation.yml`.

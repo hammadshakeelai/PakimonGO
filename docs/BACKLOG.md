@@ -42,6 +42,9 @@ New ideas must be added here before implementation. Each item should later becom
 - Implement tests from `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md` once public DTO schemas exist.
 - Implement tests from `docs/qa/SCORING_STATE_TEST_SPEC.md` once score state code exists.
 - Implement benchmark runners from `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md` once fixture manifests exist.
+- Convert `docs/qa/TEST_CASE_CATALOGUE.md` into module-local automated tests as code appears.
+- Convert `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md` into E2E/manual acceptance suites after runnable flows exist.
+- Validate API examples against generated OpenAPI schemas once contract tooling exists.
 
 ## Process Backlog
 
@@ -55,6 +58,7 @@ New ideas must be added here before implementation. Each item should later becom
 - Create OKF export files.
 - Add Graphify generation workflow after first code exists.
 - Add docs lint and link-check workflow.
+- Make `.github/workflows/docs-validation.yml` a required branch check once repository settings are configured.
 - Add max-file-size warning workflow once code exists.
 - Add full visible conversation text to `docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt` after user pastes export.
 - Create first Alpha-0 vertical slice work package before feature code.

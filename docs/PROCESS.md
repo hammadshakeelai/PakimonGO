@@ -156,6 +156,8 @@ No feature is complete until:
 
 Before coding a module, read `docs/qa/README.md` and the relevant QA spec. Add or update test IDs before implementing behavior if the current spec does not describe the expected tests.
 
+Use `docs/qa/TEST_CASE_CATALOGUE.md` as the source for concrete test IDs and `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md` for user-visible acceptance flows.
+
 Launch-blocking areas include privacy DTOs, score state, duplicate/zoo checks, upload idempotency, moderation/report/block flows, and exact-location leak prevention. If these tests fail, stop feature exposure until the contract or implementation is fixed.
 
 ## AI Agent Handoff Rules

@@ -29,6 +29,8 @@ Keep source files usually around 200-300 lines. Split by feature/domain before f
 The local toolchain has been checked, but no runnable app/backend scaffold exists yet. When scaffolding begins, document exact commands here and in `README.md`. Expected future commands:
 
 - `python tools\qa\validate_docs.py` to validate planning docs, OpenAPI parsing, links, Mermaid files, and file-size guardrails.
+- `python tools\qa\validate_json_examples.py` to validate API examples and QA fixture JSON syntax.
+- `python tools\qa\scan_secrets.py` to catch obvious committed secrets.
 - `powershell -ExecutionPolicy Bypass -File tools\qa\check_toolchain.ps1` to recheck local toolchain readiness.
 - `flutter pub get` to install mobile dependencies.
 - `flutter test` to run mobile unit/widget tests.
@@ -51,7 +53,7 @@ Tests should live near the module or in that app/service test folder. Required t
 
 Every feature needs requirement IDs, acceptance criteria, automated tests where practical, and documented manual verification for camera/map/device behavior.
 
-Before code, read `docs/qa/README.md`, `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`, and the relevant focused spec. Public API work must satisfy `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`; scoring work must satisfy `docs/qa/SCORING_STATE_TEST_SPEC.md`; Android APK work must satisfy `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`.
+Before code, read `docs/qa/README.md`, `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`, `docs/qa/TEST_CASE_CATALOGUE.md`, and the relevant focused spec. Public API work must satisfy `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`; scoring work must satisfy `docs/qa/SCORING_STATE_TEST_SPEC.md`; Android APK work must satisfy `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`.
 
 ## Commit & Pull Request Guidelines
 

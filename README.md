@@ -44,12 +44,17 @@ Before production coding starts, finish the SRS/ADR acceptance pass and define t
 - Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
 - QA spec index: `docs/qa/README.md`
 - Requirement-to-test matrix: `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`
+- Test case catalogue: `docs/qa/TEST_CASE_CATALOGUE.md`
+- BDD acceptance scenarios: `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md`
 - Sprint 0 test plan: `docs/qa/SPRINT_0_TEST_PLAN.md`
 - Privacy contract test spec: `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`
 - Scoring state test spec: `docs/qa/SCORING_STATE_TEST_SPEC.md`
 - Goldset governance and zoo/duplicate benchmarks: `docs/qa/GOLDSET_GOVERNANCE_PLAN.md`, `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md`
 - Manual Android and security checklists: `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`, `docs/qa/SECURITY_TEST_CHECKLIST.md`
 - CI gates and ready/done rules: `docs/qa/CI_GATE_DESIGN.md`, `docs/qa/DEFINITION_OF_READY_DONE.md`
+- Failure and release gates: `docs/qa/FAILURE_MODE_MATRIX.md`, `docs/qa/RELEASE_GATE_CHECKLIST.md`
+- API examples: `docs/api/examples/`
+- QA JSON fixtures: `docs/qa/fixtures/`
 - Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
 - Sprint 0 task packets: `docs/sprints/sprint-0/`
 - Toolchain readiness: `docs/tooling/TOOLCHAIN_READINESS.md`
@@ -65,5 +70,7 @@ Current pre-code validation:
 
 ```powershell
 python tools/qa/validate_docs.py
+python tools/qa/validate_json_examples.py
+python tools/qa/scan_secrets.py
 powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
 ```

@@ -22,10 +22,11 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
 - Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
 - Data dictionary is a planning dictionary, not final migrations.
-- GitHub Actions are not yet configured to run `tools/qa/validate_docs.py`.
+- GitHub Actions workflow exists for docs validation, JSON example validation, and lightweight secret scanning, but repository branch protection is not configured here.
 - Direct `adb` is not on PATH; use the SDK path or add platform-tools to PATH when direct device commands are needed.
 - QA specs are now detailed, but the actual pytest/Dart/benchmark tests do not exist until Sprint 0 code scaffolds the modules.
 - Exact pass thresholds for zoo/duplicate/species goldsets are planning gates only until licensed fixtures and benchmark reports exist.
+- API examples and QA fixtures are syntax-validated only; schema validation should be added after contract tooling/generation exists.
 
 ## Future Debt Controls
 

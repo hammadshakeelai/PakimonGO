@@ -21,6 +21,8 @@ The project is in Phase 5: scaffold, methodology alignment, and implementation r
 
 The QA test architecture is now expanded with focused specs under `docs/qa/`, including requirement-to-test mapping, Sprint 0 tests, privacy contract tests, scoring state tests, goldset governance, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
 
+The concrete test layer now includes a test case catalogue, BDD scenarios, failure-mode matrix, release gates, API examples, QA JSON fixtures, JSON validation, secret scan, and docs validation workflow.
+
 ## Ready Next
 
 Begin Sprint 0: Alpha-0 toolchain and contract foundation.
@@ -37,7 +39,7 @@ Allowed next work:
 - Capture draft model shell.
 - Use task packets in `docs/sprints/sprint-0/`.
 - Use QA specs in `docs/qa/` before writing code.
-- Run `python tools/qa/validate_docs.py` before and after scaffold work.
+- Run `python tools/qa/validate_docs.py`, `python tools/qa/validate_json_examples.py`, and `python tools/qa/scan_secrets.py` before and after scaffold work.
 
 ## Still Gated
 
