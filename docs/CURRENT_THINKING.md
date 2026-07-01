@@ -31,19 +31,17 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 20 is complete.**
+**Sprint 21 is complete.**
 
-Sprint 20 delivered:
-- Sensitive species filtering in `get_user_collection`, `get_leaderboard`, `get_submissions`
-- Default `include_sensitive=false` excludes sensitive species from public listings
-- Optional `include_sensitive=true` flag for elevated access
-- Repository refactored into 7 modules (media_asset, submission, score_event, user, collection, submission_list, sensitive_species)
-- 6 new tests for collection/leaderboard sensitive species exclusion
+Sprint 21 delivered:
+- OPENAPI_DRAFT.yaml updated with include_sensitive params for 3 endpoints
+- Fixed duplicate /submissions: path (merged POST + GET)
+- 31 total schemas, 20 paths
 
-Sprint 0-20 stats:
+Sprint 0-21 stats:
 - 144 total tests (69 API + 61 scoring-rules + 14 Flutter)
 - 20 real endpoints + 8 planned in OpenAPI
 - 8 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
 
-Next: Sprint 21 — OPENAPI_DRAFT.yaml update for include_sensitive params + API versioning.
+Next: Sprint 22 — API versioning strategy (v1/v2) for breaking changes.

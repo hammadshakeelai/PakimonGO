@@ -193,6 +193,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 21 Progress
+
+- S21-001: ✅ DONE — Updated GET /v1/users/me/collection with include_sensitive param
+- S21-002: ✅ DONE — Updated GET /v1/leaderboard with include_sensitive param
+- S21-003: ✅ DONE — Added GET /v1/submissions endpoint documentation with include_sensitive
+- S21-004: ✅ DONE — Added PaginatedSubmissionListResponse schema
+- OPENAPI_DRAFT.yaml: 20 paths, 31 schemas, fixed duplicate /submissions: path
+
 ## Sprint 20 Progress
 
 - S20-001: ✅ DONE — `get_user_collection` excludes sensitive species by default, optional `include_sensitive` flag
@@ -268,4 +276,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 21 — OPENAPI_DRAFT.yaml update for include_sensitive params + API versioning.
+Sprint 22 — API versioning strategy (v1/v2) for breaking changes.
