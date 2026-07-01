@@ -193,6 +193,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 14 Progress
+
+- S14-001: ✅ DONE — GoogleVisionProvider with real REST API call (base64 encode, POST to vision.googleapis.com, parse response)
+- S14-002: ✅ DONE — Parse labels + objects: detects species from OBJECT_LOCALIZATION, classifies context (zoo/pet/wild)
+- S14-003: ✅ DONE — Added `requests` dependency to requirements.txt
+- S14-004: ✅ DONE — Mock API tests (6 tests: zoo, wild, pet, empty, error, HTTP error, file-not-found)
+- S14-005: ✅ DONE — Updated SESSION_CHECKLIST.md
+
 ## Sprint 12 Progress
 
 - S12-001: ✅ DONE — JobQueue protocol + InMemoryJobQueue with process_pending()
@@ -203,4 +211,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 14 — Real Google Vision provider implementation or collection/leaderboard endpoints.
+Sprint 15 — Collection/leaderboard endpoints or database-backed user scoring history.

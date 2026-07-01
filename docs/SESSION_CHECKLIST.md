@@ -30,3 +30,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 24 | Sprint 11 AI provider adapter framework | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 112 total tests, AIScoringService wired |
 | 25 | Sprint 12 async worker scoring | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 112 tests, worker thread, async scoring |
 | 26 | Sprint 13 map prototype spike | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | Mapbox SDK wired, MapScreen with fallback |
+| 27 | Sprint 14 real Google Vision provider | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | Real REST API impl, 6 mock tests, 117 total |

@@ -23,14 +23,12 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 - Full visible conversations or summaries should be archived in `docs/conversation-archive/` when they change direction or decisions.
 - Empty scaffold folders use `.gitkeep` so future agents see intended module boundaries.
 - The external Software Engineering methodology is now a required artifact chain.
-- `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test planning.
-- ADR review is complete enough to begin Sprint 0: 13 accepted, 1 revised, 2 deferred.
+- `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test mapping.
+- ADR review is complete: 17 ADRs accepted or revised, zero deferred.
 - Data dictionary and Sprint 0 plan are the current rails for first migrations/toolchain work.
-- Toolchain readiness is checked: Flutter doctor passes, Python is available, and docs validation scripts pass.
-- Sprint 0 tasks are now split into individual agent packets.
-- Pre-code QA is now operationalized with focused specs for requirement-to-test coverage, Sprint 0 validation, privacy contracts, scoring state, goldsets, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
-- The test layer now has a concrete catalogue, BDD acceptance scenarios, API examples, JSON fixtures, failure-mode matrix, release gates, a JSON syntax validator, secret scanner, and GitHub Actions docs workflow.
-- Final pre-code governance now includes ADR-017 test tooling standards, test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, CODEOWNERS, PR/issue templates, reusable docs templates, and a pre-code completion audit.
+- Pre-code QA is operationalized with focused specs for requirement-to-test coverage, Sprint 0 validation, privacy contracts, scoring state, goldsets, zoo/duplicate benchmarks, Android QA, security checks, CI gates, and ready/done rules.
+- The test layer has concrete catalogue, BDD acceptance scenarios, API examples, JSON fixtures, failure-mode matrix, release gates, JSON syntax validator, secret scanner, and GitHub Actions docs workflow.
+- ADR-017 test tooling standards, test harness architecture, coverage/flaky policy, local PR checklist, architecture fitness rules, CODEOWNERS, PR/issue templates, reusable docs templates, and pre-code completion audit in place.
 
 ## Internal Debate Log
 
@@ -48,21 +46,18 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 13 is complete.** All 5 tasks done and verified.
+**Sprint 14 is complete.**
 
-Sprint 13 delivered:
-- `mapbox_maps_flutter 2.25.0` added to pubspec.yaml
-- `lib/core/config/app_config.dart` — `AppConfig.mapboxAccessToken` from `MAPBOX_ACCESS_TOKEN` env var
-- `lib/features/map/presentation/map_screen.dart` — `MapScreen` with `MapWidget` (Mapbox map with fallback message if no token)
-- `lib/main.dart` — `PakimonGoApp` with MapScreen as home, `MapboxOptions.setAccessToken` on load
-- `test/widget_test.dart` — updated for new app structure (checks "PakimonGO Map" title)
-- Without a token, the app renders a placeholder message instead of crashing
-- 14 Flutter tests all passing
+Sprint 14 delivered:
+- GoogleVisionProvider with real REST API (base64 encode, POST, label/object annotation parsing)
+- Context classification: zoo/pet keywords → "zoo"/"pet", else "wild"/"unknown"
+- 6 mock API tests covering zoo, wild, pet, empty, error, file-not-found
+- `requests` dependency added to requirements.txt
 
-Sprint 0-13 stats:
-- 112 Python tests + 14 Flutter tests = 126 total
+Sprint 0-14 stats:
+- 103 Python tests + 14 Flutter tests = 117 total
 - 11 real endpoints + 8 planned in OpenAPI
 - 7 GitHub Actions CI jobs
-- Mapbox Flutter SDK wired for prototyping
+- All 17 ADRs accepted or revised
 
-Next: Sprint 14 — Real Google Vision provider implementation or collection/leaderboard endpoints.
+Next: Sprint 15 — Collection/leaderboard endpoints or scoring history.
