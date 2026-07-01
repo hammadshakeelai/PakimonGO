@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file records the ADR acceptance pass for ADR-001 through ADR-016 and captures what implementation work is now unlocked. Future ADRs should use the same checklist before production feature code depends on them.
+This file records the ADR acceptance pass for ADR-001 through ADR-017 and captures what implementation work is now unlocked. Future ADRs should use the same checklist before production feature code depends on them.
 
 ## Review Checklist
 
@@ -37,16 +37,17 @@ For each ADR:
 | ADR-014 | Analytics minimization | Accepted | Minimal analytics tied to safety, reliability, cost, and success metrics. | No for initial scaffold |
 | ADR-015 | Deployment platform | Deferred | Google Cloud/Firebase-first is alpha direction; production approval waits for budget/region/compliance review. | No for local contracts |
 | ADR-016 | Release process | Accepted | Ring-based release is baseline. | Yes for alpha planning |
+| ADR-017 | Test tooling standards | Accepted | pytest/FastAPI and Flutter testing defaults are baseline for Sprint 0. | Yes for scaffold tests |
 
 ## ADR Review: 2026-07-01
 
 - Reviewer: Codex GPT-5, acting on user approval to complete the pre-code locks.
-- ADRs reviewed: ADR-001 through ADR-016.
-- Accepted: ADR-001, ADR-002, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-010, ADR-011, ADR-012, ADR-013, ADR-014, ADR-016.
+- ADRs reviewed: ADR-001 through ADR-017.
+- Accepted: ADR-001, ADR-002, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-010, ADR-011, ADR-012, ADR-013, ADR-014, ADR-016, ADR-017.
 - Revised: ADR-009, with minimized-retention posture accepted and exact retention windows deferred.
 - Deferred: ADR-003 final map provider; ADR-015 final production deployment approval.
 - Rejected: none.
-- New ADRs required: scoring formula version policy, migration tooling, CI quality gates, final map provider after spike, final deployment region/budget after cloud review.
+- New ADRs required: scoring formula version policy, migration tooling, final map provider after spike, final deployment region/budget after cloud review.
 - Implementation unlocked: WP-015 can begin for contracts, Flutter shell, FastAPI shell, auth adapter interfaces, capture draft model, upload contract, score state enum, and privacy DTO tests.
 - Remaining blockers: do not build final map-provider-specific UX, production deployment, exact retention workflows, or final scoring formula until deferred decisions are resolved.
 

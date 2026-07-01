@@ -66,6 +66,10 @@ Deferred final production deployment approval. Google Cloud/Firebase-first remai
 
 Accepted ring-based release from local/staging through internal APK, Play testing, Android production, TestFlight, and iOS production.
 
+### ADR-017: Test Tooling Standards
+
+Accepted pytest/httpx/pytest-asyncio/ruff/mypy/coverage.py for Python services, Flutter test/integration_test/mocktail for mobile, and lightweight local secret/JSON/docs validation until generated contract and dedicated security tooling exist.
+
 ## Decision Rules
 
 - Accepted decisions may still have explicit reversal conditions in their ADRs.

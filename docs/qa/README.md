@@ -14,6 +14,11 @@ This folder turns PakimonGO's test strategy into agent-ready quality gates. Star
 - `CI_GATE_DESIGN.md`: local and CI gates by project phase.
 - `FAILURE_MODE_MATRIX.md`: failure, impact, detection, mitigation, and rollback matrix.
 - `RELEASE_GATE_CHECKLIST.md`: release ring quality gates from local to production.
+- `TEST_HARNESS_ARCHITECTURE.md`: target test folder layout, fixtures, fakes, and helper rules.
+- `COVERAGE_AND_FLAKY_POLICY.md`: coverage targets and flaky/quarantine rules.
+- `LOCAL_PR_CHECKLIST.md`: local commands for commits and pull requests.
+- `ARCHITECTURE_FITNESS_RULES.md`: architecture rules to automate as code appears.
+- `PRECODE_COMPLETION_AUDIT.md`: final pre-code readiness audit.
 
 ## Launch-Blocking Specs
 
@@ -32,6 +37,10 @@ This folder turns PakimonGO's test strategy into agent-ready quality gates. Star
 ## API Examples
 
 API examples live in `docs/api/examples/` and must stay aligned with `docs/api/OPENAPI_DRAFT.yaml` until generated clients/examples exist.
+
+## Collaboration Templates
+
+Pull request, bug, feature, and test-gap templates live under `.github/`. Ownership boundaries are listed in `.github/CODEOWNERS`.
 
 ## Agent Rule
 

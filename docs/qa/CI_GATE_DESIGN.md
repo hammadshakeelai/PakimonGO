@@ -24,6 +24,10 @@ Checks:
 - API examples and QA fixtures parse as JSON
 - obvious committed secrets are blocked
 
+Configured workflow:
+
+- `.github/workflows/docs-validation.yml`
+
 ## Phase 2: Scaffold CI
 
 Add when Sprint 0 code lands:
