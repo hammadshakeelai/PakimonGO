@@ -1,0 +1,15 @@
+{
+  "submissionId": "sub_01JZEXAMPLECAPTURE001",
+  "mediaAssetId": "media_01JZEXAMPLEUPLOAD001",
+  "scoreState": {
+    "status": "pending",
+    "visiblePoints": null,
+    "explanationSummary": "Scoring is pending.",
+    "ledger": "wild"
+  },
+  "visibility": "private",
+  "publicLocation": {
+    "cellId": "cell_8f283082",
+    "precisionLabel": "coarse"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "decisionId": "zoo_decision_fixture_001",
+  "submissionId": "sub_fixture_001",
+  "geofenceDatasetVersion": "zoo-geofences-alpha0-0.1.0",
+  "classification": "zoo_likely",
+  "confidence": 0.91,
+  "gpsAccuracyMeters": 18.5,
+  "boundaryRelation": "inside_polygon",
+  "userDisclosure": "zoo_captive",
+  "scoreEffect": "participation_cap",
+  "reviewRequired": false
+}

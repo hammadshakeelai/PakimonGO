@@ -1,0 +1,14 @@
+{
+  "postId": "bad_public_leak_fixture_001",
+  "visibility": "public",
+  "publicLocation": {
+    "latitude": 33.6844,
+    "longitude": 73.0479,
+    "accuracyMeters": 12.8
+  },
+  "originalUrl": "https://storage.pakimongo.example/private/original.jpg",
+  "rawExif": {
+    "GPSLatitude": "33.6844",
+    "GPSLongitude": "73.0479"
+  }
+}

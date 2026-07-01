@@ -1,0 +1,11 @@
+{
+  "scoreEventId": "score_evt_fixture_001",
+  "submissionId": "sub_fixture_001",
+  "state": "capped",
+  "ledger": "participation",
+  "points": 1,
+  "formulaVersion": "score-formula-alpha0-0.1.0",
+  "reasonCode": "zoo_disclosed_participation",
+  "evidenceIds": ["evidence_fixture_geofence_001"],
+  "createdAt": "2026-07-01T05:35:00Z"
+}

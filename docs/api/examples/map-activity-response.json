@@ -1,0 +1,16 @@
+{
+  "cells": [
+    {
+      "cellId": "cell_8f283082",
+      "speciesSummary": ["House Sparrow", "Common Myna"],
+      "activityCount": 12,
+      "suppressedReason": null
+    },
+    {
+      "cellId": "cell_8f283083",
+      "speciesSummary": [],
+      "activityCount": 0,
+      "suppressedReason": "sensitive_species"
+    }
+  ]
+}

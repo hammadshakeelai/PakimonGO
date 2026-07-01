@@ -1,0 +1,15 @@
+{
+  "duplicateEdgeId": "dup_edge_fixture_001",
+  "sourceSubmissionId": "sub_fixture_001",
+  "targetSubmissionId": "sub_fixture_002",
+  "edgeType": "near_duplicate",
+  "decisionVersion": "duplicate-threshold-alpha0-0.1.0",
+  "signals": {
+    "sha256Match": false,
+    "perceptualHashDistance": 4,
+    "embeddingSimilarity": 0.94,
+    "sameUser": true,
+    "sameEncounterWindow": true
+  },
+  "scoreEligibility": "capped_or_review"
+}

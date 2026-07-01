@@ -1,0 +1,23 @@
+{
+  "postId": "post_01JZEXAMPLEPUBLIC001",
+  "submissionId": "sub_01JZEXAMPLECAPTURE001",
+  "author": {
+    "userId": "user_public_example",
+    "displayName": "Example Explorer"
+  },
+  "caption": "A tiny bird with big main-character energy.",
+  "visibility": "public",
+  "media": {
+    "thumbnailUrl": "https://cdn.pakimongo.example/thumbs/media_01JZEXAMPLEUPLOAD001.webp",
+    "derivativeUrl": "https://cdn.pakimongo.example/public/media_01JZEXAMPLEUPLOAD001.webp"
+  },
+  "publicLocation": {
+    "cellId": "cell_8f283082",
+    "precisionLabel": "delayed"
+  },
+  "scoreSummary": {
+    "status": "scored",
+    "visiblePoints": 42,
+    "explanationSummary": "Wild capture with clear image quality."
+  }
+}

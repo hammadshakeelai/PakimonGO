@@ -1,0 +1,14 @@
+{
+  "mediaAssetId": "media_01JZEXAMPLEUPLOAD001",
+  "animalContext": "wild",
+  "realName": "House Sparrow",
+  "cuteName": "Tiny Captain",
+  "caption": "Resting near the garden path.",
+  "tags": ["sparrow", "garden", "morning"],
+  "visibility": "private",
+  "foregroundLocation": {
+    "latitude": 33.6844,
+    "longitude": 73.0479,
+    "accuracyMeters": 18.5
+  }
+}

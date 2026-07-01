@@ -1,0 +1,21 @@
+{
+  "postId": "post_fixture_public_001",
+  "submissionId": "sub_fixture_001",
+  "authorId": "user_fixture_public",
+  "visibility": "public",
+  "caption": "Bright little visitor by the walkway.",
+  "hashtags": ["bird", "citynature"],
+  "media": {
+    "thumbnailUrl": "https://cdn.pakimongo.example/thumbs/media_fixture_001.webp",
+    "derivativeUrl": "https://cdn.pakimongo.example/public/media_fixture_001.webp"
+  },
+  "publicLocation": {
+    "cellId": "cell_fixture_8f283082",
+    "precisionLabel": "delayed"
+  },
+  "score": {
+    "status": "scored",
+    "visiblePoints": 42,
+    "explanationSummary": "Clear wild capture."
+  }
+}
