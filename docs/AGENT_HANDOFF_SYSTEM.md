@@ -65,3 +65,7 @@ Do not let two agents edit the same files in parallel. If parallel work is neede
 - Agent B: `docs/data/`, `infrastructure/database/`
 - Agent C: `docs/security/`, `docs/qa/`
 - Agent D: `apps/mobile/` after mobile ADR acceptance
+
+## Optional Subagents
+
+If the Codex UI shows helper subagents such as Aristotle, James, Kant, Dewey, or Noether, treat them as optional environment helpers, not project requirements. See `docs/agent-coordination/SUBAGENT_ROLES.md`.

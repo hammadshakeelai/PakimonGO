@@ -53,6 +53,7 @@ Open `C:/Users/HP/Documents/GitHub/PakimonGO` as an Obsidian vault.
 ## Implementation Readiness
 
 - [[docs/WORK_PACKAGE_BOARD]]
+- [[docs/agent-coordination/SUBAGENT_ROLES]]
 - [[docs/ALPHA_0_VERTICAL_SLICE]]
 - [[docs/api/OPENAPI_DRAFT.yaml]]
 - [[docs/data/DATABASE_ERD]]
