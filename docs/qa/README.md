@@ -8,8 +8,12 @@ This folder turns PakimonGO's test strategy into agent-ready quality gates. Star
 
 - `TESTING_MASTER_PLAN.md`: high-level strategy, test levels, launch-blocking suites.
 - `REQUIREMENT_TO_TEST_MATRIX.md`: requirement families mapped to test IDs and gates.
+- `TEST_CASE_CATALOGUE.md`: concrete 100+ test catalogue mapped to requirements, priority, automation, and gates.
+- `BDD_ACCEPTANCE_SCENARIOS.md`: Gherkin-style acceptance scenarios for critical flows.
 - `SPRINT_0_TEST_PLAN.md`: exact validation plan for the first code scaffold.
 - `CI_GATE_DESIGN.md`: local and CI gates by project phase.
+- `FAILURE_MODE_MATRIX.md`: failure, impact, detection, mitigation, and rollback matrix.
+- `RELEASE_GATE_CHECKLIST.md`: release ring quality gates from local to production.
 
 ## Launch-Blocking Specs
 
@@ -23,6 +27,11 @@ This folder turns PakimonGO's test strategy into agent-ready quality gates. Star
 - `ZOO_DUPLICATE_BENCHMARK_SPEC.md`: duplicate, zoo, captive, and pet benchmark rules.
 - `MANUAL_ANDROID_QA_CHECKLIST.md`: device checklist for APK/internal testing.
 - `DEFINITION_OF_READY_DONE.md`: ready/done rules for work packages and test closure.
+- `fixtures/`: JSON payload fixtures for future unit, contract, integration, and negative privacy tests.
+
+## API Examples
+
+API examples live in `docs/api/examples/` and must stay aligned with `docs/api/OPENAPI_DRAFT.yaml` until generated clients/examples exist.
 
 ## Agent Rule
 
