@@ -4,6 +4,10 @@
 
 PakimonGO's riskiest behavior is not simple UI failure; it is unfair scoring, unsafe incentives, duplicate farming, zoo farming, location leaks, and social abuse. QA must test product rules as deeply as code.
 
+## Detailed QA Specs
+
+The executable-style QA planning docs live in `docs/qa/`. Start with `docs/qa/README.md`, then use the focused privacy, scoring, goldset, security, Android, CI, and ready/done specs for implementation work.
+
 ## Test Pyramid
 
 - Unit tests: pure domain logic, scoring components, validators, privacy transforms.

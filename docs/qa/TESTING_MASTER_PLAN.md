@@ -4,6 +4,21 @@
 
 PakimonGO's highest-risk failures are unfair scoring, unsafe incentives, duplicate/zoo farming, privacy leaks, UGC abuse, and AI drift. Tests must prove product rules, not just code paths.
 
+## Operational Specs
+
+Use these focused docs when creating implementation tests:
+
+- `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`
+- `docs/qa/SPRINT_0_TEST_PLAN.md`
+- `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`
+- `docs/qa/SCORING_STATE_TEST_SPEC.md`
+- `docs/qa/GOLDSET_GOVERNANCE_PLAN.md`
+- `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md`
+- `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`
+- `docs/qa/SECURITY_TEST_CHECKLIST.md`
+- `docs/qa/CI_GATE_DESIGN.md`
+- `docs/qa/DEFINITION_OF_READY_DONE.md`
+
 ## Test Levels
 
 | Level | Purpose | Examples |
