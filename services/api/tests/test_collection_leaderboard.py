@@ -56,13 +56,18 @@ def test_collection_returns_species():
     assert resp.status_code == 200
     data = resp.json()
     assert data["userId"] == _DEFAULT_USER
+    assert "species" in data
+    assert "pagination" in data
     assert len(data["species"]) >= 2
 
 
 def test_collection_empty_for_new_user():
     resp = client.get("/v1/users/me/collection", headers=AUTH2)
     assert resp.status_code == 200
-    assert resp.json()["species"] == []
+    data = resp.json()
+    assert "species" in data
+    assert "pagination" in data
+    assert data["species"] == []
 
 
 def test_collection_requires_auth():
@@ -76,7 +81,8 @@ def test_leaderboard_returns_entries():
     assert resp.status_code == 200
     data = resp.json()
     assert "entries" in data
-    assert data["totalReturned"] > 0
+    assert "pagination" in data
+    assert data["pagination"]["total"] > 0
     top = data["entries"][0]
     assert "userId" in top
     assert "totalScore" in top
@@ -91,7 +97,9 @@ def test_leaderboard_public_no_auth_required():
 def test_leaderboard_respects_limit():
     resp = client.get("/v1/leaderboard?limit=1")
     assert resp.status_code == 200
-    assert len(resp.json()["entries"]) <= 1
+    data = resp.json()
+    assert len(data["entries"]) <= 1
+    assert data["pagination"]["limit"] == 1
 
 
 def test_leaderboard_invalid_limit():

@@ -33,3 +33,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 27 | Sprint 14 real Google Vision provider | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | Real REST API impl, 6 mock tests, 117 total |
 | 28 | Sprint 15 collection/leaderboard endpoints | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 7 tests, 61 API total, 2 new paths, 4 new schemas |
 | 29 | Sprint 16 goldset integration | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 2 manifests (18 scenarios), goldset_runner, 12 tests, CI job |
+| 30 | Sprint 17 API pagination/filter/sort | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | 3 endpoints enhanced, 7 tests updated, 136 total tests |

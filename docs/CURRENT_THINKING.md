@@ -31,19 +31,19 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 16 is complete.**
+**Sprint 17 is complete.**
 
-Sprint 16 delivered:
-- Goldset manifests for duplicate-detection (9 scenarios) and zoo-detection (9 scenarios)
-- Goldset runner: `load_manifest`, `validate_manifest`, `run_scenario`, `run_manifest`, `run_manifest_path`
-- 12 goldset tests covering manifest validation, scenario execution, full benchmark pass
-- CI job `goldset-smoke` runs goldset benchmarks on every PR
-- 73 scoring-rules tests + 61 API tests + 14 Flutter = 148 total
+Sprint 17 delivered:
+- `GET /v1/users/me/collection` with pagination, context filter, sorting
+- `GET /v1/leaderboard` with pagination, sorting
+- `GET /v1/submissions` list endpoint with pagination, status filter, sorting
+- Repository functions return `(items, total)` tuples for pagination metadata
+- 7 updated tests for pagination/filtering/sorting
 
-Sprint 0-16 stats:
-- 148 total tests (61 API + 73 scoring-rules + 14 Flutter)
+Sprint 0-17 stats:
+- 136 total tests (61 API + 61 scoring-rules + 14 Flutter)
 - 20 real endpoints + 8 planned in OpenAPI
 - 8 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
 
-Next: Sprint 17 — API enhancements (pagination, filtering, sorting) or sensitive species suppression.
+Next: Sprint 18 — OPENAPI_DRAFT.yaml update for pagination params + sensitive species suppression.

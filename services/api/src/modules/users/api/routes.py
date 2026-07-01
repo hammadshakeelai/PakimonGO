@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
@@ -32,9 +32,26 @@ def get_my_profile(
 def get_my_collection(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+    context: str | None = Query(default=None, enum=["wild", "zoo", "pet", "unknown"]),
+    sort_by: str = Query(default="totalPoints", enum=["totalPoints", "species", "captureCount", "lastCaptured"]),
+    sort_order: str = Query(default="desc", enum=["asc", "desc"]),
 ):
-    collection = get_user_collection(db, current_user.user_id)
-    return {"userId": current_user.user_id, "species": collection}
+    collection, total = get_user_collection(
+        db=db,
+        user_id=current_user.user_id,
+        limit=limit,
+        offset=offset,
+        context=context,
+        sort_by=sort_by,
+        sort_order=sort_order,
+    )
+    return {
+        "userId": current_user.user_id,
+        "species": collection,
+        "pagination": {"limit": limit, "offset": offset, "total": total},
+    }
 
 
 @router.patch("/me")

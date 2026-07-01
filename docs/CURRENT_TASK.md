@@ -193,6 +193,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 17 Progress
+
+- S17-001: ✅ DONE — `GET /v1/users/me/collection` with pagination (limit/offset), filtering (context), sorting (totalPoints, species, captureCount, lastCaptured asc/desc)
+- S17-002: ✅ DONE — `GET /v1/leaderboard` with pagination (limit/offset), sorting (totalScore, userId, submissionCount asc/desc)
+- S17-003: ✅ DONE — `GET /v1/submissions` list endpoint with pagination, filtering (status, user_id), sorting (createdAt, submittedAt, status, points, species)
+- S17-004: ✅ DONE — Repository functions updated: `get_user_collection`, `get_leaderboard`, `get_submissions` all return (items, total) tuples
+- S17-005: ✅ DONE — Tests updated for pagination/filtering/sorting
+- S17-006: (Pending) — OPENAPI_DRAFT.yaml update
+- 61 API tests + 61 scoring-rules + 14 Flutter = **136 total tests, all passing**
+
 ## Sprint 16 Progress
 
 - S16-001: ✅ DONE — duplicate-detection manifest.yaml (9 scenarios: exact dup, new SHA, empty set, null/empty current, dup overrides zoo/pet, zoo/pet without dup)
@@ -229,4 +239,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 17 — API enhancements (pagination, filtering, sorting) or sensitive species suppression.
+Sprint 18 — OPENAPI_DRAFT.yaml update for pagination params + sensitive species suppression.
