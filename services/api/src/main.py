@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from .modules.leaderboard.api.routes import router as leaderboard_router
 from .modules.media.api.routes import router as media_router
 from .modules.submissions.api.routes import router as submission_router
 from .modules.users.api.routes import router as users_router
@@ -33,6 +34,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="PakimonGO API", version="0.1.0", lifespan=lifespan)
+app.include_router(leaderboard_router)
 app.include_router(media_router)
 app.include_router(submission_router)
 app.include_router(users_router)

@@ -1,8 +1,11 @@
 openapi: 3.1.0
 info:
   title: PakimonGO API Draft
-  version: 0.1.0-alpha0
-  description: Contract-first draft for Alpha-0 planning. This is not generated from code yet.
+  version: 0.2.0-alpha0
+  description: >
+    OpenAPI draft reflecting Sprint 1-15 implemented endpoints.
+    Endpoints marked `x-status: planned` are future features not yet implemented.
+    This is a living document — update when new endpoints are added.
 servers:
   - url: https://api.pakimongo.example/v1
     description: Placeholder production URL
@@ -11,37 +14,49 @@ servers:
 security:
   - bearerAuth: []
 paths:
-  /me:
+  /health/live:
     get:
-      summary: Get current account profile
-      operationId: getMe
+      summary: Liveness check
+      operationId: healthLive
+      x-status: implemented
+      security: []
       responses:
         "200":
-          description: Current user profile
+          description: Service is alive
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserProfile"
-  /account-deletion-requests:
-    post:
-      summary: Request account deletion
-      operationId: requestAccountDeletion
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /health/ready:
+    get:
+      summary: Readiness check
+      operationId: healthReady
+      x-status: implemented
+      security: []
       responses:
-        "202":
-          description: Deletion request accepted
+        "200":
+          description: Service is ready
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeletionRequest"
-  /media/uploads:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /media/upload-intent:
     post:
-      summary: Create signed upload intent
+      summary: Create upload intent
       operationId: createUploadIntent
+      x-status: implemented
       x-requirements:
         - FR-CAP-011
         - NFR-SEC-005
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
@@ -49,21 +64,21 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateUploadIntentRequest"
       responses:
-        "201":
-          description: Signed upload intent created
+        "200":
+          description: Upload intent created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/UploadIntent"
-  /media/uploads/{mediaAssetId}/complete:
-    post:
-      summary: Complete an upload idempotently
-      operationId: completeUpload
-      x-requirements:
-        - FR-CAP-012
-        - FR-CAP-013
+        "400":
+          description: Missing or invalid fields
+          $ref: "#/components/responses/ValidationError"
+  /media/upload/{mediaAssetId}:
+    put:
+      summary: Upload file bytes
+      operationId: uploadFile
+      x-status: implemented
       parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
         - name: mediaAssetId
           in: path
           required: true
@@ -72,26 +87,111 @@ paths:
       requestBody:
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: File uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  mediaAssetId:
+                    type: string
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /media/complete-upload:
+    post:
+      summary: Complete upload and generate derivatives
+      operationId: completeUpload
+      x-status: implemented
+      x-requirements:
+        - FR-CAP-012
+        - FR-CAP-013
+      requestBody:
+        required: true
+        content:
           application/json:
             schema:
               $ref: "#/components/schemas/CompleteUploadRequest"
       responses:
         "200":
-          description: Upload completed
+          description: Upload completed with derivative URLs
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MediaAsset"
+                $ref: "#/components/schemas/CompleteUploadResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /media/derivatives/{mediaAssetId}:
+    get:
+      summary: Get media derivative URLs
+      operationId: getDerivatives
+      x-status: implemented
+      parameters:
+        - name: mediaAssetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Derivative URLs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DerivativeSet"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /media/files/{subdir}/{filename}:
+    get:
+      summary: Serve stored file
+      operationId: serveFile
+      x-status: implemented
+      security: []
+      parameters:
+        - name: subdir
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [originals, thumbs, public]
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File stream
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: "#/components/responses/NotFound"
+
   /submissions:
     post:
       summary: Submit a capture for scoring
       operationId: createSubmission
+      x-status: implemented
       x-requirements:
         - FR-CAP-005
         - FR-SCORE-003
         - FR-SCORE-008
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
@@ -99,28 +199,19 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateSubmissionRequest"
       responses:
-        "202":
-          description: Submission accepted
+        "200":
+          description: Submission created with precheck result
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Submission"
-    get:
-      summary: List current user's submissions
-      operationId: listSubmissions
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-      responses:
-        "200":
-          description: Submission page
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SubmissionPage"
+        "400":
+          $ref: "#/components/responses/ValidationError"
   /submissions/{submissionId}:
     get:
       summary: Get submission detail
       operationId: getSubmission
+      x-status: implemented
       parameters:
         - name: submissionId
           in: path
@@ -134,10 +225,98 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Submission"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /users/me:
+    get:
+      summary: Get current user profile
+      operationId: getMyProfile
+      x-status: implemented
+      responses:
+        "200":
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+    patch:
+      summary: Update current user profile
+      operationId: patchMyProfile
+      x-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchUserProfileRequest"
+      responses:
+        "200":
+          description: Updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /users/me/collection:
+    get:
+      summary: Get current user species collection
+      operationId: getMyCollection
+      x-status: implemented
+      x-requirements:
+        - FR-LB-005
+      responses:
+        "200":
+          description: User collection of scored species
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /leaderboard:
+    get:
+      summary: Get global leaderboard
+      operationId: getLeaderboardSimple
+      x-status: implemented
+      x-requirements:
+        - FR-LB-001
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 500
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardResponse"
+
+  # ── Planned endpoints ──────────────────────────────────
+
+  /account-deletion-requests:
+    post:
+      summary: Request account deletion
+      operationId: requestAccountDeletion
+      x-status: planned
+      responses:
+        "202":
+          description: Deletion request accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletionRequest"
   /submissions/{submissionId}/score:
     get:
       summary: Get visible score state
       operationId: getSubmissionScore
+      x-status: planned
       x-requirements:
         - FR-SCORE-003
         - FR-SCORE-004
@@ -159,6 +338,7 @@ paths:
     get:
       summary: Get privacy-safe map activity
       operationId: getMapActivity
+      x-status: planned
       x-requirements:
         - FR-MAP-003
         - FR-MAP-004
@@ -186,6 +366,7 @@ paths:
     post:
       summary: Set a waypoint to a general area
       operationId: setWaypoint
+      x-status: planned
       x-requirements:
         - FR-MAP-008
         - FR-MAP-009
@@ -206,6 +387,7 @@ paths:
     get:
       summary: Get leaderboard by scope
       operationId: getLeaderboard
+      x-status: planned
       parameters:
         - name: scope
           in: path
@@ -229,8 +411,7 @@ paths:
     post:
       summary: Report content, user, group, comment, or score
       operationId: reportContent
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
+      x-status: planned
       requestBody:
         required: true
         content:
@@ -248,8 +429,7 @@ paths:
     post:
       summary: Block a user
       operationId: blockUser
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
+      x-status: planned
       requestBody:
         required: true
         content:
@@ -271,8 +451,7 @@ paths:
     post:
       summary: Create score, duplicate, zoo, identification, or moderation appeal
       operationId: createAppeal
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
+      x-status: planned
       requestBody:
         required: true
         content:
@@ -286,102 +465,115 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Appeal"
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: Firebase ID token
-  parameters:
-    IdempotencyKey:
-      name: Idempotency-Key
-      in: header
-      required: true
-      schema:
-        type: string
-    Cursor:
-      name: cursor
-      in: query
-      required: false
-      schema:
-        type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+          example:
+            code: NOT_FOUND
+            message: "Resource not found"
+            requestId: "req_abc123"
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+          example:
+            code: VALIDATION_FAILED
+            message: "Missing required fields"
+            requestId: "req_abc123"
+
   schemas:
-    UserProfile:
-      type: object
-      required: [userId, displayName, ageBand, privacyDefaults]
-      properties:
-        userId:
-          type: string
-        displayName:
-          type: string
-        ageBand:
-          type: string
-          enum: [adult, teen]
-        privacyDefaults:
-          type: object
-    DeletionRequest:
-      type: object
-      required: [requestId, status, requestedAt]
-      properties:
-        requestId:
-          type: string
-        status:
-          type: string
-          enum: [requested, processing, completed, rejected]
-        requestedAt:
-          type: string
-          format: date-time
+    # ── Media ────────────────────────────────────────────
     CreateUploadIntentRequest:
       type: object
       required: [fileName, contentType, byteSize, sha256]
       properties:
         fileName:
           type: string
+          example: sparrow.jpg
         contentType:
           type: string
           enum: [image/jpeg, image/png, image/webp]
         byteSize:
           type: integer
+          maximum: 10485760
+          description: Max 10 MB
+          example: 500000
         sha256:
           type: string
+          description: SHA-256 hex digest of the file content
+          example: "aabbccddee..."  # truncated for display
     UploadIntent:
       type: object
       required: [mediaAssetId, uploadUrl, expiresAt]
       properties:
         mediaAssetId:
           type: string
+          example: asset_001
         uploadUrl:
           type: string
-          description: Short-lived private upload URL; never stored in logs.
+          description: Local URL for PUT upload
+          example: /v1/media/upload/asset_001
         expiresAt:
           type: string
           format: date-time
     CompleteUploadRequest:
       type: object
-      required: [sha256]
-      properties:
-        sha256:
-          type: string
-    MediaAsset:
-      type: object
-      required: [mediaAssetId, processingState, originalPrivate]
+      required: [mediaAssetId, sha256]
       properties:
         mediaAssetId:
           type: string
-        processingState:
+        sha256:
           type: string
-          enum: [pending_upload, uploaded, processing, ready, rejected]
-        originalPrivate:
+    CompleteUploadResponse:
+      type: object
+      required: [status, mediaAssetId, derivatives]
+      properties:
+        status:
+          type: string
+          example: ok
+        mediaAssetId:
+          type: string
+        derivatives:
+          $ref: "#/components/schemas/DerivativeSet"
+    DerivativeSet:
+      type: object
+      required: [thumbnailUrl, derivativeUrl, exifStripped]
+      properties:
+        thumbnailUrl:
+          type: string
+          nullable: true
+          example: /v1/media/files/thumbs/asset_001.webp
+        derivativeUrl:
+          type: string
+          nullable: true
+          example: /v1/media/files/public/asset_001.webp
+        exifStripped:
           type: boolean
+          example: true
+
+    # ── Submission ────────────────────────────────────────
     CreateSubmissionRequest:
       type: object
-      required: [mediaAssetId, animalContext, visibility]
+      required: [mediaAssetId, animalContext]
       properties:
         mediaAssetId:
           type: string
         animalContext:
           type: string
-          enum: [wild, pet, zoo_captive, unknown]
+          enum: [wild, zoo, pet, unknown]
         realName:
           type: string
         cuteName:
@@ -392,15 +584,11 @@ components:
           type: array
           items:
             type: string
-        visibility:
-          type: string
-          enum: [private, friends, selected_friends, public]
         foregroundLocation:
           $ref: "#/components/schemas/PrivateLocationInput"
     PrivateLocationInput:
       type: object
       description: Accepted only on protected submission APIs; never returned by public APIs.
-      required: [latitude, longitude, accuracyMeters]
       properties:
         latitude:
           type: number
@@ -414,48 +602,148 @@ components:
       properties:
         submissionId:
           type: string
+          example: sub_001
         mediaAssetId:
           type: string
         scoreState:
           $ref: "#/components/schemas/ScoreState"
         visibility:
           type: string
+          enum: [private]
+          description: Currently always private; friends/public planned
         publicLocation:
           $ref: "#/components/schemas/PublicLocationCell"
-    SubmissionPage:
-      type: object
-      required: [items]
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Submission"
-        nextCursor:
-          type: string
     ScoreState:
       type: object
       required: [status]
       properties:
         status:
           type: string
-          enum: [pending, prechecked, ai_evaluated, scored, capped, review, rejected]
+          enum: [pending, prechecked, ai_evaluated, scored, capped, review, rejected, rolled_back]
         visiblePoints:
           type: integer
           nullable: true
         explanationSummary:
           type: string
+          enum: [normal, duplicate_cap, zoo_cap, pet_cap, review_required, unsafe_rejected, low_confidence]
         ledger:
           type: string
-          enum: [wild, pet_social, participation]
+          nullable: true
     PublicLocationCell:
       type: object
       required: [cellId, precisionLabel]
       properties:
         cellId:
           type: string
+          example: cell_a1b2c3d4
         precisionLabel:
           type: string
-          enum: [coarse, delayed, suppressed]
+          enum: [coarse]
+
+    # ── User ──────────────────────────────────────────────
+    UserProfile:
+      type: object
+      required: [userId, email, status]
+      properties:
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          type: string
+          enum: [active, suspended, deleted]
+        ageBand:
+          type: string
+          nullable: true
+          enum: [adult, teen]
+        homeRegion:
+          type: string
+          nullable: true
+        trustState:
+          type: string
+          nullable: true
+          enum: [trusted, normal, low, restricted]
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+    CollectionResponse:
+      type: object
+      required: [userId, species]
+      properties:
+        userId:
+          type: string
+        species:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionEntry"
+    CollectionEntry:
+      type: object
+      required: [species, context, totalPoints, captureCount]
+      properties:
+        species:
+          type: string
+          example: Aquila chrysaetos
+        context:
+          type: string
+          enum: [wild, zoo, pet, unknown]
+        totalPoints:
+          type: integer
+        captureCount:
+          type: integer
+        lastCaptured:
+          type: string
+          format: date-time
+          nullable: true
+    LeaderboardResponse:
+      type: object
+      required: [entries, totalReturned]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeaderboardEntry"
+        totalReturned:
+          type: integer
+    LeaderboardEntry:
+      type: object
+      required: [userId, totalScore, submissionCount]
+      properties:
+        userId:
+          type: string
+        ageBand:
+          type: string
+          nullable: true
+        homeRegion:
+          type: string
+          nullable: true
+        totalScore:
+          type: integer
+        submissionCount:
+          type: integer
+    PatchUserProfileRequest:
+      type: object
+      properties:
+        ageBand:
+          type: string
+          enum: [adult, teen]
+        homeRegion:
+          type: string
+
+    # ── Future / Planned ──────────────────────────────────
+    DeletionRequest:
+      type: object
+      required: [requestId, status, requestedAt]
+      properties:
+        requestId:
+          type: string
+        status:
+          type: string
+          enum: [requested, processing, completed, rejected]
+        requestedAt:
+          type: string
+          format: date-time
     MapActivity:
       type: object
       required: [cells]

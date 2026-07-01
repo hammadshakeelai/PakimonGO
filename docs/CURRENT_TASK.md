@@ -193,6 +193,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 15 Progress
+
+- S15-001: ✅ DONE — Repository functions: `get_user_collection` (species, points, count, last_captured) and `get_leaderboard` (user_id, score, submission count)
+- S15-002: ✅ DONE — `GET /v1/users/me/collection` endpoint (auth required, returns species grouped by real_name)
+- S15-003: ✅ DONE — `GET /v1/leaderboard` endpoint (public, optional `limit` param, 1-500)
+- S15-004: ✅ DONE — 7 tests: collection (species, empty, auth), leaderboard (entries, public, limit, invalid limit)
+- S15-005: ✅ DONE — OpenAPI updated: 2 new paths (leaderboard, collection), 4 new schemas (CollectionResponse, CollectionEntry, LeaderboardResponse, LeaderboardEntry)
+- 61 API tests + 49 scoring-rules + 14 Flutter = 124 total, all passing
+
 ## Sprint 14 Progress
 
 - S14-001: ✅ DONE — GoogleVisionProvider with real REST API call (base64 encode, POST to vision.googleapis.com, parse response)
@@ -211,4 +220,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 15 — Collection/leaderboard endpoints or database-backed user scoring history.
+Sprint 16 — Real data integration (zoo flag, golden set) or API enhancements.
