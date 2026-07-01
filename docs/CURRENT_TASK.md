@@ -193,6 +193,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 16 Progress
+
+- S16-001: ✅ DONE — duplicate-detection manifest.yaml (9 scenarios: exact dup, new SHA, empty set, null/empty current, dup overrides zoo/pet, zoo/pet without dup)
+- S16-002: ✅ DONE — zoo-detection manifest.yaml (9 scenarios: zoo, pet, wild, unknown, empty/null context, case insensitivity, dup overrides zoo, zoo with existing unrelated SHA)
+- S16-003: ✅ DONE — goldset_runner.py: load_manifest, validate_manifest, run_scenario, run_manifest, run_manifest_path
+- S16-004: ✅ DONE — 12 goldset tests (manifest exists, load, run scenario pass/fail, full manifests pass, invalid manifests, path not found)
+- S16-005: ✅ DONE — CI goldset-smoke job runs test_goldset_runner.py
+- 73 scoring-rules tests + 61 API tests + 14 Flutter = **148 total tests, all passing**
+
 ## Sprint 15 Progress
 
 - S15-001: ✅ DONE — Repository functions: `get_user_collection` (species, points, count, last_captured) and `get_leaderboard` (user_id, score, submission count)
@@ -220,4 +229,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 16 — Real data integration (zoo flag, golden set) or API enhancements.
+Sprint 17 — API enhancements (pagination, filtering, sorting) or sensitive species suppression.

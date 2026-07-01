@@ -1,0 +1,116 @@
+dataset_id: goldset-duplicate-detection-v0.1.0
+dataset_type: duplicate-detection
+version: 0.1.0
+license: synthetic
+owner: dev-team
+description: >
+  Scenarios for SHA256-based exact duplicate detection in the precheck pipeline.
+  All scenarios test the pure function run_precheck() — no DB or API needed.
+items:
+  - item_id: dup-001
+    description: exact duplicate SHA256 caught
+    input:
+      animal_context: wild
+      existing_sha256s: ["sha_existing_001"]
+      current_sha256: "sha_existing_001"
+    expected:
+      duplicate_found: true
+      explanation_category: duplicate_cap
+      suggested_state: capped
+      context: duplicate
+
+  - item_id: dup-002
+    description: new SHA256 is not a duplicate
+    input:
+      animal_context: wild
+      existing_sha256s: ["sha_existing_001"]
+      current_sha256: "sha_new_002"
+    expected:
+      duplicate_found: false
+      explanation_category: normal
+      suggested_state: ai_evaluated
+      context: wild
+
+  - item_id: dup-003
+    description: empty existing set
+    input:
+      animal_context: wild
+      existing_sha256s: []
+      current_sha256: "sha_abc"
+    expected:
+      duplicate_found: false
+      explanation_category: normal
+      suggested_state: ai_evaluated
+      context: wild
+
+  - item_id: dup-004
+    description: null current SHA256 is not duplicate
+    input:
+      animal_context: wild
+      existing_sha256s: ["sha_existing_001"]
+      current_sha256: null
+    expected:
+      duplicate_found: false
+      explanation_category: normal
+      suggested_state: ai_evaluated
+      context: wild
+
+  - item_id: dup-005
+    description: empty string current SHA256 is not duplicate
+    input:
+      animal_context: wild
+      existing_sha256s: ["sha_existing_001"]
+      current_sha256: ""
+    expected:
+      duplicate_found: false
+      explanation_category: normal
+      suggested_state: ai_evaluated
+      context: wild
+
+  - item_id: dup-006
+    description: duplicate overrides zoo context
+    input:
+      animal_context: zoo
+      existing_sha256s: ["sha_dup"]
+      current_sha256: "sha_dup"
+    expected:
+      duplicate_found: true
+      explanation_category: duplicate_cap
+      suggested_state: capped
+      context: duplicate
+
+  - item_id: dup-007
+    description: duplicate overrides pet context
+    input:
+      animal_context: pet
+      existing_sha256s: ["sha_dup"]
+      current_sha256: "sha_dup"
+    expected:
+      duplicate_found: true
+      explanation_category: duplicate_cap
+      suggested_state: capped
+      context: duplicate
+
+  - item_id: dup-008
+    description: zoo context without duplicate
+    input:
+      animal_context: zoo
+      existing_sha256s: ["sha_existing"]
+      current_sha256: "sha_new_zoo"
+    expected:
+      duplicate_found: false
+      explanation_category: zoo_cap
+      suggested_state: capped
+      context: zoo
+
+  - item_id: dup-009
+    description: pet context without duplicate
+    input:
+      animal_context: pet
+      existing_sha256s: ["sha_existing"]
+      current_sha256: "sha_new_pet"
+    expected:
+      duplicate_found: false
+      explanation_category: pet_cap
+      suggested_state: capped
+      context: pet
