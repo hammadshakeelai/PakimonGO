@@ -388,6 +388,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S38-004: ✅ DONE — Added `all-checks-pass` summary job
 - 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
 
+## Sprint 39 Progress
+
+- S39-001: ✅ DONE — Created `ErrorHandlingMiddleware` (ValueError/KeyError/PermissionError/FileNotFoundError/Exception)
+- S39-002: ✅ DONE — Created `http_exception_handler` for FastAPI HTTPException
+- S39-003: ✅ DONE — Wired into main.py (middleware + exception handler)
+- S39-004: ✅ DONE — 8 tests for error middleware
+- 97 API tests + 61 scoring-rules + 86 Flutter = **244 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 38 complete. Next: Sprint 39 (see BACKLOG.md).
+Sprint 39 complete. Next: Sprint 40 (see BACKLOG.md).

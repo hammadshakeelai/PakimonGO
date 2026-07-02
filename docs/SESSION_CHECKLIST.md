@@ -58,3 +58,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 52 | Sprint 36 photo thumbnail in species detail | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Image.network, mediaAssetId in SubmissionMarker, loading/error fallback, 228 total |
 | 53 | Sprint 37 map marker clustering | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ClusterService, haversine clustering, overlay shows cluster count, 8 new tests, 236 total |
 | 54 | Sprint 38 CI workflow update | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | needs chains, Flutter 3.x, test count echo, summary job, 236 total |
+| 55 | Sprint 39 API error handling middleware | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ErrorHandlingMiddleware, http_exception_handler, 8 tests, 244 total |

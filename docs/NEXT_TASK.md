@@ -2,7 +2,17 @@
 
 ## Current Next Task
 
-Sprint 39 — API error handling middleware (see BACKLOG.md).
+Sprint 40 — User notifications or production deployment CI/CD (see BACKLOG.md).
+
+## Sprint 39 Complete
+
+Sprint 39 delivered: **API error handling middleware.**
+
+- `ErrorHandlingMiddleware` catches ValueError → 400, KeyError → 400, PermissionError → 403, FileNotFoundError → 404, Exception → 500
+- `http_exception_handler` registered via `app.add_exception_handler(HTTPException, ...)` returns structured JSON
+- Response format: `{"error": {"code": "...", "message": "...", "details": {}}}`
+- 8 new tests; 5xx errors logged with stack trace
+- 97 API + 61 scoring-rules = 158 Python tests pass
 
 ## Sprint 38 Complete
 

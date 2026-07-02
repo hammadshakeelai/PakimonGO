@@ -110,4 +110,12 @@ Sprint 38 delivered:
 - `all-checks-pass` summary job
 - 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests**
 
-Next: Sprint 39 — API error handling middleware (see BACKLOG.md).
+**Sprint 39 — API error handling middleware (complete).**
+
+Sprint 39 delivered:
+- `ErrorHandlingMiddleware` + `http_exception_handler`
+- Structured JSON responses: `{"error": {"code": "...", "message": "...", "details": {}}}`
+- 8 new tests; 97 API + 61 scoring-rules = 158 Python tests
+- 244 total tests (97 API + 61 scoring-rules + 86 Flutter)
+
+Next: Sprint 40 — user notifications or production deployment CI/CD (see BACKLOG.md).

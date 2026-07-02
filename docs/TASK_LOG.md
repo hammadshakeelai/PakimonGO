@@ -1160,6 +1160,29 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 39 — API Error Handling Middleware
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 39 added centralized error handling with structured JSON error responses for all unhandled exceptions across the API.
+
+### Changes Made
+
+- `src/infrastructure/middleware/error_middleware.py` — NEW: `ErrorHandlingMiddleware` catches ValueError/KeyError/PermissionError/FileNotFoundError/unhandled Exception; `http_exception_handler` registered as FastAPI exception handler for HTTPException
+- `src/main.py` — Wired `ErrorHandlingMiddleware` + `app.add_exception_handler(HTTPException, http_exception_handler)`
+- `tests/test_error_middleware.py` — NEW: 8 tests covering all error types + passthrough + body shape
+
+### Verification
+
+- 97 API tests pass (+8 new)
+- 61 scoring-rules tests pass
+- Error response shape: `{"error": {"code": "...", "message": "...", "details": {}}}`
+- 5xx errors logged with stack trace
+
 ## 2026-07-03: Sprint 38 — CI Workflow Update
 
 ### Status

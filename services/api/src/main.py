@@ -3,6 +3,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from fastapi import HTTPException
+
+from .infrastructure.middleware.error_middleware import ErrorHandlingMiddleware, http_exception_handler
 from .infrastructure.middleware.version_middleware import VersionNegotiationMiddleware
 from .modules.leaderboard.api.routes import router as leaderboard_router
 from .modules.media.api.routes import router as media_router
@@ -35,7 +38,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="PakimonGO API", version="0.1.0", lifespan=lifespan)
+app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(VersionNegotiationMiddleware)
+app.add_exception_handler(HTTPException, http_exception_handler)
 app.include_router(leaderboard_router, prefix="/v1")
 app.include_router(media_router, prefix="/v1")
 app.include_router(submission_router, prefix="/v1")
