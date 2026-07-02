@@ -2,7 +2,17 @@
 
 ## Current Next Task
 
-Sprint 37 — Map marker clustering or CI workflow update (see BACKLOG.md).
+Sprint 38 — CI workflow update for new Flutter test count, or API error handling middleware (see BACKLOG.md).
+
+## Sprint 37 Complete
+
+Sprint 37 delivered: **Map marker clustering.**
+
+- `ClusterMarker` model + `ClusterService` utility (haversine distance, 2km default radius)
+- `MapViewModel` now exposes `clusters` and `clusterCount` when markers exceed 3
+- `MapScreen` overlay shows "X clusters · Y sightings" when clustered, "Y sightings" otherwise
+- 8 new tests (6 cluster service + 2 viewmodel)
+- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
 
 ## Sprint 36 Complete
 

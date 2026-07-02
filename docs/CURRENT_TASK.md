@@ -372,6 +372,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S36-005: ✅ DONE — Updated species_detail_screen_test for Image widget
 - 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
 
+## Sprint 37 Progress
+
+- S37-001: ✅ DONE — Created `ClusterMarker` model + `ClusterService` (haversine distance, 2km radius)
+- S37-002: ✅ DONE — Updated `MapViewModel` to expose `clusters` (threshold >3 markers)
+- S37-003: ✅ DONE — Updated `MapScreen` overlay to show "X clusters · Y sightings"
+- S37-004: ✅ DONE — 8 new tests (6 cluster service + 2 viewmodel clustering)
+- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 36 complete. Next: Sprint 37 (see BACKLOG.md).
+Sprint 37 complete. Next: Sprint 38 (see BACKLOG.md).

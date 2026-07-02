@@ -101,5 +101,81 @@ void main() {
 
       expect(notifyCount, 2);
     });
+
+    test('clusters are empty for 3 or fewer markers', () async {
+      final vm = MapViewModel(
+        repository: _MockRepository(
+          markers: [
+            SubmissionMarker(
+                submissionId: 's1',
+                mediaAssetId: 'm1',
+                latitude: 51.5,
+                longitude: -0.12,
+                species: 'A',
+                points: 1,
+                status: 'scored'),
+            SubmissionMarker(
+                submissionId: 's2',
+                mediaAssetId: 'm2',
+                latitude: 52.0,
+                longitude: -0.12,
+                species: 'B',
+                points: 1,
+                status: 'scored'),
+          ],
+        ),
+      );
+
+      await vm.fetchMarkers();
+
+      expect(vm.clusters, isEmpty);
+      expect(vm.clusterCount, 0);
+    });
+
+    test('clusters generated for more than 3 markers', () async {
+      final vm = MapViewModel(
+        repository: _MockRepository(
+          markers: [
+            SubmissionMarker(
+                submissionId: 's1',
+                mediaAssetId: 'm1',
+                latitude: 51.5,
+                longitude: -0.12,
+                species: 'Passer domesticus',
+                points: 25,
+                status: 'scored'),
+            SubmissionMarker(
+                submissionId: 's2',
+                mediaAssetId: 'm2',
+                latitude: 51.501,
+                longitude: -0.121,
+                species: 'Passer domesticus',
+                points: 25,
+                status: 'scored'),
+            SubmissionMarker(
+                submissionId: 's3',
+                mediaAssetId: 'm3',
+                latitude: 51.502,
+                longitude: -0.122,
+                species: 'Felis catus',
+                points: 1,
+                status: 'capped'),
+            SubmissionMarker(
+                submissionId: 's4',
+                mediaAssetId: 'm4',
+                latitude: 52.0,
+                longitude: 2.0,
+                species: 'Canis lupus',
+                points: 25,
+                status: 'scored'),
+          ],
+        ),
+      );
+
+      await vm.fetchMarkers();
+
+      expect(vm.clusterCount, greaterThan(0));
+      expect(vm.markerCount, 4);
+    });
   });
 }

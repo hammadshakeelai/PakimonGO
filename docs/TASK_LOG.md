@@ -1160,6 +1160,32 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 37 — Map Marker Clustering
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 37 added marker clustering to reduce visual clutter when many sightings exist nearby. Closest markers are grouped using haversine distance within a 2km radius.
+
+### Changes Made
+
+- `lib/features/map/domain/cluster_service.dart` — NEW: `ClusterMarker` model (center lat/lng, count, species preview) + `ClusterService.cluster()` (haversine distance-based grouping, 2km default radius)
+- `lib/features/map/domain/map_viewmodel.dart` — NEW: `clusters`/`clusterCount` getters; `_buildClusters()` called on fetch; thresholds at >3 markers
+- `lib/features/map/presentation/map_screen.dart` — Overlay shows "X clusters · Y sightings" when clusters exist, "Y sightings" otherwise
+- `test/features/map/cluster_service_test.dart` — NEW: 6 tests (empty, nearby grouped, distant separated, species preview x3)
+- `test/features/map/map_viewmodel_test.dart` — 2 new tests (clusters empty ≤3, clusters generated >3)
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 86 passed (was 78 pre-S37: +8 new)
+- Total: **236 tests, all passing**
+- QA validations: 4/4 PASS
+
 ## 2026-07-03: Sprint 36 — Photo Thumbnail in Species Detail
 
 ### Status

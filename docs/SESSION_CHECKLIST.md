@@ -56,3 +56,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 50 | Sprint 34 pull-to-refresh on map | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | RefreshIndicator on MapScreen body, pull triggers fetchMarkers, 2 new tests, 69 Flutter tests, 219 total |
 | 51 | Sprint 35 submission history screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | History tab, SubmissionHistoryScreen, 9 new Flutter tests, 78 Flutter, 228 total |
 | 52 | Sprint 36 photo thumbnail in species detail | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Image.network, mediaAssetId in SubmissionMarker, loading/error fallback, 228 total |
+| 53 | Sprint 37 map marker clustering | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ClusterService, haversine clustering, overlay shows cluster count, 8 new tests, 236 total |

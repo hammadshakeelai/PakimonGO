@@ -123,6 +123,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerOverlay() {
+    final clusters = _viewModel.clusters;
+    final hasClusters = clusters.length > 0;
+
     return Positioned(
       left: 12,
       bottom: 12,
@@ -136,8 +139,12 @@ class _MapScreenState extends State<MapScreen> {
               children: [
                 const Icon(Icons.location_on, size: 18, color: Colors.green),
                 const SizedBox(width: 6),
-                Text('${_viewModel.markerCount} sightings',
-                    style: Theme.of(context).textTheme.bodyMedium),
+                hasClusters
+                    ? Text(
+                        '${clusters.length} clusters · ${_viewModel.markerCount} sightings',
+                        style: Theme.of(context).textTheme.bodyMedium)
+                    : Text('${_viewModel.markerCount} sightings',
+                        style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(width: 4),
                 const Icon(Icons.chevron_right, size: 16),
               ],

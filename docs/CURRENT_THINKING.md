@@ -92,4 +92,13 @@ Sprint 36 delivered:
 - All SubmissionMarker constructors updated across 4 test files
 - 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
 
-Next: Sprint 37 — Map marker clustering or CI workflow update (see BACKLOG.md).
+**Sprint 37 — Map marker clustering (complete).**
+
+Sprint 37 delivered:
+- `ClusterMarker` model + `ClusterService` utility (haversine distance-based, 2km default radius)
+- `MapViewModel` exposes `clusters`/`clusterCount`; clusters built when markers > 3
+- `MapScreen` overlay shows "X clusters · Y sightings" when clustered
+- 8 new tests (6 cluster service + 2 viewmodel)
+- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
+
+Next: Sprint 38 — CI workflow update or API error handling middleware (see BACKLOG.md).
