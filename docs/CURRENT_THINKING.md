@@ -31,18 +31,20 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 22 (in progress) — API versioning v1 prefix complete.**
+**Sprint 22 — API versioning complete.**
 
 Sprint 22 delivered:
 - All API routes now under /v1/ prefix via main app
+- Version negotiation middleware: Accept-Version header → v1/v2 selection, API-Version response header
 - Module routers: users (/users), leaderboard (/leaderboard), submissions (/submissions), media (/media)
 - Internal paths updated: /media/upload/{id}, /media/files/thumbs|public/{id}
-- 144 total tests passing (69 API + 61 scoring-rules + 14 Flutter)
+- OpenAPI has `x-versions: [v1, v2]` metadata and v2 health endpoint placeholder
+- 150 total tests passing (75 API + 61 scoring-rules + 14 Flutter)
 
 Sprint 0-22 stats:
-- 144 total tests (69 API + 61 scoring-rules + 14 Flutter)
-- 20 real endpoints + 8 planned in OpenAPI
+- 150 total tests (75 API + 61 scoring-rules + 14 Flutter)
+- 22 real endpoints + 8 planned in OpenAPI
 - 8 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
 
-Next: Sprint 22 continued — Version negotiation (header + URL path) + OpenAPI v2 placeholder.
+Next: Sprint 23 — Open for implementation.
