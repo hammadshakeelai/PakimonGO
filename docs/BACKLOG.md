@@ -24,6 +24,17 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
+- ~~S28-001: Add `http` package to pubspec.yaml~~ ✅ DONE
+- ~~S28-002: Create `ApiClient` HTTP wrapper~~ ✅ DONE
+- ~~S28-003: Create `ApiConfig` env-var reader~~ ✅ DONE
+- ~~S28-004: Create API response models~~ ✅ DONE
+- ~~S28-005: Create `CaptureRepository`~~ ✅ DONE
+- ~~S28-006: Build `CaptureScreen` UI~~ ✅ DONE
+- ~~S28-007: Update `main.dart` with tab nav~~ ✅ DONE
+- ~~S28-008: Write `ApiClient` unit tests~~ ✅ DONE
+- ~~S28-009: Write `CaptureRepository` unit tests~~ ✅ DONE
+- ~~S28-010: Write `CaptureScreen` widget tests~~ ✅ DONE
+
 - ~~S0-001: Generate Flutter project template~~ ✅ DONE
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE

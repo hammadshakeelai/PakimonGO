@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   db:
     image: ankane/pgvector:latest
@@ -8,3 +9,31 @@ services:
       POSTGRES_DB: pakimongo_local
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      SYNC_DATABASE_URL: postgresql://postgres:dummy_local_password@db:5432/pakimongo_local
+      STORAGE_PROVIDER: local
+      UPLOAD_BASE: /app/data/uploads
+      ENVIRONMENT: local
+    volumes:
+      - uploads:/app/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  uploads:

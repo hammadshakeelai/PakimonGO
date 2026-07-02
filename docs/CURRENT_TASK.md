@@ -4,7 +4,7 @@
 
 Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, async worker scoring, and map prototype.
 
-Sprints 1-25 complete. 84 API tests all passing (90 with integration tests).
+Sprints 1-27 complete. 89 API tests all passing.
 
 ## Active Task
 
@@ -299,6 +299,22 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S12-004: ✅ DONE — Background worker thread in FastAPI lifespan
 - S12-005: ✅ DONE — Tests updated for async flow (process_pending after POST, GET to verify)
 
+## Sprint 27 Progress
+
+- S27-001: ✅ DONE — Created `services/api/Dockerfile` (Python 3.13-slim, uvicorn)
+- S27-002: ✅ DONE — Expanded `docker-compose.local.yml` with `api` service (build, DB health check, volumes)
+- S27-003: ✅ DONE — Added `infrastructure/docker/.env.docker` example
+- S27-004: ✅ DONE — Updated README with Docker instructions (primary dev path)
+- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+## Sprint 26 Progress
+
+- S26-001: ✅ DONE — Added `generate_derivative_stubs` to `StorageProvider` interface; renamed from `generate_derivative_urls`; implemented on `S3StorageProvider` and `GCSStorageProvider`
+- S26-002: ✅ DONE — Replaced hardcoded `LocalFileStorage()` in media routes with `get_storage_provider()` factory
+- S26-003: ✅ DONE — Added 8 cloud storage tests (factory defaults, S3/GCS URL formats, ImportError on missing deps, media roundtrip)
+- S26-004: ✅ DONE — Sprint 26 plan created, state docs updated
+- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
 ## Sprint 25 Progress
 
 - S25-001: ✅ DONE — Integration test: end-to-end capture flow (6 tests: wild, zoo, duplicate, multiuser, list, health)
@@ -307,6 +323,20 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S25-004: ✅ DONE — OpenAPI schema validation added to validate_docs.py (15 examples parsed)
 - S25-005: ✅ DONE — CI job `integration-tests` added to docs-validation.yml (9 total jobs)
 
+## Sprint 28 Progress
+
+- S28-001: ✅ DONE — `http` package added to pubspec.yaml
+- S28-002: ✅ DONE — `ApiClient` HTTP wrapper (base URL, auth, GET/POST/PATCH/putFile, ApiException)
+- S28-003: ✅ DONE — `ApiConfig` env-var reader (`--dart-define`)
+- S28-004: ✅ DONE — 6 API response models (UploadIntentResponse, CompleteUploadResponse, DerivativeUrls, ScoreState, SubmissionResponse, UserProfileResponse)
+- S28-005: ✅ DONE — `CaptureRepository` (createUploadIntent, uploadFile, completeUpload, createSubmission, getSubmission, getProfile, getCollection, getLeaderboard)
+- S28-006: ✅ DONE — `CaptureScreen` UI (species/context/caption fields, dropdown, submit button, status card)
+- S28-007: ✅ DONE — `main.dart` HomeScreen with bottom nav (Map + Capture tabs)
+- S28-008: ✅ DONE — 5 `ApiClient` unit tests (GET, POST, 404, 400 with detail, no-auth GET)
+- S28-009: ✅ DONE — 5 `CaptureRepository` unit tests (uploadIntent, completeUpload, createSubmission, getProfile, error)
+- S28-010: ✅ DONE — 2 `CaptureScreen` widget tests (form rendering, submit tap)
+- 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 25 complete. Next: Sprint 26 (see BACKLOG.md).
+Sprint 28 complete. Next: Sprint 29 (see BACKLOG.md).

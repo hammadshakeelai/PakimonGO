@@ -904,3 +904,90 @@ Sprint 25 delivered integration testing, endpoint documentation, README update, 
 - QA validations: 4/4 PASS (pre_task_check, validate_docs, validate_json_examples, scan_secrets)
 - Ruff: clean
 - Mypy: clean
+
+## 2026-07-02: Sprint 26 — Wire Cloud Storage into Media Flow
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 26 replaced hardcoded `LocalFileStorage` in media routes with the env-configurable `get_storage_provider()` factory, enabling S3/GCS in production.
+
+### Changes Made
+
+- `services/api/src/infrastructure/storage/cloud_storage.py` — Renamed `generate_derivative_urls` to `generate_derivative_stubs` on StorageProvider, S3StorageProvider, GCSStorageProvider
+- `services/api/src/modules/media/api/routes.py` — Changed `_storage = LocalFileStorage()` to `_storage = get_storage_provider()`
+- `services/api/tests/test_cloud_storage.py` — Rewritten with 8 tests: factory defaults, S3/GCS URL formats, ImportError on missing deps, media roundtrip with local provider
+- `docs/sprints/SPRINT_26_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed (84 existing + 5 new cloud storage)
+- Scoring-rules tests: 61 passed
+- Flutter tests: 14 passed
+- Total: **164 tests, all passing**
+- Ruff: clean
+- QA validations: 4/4 PASS
+
+## 2026-07-02: Sprint 27 — Docker Compose Local Dev Environment
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 27 created a full local dev environment with Docker Compose, enabling one-command startup of PostgreSQL + API.
+
+### Changes Made
+
+- `services/api/Dockerfile` — NEW: Python 3.13-slim, pip install, uvicorn CMD
+- `infrastructure/docker/docker-compose.local.yml` — Expanded from just `db` to `db` + `api` services with build context, health check, named volumes
+- `infrastructure/docker/.env.docker` — NEW: documented Docker-specific env vars
+- `infrastructure/docker/README.md` — Rewritten with quick start, verify, alembic instructions
+- `README.md` — Updated with Docker as primary dev path
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 14 passed
+- Total: **164 tests, all passing**
+- Ruff: clean
+- QA validations: 4/4 PASS
+
+## 2026-07-03: Sprint 28 — Connect Flutter Mobile to API
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 28 wired the Flutter mobile app to the FastAPI backend with a full HTTP client, response models, and capture screen UI.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/pubspec.yaml` — Added `http: ^1.6.0` dependency
+- `apps/mobile/pakimon_go_app/lib/core/network/api_client.dart` — NEW: ApiClient with base URL, auth token, GET/POST/PATCH/putFile, ApiException
+- `apps/mobile/pakimon_go_app/lib/core/network/api_config.dart` — NEW: env-var reader via --dart-define
+- `apps/mobile/pakimon_go_app/lib/shared/models/api_models.dart` — NEW: 6 response models
+- `apps/mobile/pakimon_go_app/lib/features/capture/data/capture_repository.dart` — NEW: 8 API methods
+- `apps/mobile/pakimon_go_app/lib/features/capture/presentation/capture_screen.dart` — NEW: Capture UI with form fields and upload→submit flow
+- `apps/mobile/pakimon_go_app/lib/main.dart` — Rewritten with HomeScreen bottom nav (Map + Capture tabs)
+- `apps/mobile/pakimon_go_app/test/features/capture/api_client_test.dart` — NEW: 5 mock HTTP tests
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_repository_test.dart` — NEW: 5 mock repository tests
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_screen_test.dart` — NEW: 2 widget tests
+- `apps/mobile/pakimon_go_app/test/widget_test.dart` — Updated for nav test
+- `docs/sprints/SPRINT_28_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 27 passed (was 14 pre-S28: +10 unit + 2 widget + 1 nav)
+- Total: **177 tests, all passing**
+- Ruff: clean
+- QA validations: pending commit

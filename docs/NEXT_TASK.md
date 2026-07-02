@@ -2,9 +2,46 @@
 
 ## Current Next Task
 
-Sprint 26 — (see BACKLOG.md for next work package).
+Sprint 29 — Mobile integration: camera plugin, auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).
 
-## Sprint 2-13 Complete
+## Sprint 2-26 Complete
+
+Sprints 2-26 delivered the core API: DB-backed repositories, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI, CI, scoring pipeline, AI adapter framework, async worker, map prototype, Google Vision provider, collection/leaderboard endpoints, goldset benchmarks, pagination/filtering/sorting, sensitive species suppression, API version negotiation, and cloud storage infrastructure.
+
+89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**.
+
+## Sprint 2-27 Complete
+
+### Sprint 27 Complete
+
+Sprint 27 delivered: **Docker Compose local dev environment.**
+
+- `services/api/Dockerfile` (Python 3.13-slim, uvicorn on 8000)
+- `infrastructure/docker/docker-compose.local.yml` expanded with `api` + `db` services (health check, named volumes)
+- `infrastructure/docker/.env.docker` for compose env overrides
+- README updated with Docker as primary dev path
+- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+### Sprint 28 Complete
+
+Sprint 28 delivered: **Connect Flutter mobile to API.**
+
+- `ApiClient` HTTP wrapper with auth, GET/POST/PATCH/putFile, ApiException
+- 6 API response models (`fromJson`)
+- `CaptureRepository` with 8 API methods
+- `CaptureScreen` UI with species/context/caption fields, upload→submit flow
+- `main.dart` HomeScreen with bottom nav (Map + Capture tabs)
+- 10 new Flutter unit tests + 2 widget tests
+- 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
+
+### Sprint 26 Complete
+
+Sprint 26 delivered: **Cloud storage wired into media flow.**
+
+- `generate_derivative_stubs()` added to `StorageProvider` interface and both cloud implementations
+- Media routes use `get_storage_provider()` factory (env-based selection: local/s3/gcs)
+- 8 cloud storage tests (factory defaults, S3/GCS URL formats, ImportError checks, media roundtrip)
+- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
 
 ### Sprint 25 Complete
 

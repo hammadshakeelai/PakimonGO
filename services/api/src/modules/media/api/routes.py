@@ -14,12 +14,12 @@ from src.infrastructure.database.repositories import (
     update_media_asset_storage_key,
 )
 from src.infrastructure.database.session import get_db
-from src.infrastructure.storage.local_storage import LocalFileStorage
+from src.infrastructure.storage.cloud_storage import get_storage_provider
 
 MAX_BYTE_SIZE = 10 * 1024 * 1024
 
 router = APIRouter(prefix="/media", tags=["media"])
-_storage = LocalFileStorage()
+_storage = get_storage_provider()
 
 
 @router.post("/upload-intent")

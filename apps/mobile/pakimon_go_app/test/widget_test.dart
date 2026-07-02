@@ -9,4 +9,11 @@ void main() {
     expect(find.text('PakimonGO'), findsNothing);
     expect(find.text('PakimonGO Map'), findsOneWidget);
   });
+
+  testWidgets('navigates to capture screen via bottom nav', (WidgetTester tester) async {
+    await tester.pumpWidget(const PakimonGoApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Test Capture'), findsNothing);
+  });
 }

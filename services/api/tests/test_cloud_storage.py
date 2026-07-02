@@ -1,32 +1,94 @@
-import sys
 import os
+import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+import pytest
+
+from src.infrastructure.storage.cloud_storage import (
+    S3StorageProvider,
+    GCSStorageProvider,
+    get_storage_provider,
+)
 
 
-class TestStorageProviderInterface:
-    """Tests for storage provider contract without external deps."""
+class TestStorageProviderFactory:
 
-    def test_s3_urls_format(self):
-        """Verify S3 URL format is correct."""
-        bucket = "test-bucket"
-        region = "us-west-2"
-        expected_thumb = f"https://{bucket}.s3.{region}/thumbs/test-id.webp"
-
-        assert expected_thumb.startswith("https://")
-        assert "test-bucket" in expected_thumb
-        assert "test-id.webp" in expected_thumb
-
-    def test_gcs_urls_format(self):
-        """Verify GCS URL format is correct."""
-        bucket = "test-bucket"
-        expected_thumb = f"https://storage.googleapis.com/{bucket}/thumbs/test-id.webp"
-
-        assert expected_thumb.startswith("https://")
-        assert "storage.googleapis.com" in expected_thumb
-
-    def test_env_defaults_local(self):
-        """Verify default storage provider is local."""
+    def test_default_is_local(self):
         os.environ.pop("STORAGE_PROVIDER", None)
-        # When STORAGE_PROVIDER not set or "local", LocalFileStorage is used
-        assert os.getenv("STORAGE_PROVIDER", "local") == "local"
+        from src.infrastructure.storage.local_storage import LocalFileStorage
+        provider = get_storage_provider()
+        assert isinstance(provider, LocalFileStorage)
+
+    def test_s3_provider_requires_boto3(self):
+        os.environ["STORAGE_PROVIDER"] = "s3"
+        with pytest.raises(ImportError, match="boto3"):
+            get_storage_provider()
+
+    def test_gcs_provider_requires_gcs(self):
+        os.environ["STORAGE_PROVIDER"] = "gcs"
+        with pytest.raises(ImportError, match="google-cloud-storage"):
+            get_storage_provider()
+
+
+class TestS3StorageProvider:
+
+    def test_derivative_stubs_urls(self):
+        provider = S3StorageProvider.__new__(S3StorageProvider)
+        provider._bucket = "test-bucket"
+        provider._region = "us-west-2"
+        urls = provider.generate_derivative_stubs("asset-123")
+        assert urls["thumbnail"] == "https://test-bucket.s3.us-west-2/thumbs/asset-123.webp"
+        assert urls["public"] == "https://test-bucket.s3.us-west-2/public/asset-123.webp"
+
+    def test_get_path_returns_none(self):
+        provider = S3StorageProvider.__new__(S3StorageProvider)
+        assert provider.get_path("some/path") is None
+
+
+class TestGCSStorageProvider:
+
+    def test_derivative_stubs_urls(self):
+        provider = GCSStorageProvider.__new__(GCSStorageProvider)
+        provider._bucket_name = "test-bucket"
+        urls = provider.generate_derivative_stubs("asset-123")
+        assert urls["thumbnail"] == "https://storage.googleapis.com/test-bucket/thumbs/asset-123.webp"
+        assert urls["public"] == "https://storage.googleapis.com/test-bucket/public/asset-123.webp"
+
+    def test_get_path_returns_none(self):
+        provider = GCSStorageProvider.__new__(GCSStorageProvider)
+        assert provider.get_path("some/path") is None
+
+
+class TestMediaRoutesWithCloudStorage:
+
+    def test_media_upload_local_provider(self):
+        os.environ["STORAGE_PROVIDER"] = "local"
+        from fastapi.testclient import TestClient
+        from src.main import app
+        client = TestClient(app)
+        auth = {"Authorization": "Bearer test_token_valid"}
+
+        resp = client.post("/v1/media/upload-intent", json={
+            "fileName": "test.jpg",
+            "contentType": "image/jpeg",
+            "byteSize": 500000,
+            "sha256": "c" * 64,
+        }, headers=auth)
+        assert resp.status_code == 200
+        media_id = resp.json()["mediaAssetId"]
+
+        upload = client.put(
+            f"/v1/media/upload/{media_id}",
+            files={"file": ("test.jpg", b"test-bytes", "image/jpeg")},
+            headers=auth,
+        )
+        assert upload.status_code == 200
+
+        complete = client.post("/v1/media/complete-upload", json={
+            "mediaAssetId": media_id,
+            "sha256": "c" * 64,
+        }, headers=auth)
+        assert complete.status_code == 200
+        derivs = complete.json()["derivatives"]
+        assert derivs["thumbnailUrl"] is not None
+        assert derivs["derivativeUrl"] is not None

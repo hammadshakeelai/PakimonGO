@@ -1,0 +1,107 @@
+import 'package:pakimon_go_app/core/network/api_client.dart';
+import 'package:pakimon_go_app/shared/models/api_models.dart';
+
+class CaptureRepository {
+  final ApiClient _client;
+
+  CaptureRepository({ApiClient? client})
+      : _client = client ?? ApiClient();
+
+  Future<UploadIntentResponse> createUploadIntent({
+    required String fileName,
+    required String contentType,
+    required int byteSize,
+    required String sha256,
+  }) async {
+    final response = await _client.post('/media/upload-intent', body: {
+      'fileName': fileName,
+      'contentType': contentType,
+      'byteSize': byteSize,
+      'sha256': sha256,
+    });
+    return UploadIntentResponse.fromJson(response);
+  }
+
+  Future<Map<String, dynamic>> uploadFile({
+    required String mediaAssetId,
+    required List<int> fileBytes,
+    required String fileName,
+  }) async {
+    return _client.putFile(
+      '/media/upload/$mediaAssetId',
+      fileBytes: fileBytes,
+      fileName: fileName,
+    );
+  }
+
+  Future<CompleteUploadResponse> completeUpload({
+    required String mediaAssetId,
+    required String sha256,
+  }) async {
+    final response = await _client.post('/media/complete-upload', body: {
+      'mediaAssetId': mediaAssetId,
+      'sha256': sha256,
+    });
+    return CompleteUploadResponse.fromJson(response);
+  }
+
+  Future<SubmissionResponse> createSubmission({
+    required String mediaAssetId,
+    required String animalContext,
+    required String realName,
+    String? cuteName,
+    String? caption,
+    List<String>? tags,
+    double? latitude,
+    double? longitude,
+    double? accuracyMeters,
+  }) async {
+    final body = <String, dynamic>{
+      'mediaAssetId': mediaAssetId,
+      'animalContext': animalContext,
+      'realName': realName,
+    };
+    if (cuteName != null) body['cuteName'] = cuteName;
+    if (caption != null) body['caption'] = caption;
+    if (tags != null) body['tags'] = tags;
+    if (latitude != null && longitude != null) {
+      body['foregroundLocation'] = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'accuracyMeters': accuracyMeters ?? 0,
+      };
+    }
+    final response = await _client.post('/submissions', body: body);
+    return SubmissionResponse.fromJson(response);
+  }
+
+  Future<SubmissionResponse> getSubmission(String submissionId) async {
+    final response = await _client.get('/submissions/$submissionId');
+    return SubmissionResponse.fromJson(response);
+  }
+
+  Future<UserProfileResponse> getProfile() async {
+    final response = await _client.get('/users/me');
+    return UserProfileResponse.fromJson(response);
+  }
+
+  Future<Map<String, dynamic>> getCollection({
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    return _client.get('/users/me/collection', queryParams: {
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+    });
+  }
+
+  Future<Map<String, dynamic>> getLeaderboard({
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    return _client.get('/leaderboard', queryParams: {
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+    }, auth: false);
+  }
+}

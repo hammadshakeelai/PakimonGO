@@ -27,8 +27,8 @@ class StorageProvider:
         """Save original file, return storage key."""
         ...
 
-    def generate_derivative_urls(self, asset_id: str) -> dict[str, str]:
-        """Generate derivative URLs (thumbnail, public)."""
+    def generate_derivative_stubs(self, asset_id: str) -> dict[str, str]:
+        """Generate derivative stubs (thumbnail, public) and return URLs."""
         ...
 
     def get_url(self, key: str) -> str | None:
@@ -55,7 +55,7 @@ class S3StorageProvider(StorageProvider):
         self._client.put_object(Bucket=self._bucket, Key=key, Body=content)
         return key
 
-    def generate_derivative_urls(self, asset_id: str) -> dict[str, str]:
+    def generate_derivative_stubs(self, asset_id: str) -> dict[str, str]:
         return {
             "thumbnail": f"https://{self._bucket}.s3.{self._region}/thumbs/{asset_id}.webp",
             "public": f"https://{self._bucket}.s3.{self._region}/public/{asset_id}.webp",
@@ -88,7 +88,7 @@ class GCSStorageProvider(StorageProvider):
         blob.upload_from_string(content)
         return key
 
-    def generate_derivative_urls(self, asset_id: str) -> dict[str, str]:
+    def generate_derivative_stubs(self, asset_id: str) -> dict[str, str]:
         return {
             "thumbnail": f"https://storage.googleapis.com/{self._bucket_name}/thumbs/{asset_id}.webp",
             "public": f"https://storage.googleapis.com/{self._bucket_name}/public/{asset_id}.webp",

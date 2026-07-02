@@ -26,7 +26,7 @@ SOURCE_ROOTS = ("apps", "services", "packages")
 
 REQUIRED_DOCS = {
     "CURRENT_TASK.md": ["Active Phase", "Active Task", "Current Next Action"],
-    "NEXT_TASK.md": ["Current Next Task", "Sprint 2-13 Complete"],
+    "NEXT_TASK.md": ["Current Next Task", "Sprint 2-26 Complete"],
     "CURRENT_THINKING.md": None,
     "PROCESS.md": None,
     "sprints/SPRINT_0_PLAN.md": ["Sprint Goal", "Sprint Backlog", "Definition Of Done"],

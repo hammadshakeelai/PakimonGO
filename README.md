@@ -22,11 +22,24 @@ Phase 6: Feature implementation. All Sprints 0-24 complete. 84 API tests + 61 sc
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.13+
+- Docker (recommended) or PostgreSQL locally
 - Flutter SDK (for mobile)
-- PostgreSQL (Docker Compose: `docker compose up -d`)
 
-### Run the API
+### Run with Docker (recommended)
+
+```bash
+docker compose -f infrastructure/docker/docker-compose.local.yml up --build
+```
+
+This starts PostgreSQL + pgvector and the FastAPI server on port 8000.
+
+```bash
+curl http://localhost:8000/health/live
+# {"status":"ok"}
+```
+
+### Run without Docker
 
 ```bash
 cd services/api
@@ -38,7 +51,7 @@ python -m uvicorn src.main:app --reload --port 8000
 ### Run Tests
 
 ```bash
-# API tests (84 tests)
+# API tests (89 tests)
 cd services/api
 python -m pytest -v
 
@@ -49,9 +62,6 @@ python -m pytest -v
 # Flutter tests (14 tests)
 cd apps/mobile/pakimon_go_app
 flutter test
-
-# All tests
-python -m pytest services/api/tests packages/scoring-rules/tests -v
 ```
 
 ### QA Validation

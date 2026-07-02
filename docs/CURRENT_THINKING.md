@@ -31,15 +31,16 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 25 — Integration testing and documentation (complete).**
+**Sprint 28 — Connect Flutter mobile to API (complete).**
 
-Sprint 25 delivered:
-- End-to-end integration tests: wild capture, zoo capture, duplicate detection, multiuser collection, submission list, health
-- API endpoint docstrings on all 14 endpoints
-- README.md updated with current build/run/test instructions
-- OpenAPI schema validation (check_openapi_examples in validate_docs.py)
-- CI job `integration-tests` added (9 total jobs)
+Sprint 28 delivered:
+- `ApiClient` HTTP wrapper with auth, GET/POST/PATCH/putFile
+- 6 API response models with `fromJson`
+- `CaptureRepository` with 8 API methods
+- `CaptureScreen` with species/context/caption fields, upload→submit flow
+- `main.dart` HomeScreen with bottom nav (Map + Capture tabs)
+- 10 new Flutter unit tests + 2 widget tests for capture screen
+- 27 Flutter tests total, all passing
+- 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
 
-Test counts: 84 API tests (90 with integration tests) + 61 scoring-rules + 14 Flutter = **159 total tests**.
-
-Next: Sprint 26 (see BACKLOG.md).
+Next: Sprint 29 (see BACKLOG.md).
