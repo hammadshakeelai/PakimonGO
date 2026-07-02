@@ -204,7 +204,11 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 ## Sprint 23 Progress
 
 - S23-001: ✅ DONE — Stage and commit all implementation files (Sprints 0-22 corpus)
-- 150 total tests passing, all validations pass
+- S23-002: ✅ DONE — Stage scoring-rules package files
+- S23-003: ✅ DONE — Stage infrastructure files (auth, storage, queue, database, session)
+- S23-004: ✅ DONE — Run full test suite validation (150 tests pass, all validations)
+- S23-005: ✅ DONE — Updated state docs and TECH_DEBT
+- 150 tests passing, all validations pass
 
 ## Sprint 21 Progress
 
