@@ -3,9 +3,12 @@ info:
   title: PakimonGO API Draft
   version: 0.2.0-alpha0
   description: >
-    OpenAPI draft reflecting Sprint 1-20 implemented endpoints.
+    OpenAPI draft reflecting Sprint 1-22 implemented endpoints.
     Endpoints marked `x-status: planned` are future features not yet implemented.
     This is a living document — update when new endpoints are added.
+  x-versions:
+    supported: [v1, v2]
+    default: v1
 servers:
   - url: https://api.pakimongo.example/v1
     description: Placeholder production URL
@@ -14,11 +17,48 @@ servers:
 security:
   - bearerAuth: []
 paths:
+  /v2/health/live:
+    get:
+      summary: Liveness check (v2)
+      operationId: healthLiveV2
+      x-status: placeholder
+      security: []
+      responses:
+        "200":
+          description: Service is alive (v2 format)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /v2/health/ready:
+    get:
+      summary: Readiness check (v2)
+      operationId: healthReadyV2
+      x-status: placeholder
+      security: []
+      responses:
+        "200":
+          description: Service is ready (v2 format)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
   /health/live:
     get:
       summary: Liveness check
       operationId: healthLive
       x-status: implemented
+      x-version: v1
+      x-requirements:
+        - FR-API-001
       security: []
       responses:
         "200":
@@ -36,6 +76,9 @@ paths:
       summary: Readiness check
       operationId: healthReady
       x-status: implemented
+      x-version: v1
+      x-requirements:
+        - FR-API-001
       security: []
       responses:
         "200":
@@ -54,6 +97,7 @@ paths:
       summary: Create upload intent
       operationId: createUploadIntent
       x-status: implemented
+      x-version: v1
       x-requirements:
         - FR-CAP-011
         - NFR-SEC-005
@@ -78,6 +122,7 @@ paths:
       summary: Upload file bytes
       operationId: uploadFile
       x-status: implemented
+      x-version: v1
       parameters:
         - name: mediaAssetId
           in: path
@@ -114,6 +159,7 @@ paths:
       summary: Complete upload and generate derivatives
       operationId: completeUpload
       x-status: implemented
+      x-version: v1
       x-requirements:
         - FR-CAP-012
         - FR-CAP-013
@@ -139,6 +185,7 @@ paths:
       summary: Get media derivative URLs
       operationId: getDerivatives
       x-status: implemented
+      x-version: v1
       parameters:
         - name: mediaAssetId
           in: path
@@ -159,6 +206,7 @@ paths:
       summary: Serve stored file
       operationId: serveFile
       x-status: implemented
+      x-version: v1
       security: []
       parameters:
         - name: subdir
@@ -188,6 +236,7 @@ paths:
       summary: Submit a capture for scoring
       operationId: createSubmission
       x-status: implemented
+      x-version: v1
       x-requirements:
         - FR-CAP-005
         - FR-SCORE-003
@@ -211,6 +260,7 @@ paths:
       summary: List user submissions
       operationId: listSubmissions
       x-status: implemented
+      x-version: v1
       x-requirements:
         - FR-CAP-005
       parameters:
@@ -263,6 +313,7 @@ paths:
       summary: Get submission detail
       operationId: getSubmission
       x-status: implemented
+      x-version: v1
       parameters:
         - name: submissionId
           in: path
