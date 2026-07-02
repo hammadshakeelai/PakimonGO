@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Sprint 29 — Mobile integration: camera plugin, auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).
+Sprint 30 — Auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).
 
 ## Sprint 2-26 Complete
 
@@ -21,6 +21,16 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - `infrastructure/docker/.env.docker` for compose env overrides
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+### Sprint 29 Complete
+
+Sprint 29 delivered: **Camera plugin integration.**
+
+- `CaptureMediaService` abstract interface + `ImagePickerService` real impl
+- `CaptureScreen` two-phase flow: Camera/Gallery buttons → preview → submit
+- Broken image fallback via `errorBuilder`
+- 4 new widget tests
+- 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
 
 ### Sprint 28 Complete
 

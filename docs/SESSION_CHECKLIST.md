@@ -47,4 +47,5 @@ Update this after every work burst. Each row tracks one task cycle.
 | 41 | Sprint 25 integration tests + docs | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | 6 e2e tests, docstrings, README, validate_docs extended, CI job |
 | 42 | Sprint 26 cloud storage wired into media | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | StorageProvider factory in routes, 8 tests, 164 total |
 | 43 | Sprint 27 Docker Compose local dev | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Dockerfile, compose with api+db, .env.docker, README |
-| 44 | Sprint 28 Flutter API client | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ApiClient, response models, CaptureRepository, CaptureScreen, 27 Flutter tests, 177 total |
+| 44 | Sprint 28 Flutter API client | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | ApiClient, response models, CaptureRepository, CaptureScreen, 27 Flutter tests, 177 total |
+| 45 | Sprint 29 camera plugin integration | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | CaptureMediaService, ImagePickerService, CaptureScreen two-phase flow, 29 Flutter tests, 179 total |

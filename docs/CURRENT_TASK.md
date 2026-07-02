@@ -337,6 +337,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S28-010: ✅ DONE — 2 `CaptureScreen` widget tests (form rendering, submit tap)
 - 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
 
+## Sprint 29 Progress
+
+- S29-001: ✅ DONE — `image_picker: ^1.1.2` added to pubspec.yaml
+- S29-002: ✅ DONE — `CaptureMediaService` abstract interface + `ImagePickerService` real impl
+- S29-003: ✅ DONE — `CaptureScreen` two-phase flow: Camera/Gallery buttons → preview → fill form → submit
+- S29-004: ✅ DONE — 4 new widget tests (form rendering, camera pick, gallery pick, broken image fallback)
+- 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 28 complete. Next: Sprint 29 (see BACKLOG.md).
+Sprint 29 complete. Next: Sprint 30 (see BACKLOG.md).

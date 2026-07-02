@@ -991,3 +991,32 @@ Sprint 28 wired the Flutter mobile app to the FastAPI backend with a full HTTP c
 - Total: **177 tests, all passing**
 - Ruff: clean
 - QA validations: pending commit
+
+## 2026-07-03: Sprint 29 — Camera Plugin Integration
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 29 replaced fake image bytes in the Flutter capture flow with real device camera/gallery capture via the `image_picker` plugin.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/pubspec.yaml` — Added `image_picker: ^1.1.2`
+- `apps/mobile/pakimon_go_app/lib/features/capture/domain/capture_media_service.dart` — NEW: CaptureMediaService abstract interface + CaptureMediaResult model with SHA256
+- `apps/mobile/pakimon_go_app/lib/features/capture/data/image_picker_service.dart` — NEW: ImagePickerService using ImagePicker (camera + gallery, max 2048px)
+- `apps/mobile/pakimon_go_app/lib/features/capture/presentation/default_capture_media_service.dart` — NEW: production factory
+- `apps/mobile/pakimon_go_app/lib/features/capture/presentation/capture_screen.dart` — Rewritten: Camera/Gallery buttons, image preview with error fallback, two-phase flow
+- `apps/mobile/pakimon_go_app/lib/main.dart` — Uses createDefaultMediaService()
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_screen_test.dart` — Rewritten: 4 widget tests
+- `apps/mobile/pakimon_go_app/test/widget_test.dart` — Uses mock media service (avoids image_picker native dependency)
+- `docs/sprints/SPRINT_29_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 29 passed (was 27 pre-S29: +2 new widget tests + 2 rewritten)
+- Total: **179 tests, all passing**

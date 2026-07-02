@@ -43,4 +43,15 @@ Sprint 28 delivered:
 - 27 Flutter tests total, all passing
 - 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
 
-Next: Sprint 29 (see BACKLOG.md).
+**Sprint 29 — Camera plugin integration (complete).**
+
+Sprint 29 delivered:
+- `CaptureMediaService` abstract interface with `pickFromCamera()` / `pickFromGallery()`
+- `ImagePickerService` real implementation using `image_picker` plugin
+- `CaptureScreen` two-phase flow: Camera/Gallery buttons → image preview → form → submit
+- Broken image fallback via `errorBuilder` for invalid/missing image data
+- 4 new widget tests (form rendering, camera pick, gallery pick, submit button state)
+- 29 Flutter tests total, all passing
+- 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
+
+Next: Sprint 30 — Auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).

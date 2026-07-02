@@ -5,17 +5,25 @@ import 'package:flutter/material.dart';
 
 import '../../../core/network/api_client.dart';
 import '../data/capture_repository.dart';
+import '../domain/capture_media_service.dart';
 import '../../../shared/models/api_models.dart';
 
 class CaptureScreen extends StatefulWidget {
-  const CaptureScreen({super.key});
+  final CaptureMediaService mediaService;
+  final CaptureRepository? repository;
+
+  const CaptureScreen({
+    super.key,
+    required this.mediaService,
+    this.repository,
+  });
 
   @override
   State<CaptureScreen> createState() => _CaptureScreenState();
 }
 
 class _CaptureScreenState extends State<CaptureScreen> {
-  final _repo = CaptureRepository();
+  late final CaptureRepository _repo;
   final _speciesCtrl = TextEditingController(text: 'Passer domesticus');
   final _cuteNameCtrl = TextEditingController(text: 'Test Sparrow');
   final _captionCtrl = TextEditingController(text: 'Submitted via Flutter');
@@ -23,40 +31,59 @@ class _CaptureScreenState extends State<CaptureScreen> {
   String _status = '';
   SubmissionResponse? _lastSubmission;
   bool _loading = false;
+  CaptureMediaResult? _capturedMedia;
 
-  Future<void> _captureAndSubmit() async {
+  @override
+  void initState() {
+    super.initState();
+    _repo = widget.repository ?? CaptureRepository();
+  }
+
+  Future<void> _pickFromCamera() async {
+    final result = await widget.mediaService.pickFromCamera();
+    if (result != null) {
+      setState(() => _capturedMedia = result);
+    }
+  }
+
+  Future<void> _pickFromGallery() async {
+    final result = await widget.mediaService.pickFromGallery();
+    if (result != null) {
+      setState(() => _capturedMedia = result);
+    }
+  }
+
+  Future<void> _submit() async {
+    final media = _capturedMedia;
+    if (media == null) return;
+
     setState(() => _loading = true);
     _status = '';
     _lastSubmission = null;
 
     try {
-      final sha256 = List.generate(64, (_) => 'f').join();
-      final fakeImage = Uint8List.fromList(
-        List.generate(500, (i) => i % 256),
-      );
-
       _status = 'Creating upload intent...';
       setState(() {});
       final intent = await _repo.createUploadIntent(
-        fileName: 'capture.jpg',
-        contentType: 'image/jpeg',
-        byteSize: fakeImage.length,
-        sha256: sha256,
+        fileName: media.fileName,
+        contentType: media.contentType,
+        byteSize: media.bytes.length,
+        sha256: media.sha256,
       );
 
       _status = 'Uploading file...';
       setState(() {});
       await _repo.uploadFile(
         mediaAssetId: intent.mediaAssetId,
-        fileBytes: fakeImage,
-        fileName: 'capture.jpg',
+        fileBytes: media.bytes,
+        fileName: media.fileName,
       );
 
       _status = 'Completing upload...';
       setState(() {});
       await _repo.completeUpload(
         mediaAssetId: intent.mediaAssetId,
-        sha256: sha256,
+        sha256: media.sha256,
       );
 
       final rng = Random();
@@ -74,7 +101,8 @@ class _CaptureScreenState extends State<CaptureScreen> {
         accuracyMeters: 18.5,
       );
 
-      _status = 'Done — ${submission.scoreState.status} (${submission.points} pts)';
+      _status =
+          'Done — ${submission.scoreState.status} (${submission.points} pts)';
       _lastSubmission = submission;
     } on ApiException catch (e) {
       _status = 'Error $e';
@@ -103,6 +131,50 @@ class _CaptureScreenState extends State<CaptureScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (_capturedMedia != null) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.memory(
+                    _capturedMedia!.bytes,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 200,
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: Icon(Icons.broken_image, size: 48),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${_capturedMedia!.fileName} (${_capturedMedia!.bytes.length ~/ 1024} KB)',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 8),
+              ],
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: _loading ? null : _pickFromCamera,
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Camera'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _loading ? null : _pickFromGallery,
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text('Gallery'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _context,
                 decoration: const InputDecoration(labelText: 'Context'),
@@ -127,7 +199,8 @@ class _CaptureScreenState extends State<CaptureScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
-                onPressed: _loading ? null : _captureAndSubmit,
+                onPressed:
+                    (_loading || _capturedMedia == null) ? null : _submit,
                 icon: _loading
                     ? const SizedBox(
                         width: 18,
@@ -154,7 +227,8 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('ID: ${_lastSubmission!.submissionId}'),
-                        Text('Status: ${_lastSubmission!.scoreState.status}'),
+                        Text(
+                            'Status: ${_lastSubmission!.scoreState.status}'),
                         Text('Points: ${_lastSubmission!.points}'),
                         Text('Visibility: ${_lastSubmission!.visibility}'),
                       ],

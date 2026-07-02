@@ -24,6 +24,10 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
+- ~~S29-001: Add image_picker dependency to pubspec.yaml~~ ✅ DONE
+- ~~S29-002: Create CaptureMediaService interface + ImagePickerService~~ ✅ DONE
+- ~~S29-003: Update CaptureScreen with camera/gallery buttons~~ ✅ DONE
+- ~~S29-004: Write tests for camera integration~~ ✅ DONE
 - ~~S28-001: Add `http` package to pubspec.yaml~~ ✅ DONE
 - ~~S28-002: Create `ApiClient` HTTP wrapper~~ ✅ DONE
 - ~~S28-003: Create `ApiConfig` env-var reader~~ ✅ DONE
