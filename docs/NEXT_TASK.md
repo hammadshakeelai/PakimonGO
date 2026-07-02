@@ -2,13 +2,22 @@
 
 ## Current Next Task
 
-Sprint 24 continued — Wire storage factory to media module (S24-004).
+Sprint 25 — Integration testing and documentation.
 
 ## Sprint 2-13 Complete
 
 Sprints 2-13 delivered: DB-backed services, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI update, CI expansion, AI scoring, ADR review, AI adapter framework, async worker scoring, and Mapbox prototype. 112 Python + 14 Flutter tests all passing.
 
-## Sprints 14-23 Complete
+## Sprints 14-24 Complete
+
+### Sprint 24 Complete
+
+Sprint 24 delivered: **Cloud storage infrastructure - StorageProvider interface with S3/GCS implementations.**
+
+- StorageProvider class with S3StorageProvider and GCSStorageProvider
+- Environment configuration (.env.example updated with STORAGE_PROVIDER, S3/GCS vars)
+- Fixed derivative URLs to use /v1/media/files prefix
+- 153 total tests passing (78 API + 61 scoring-rules + 14 Flutter)
 
 ### Sprint 23 Complete
 

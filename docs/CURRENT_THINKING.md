@@ -31,11 +31,12 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 24 in progress — Cloud storage integration.**
+**Sprint 24-25 — Cloud storage + integration testing.**
 
 Sprint 24 delivered:
-- StorageProvider ABC with S3/GCS implementations
-- Environment configuration (.env.example updated)
-- 78 API tests + 61 scoring-rules + 14 Flutter = **153 total tests**
+- StorageProvider class with S3/GCS implementations
+- Environment configuration (.env.example updated with STORAGE_PROVIDER, S3/GCS vars)
+- Fixed derivative URLs to use /v1/media/files prefix
+- 153 total tests passing (78 API + 61 scoring-rules + 14 Flutter)
 
-Next: Wire storage factory to media module (S24-004).
+Next: Sprint 25 — Integration testing and documentation.

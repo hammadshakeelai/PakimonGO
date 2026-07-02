@@ -203,12 +203,22 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Sprint 24 Progress
 
-- S24-001: ✅ DONE — Add cloud storage provider interface (StorageProvider ABC, S3/GCS)
-- S24-002: ✅ DONE — Add environment configuration (.env.example updated)
-- S24-003: ✅ DONE — Add storage tests (78 total tests pass)
+- S24-001: ✅ DONE — Add cloud storage provider interface (StorageProvider, S3/GCS implementations)
+- S24-002: ✅ DONE — Add environment configuration (.env.example updated with STORAGE_PROVIDER, S3/GCS vars)
+- S24-003: ✅ DONE — Add storage tests (3 tests for URL format/env defaults)
+- S24-004: ✅ DONE — Fix derivative URLs to use /v1/media/files prefix
+- S24-005: ✅ DONE — State docs updated
 - 78 API tests + 61 scoring-rules + 14 Flutter = **153 total tests**
 
-## Sprint 21 Progress
+## Sprint 23 Progress
+
+- S23-001: ✅ DONE — Stage and commit all implementation files (Sprints 0-22 corpus)
+- S23-002: ✅ DONE — Stage scoring-rules package files
+- S23-003: ✅ DONE — Stage infrastructure files (auth, storage, queue, database, session)
+- S23-004: ✅ DONE — Run full test suite validation (150 tests pass, all validations)
+- S23-005: ✅ DONE — Updated state docs and TECH_DEBT
+
+## Sprint 22 Progress
 
 - S21-001: ✅ DONE — Updated GET /v1/users/me/collection with include_sensitive param
 - S21-002: ✅ DONE — Updated GET /v1/leaderboard with include_sensitive param
