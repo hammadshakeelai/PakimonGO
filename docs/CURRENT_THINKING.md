@@ -31,20 +31,11 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 22 — API versioning complete.**
+**Sprint 24 in progress — Cloud storage integration.**
 
-Sprint 22 delivered:
-- All API routes now under /v1/ prefix via main app
-- Version negotiation middleware: Accept-Version header → v1/v2 selection, API-Version response header
-- Module routers: users (/users), leaderboard (/leaderboard), submissions (/submissions), media (/media)
-- Internal paths updated: /media/upload/{id}, /media/files/thumbs|public/{id}
-- OpenAPI has `x-versions: [v1, v2]` metadata and v2 health endpoint placeholder
-- 150 total tests passing (75 API + 61 scoring-rules + 14 Flutter)
+Sprint 24 delivered:
+- StorageProvider ABC with S3/GCS implementations
+- Environment configuration (.env.example updated)
+- 78 API tests + 61 scoring-rules + 14 Flutter = **153 total tests**
 
-Sprint 0-22 stats:
-- 150 total tests (75 API + 61 scoring-rules + 14 Flutter)
-- 22 real endpoints + 8 planned in OpenAPI
-- 8 GitHub Actions CI jobs
-- All 17 ADRs accepted or revised
-
-Next: Sprint 23 — Open for implementation.
+Next: Wire storage factory to media module (S24-004).

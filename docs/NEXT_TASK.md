@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Sprint 24 — Real Storage and AI Integration.
+Sprint 24 continued — Wire storage factory to media module (S24-004).
 
 ## Sprint 2-13 Complete
 
