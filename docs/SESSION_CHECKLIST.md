@@ -38,3 +38,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 32 | Sprint 19 sensitive species suppression | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | SensitiveSpecies model, location suppression, 4 tests |
 | 33 | Sprint 20 sensitive species filtering | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | Filtering in collection/leaderboard/submissions, 6 tests, 7 repo modules |
 | 34 | Sprint 21 OPENAPI_DRAFT.yaml update | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | include_sensitive params, fixed duplicate path, 31 schemas |
+| 35 | Sprint 22 API v1 prefix routing | ✅ PASS | ✅ ALL state docs + conversation archive | ✅ ALL PASS | ❌ no commit | /v1 prefix at app level, 4 module routers updated, internal paths fixed |

@@ -20,7 +20,7 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 - Short-burst semantic commits are required for implementation work.
 - AI-authored commits must include agent/time/work-package/requirements/process-doc trailers.
-- Full visible conversations or summaries should be archived in `docs/conversation-archive/` when they change direction or decisions.
+- Full visible conversations or summaries should be archived in `docs/conversation-archive/` when they change direction or they change direction or decisions.
 - Empty scaffold folders use `.gitkeep` so future agents see intended module boundaries.
 - The external Software Engineering methodology is now a required artifact chain.
 - `docs/TRACEABILITY_MATRIX.md` is the current source for requirement-to-test mapping.
@@ -31,17 +31,18 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 21 is complete.**
+**Sprint 22 (in progress) — API versioning v1 prefix complete.**
 
-Sprint 21 delivered:
-- OPENAPI_DRAFT.yaml updated with include_sensitive params for 3 endpoints
-- Fixed duplicate /submissions: path (merged POST + GET)
-- 31 total schemas, 20 paths
+Sprint 22 delivered:
+- All API routes now under /v1/ prefix via main app
+- Module routers: users (/users), leaderboard (/leaderboard), submissions (/submissions), media (/media)
+- Internal paths updated: /media/upload/{id}, /media/files/thumbs|public/{id}
+- 144 total tests passing (69 API + 61 scoring-rules + 14 Flutter)
 
-Sprint 0-21 stats:
+Sprint 0-22 stats:
 - 144 total tests (69 API + 61 scoring-rules + 14 Flutter)
 - 20 real endpoints + 8 planned in OpenAPI
 - 8 GitHub Actions CI jobs
 - All 17 ADRs accepted or revised
 
-Next: Sprint 22 — API versioning strategy (v1/v2) for breaking changes.
+Next: Sprint 22 continued — Version negotiation (header + URL path) + OpenAPI v2 placeholder.

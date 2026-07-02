@@ -2,24 +2,26 @@
 
 ## Current Next Task
 
-Sprint 22 — API versioning strategy (v1/v2) for breaking changes.
+Sprint 22 continued — Version negotiation (header + URL path) + OpenAPI v2 placeholder.
 
 ## Sprint 2-13 Complete
 
 Sprints 2-13 delivered: DB-backed services, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI update, CI expansion, AI scoring, ADR review, AI adapter framework, async worker scoring, and Mapbox prototype. 112 Python + 14 Flutter tests all passing.
 
-## Sprint 14-21 Complete
+## Sprint 14-22 Complete
+
+### Sprint 22 (in progress)
+
+Sprint 22 delivered: **API versioning - v1 prefix added to all routes**.
+
+- Main app includes all routers with prefix="/v1"
+- All module routers updated: users (/users), leaderboard (/leaderboard), submissions (/submissions), media (/media)
+- Internal paths updated: /media/upload/{id}, /media/files/thumbs|public/{id}
+- 69 API tests + 61 scoring-rules + 14 Flutter = **144 total tests, all passing**
 
 ### Sprint 21 Complete
 
 Sprint 21 delivered: **OPENAPI_DRAFT.yaml update for include_sensitive params**.
-
-- GET /v1/users/me/collection: include_sensitive param (boolean, default false)
-- GET /v1/leaderboard: include_sensitive param (boolean, default false)
-- GET /v1/submissions: include_sensitive param (boolean, default false)
-- Fixed duplicate /submissions: path (merged POST + GET)
-- 31 schemas, 20 paths
-- 144 total tests (69 API + 61 scoring-rules + 14 Flutter) all passing
 
 ### Sprint 20 Complete
 
@@ -50,4 +52,5 @@ Sprint 15 delivered: **Collection and Leaderboard Endpoints**.
 Sprint 14 delivered: **Real Google Vision Provider implementation**.
 
 Next sprint candidates:
-- **API versioning** — v1/v2 strategy for breaking changes
+- **Version negotiation** — Accept-Version header + URL path negotiation
+- **API v2 placeholder** — OpenAPI spec for future breaking changes

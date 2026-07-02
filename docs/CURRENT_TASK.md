@@ -193,6 +193,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S13-004: ✅ DONE — Updated main.dart: PakimonGO app with MapScreen as home, MapboxOptions.setAccessToken on start
 - S13-005: ✅ DONE — Updated widget tests for new app structure (14 Flutter tests pass)
 
+## Sprint 22 Progress
+
+- S22-001: ✅ DONE — Added /v1 prefix at app level; updated all module routes to remove internal v1 prefixes
+- S22-002: ✅ DONE — Version negotiation via header + URL path
+- S22-003: ✅ DONE — OpenAPI spec version info and v2 placeholder
+- S22-004: ✅ DONE — Tests for version negotiation
+- 75 API tests + 61 scoring-rules + 14 Flutter = **150 total tests, all passing**
+
 ## Sprint 21 Progress
 
 - S21-001: ✅ DONE — Updated GET /v1/users/me/collection with include_sensitive param
@@ -276,4 +284,4 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 
 ## Current Next Action
 
-Sprint 22 — API versioning strategy (v1/v2) for breaking changes.
+Sprint 23 — Open for implementation (see BACKLOG.md).
