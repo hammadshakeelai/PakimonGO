@@ -57,7 +57,8 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S35-007: Tests for submission history~~ ✅ DONE
 - ~~S36-001: Photo thumbnail in species detail screen~~ ✅ DONE
 - ~~S37-001: Map marker clustering~~ ✅ DONE
-- S38-001: CI workflow update for new Flutter test count or API error handling middleware
+- ~~S38-001: CI workflow update~~ ✅ DONE
+- S39-001: API error handling middleware
 - ~~S0-001: Generate Flutter project template~~ ✅ DONE
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE

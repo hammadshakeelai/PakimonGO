@@ -2,7 +2,17 @@
 
 ## Current Next Task
 
-Sprint 38 — CI workflow update for new Flutter test count, or API error handling middleware (see BACKLOG.md).
+Sprint 39 — API error handling middleware (see BACKLOG.md).
+
+## Sprint 38 Complete
+
+Sprint 38 delivered: **CI workflow update.**
+
+- `needs:` dependency chain across all 9 CI jobs (docs → lint → test → integration → summary)
+- Flutter version broadened from `3.38.x` to `3.x`
+- Test count echo steps in API, scoring-rules, and Flutter jobs
+- `all-checks-pass` summary job reports total test status
+- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests**
 
 ## Sprint 37 Complete
 

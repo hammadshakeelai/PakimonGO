@@ -1160,6 +1160,29 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 38 — CI Workflow Update
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 38 updated the CI workflow with job dependency chains, a broader Flutter SDK version, test count echo steps, and a final summary job.
+
+### Changes Made
+
+- `.github/workflows/docs-validation.yml` — Added `needs:` chains: docs-validation → lint → test → integration → all-checks-pass summary job
+- Flutter version changed from `3.38.x` to `3.x` for broader compatibility
+- Test count echo steps added to API, scoring-rules, and Flutter jobs
+- Worker tests made non-fatal (best-effort)
+- `all-checks-pass` job summarizes all 9 CI checks
+
+### Verification
+
+- All QA validations pass
+- 89 API + 61 scoring-rules + 86 Flutter = **236 total tests**
+
 ## 2026-07-03: Sprint 37 — Map Marker Clustering
 
 ### Status

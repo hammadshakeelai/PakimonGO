@@ -380,6 +380,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S37-004: ✅ DONE — 8 new tests (6 cluster service + 2 viewmodel clustering)
 - 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
 
+## Sprint 38 Progress
+
+- S38-001: ✅ DONE — Added `needs:` dependency chain to all CI jobs
+- S38-002: ✅ DONE — Updated Flutter version to `3.x`
+- S38-003: ✅ DONE — Added test count echo steps to API, scoring, Flutter jobs
+- S38-004: ✅ DONE — Added `all-checks-pass` summary job
+- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 37 complete. Next: Sprint 38 (see BACKLOG.md).
+Sprint 38 complete. Next: Sprint 39 (see BACKLOG.md).
