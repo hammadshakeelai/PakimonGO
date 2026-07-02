@@ -1049,3 +1049,29 @@ Sprint 30 created a login/onboarding flow that stores auth tokens and wires them
 - Scoring-rules tests: 61 passed
 - Flutter tests: 42 passed (was 29 pre-S30: +8 unit + 5 widget)
 - Total: **192 tests, all passing**
+
+## 2026-07-03: Sprint 31 — Offline Draft Persistence
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 31 added offline persistence for capture drafts using shared_preferences, preventing data loss when the app is closed mid-capture.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/pubspec.yaml` — Added `shared_preferences: ^2.3.0`
+- `apps/mobile/pakimon_go_app/lib/features/capture/domain/draft_persistence_service.dart` — NEW: DraftPersistenceService abstract interface + InMemoryDraftStorage
+- `apps/mobile/pakimon_go_app/lib/features/capture/data/shared_prefs_draft_storage.dart` — NEW: SharedPrefsDraftStorage (JSON serialization, draft ID index)
+- `apps/mobile/pakimon_go_app/lib/features/capture/domain/capture_draft.dart` — CaptureDraftService now async; all mutating methods persist; new loadPersistedDrafts() method; new `all` getter
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_draft_test.dart` — Updated: all service tests now async; added InMemoryDraftStorage tests (5) + loadPersistedDrafts + all getter tests
+- `docs/sprints/SPRINT_31_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 49 passed (was 42 pre-S31: +7 new/updated draft tests)
+- Total: **199 tests, all passing**

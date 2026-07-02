@@ -24,6 +24,10 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
+- ~~S31-001: Add shared_preferences dependency~~ ✅ DONE
+- ~~S31-002: Create DraftPersistenceService interface + SharedPrefsDraftStorage~~ ✅ DONE
+- ~~S31-003: Update CaptureDraftService for persistence~~ ✅ DONE
+- ~~S31-005: Update tests + write new persistence tests~~ ✅ DONE
 - ~~S30-001: Create AuthService (token storage/retrieval)~~ ✅ DONE
 - ~~S30-002: Update ApiClient to use dynamic token provider~~ ✅ DONE
 - ~~S30-003: Create LoginScreen UI~~ ✅ DONE

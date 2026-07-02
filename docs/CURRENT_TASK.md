@@ -345,15 +345,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S29-004: ✅ DONE — 4 new widget tests (form rendering, camera pick, gallery pick, broken image fallback)
 - 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
 
-## Sprint 30 Progress
+## Sprint 31 Progress
 
-- S30-001: ✅ DONE — `AuthService` (ChangeNotifier, loginWithUserId/Token, logout, listener)
-- S30-002: ✅ DONE — `ApiClient` token provider pattern: `String Function()` instead of fixed string
-- S30-003: ✅ DONE — `LoginScreen` with user ID + token paste modes, Sign In button
-- S30-004: ✅ DONE — `AuthGate` routing (login → home), logout button in app bar
-- S30-005: ✅ DONE — 8 AuthService unit tests + 5 LoginScreen widget tests = 13 new auth tests
-- 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
+- S31-001: ✅ DONE — `shared_preferences: ^2.3.0` added to pubspec.yaml
+- S31-002: ✅ DONE — `DraftPersistenceService` abstract interface + `SharedPrefsDraftStorage` impl
+- S31-003: ✅ DONE — `CaptureDraftService` now async with persistence (create/save/restore/delete persist to storage; loadPersistedDrafts restores on startup)
+- S31-004: ✅ DONE — 5 InMemoryDraftStorage tests + 10 updated CaptureDraftService tests
+- 89 API tests + 61 scoring-rules + 49 Flutter = **199 total tests, all passing**
 
 ## Current Next Action
 
-Sprint 30 complete. Next: Sprint 31 (see BACKLOG.md).
+Sprint 31 complete. Next: Sprint 32 (see BACKLOG.md).

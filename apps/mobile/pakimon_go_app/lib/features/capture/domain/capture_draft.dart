@@ -2,6 +2,8 @@
 ///
 /// Requirements: FR-CAP-001, FR-CAP-003, FR-CAP-004, FR-CAP-019
 
+import 'draft_persistence_service.dart';
+
 enum DraftLifecycle {
   creating,
   saved,
@@ -92,8 +94,19 @@ class CaptureDraft {
 
 class CaptureDraftService {
   final Map<String, CaptureDraft> _store = {};
+  final DraftPersistenceService _persistence;
 
-  CaptureDraft create(String localId, String mediaPath) {
+  CaptureDraftService({DraftPersistenceService? persistence})
+      : _persistence = persistence ?? InMemoryDraftStorage();
+
+  Future<void> loadPersistedDrafts() async {
+    final drafts = await _persistence.loadAll();
+    for (final draft in drafts) {
+      _store[draft.localId] = draft;
+    }
+  }
+
+  Future<CaptureDraft> create(String localId, String mediaPath) async {
     final now = DateTime.now();
     final draft = CaptureDraft(
       localId: localId,
@@ -102,35 +115,41 @@ class CaptureDraftService {
       updatedAt: now,
     );
     _store[localId] = draft;
+    await _persistence.save(draft);
     return draft;
   }
 
-  CaptureDraft? restore(String localId) {
+  Future<CaptureDraft?> restore(String localId) async {
     final draft = _store[localId]?.copyWith(
       lifecycle: DraftLifecycle.restored,
     );
     if (draft != null) {
       _store[localId] = draft;
+      await _persistence.save(draft);
     }
     return draft;
   }
 
-  CaptureDraft? save(String localId) {
+  Future<CaptureDraft?> save(String localId) async {
     final existing = _store[localId];
     if (existing == null) return null;
     final saved = existing.markSaved();
     _store[localId] = saved;
+    await _persistence.save(saved);
     return saved;
   }
 
-  bool delete(String localId) {
+  Future<bool> delete(String localId) async {
     final existing = _store[localId];
     if (existing == null) return false;
     _store[localId] = existing.markDeleted();
+    await _persistence.save(existing.markDeleted());
     return true;
   }
 
   CaptureDraft? get(String localId) {
     return _store[localId];
   }
+
+  List<CaptureDraft> get all => _store.values.toList();
 }

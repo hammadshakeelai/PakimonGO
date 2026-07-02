@@ -65,4 +65,14 @@ Sprint 30 delivered:
 - 42 Flutter tests total, all passing
 - 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
 
-Next: Sprint 31 — Offline draft persistence, map markers from API, or other backlog item (see BACKLOG.md).
+**Sprint 31 — Offline draft persistence (complete).**
+
+Sprint 31 delivered:
+- `DraftPersistenceService` abstract interface (save/load/loadAll/delete/clear)
+- `SharedPrefsDraftStorage` using `shared_preferences` (JSON serialization + draft ID index)
+- `CaptureDraftService` now async: all mutating methods persist to storage; `loadPersistedDrafts()` for startup restore
+- `InMemoryDraftStorage` for tests (5 new tests)
+- 49 Flutter tests total, all passing
+- 89 API tests + 61 scoring-rules + 49 Flutter = **199 total tests, all passing**
+
+Next: Sprint 32 — Map markers from API, or other backlog item (see BACKLOG.md).

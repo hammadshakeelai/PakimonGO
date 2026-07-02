@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Sprint 31 — Offline draft persistence, map markers from API, or other backlog item (see BACKLOG.md).
+Sprint 32 — Map markers from API, or other backlog item (see BACKLOG.md).
 
 ## Sprint 2-26 Complete
 
@@ -21,6 +21,15 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - `infrastructure/docker/.env.docker` for compose env overrides
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+### Sprint 31 Complete
+
+Sprint 31 delivered: **Offline draft persistence.**
+
+- `DraftPersistenceService` abstract interface + `SharedPrefsDraftStorage` impl
+- `CaptureDraftService` now async with persistence (create/save/restore/delete persist)
+- `InMemoryDraftStorage` for tests (5 new tests)
+- 89 API tests + 61 scoring-rules + 49 Flutter = **199 total tests, all passing**
 
 ### Sprint 30 Complete
 
