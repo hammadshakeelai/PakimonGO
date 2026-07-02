@@ -205,6 +205,7 @@ Artifacts:
 | FR-MOD-018 | UC-013 | EvidenceAccess | ModerationService.limitEvidenceAccess | TC-MOD-018 |
 | FR-MOD-019 | UC-013 | TrustEvent | ModerationService.reduceFalseReporterTrust | TC-MOD-019 |
 | FR-MOD-020 | UC-014 | FeatureFlag | AdminService.disableCriticalFeature | TC-MOD-020 |
+| FR-API-001 | UC-001 | APIVersion | VersionNegotiationMiddleware.negotiate | TC-API-001 |
 | FR-NOTIF-001 | UC-004 | Notification | NotificationService.sendScoreComplete | TC-NOTIF-001 |
 | FR-NOTIF-002 | UC-008 | Notification | NotificationService.sendSocialNotification | TC-NOTIF-002 |
 | FR-NOTIF-003 | UC-001 | UserSettings | NotificationService.updatePreferences | TC-NOTIF-003 |

@@ -6,7 +6,7 @@ Create the first runnable technical foundation for PakimonGO without implementin
 
 ## Sprint Status
 
-Planned. Not started.
+Complete. All 10 tasks finished.
 
 Task packets are split under `docs/sprints/sprint-0/`.
 
@@ -46,18 +46,18 @@ Toolchain readiness snapshot: `docs/tooling/TOOLCHAIN_READINESS.md`.
 
 ## Sprint Backlog
 
-| ID | Task | Owned Paths | Forbidden Paths | Acceptance | Verification |
-|---|---|---|---|---|---|
-| S0-001 | Scaffold Flutter project shell | `apps/mobile/pakimon_go_app/` | backend/data docs except state updates | `flutter pub get` can run if Flutter is installed; app has module layout preserved | `flutter --version`, `flutter pub get`, `flutter test` if available |
-| S0-002 | Scaffold FastAPI API shell | `services/api/` | mobile feature code | API has app entrypoint, `/health/live`, `/health/ready`, module package structure | `python -m pytest` or import smoke |
-| S0-003 | Scaffold worker shell | `services/workers/` | API route implementation beyond queue stubs | worker package imports and has no-op job runner | import smoke/unit test |
-| S0-004 | Add local development config examples | `.env.example`, `infrastructure/docker/` | real secrets, private credentials | examples list required vars with dummy values only | secret scan/manual review |
-| S0-005 | Add contract package shell | `packages/contracts/` | generated clients until generator chosen | OpenAPI draft copied/referenced and schema validation target documented | OpenAPI parse/lint |
-| S0-006 | Add public DTO privacy tests | `services/api/tests/`, `packages/contracts/` | production scoring logic | tests assert public DTO schemas omit exact lat/lng/private URLs | pytest or schema check |
-| S0-007 | Add score state enum/model shell | `packages/scoring-rules/`, `services/api/src/modules/scoring/` | final score formula | pending/prechecked/ai_evaluated/scored/capped/review/rejected represented | unit tests |
-| S0-008 | Add capture draft model shell | `apps/mobile/pakimon_go_app/lib/features/capture/` | real camera plugin flow | draft metadata model exists and references requirements | Dart unit test if Flutter available |
-| S0-009 | Extend CI validation workflow | `.github/workflows/` | deploy secrets | docs/OpenAPI/test commands described or wired as non-deploy checks | local command parity |
-| S0-010 | Update traceability and state docs | `docs/` | none | current/next/thinking/task log reflect sprint start/close | git diff review |
+| ID | Status | Task | Owned Paths | Forbidden Paths | Acceptance | Verification |
+|---|---|---|---|---|---|---|---|
+| S0-001 | ✅ DONE | Scaffold Flutter project shell | `apps/mobile/pakimon_go_app/` | backend/data docs except state updates | `flutter pub get` can run if Flutter is installed; app has module layout preserved | `flutter --version`, `flutter pub get`, `flutter test` if available |
+| S0-002 | ✅ DONE | Scaffold FastAPI API shell | `services/api/` | mobile feature code | API has app entrypoint, `/health/live`, `/health/ready`, module package structure | `python -m pytest` or import smoke |
+| S0-003 | ✅ DONE | Scaffold worker shell | `services/workers/` | API route implementation beyond queue stubs | worker package imports and has no-op job runner | import smoke/unit test |
+| S0-004 | ✅ DONE | Add local development config examples | `.env.example`, `infrastructure/docker/` | real secrets, private credentials | examples list required vars with dummy values only | secret scan/manual review |
+| S0-005 | ✅ DONE | Add contract package shell | `packages/contracts/` | generated clients until generator chosen | OpenAPI draft copied/referenced and schema validation target documented | OpenAPI parse/lint |
+| S0-006 | ✅ DONE | Add public DTO privacy tests | `services/api/tests/`, `packages/contracts/` | production scoring logic | tests assert public DTO schemas omit exact lat/lng/private URLs | 7 pytest tests pass |
+| S0-007 | ✅ DONE | Add score state enum/model shell | `packages/scoring-rules/`, `services/api/src/modules/scoring/` | final score formula | pending/prechecked/ai_evaluated/scored/capped/review/rejected represented | 17 API + 18 pkg tests pass |
+| S0-008 | ✅ DONE | Add capture draft model shell | `apps/mobile/pakimon_go_app/lib/features/capture/` | real camera plugin flow | draft metadata model exists and references requirements | 14 Flutter tests pass |
+| S0-009 | ✅ DONE | Extend CI validation workflow | `.github/workflows/` | deploy secrets | docs/OpenAPI/test commands described or wired as non-deploy checks | local command parity |
+| S0-010 | ✅ DONE | Update traceability and state docs | `docs/` | none | current/next/thinking/task log reflect sprint start/close | git diff review |
 
 ## File Ownership
 
@@ -75,16 +75,16 @@ Toolchain readiness snapshot: `docs/tooling/TOOLCHAIN_READINESS.md`.
 
 Use these short-burst commits unless the actual toolchain forces a smaller split:
 
-1. `scaffold(mobile): add flutter shell`
-2. `scaffold(api): add fastapi shell`
-3. `scaffold(workers): add worker shell`
-4. `scaffold(contracts): add openapi package shell`
-5. `test(contracts): guard public dto privacy`
-6. `feat(scoring): add score state model`
-7. `feat(capture): add draft model shell`
-8. `chore(dev): add local config examples`
-9. `ci: add scaffold validation checks`
-10. `docs(state): close sprint 0 scaffold pass`
+1. ✅ `scaffold(mobile): add flutter shell`
+2. ✅ `scaffold(api): add fastapi shell`
+3. ✅ `scaffold(workers): add worker shell`
+4. ✅ `scaffold(contracts): add openapi package shell`
+5. ✅ `chore(dev): add local config examples`
+6. ✅ `test(contracts): guard public dto privacy`
+7. ✅ `feat(scoring): add score state model`
+8. ✅ `feat(capture): add draft model shell`
+9. ✅ `ci: add scaffold validation checks`
+10. ✅ `docs(state): close sprint 0 scaffold pass`
 
 Every AI-authored commit must include:
 

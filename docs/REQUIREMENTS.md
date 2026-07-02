@@ -271,48 +271,54 @@ Use stable IDs in stories, tests, code comments, ADRs, bug reports, and commit m
 
 | ID | Requirement |
 |---|---|
-| NFR-PERF-001 | App cold start to usable home p95 <= 3s on mid-range Android; block alpha if >4s. |
-| NFR-PERF-002 | Feed/leaderboard cached reads p95 <= 500ms; uncached <= 900ms. |
-| NFR-PERF-003 | Map viewport query p95 <= 800ms for up to 100 visible clusters/cells. |
-| NFR-PERF-004 | Submission returns durable pending state <= 2s p95 after upload completes. |
-| NFR-PERF-005 | Automated scoring p50 <= 45s and p95 <= 3min, excluding manual review. |
-| NFR-PERF-006 | Feeds never download original images by default. |
-| NFR-SCALE-001 | Beta backend supports 10k DAU, 1k concurrent users, 100 RPS read peak. |
-| NFR-SCALE-002 | Leaderboards handle 1M score events/day with <5min projection lag. |
-| NFR-SCALE-003 | Duplicate/vector lookup p95 <= 1.5s at 1M image embeddings. |
-| NFR-REL-001 | API availability: 99.5% beta, 99.9% production. |
-| NFR-REL-002 | Submission pipeline job success >= 99%; retryable failures recover within 30min. |
-| NFR-REL-003 | No user-visible loss of submitted captures. |
-| NFR-PRIV-001 | Public map cells never expose exact coordinates. |
-| NFR-PRIV-002 | Public location precision defaults to roughly 250m radius or coarser. |
-| NFR-PRIV-003 | Public animal activity delayed >= 30min unless less precise. |
-| NFR-PRIV-004 | EXIF GPS stripped from every public derivative. |
-| NFR-PRIV-005 | Account deletion completes/anonymizes eligible data within defined retention, target <=30 days. |
-| NFR-SEC-001 | All score and leaderboard writes are server-authoritative. |
-| NFR-SEC-002 | 100% protected endpoints require valid auth and authorization. |
-| NFR-SEC-003 | App Check/attestation enforced for scoring/upload where available. |
-| NFR-SEC-004 | Rate limits exist for upload, scoring, comments, likes, reports, auth-sensitive flows. |
-| NFR-SEC-005 | No secrets in repo, client, or release artifacts. |
-| NFR-ACCESS-001 | Core flows meet WCAG 2.2 AA-equivalent mobile expectations. |
-| NFR-ACCESS-002 | Primary touch targets >= 44x44 platform-equivalent where practical. |
-| NFR-ACCESS-003 | All actionable controls have screen-reader labels. |
-| NFR-MAINT-001 | Source files usually <=300 lines; >500 requires debt entry or generated-code exception. |
-| NFR-MAINT-002 | Every non-trivial module has tests and module README. |
-| NFR-MAINT-003 | Requirement IDs are linked in stories/tests/comments where useful. |
-| NFR-OBS-001 | 100% API requests have trace/request ID, latency, status, and lawful user correlation. |
-| NFR-OBS-002 | Crash-free sessions >=99.5% beta, >=99.8% production. |
-| NFR-OBS-003 | Alerts exist for API errors, queue backlog, scoring latency, upload failures, location-leak incident class. |
-| NFR-AUDIT-001 | 100% score changes store formula version, evidence IDs, model/prompt version, actor/source. |
-| NFR-AUDIT-002 | 100% moderation/admin/deletion actions are append-only audited. |
-| NFR-AUDIT-003 | Audit records query by user/submission/action within p95 <=5s at 1M rows. |
-| NFR-COST-001 | Automated scoring variable cost target <= $0.05 average per submitted capture. |
-| NFR-COST-002 | Monthly cloud cost forecast keeps 30% headroom against approved budget. |
-| NFR-PORT-001 | iOS compile spike succeeds before Android production launch. |
-| NFR-PORT-002 | Backend local setup completes within 30min on a fresh machine after scaffold exists. |
-| NFR-LOC-001 | User-facing strings externalized by beta. |
-| NFR-LOC-002 | Layout supports 30% longer strings and RTL smoke test. |
-| NFR-ENERGY-001 | 15-minute map/capture session drains <=5% battery on mid-range Android. |
-| NFR-ENERGY-002 | No continuous camera/GPS after leaving flow. |
+| NFR-PERF-001 | App cold start to usable home p95 <= 3s on mid-range Android; block alpha if >4s.
+| NFR-PERF-002 | Feed/leaderboard cached reads p95 <= 500ms; uncached <= 900ms.
+| NFR-PERF-003 | Map viewport query p95 <= 800ms for up to 100 visible clusters/cells.
+| NFR-PERF-004 | Submission returns durable pending state <= 2s p95 after upload completes.
+| NFR-PERF-005 | Automated scoring p50 <= 45s and p95 <= 3min, excluding manual review.
+| NFR-PERF-006 | Feeds never download original images by default.
+| NFR-SCALE-001 | Beta backend supports 10k DAU, 1k concurrent users, 100 RPS read peak.
+| NFR-SCALE-002 | Leaderboards handle 1M score events/day with <5min projection lag.
+| NFR-SCALE-003 | Duplicate/vector lookup p95 <= 1.5s at 1M image embeddings.
+| NFR-REL-001 | API availability: 99.5% beta, 99.9% production.
+| NFR-REL-002 | Submission pipeline job success >= 99%; retryable failures recover within 30min.
+| NFR-REL-003 | No user-visible loss of submitted captures.
+| NFR-PRIV-001 | Public map cells never expose exact coordinates.
+| NFR-PRIV-002 | Public location precision defaults to roughly 250m radius or coarser.
+| NFR-PRIV-003 | Public animal activity delayed >= 30min unless less precise.
+| NFR-PRIV-004 | EXIF GPS stripped from every public derivative.
+| NFR-PRIV-005 | Account deletion completes/anonymizes eligible data within defined retention, target <=30 days.
+| NFR-SEC-001 | All score and leaderboard writes are server-authoritative.
+| NFR-SEC-002 | 100% protected endpoints require valid auth and authorization.
+| NFR-SEC-003 | App Check/attestation enforced for scoring/upload where available.
+| NFR-SEC-004 | Rate limits exist for upload, scoring, comments, likes, reports, auth-sensitive flows.
+| NFR-SEC-005 | No secrets in repo, client, or release artifacts.
+| NFR-ACCESS-001 | Core flows meet WCAG 2.2 AA-equivalent mobile expectations.
+| NFR-ACCESS-002 | Primary touch targets >= 44x44 platform-equivalent where practical.
+| NFR-ACCESS-003 | All actionable controls have screen-reader labels.
+| NFR-MAINT-001 | Source files usually <=300 lines; >500 requires debt entry or generated-code exception.
+| NFR-MAINT-002 | Every non-trivial module has tests and module README.
+| NFR-MAINT-003 | Requirement IDs are linked in stories/tests/comments where useful.
+| NFR-OBS-001 | 100% API requests have trace/request ID, latency, status, and lawful user correlation.
+| NFR-OBS-002 | Crash-free sessions >=99.5% beta, >=99.8% production.
+| NFR-OBS-003 | Alerts exist for API errors, queue backlog, scoring latency, upload failures, location-leak incident class.
+| NFR-AUDIT-001 | 100% score changes store formula version, evidence IDs, model/prompt version, actor/source.
+| NFR-AUDIT-002 | 100% moderation/admin/deletion actions are append-only audited.
+| NFR-AUDIT-003 | Audit records query by user/submission/action within p95 <=5s at 1M rows.
+| NFR-COST-001 | Automated scoring variable cost target <= $0.05 average per submitted capture.
+| NFR-COST-002 | Monthly cloud cost forecast keeps 30% headroom against approved budget.
+| NFR-PORT-001 | iOS compile spike succeeds before Android production launch.
+| NFR-PORT-002 | Backend local setup completes within 30min on a fresh machine after scaffold exists.
+| NFR-LOC-001 | User-facing strings externalized by beta.
+| NFR-LOC-002 | Layout supports 30% longer strings and RTL smoke test.
+| NFR-ENERGY-001 | 15-minute map/capture session drains <=5% battery on mid-range Android.
+| NFR-ENERGY-002 | No continuous camera/GPS after leaving flow.
+
+## API Requirements
+
+| ID | Requirement |
+|---|---|
+| FR-API-001 | API supports version negotiation via Accept-Version header (defaults to v1) while maintaining backward compatibility with URL path versioning. |
 
 ## Requirement Traceability
 

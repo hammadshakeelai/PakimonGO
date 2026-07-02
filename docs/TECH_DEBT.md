@@ -17,7 +17,7 @@ No production code exists yet. Current debt is planning debt and decision debt.
 - Moderation staffing/tooling is undefined.
 - Graphify integration is planned but not validated because no code exists yet.
 - Actual Flutter and FastAPI project code is not scaffolded yet; only repo boundaries and tooling standards exist.
-- CI currently covers docs, JSON examples, and lightweight secret scan; Flutter/backend test jobs wait until runnable scaffold code exists.
+- CI covers docs, JSON examples, secret scan, API tests (26), worker tests, scoring-rules tests (18), and Flutter tests (14). Phase 2 scaffold CI is complete. Phase 3-5 CI gates (security, benchmark, release) remain for future sprints.
 - Conversation archive contains summaries and a paste target; the complete full visible chat export depends on a user-provided paste/export.
 - OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
 - Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.

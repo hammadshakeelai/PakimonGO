@@ -1,5 +1,62 @@
 # Repository Guidelines
 
+## MANDATORY TASK LOOP — DO NOT SKIP
+
+Every work burst follows this exact sequence. If you skip a step, the session log will show it.
+
+### PRE-TASK (before any code/docs change)
+
+```txt
+[STEP 1] RUN: python tools/qa/pre_task_check.py
+         → If FAIL: stop and fix before proceeding
+
+[STEP 2] READ: docs/CURRENT_TASK.md, docs/NEXT_TASK.md, docs/CURRENT_THINKING.md
+         → Confirm phase and active task match what you're about to do
+
+[STEP 3] READ: The exact sprint packet for this task
+         → Confirm file ownership, forbidden paths, acceptance criteria
+
+[STEP 4] READ: docs/TRACEABILITY_MATRIX.md for the FR IDs in the task packet
+         → If trace row missing: stop, add it before code
+
+[STEP 5] DO THE WORK — short burst, small files (≤300 lines)
+```
+
+### POST-TASK (before ending burst or committing)
+
+```txt
+[STEP 6] RUN: python tools/qa/validate_docs.py
+         RUN: python tools/qa/validate_json_examples.py
+         RUN: python tools/qa/scan_secrets.py
+         → If any FAIL: fix before commit
+
+[STEP 7] UPDATE all state docs:
+           - docs/CURRENT_TASK.md
+           - docs/NEXT_TASK.md
+           - docs/CURRENT_THINKING.md
+           - docs/TASK_LOG.md
+           - docs/BACKLOG.md
+           - docs/BUGS_AND_RISKS.md
+           - docs/TECH_DEBT.md
+           - docs/sprints/SPRINT_0_PLAN.md (if sprint status changed)
+
+[STEP 8] If architecture/requirement decision changed:
+           - Update affected ADR in docs/adr/
+           - Update affected OKF in knowledge/okf/
+
+[STEP 9] COMMIT: semantic message + AI trailers
+           AI-Agent, AI-Work-Mode, AI-Commit-Time
+           Work-Package, Requirements, Process-Docs-Updated
+```
+
+## Verification Loop Rule
+
+After every task marked complete, immediately:
+1. Run pre_task_check.py again
+2. Run all 3 validation scripts again
+3. Update docs/SESSION_CHECKLIST.md with actual steps completed
+4. Only then move to next task
+
 ## Mandatory Agent Workflow
 
 Before meaningful work, read `docs/CURRENT_TASK.md`, `docs/NEXT_TASK.md`, `docs/CURRENT_THINKING.md`, `docs/PROCESS.md`, and relevant requirements/ADRs. Update state docs before ending work: current task, next task, backlog, bugs/risks, and technical debt.
