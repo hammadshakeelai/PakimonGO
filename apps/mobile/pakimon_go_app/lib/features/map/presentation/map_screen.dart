@@ -5,6 +5,7 @@ import '../../../core/config/app_config.dart';
 import '../../capture/data/capture_repository.dart';
 import '../../../shared/models/submission_marker.dart';
 import '../domain/map_viewmodel.dart';
+import 'marker_list_screen.dart';
 
 class MapScreen extends StatefulWidget {
   final MapViewModel? viewModel;
@@ -112,19 +113,33 @@ class _MapScreenState extends State<MapScreen> {
     return Positioned(
       left: 12,
       bottom: 12,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.location_on, size: 18, color: Colors.green),
-              const SizedBox(width: 6),
-              Text('${_viewModel.markerCount} sightings',
-                  style: Theme.of(context).textTheme.bodyMedium),
-            ],
+      child: GestureDetector(
+        onTap: _openMarkerList,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.location_on, size: 18, color: Colors.green),
+                const SizedBox(width: 6),
+                Text('${_viewModel.markerCount} sightings',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(width: 4),
+                const Icon(Icons.chevron_right, size: 16),
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _openMarkerList() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MarkerListScreen(markers: _viewModel.markers),
       ),
     );
   }

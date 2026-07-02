@@ -22,6 +22,16 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
 
+### Sprint 33 Complete
+
+Sprint 33 delivered: **Species detail screen.**
+
+- `SpeciesDetailScreen` (species name, points, status, coordinates, photo placeholder)
+- `MarkerListScreen` (tappable list → detail navigation)
+- MapScreen overlay tappable with chevron
+- 8 new widget tests
+- 89 API tests + 61 scoring-rules + 67 Flutter = **217 total tests, all passing**
+
 ### Sprint 32 Complete
 
 Sprint 32 delivered: **Map markers from API.**

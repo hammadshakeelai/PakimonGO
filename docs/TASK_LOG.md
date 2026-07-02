@@ -1110,3 +1110,29 @@ Sprint 32 added user submission markers to the Mapbox map by fetching data from 
 - Scoring-rules tests: 61 passed
 - Flutter tests: 59 passed (was 49 pre-S32: +10 new)
 - Total: **209 tests, all passing**
+
+## 2026-07-03: Sprint 33 — Species Detail Screen
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 33 added a tap-through flow from map marker overlay → sighting list → species detail screen.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/lib/features/species/presentation/species_detail_screen.dart` — NEW: species name in AppBar, photo placeholder, info card (points, status, lat/lng)
+- `apps/mobile/pakimon_go_app/lib/features/map/presentation/marker_list_screen.dart` — NEW: tappable list with color-coded avatars, species, status, coordinates, navigation to detail
+- `apps/mobile/pakimon_go_app/lib/features/map/presentation/map_screen.dart` — Marker overlay now tappable (GestureDetector + chevron icon), navigates to MarkerListScreen
+- `apps/mobile/pakimon_go_app/test/features/species/species_detail_screen_test.dart` — NEW: 4 widget tests
+- `apps/mobile/pakimon_go_app/test/features/map/marker_list_screen_test.dart` — NEW: 4 widget tests (list, empty, subtitle, navigation)
+- `docs/sprints/SPRINT_33_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 67 passed (was 59 pre-S33: +8 new)
+- Total: **217 tests, all passing**

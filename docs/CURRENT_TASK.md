@@ -345,17 +345,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S29-004: ✅ DONE — 4 new widget tests (form rendering, camera pick, gallery pick, broken image fallback)
 - 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
 
-## Sprint 32 Progress
+## Sprint 33 Progress
 
-- S32-001: ✅ DONE — Backend: cell centroid (cellLatitude/cellLongitude) in publicLocation response
-- S32-002: ✅ DONE — `SubmissionMarker` model with fromJson parsing
-- S32-003: ✅ DONE — `CaptureRepository.getMapMarkers()` method (GET /v1/submissions, parses markers, filters zero-location)
-- S32-004: ✅ DONE — `MapViewModel` (ChangeNotifier: fetch, loading, error, marker count)
-- S32-005: ✅ DONE — `MapScreen` updated: DI with optional viewModel, loading indicator, error+retry, marker count overlay
-- S32-006: ✅ DONE — `main.dart` wired: MapViewModel in HomeScreen, passed to MapScreen
-- S32-007: ✅ DONE — 4 MapViewModel unit tests + 4 MapScreen widget tests + 2 repository tests = 10 new tests
-- 89 API tests + 61 scoring-rules + 59 Flutter = **209 total tests, all passing**
+- S33-001: ✅ DONE — `SpeciesDetailScreen` (species name, points, status, coordinates, photo placeholder)
+- S33-002: ✅ DONE — `MarkerListScreen` (tappable list from map overlay → detail screen)
+- S33-003: ✅ DONE — MapScreen marker overlay now tappable, navigates to MarkerListScreen
+- S33-004: ✅ DONE — 4 SpeciesDetailScreen widget tests + 4 MarkerListScreen widget tests = 8 new tests
+- 89 API tests + 61 scoring-rules + 67 Flutter = **217 total tests, all passing**
 
 ## Current Next Action
 
-Sprint 32 complete. Next: Sprint 33 (see BACKLOG.md).
+Sprint 33 complete. Next: Sprint 34 (see BACKLOG.md).

@@ -48,7 +48,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('shows marker count when markers loaded',
+  testWidgets('shows no-token fallback when markers loaded without token',
       (WidgetTester tester) async {
     final repo = _ControllableRepository();
     final vm = MapViewModel(repository: repo);
@@ -66,7 +66,8 @@ void main() {
     )]);
     await tester.pumpAndSettle();
 
-    expect(find.text('PakimonGO Map'), findsOneWidget);
+    expect(find.text('Map unavailable — set MAPBOX_ACCESS_TOKEN'),
+        findsOneWidget);
   });
 
   testWidgets('shows error state with retry button on fetch failure',
