@@ -1,39 +1,42 @@
 """Cloud storage providers for production."""
 
 import os
-from abc import ABC, abstractmethod
+from pathlib import Path
 
 _HAS_BOTO3 = False
 _HAS_GCS = False
 try:
-    import boto3  # type: ignore[import]
+    import boto3
+
     _HAS_BOTO3 = True
 except ImportError:
     pass
 
 try:
-    from google.cloud import storage  # type: ignore[import]
+    from google.cloud import storage
+
     _HAS_GCS = True
 except ImportError:
     pass
 
 
-class StorageProvider(ABC):
-    """Abstract storage provider interface."""
+class StorageProvider:
+    """Storage provider interface - duck typing compatible with LocalFileStorage."""
 
-    @abstractmethod
     def save_original(self, asset_id: str, content: bytes) -> str:
         """Save original file, return storage key."""
         ...
 
-    @abstractmethod
     def generate_derivative_urls(self, asset_id: str) -> dict[str, str]:
         """Generate derivative URLs (thumbnail, public)."""
         ...
 
-    @abstractmethod
     def get_url(self, key: str) -> str | None:
         """Get public URL for key."""
+        ...
+
+    def get_path(self, relative: str) -> Path | None:
+        """Get local path for file (for local storage compatibility)."""
         ...
 
 
@@ -65,6 +68,9 @@ class S3StorageProvider(StorageProvider):
         except Exception:
             return None
 
+    def get_path(self, relative: str) -> Path | None:
+        return None
+
 
 class GCSStorageProvider(StorageProvider):
     """Google Cloud Storage provider."""
@@ -94,6 +100,9 @@ class GCSStorageProvider(StorageProvider):
             return blob.public_url
         return None
 
+    def get_path(self, relative: str) -> Path | None:
+        return None
+
 
 def get_storage_provider() -> StorageProvider:
     """Factory for storage provider based on env vars."""
@@ -106,4 +115,5 @@ def get_storage_provider() -> StorageProvider:
     if provider == "gcs":
         return GCSStorageProvider(bucket_name=os.getenv("GCS_BUCKET_NAME", "pakimongo-dev"))
     from .local_storage import LocalFileStorage
+
     return LocalFileStorage()
