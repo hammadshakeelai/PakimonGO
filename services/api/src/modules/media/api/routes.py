@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
@@ -89,7 +88,7 @@ def complete_upload(
     try:
         deriv_urls = _storage.generate_derivative_stubs(media_asset_id)
     except FileNotFoundError:
-        deriv_urls = {"thumbnail": None, "public": None}  # type: ignore[dict-item, assignment]
+        deriv_urls = {"thumbnail": None, "public": None}  # type: ignore[dict-item]
 
     return {
         "status": "ok",
@@ -117,9 +116,9 @@ def get_media_derivatives(
     pub_path = None
     for d in derivs:
         if d.size_label == "thumbnail":
-            thumb_path = f"/media/files/thumbs/{media_asset_id}.webp"
+            thumb_path = f"/v1/media/files/thumbs/{media_asset_id}.webp"
         elif d.size_label == "public":
-            pub_path = f"/media/files/public/{media_asset_id}.webp"
+            pub_path = f"/v1/media/files/public/{media_asset_id}.webp"
 
     return {
         "thumbnailUrl": thumb_path,
