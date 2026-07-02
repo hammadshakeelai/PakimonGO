@@ -1,5 +1,6 @@
 class SubmissionMarker {
   final String submissionId;
+  final String mediaAssetId;
   final double latitude;
   final double longitude;
   final String species;
@@ -8,6 +9,7 @@ class SubmissionMarker {
 
   SubmissionMarker({
     required this.submissionId,
+    required this.mediaAssetId,
     required this.latitude,
     required this.longitude,
     required this.species,
@@ -19,6 +21,7 @@ class SubmissionMarker {
     final loc = json['publicLocation'] as Map<String, dynamic>? ?? {};
     return SubmissionMarker(
       submissionId: json['submissionId'] as String,
+      mediaAssetId: json['mediaAssetId'] as String? ?? '',
       latitude: (loc['cellLatitude'] as num?)?.toDouble() ?? 0.0,
       longitude: (loc['cellLongitude'] as num?)?.toDouble() ?? 0.0,
       species: json['realName'] as String? ?? 'Unknown',

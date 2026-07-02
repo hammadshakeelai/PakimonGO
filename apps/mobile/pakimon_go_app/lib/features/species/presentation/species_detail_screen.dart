@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pakimon_go_app/core/network/api_config.dart';
 import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 class SpeciesDetailScreen extends StatelessWidget {
   final SubmissionMarker marker;
 
   const SpeciesDetailScreen({super.key, required this.marker});
+
+  String get _thumbnailUrl =>
+      '${ApiConfig.baseUrl}/v1/media/files/thumbs/${marker.mediaAssetId}.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class SpeciesDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPhotoPlaceholder(theme),
+            _buildPhoto(theme),
             const SizedBox(height: 16),
             _buildInfoCard(theme),
           ],
@@ -25,7 +29,28 @@ class SpeciesDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPhotoPlaceholder(ThemeData theme) {
+  Widget _buildPhoto(ThemeData theme) {
+    if (marker.mediaAssetId.isEmpty) {
+      return _buildPhotoPlaceholder(theme, 'Photo not available');
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.network(
+        _thumbnailUrl,
+        width: double.infinity,
+        height: 200,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            _buildPhotoPlaceholder(theme, 'Failed to load photo'),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildPhotoPlaceholder(theme, 'Loading photo…');
+        },
+      ),
+    );
+  }
+
+  Widget _buildPhotoPlaceholder(ThemeData theme, String message) {
     return Container(
       width: double.infinity,
       height: 200,
@@ -33,13 +58,13 @@ class SpeciesDetailScreen extends StatelessWidget {
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.image, size: 48, color: Colors.grey),
-            SizedBox(height: 8),
-            Text('Photo preview', style: TextStyle(color: Colors.grey)),
+            const Icon(Icons.image, size: 48, color: Colors.grey),
+            const SizedBox(height: 8),
+            Text(message, style: const TextStyle(color: Colors.grey)),
           ],
         ),
       ),

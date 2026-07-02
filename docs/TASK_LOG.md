@@ -1159,3 +1159,61 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Scoring-rules tests: 61 passed
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
+
+## 2026-07-03: Sprint 36 — Photo Thumbnail in Species Detail
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 36 replaced the static photo placeholder in SpeciesDetailScreen with a live thumbnail image fetched from the API, with loading and error fallback states.
+
+### Changes Made
+
+- `lib/shared/models/submission_marker.dart` — Added `mediaAssetId` field (required String)
+- `lib/features/species/presentation/species_detail_screen.dart` — Replaced `_buildPhotoPlaceholder` with `_buildPhoto(theme)` using `Image.network()` with `loadingBuilder` and `errorBuilder`; thumbnail URL constructed from `ApiConfig.baseUrl`
+- `lib/shared/models/api_models.dart` — `toMarker()` passes `mediaAssetId`
+- `test/features/species/species_detail_screen_test.dart` — Updated for `Image` widget
+- `test/features/map/marker_list_screen_test.dart` — Updated "Failed to load photo" assertion
+- `test/features/map/map_viewmodel_test.dart` — Added `mediaAssetId` to markers
+- `test/features/map/map_screen_test.dart` — Added `mediaAssetId` to markers
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 78 passed (same count, updated tests)
+- Total: **228 tests, all passing**
+- QA validations: 4/4 PASS
+
+## 2026-07-03: Sprint 35 — Submission History Screen
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 35 added a dedicated submission history screen showing past submissions with species name, points, and status, accessible from a third "History" tab in the bottom nav.
+
+### Changes Made
+
+- `services/api/src/modules/submissions/api/routes.py` — Added `realName` + `animalContext` to `_build_submission_response` dict
+- `apps/mobile/.../shared/models/api_models.dart` — Added `realName`, `animalContext` fields + `toMarker()` method to `SubmissionResponse`
+- `apps/mobile/.../features/capture/data/capture_repository.dart` — Added `getSubmissions()` method (GET /v1/submissions)
+- `apps/mobile/.../features/submissions/domain/submission_history_viewmodel.dart` — NEW: ChangeNotifier with fetchSubmissions, loading/error states
+- `apps/mobile/.../features/submissions/presentation/submission_history_screen.dart` — NEW: ListView with species, points, status; tap→SpeciesDetailScreen
+- `apps/mobile/.../main.dart` — Added History tab (3rd NavigationDestination)
+- `test/features/submissions/submission_history_viewmodel_test.dart` — NEW: 5 tests
+- `test/features/submissions/submission_history_screen_test.dart` — NEW: 4 widget tests
+- `test/widget_test.dart` — Updated with History tab, mock getSubmissions
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 78 passed (was 69 pre-S35: +9 new)
+- Total: **228 tests, all passing**
+- QA validations: 4/4 PASS

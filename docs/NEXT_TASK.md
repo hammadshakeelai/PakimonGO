@@ -2,7 +2,28 @@
 
 ## Current Next Task
 
-Sprint 33 — tbd (see BACKLOG.md).
+Sprint 37 — Map marker clustering or CI workflow update (see BACKLOG.md).
+
+## Sprint 36 Complete
+
+Sprint 36 delivered: **Photo thumbnail in species detail.**
+
+- `mediaAssetId` added to `SubmissionMarker` model
+- SpeciesDetailScreen now shows `Image.network()` with thumbnail from `/v1/media/files/thumbs/{id}.jpg`
+- Loading state shows placeholder text "Loading photo…"; error state shows "Failed to load photo"
+- All SubmissionMarker constructors across 4 test files updated
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+
+## Sprint 35 Complete
+
+Sprint 35 delivered: **Submission history screen.**
+
+- Backend: `realName` + `animalContext` added to `_build_submission_response`
+- Flutter: `SubmissionResponse.toMarker()`, `CaptureRepository.getSubmissions()`, `SubmissionHistoryViewModel`
+- `SubmissionHistoryScreen` with species name, points, status — tap navigates to `SpeciesDetailScreen`
+- History tab in bottom nav (Map / Capture / History)
+- 9 new Flutter tests (5 viewmodel + 4 screen widget)
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
 
 ## Sprint 2-26 Complete
 

@@ -352,6 +352,26 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S34-003: ✅ DONE — 2 new widget tests (RefreshIndicator present + pull triggers fetch)
 - 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
 
+## Sprint 35 Progress
+
+- S35-001: ✅ DONE — Backend: added `realName` + `animalContext` to `_build_submission_response`
+- S35-002: ✅ DONE — Flutter: added `realName`/`animalContext` to `SubmissionResponse` model
+- S35-003: ✅ DONE — Flutter: added `getSubmissions()` to `CaptureRepository`
+- S35-004: ✅ DONE — Flutter: created `SubmissionHistoryViewModel` ChangeNotifier
+- S35-005: ✅ DONE — Flutter: created `SubmissionHistoryScreen` with list + tap→SpeciesDetailScreen
+- S35-006: ✅ DONE — Flutter: wired History tab into main.dart bottom nav
+- S35-007: ✅ DONE — 9 new Flutter tests (5 viewmodel + 4 screen widget)
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+
+## Sprint 36 Progress
+
+- S36-001: ✅ DONE — Added `mediaAssetId` to `SubmissionMarker` model
+- S36-002: ✅ DONE — Replaced photo placeholder with `Image.network()` in SpeciesDetailScreen
+- S36-003: ✅ DONE — Added loading/error fallback states for thumbnail
+- S36-004: ✅ DONE — Updated all SubmissionMarker constructors across tests
+- S36-005: ✅ DONE — Updated species_detail_screen_test for Image widget
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 34 complete. Next: Sprint 35 (see BACKLOG.md).
+Sprint 36 complete. Next: Sprint 37 (see BACKLOG.md).

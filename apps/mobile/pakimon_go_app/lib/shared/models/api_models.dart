@@ -1,3 +1,5 @@
+import 'submission_marker.dart';
+
 class UploadIntentResponse {
   final String mediaAssetId;
   final String uploadUrl;
@@ -89,6 +91,8 @@ class ScoreState {
 class SubmissionResponse {
   final String submissionId;
   final String mediaAssetId;
+  final String? realName;
+  final String? animalContext;
   final ScoreState scoreState;
   final String visibility;
   final Map<String, dynamic> publicLocation;
@@ -96,6 +100,8 @@ class SubmissionResponse {
   SubmissionResponse({
     required this.submissionId,
     required this.mediaAssetId,
+    this.realName,
+    this.animalContext,
     required this.scoreState,
     required this.visibility,
     required this.publicLocation,
@@ -105,6 +111,8 @@ class SubmissionResponse {
     return SubmissionResponse(
       submissionId: json['submissionId'] as String,
       mediaAssetId: json['mediaAssetId'] as String,
+      realName: json['realName'] as String?,
+      animalContext: json['animalContext'] as String?,
       scoreState: ScoreState.fromJson(json['scoreState'] as Map<String, dynamic>),
       visibility: json['visibility'] as String,
       publicLocation: json['publicLocation'] as Map<String, dynamic>,
@@ -114,6 +122,18 @@ class SubmissionResponse {
   bool get isScored => scoreState.status == 'scored';
   bool get isCapped => scoreState.status == 'capped';
   int get points => scoreState.visiblePoints ?? 0;
+
+  SubmissionMarker toMarker() {
+    return SubmissionMarker(
+      submissionId: submissionId,
+      mediaAssetId: mediaAssetId,
+      species: realName ?? 'Unknown',
+      status: scoreState.status,
+      points: scoreState.visiblePoints ?? 0,
+      latitude: (publicLocation['cellLatitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (publicLocation['cellLongitude'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 }
 
 class UserProfileResponse {

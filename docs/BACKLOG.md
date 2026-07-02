@@ -48,6 +48,15 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S28-009: Write `CaptureRepository` unit tests~~ ✅ DONE
 - ~~S28-010: Write `CaptureScreen` widget tests~~ ✅ DONE
 
+- ~~S35-001: Backend: add realName + animalContext to response~~ ✅ DONE
+- ~~S35-002: Flutter: update SubmissionResponse model~~ ✅ DONE
+- ~~S35-003: Flutter: add getSubmissions() to CaptureRepository~~ ✅ DONE
+- ~~S35-004: Flutter: create SubmissionHistoryViewModel~~ ✅ DONE
+- ~~S35-005: Flutter: create SubmissionHistoryScreen~~ ✅ DONE
+- ~~S35-006: Flutter: wire History tab in main.dart~~ ✅ DONE
+- ~~S35-007: Tests for submission history~~ ✅ DONE
+- ~~S36-001: Photo thumbnail in species detail screen~~ ✅ DONE
+- S37-001: Map marker clustering or CI workflow update
 - ~~S0-001: Generate Flutter project template~~ ✅ DONE
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE

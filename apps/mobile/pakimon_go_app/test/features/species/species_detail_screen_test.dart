@@ -12,6 +12,7 @@ Widget _buildScreen(SubmissionMarker marker) {
 void main() {
   final scoredMarker = SubmissionMarker(
     submissionId: 's1',
+    mediaAssetId: 'm1',
     latitude: 51.5,
     longitude: -0.12,
     species: 'Passer domesticus',
@@ -21,6 +22,7 @@ void main() {
 
   final cappedMarker = SubmissionMarker(
     submissionId: 's2',
+    mediaAssetId: 'm2',
     latitude: 48.85,
     longitude: 2.35,
     species: 'Felis catus',
@@ -35,12 +37,11 @@ void main() {
     expect(find.text('Passer domesticus'), findsAtLeastNWidgets(1));
   });
 
-  testWidgets('shows photo placeholder', (WidgetTester tester) async {
+  testWidgets('shows photo with image network', (WidgetTester tester) async {
     await tester.pumpWidget(_buildScreen(scoredMarker));
     await tester.pumpAndSettle();
 
-    expect(find.text('Photo preview'), findsOneWidget);
-    expect(find.byIcon(Icons.image), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
   });
 
   testWidgets('shows points, status, and coordinates', (WidgetTester tester) async {

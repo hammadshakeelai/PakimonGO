@@ -73,4 +73,23 @@ Sprint 34 delivered:
 - 2 new widget tests (RefreshIndicator presence + pull-gesture triggers fetch)
 - 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
 
-Next: Sprint 35 — tbd (see BACKLOG.md).
+**Sprint 35 — Submission history screen (complete).**
+
+Sprint 35 delivered:
+- Backend: `realName` + `animalContext` fields in `_build_submission_response`
+- Flutter: `SubmissionHistoryViewModel` ChangeNotifier + `SubmissionHistoryScreen` with species, points, status list
+- Tap a submission → `SpeciesDetailScreen` via `toMarker()` conversion
+- History tab in bottom nav (Map / Capture / History)
+- 9 new Flutter tests (5 viewmodel + 4 widget)
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+
+**Sprint 36 — Photo thumbnail in species detail (complete).**
+
+Sprint 36 delivered:
+- `mediaAssetId` added to `SubmissionMarker` model
+- `SpeciesDetailScreen` shows `Image.network()` with thumbnail via `/v1/media/files/thumbs/{id}.jpg`
+- Loading/error fallback states for thumbnail image
+- All SubmissionMarker constructors updated across 4 test files
+- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+
+Next: Sprint 37 — Map marker clustering or CI workflow update (see BACKLOG.md).

@@ -49,6 +49,7 @@ void main() {
       final markers = [
         SubmissionMarker(
           submissionId: 's1',
+          mediaAssetId: 'm1',
           latitude: 51.5,
           longitude: -0.12,
           species: 'Passer domesticus',
@@ -57,6 +58,7 @@ void main() {
         ),
         SubmissionMarker(
           submissionId: 's2',
+          mediaAssetId: 'm2',
           latitude: 48.85,
           longitude: 2.35,
           species: 'Felis catus',

@@ -58,6 +58,7 @@ void main() {
 
     repo.complete([SubmissionMarker(
       submissionId: 's1',
+      mediaAssetId: 'm1',
       latitude: 51.5,
       longitude: -0.12,
       species: 'Passer domesticus',
