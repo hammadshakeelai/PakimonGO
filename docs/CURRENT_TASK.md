@@ -396,6 +396,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S39-004: ✅ DONE — 8 tests for error middleware
 - 97 API tests + 61 scoring-rules + 86 Flutter = **244 total tests, all passing**
 
+## Sprint 40 Progress
+
+- S40-001: ✅ DONE — Notification DB model + Alembic migration 002
+- S40-002: ✅ DONE — Notification repository (create, list, mark_read, unread_count)
+- S40-003: ✅ DONE — GET /v1/notifications, PATCH /v1/notifications/{id}/read, GET /v1/notifications/unread-count
+- S40-004: ✅ DONE — Wired notifications into sync + async scoring paths
+- S40-005: ✅ DONE — 6 new tests
+- 103 API tests + 61 scoring-rules + 86 Flutter = **250 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 39 complete. Next: Sprint 40 (see BACKLOG.md).
+Sprint 40 complete. Next: Sprint 41 (see BACKLOG.md).

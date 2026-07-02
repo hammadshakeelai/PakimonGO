@@ -1160,6 +1160,32 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 40 — User Notifications (Backend)
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 40 added a notification system to the backend: DB model, repository, REST endpoints, and wiring into both sync and async scoring paths.
+
+### Changes Made
+
+- `src/infrastructure/database/models.py` — Added `Notification` table (user_id, notification_type, title, body, reference_type, reference_id, is_read)
+- `alembic/versions/002_add_notifications.py` — Migration for notifications table
+- `src/infrastructure/database/repositories/notification.py` — NEW: create_notification, get_notifications, mark_notification_read, unread_notification_count
+- `src/modules/notifications/api/routes.py` — NEW: GET /v1/notifications, PATCH /v1/notifications/{id}/read, GET /v1/notifications/unread-count (all auth-protected)
+- `src/modules/submissions/api/routes.py` — Wired notification creation into sync scoring path
+- `src/infrastructure/worker/scoring_worker.py` — Wired notification creation into async scoring path
+- `tests/test_notifications.py` — NEW: 6 tests
+
+### Verification
+
+- 103 API tests pass (+6)
+- 61 scoring-rules tests pass
+- 250 total tests (103 API + 61 scoring-rules + 86 Flutter)
+
 ## 2026-07-03: Sprint 39 — API Error Handling Middleware
 
 ### Status

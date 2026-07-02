@@ -118,4 +118,12 @@ Sprint 39 delivered:
 - 8 new tests; 97 API + 61 scoring-rules = 158 Python tests
 - 244 total tests (97 API + 61 scoring-rules + 86 Flutter)
 
-Next: Sprint 40 — user notifications or production deployment CI/CD (see BACKLOG.md).
+**Sprint 40 — User notifications (backend) (complete).**
+
+Sprint 40 delivered:
+- Notification model + migration 002 + repository
+- GET/PATCH notifications endpoints
+- Notifications scored in both sync and async scoring paths
+- 6 new tests; 103 API + 61 scoring-rules = 164 Python tests, 250 total
+
+Next: Sprint 41 — Flutter notification center screen or production deployment CI/CD (see BACKLOG.md).

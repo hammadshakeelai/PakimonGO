@@ -2,7 +2,17 @@
 
 ## Current Next Task
 
-Sprint 40 — User notifications or production deployment CI/CD (see BACKLOG.md).
+Sprint 41 — Flutter notification center screen or production deployment CI/CD (see BACKLOG.md).
+
+## Sprint 40 Complete
+
+Sprint 40 delivered: **User notifications (backend).**
+
+- Notification DB model + Alembic migration 002
+- Repository: create, get_notifications (paginated, unread-only), mark_read, unread_count
+- Routes: GET /v1/notifications, PATCH /v1/notifications/{id}/read, GET /v1/notifications/unread-count
+- Notifications wired into sync and async scoring paths
+- 6 new tests; 103 API + 61 scoring-rules = 164 Python tests, 250 total
 
 ## Sprint 39 Complete
 

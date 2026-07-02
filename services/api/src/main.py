@@ -9,6 +9,7 @@ from .infrastructure.middleware.error_middleware import ErrorHandlingMiddleware,
 from .infrastructure.middleware.version_middleware import VersionNegotiationMiddleware
 from .modules.leaderboard.api.routes import router as leaderboard_router
 from .modules.media.api.routes import router as media_router
+from .modules.notifications.api.routes import router as notification_router
 from .modules.submissions.api.routes import router as submission_router
 from .modules.users.api.routes import router as users_router
 
@@ -43,6 +44,7 @@ app.add_middleware(VersionNegotiationMiddleware)
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.include_router(leaderboard_router, prefix="/v1")
 app.include_router(media_router, prefix="/v1")
+app.include_router(notification_router, prefix="/v1")
 app.include_router(submission_router, prefix="/v1")
 app.include_router(users_router, prefix="/v1")
 

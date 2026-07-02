@@ -59,7 +59,8 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S37-001: Map marker clustering~~ ✅ DONE
 - ~~S38-001: CI workflow update~~ ✅ DONE
 - ~~S39-001: API error handling middleware~~ ✅ DONE
-- S40-001: User notifications or production deployment CI/CD
+- ~~S40-001: User notifications (backend)~~ ✅ DONE
+- S41-001: Flutter notification center screen or production deployment CI/CD
 - ~~S0-001: Generate Flutter project template~~ ✅ DONE
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE

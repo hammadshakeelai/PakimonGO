@@ -4,6 +4,7 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from src.infrastructure.database.repositories import create_notification
 from src.infrastructure.database.repositories import create_score_event
 from src.infrastructure.database.repositories import get_media_asset
 from src.infrastructure.database.repositories import update_submission_status
@@ -65,6 +66,23 @@ def process_score_job(job: Job, scoring_service: AIScoringService | None = None)
             previous_state="ai_evaluated",
             new_state=new_state,
         )
+        if user_id:
+            points = scoring_result.points
+            if points is not None:
+                n_title = f"Submission scored: {points} pts"
+                n_body = f"Your submission received {points} points ({scoring_result.explanation_category})."
+            else:
+                n_title = "Submission reviewed"
+                n_body = f"Your submission has been reviewed ({scoring_result.explanation_category})."
+            create_notification(
+                db=db,
+                user_id=user_id,
+                notification_type="submission_scored",
+                title=n_title,
+                body=n_body,
+                reference_type="submission",
+                reference_id=submission_id,
+            )
     finally:
         db.close()
 

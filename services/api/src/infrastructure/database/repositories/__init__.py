@@ -6,6 +6,12 @@ from .media_asset import (
     get_media_asset,
     update_media_asset_storage_key,
 )
+from .notification import (
+    create_notification,
+    get_notifications,
+    mark_notification_read,
+    unread_notification_count,
+)
 from .score_event import create_score_event, get_latest_score_event
 from .sensitive_species import (
     create_sensitive_species,
@@ -24,7 +30,11 @@ from .user import get_or_create_user, update_user
 
 __all__ = [
     "create_media_asset",
+    "create_notification",
     "get_media_asset",
+    "get_notifications",
+    "mark_notification_read",
+    "unread_notification_count",
     "update_media_asset_storage_key",
     "complete_media_asset",
     "get_derivatives",

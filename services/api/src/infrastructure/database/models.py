@@ -149,6 +149,20 @@ class AuditLog(Base):
     created_at = Column(DateTime(timezone=True), default=_utcnow)
 
 
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    notification_type = Column(String(32), nullable=False)
+    title = Column(String(256), nullable=False)
+    body = Column(Text, nullable=True)
+    reference_type = Column(String(32), nullable=True)
+    reference_id = Column(String(36), nullable=True)
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
 class IdempotencyKey(Base):
     __tablename__ = "idempotency_keys"
 

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
+from src.infrastructure.database.repositories import create_notification
 from src.infrastructure.database.repositories import create_score_event
 from src.infrastructure.database.repositories import create_submission as db_create_submission
 from src.infrastructure.database.repositories import get_all_submission_sha256s
@@ -69,6 +70,8 @@ def _build_submission_response(sub, attr, score_event=None, db: Session | None =
     return {
         "submissionId": sub.id,
         "mediaAssetId": sub.primary_media_asset_id,
+        "realName": real_name,
+        "animalContext": animal_context,
         "scoreState": {
             "status": status,
             "visiblePoints": points,
@@ -78,6 +81,24 @@ def _build_submission_response(sub, attr, score_event=None, db: Session | None =
         "visibility": "private",
         "publicLocation": public_location,
     }
+
+
+def _notify_scored(db, user_id, submission_id, points, explanation):
+    if points is not None:
+        title = f"Submission scored: {points} pts"
+        body = f"Your submission received {points} points ({explanation})."
+    else:
+        title = "Submission reviewed"
+        body = f"Your submission has been reviewed ({explanation})."
+    create_notification(
+        db=db,
+        user_id=user_id,
+        notification_type="submission_scored",
+        title=title,
+        body=body,
+        reference_type="submission",
+        reference_id=submission_id,
+    )
 
 
 @router.post("")
@@ -153,6 +174,7 @@ def create_submission_endpoint(
         previous_state=suggested.value,
         new_state=new_state,
     )
+    _notify_scored(db, current_user.user_id, sub.id, scoring_result.points, scoring_result.explanation_category)
     return _build_submission_response(sub, attr, score_event, db)
 
 

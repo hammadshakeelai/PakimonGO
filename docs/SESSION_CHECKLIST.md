@@ -59,3 +59,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 53 | Sprint 37 map marker clustering | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ClusterService, haversine clustering, overlay shows cluster count, 8 new tests, 236 total |
 | 54 | Sprint 38 CI workflow update | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | needs chains, Flutter 3.x, test count echo, summary job, 236 total |
 | 55 | Sprint 39 API error handling middleware | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ErrorHandlingMiddleware, http_exception_handler, 8 tests, 244 total |
+| 56 | Sprint 40 user notifications backend | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Notification model, migration, repository, routes, scoring wiring, 6 tests, 250 total |
