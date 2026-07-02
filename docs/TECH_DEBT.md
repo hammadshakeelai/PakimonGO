@@ -2,7 +2,16 @@
 
 ## Current Known Debt
 
-No production code exists yet. Current debt is planning debt and decision debt.
+Production code exists (Sprint 0-22 complete). Current debt items:
+
+## Implementation Debt
+
+- API versioning uses middleware but no v2 routes exist yet (placeholder only)
+- Storage uses local filesystem; needs cloud storage migration (S3/GCS) for production
+- VisionProvider configured for Google but no real API key/environment tested
+- Mapbox access token placeholder; MapScreen falls back to message without token
+- No actual camera plugin integration; capture draft is in-memory only
+- Database uses SQLite for tests; PostgreSQL connection string not wired to real DB
 
 ## Decision Debt
 
