@@ -104,4 +104,40 @@ void main() {
     repo.complete([]);
     await tester.pumpAndSettle();
   });
+
+  testWidgets('RefreshIndicator present on loaded state',
+      (WidgetTester tester) async {
+    final repo = _ControllableRepository();
+    final vm = MapViewModel(repository: repo);
+
+    await tester.pumpWidget(_buildScreen(vm));
+    await tester.pump();
+
+    repo.complete([]);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(RefreshIndicator), findsOneWidget);
+  });
+
+  testWidgets('RefreshIndicator pull triggers fetch',
+      (WidgetTester tester) async {
+    final repo = _ControllableRepository();
+    final vm = MapViewModel(repository: repo);
+
+    await tester.pumpWidget(_buildScreen(vm));
+    await tester.pump();
+
+    repo.complete([]);
+    await tester.pumpAndSettle();
+
+    await tester.fling(find.byType(SingleChildScrollView),
+        const Offset(0, 300), 1000);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    repo.complete([]);
+    await tester.pumpAndSettle();
+  });
 }

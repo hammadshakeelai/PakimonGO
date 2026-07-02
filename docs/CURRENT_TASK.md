@@ -345,14 +345,13 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S29-004: ✅ DONE — 4 new widget tests (form rendering, camera pick, gallery pick, broken image fallback)
 - 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
 
-## Sprint 33 Progress
+## Sprint 34 Progress
 
-- S33-001: ✅ DONE — `SpeciesDetailScreen` (species name, points, status, coordinates, photo placeholder)
-- S33-002: ✅ DONE — `MarkerListScreen` (tappable list from map overlay → detail screen)
-- S33-003: ✅ DONE — MapScreen marker overlay now tappable, navigates to MarkerListScreen
-- S33-004: ✅ DONE — 4 SpeciesDetailScreen widget tests + 4 MarkerListScreen widget tests = 8 new tests
-- 89 API tests + 61 scoring-rules + 67 Flutter = **217 total tests, all passing**
+- S34-001: ✅ DONE — MapScreen body wrapped in `RefreshIndicator` + `SingleChildScrollView`
+- S34-002: ✅ DONE — Pull-to-refresh triggers `_viewModel.fetchMarkers()`
+- S34-003: ✅ DONE — 2 new widget tests (RefreshIndicator present + pull triggers fetch)
+- 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
 
 ## Current Next Action
 
-Sprint 33 complete. Next: Sprint 34 (see BACKLOG.md).
+Sprint 34 complete. Next: Sprint 35 (see BACKLOG.md).

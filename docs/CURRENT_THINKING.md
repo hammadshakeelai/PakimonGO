@@ -65,13 +65,12 @@ Sprint 30 delivered:
 - 42 Flutter tests total, all passing
 - 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
 
-**Sprint 33 — Species detail screen (complete).**
+**Sprint 34 — Pull-to-refresh on map (complete).**
 
-Sprint 33 delivered:
-- `SpeciesDetailScreen` — shows species name in AppBar, photo placeholder, info card (points, status, lat/lng)
-- `MarkerListScreen` — tappable list of markers with species/status/coordinates, color-coded avatars, navigates to detail
-- MapScreen marker overlay now tappable with chevron icon, navigates to MarkerListScreen
-- 8 new widget tests (4 detail + 4 list)
-- 89 API tests + 61 scoring-rules + 67 Flutter = **217 total tests, all passing**
+Sprint 34 delivered:
+- MapScreen body wrapped in `RefreshIndicator` + `SingleChildScrollView` with `AlwaysScrollableScrollPhysics`
+- Pull-to-refresh triggers `_viewModel.fetchMarkers()` for all states (loading, error, no-token, map)
+- 2 new widget tests (RefreshIndicator presence + pull-gesture triggers fetch)
+- 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
 
-Next: Sprint 34 — tbd (see BACKLOG.md).
+Next: Sprint 35 — tbd (see BACKLOG.md).

@@ -1136,3 +1136,26 @@ Sprint 33 added a tap-through flow from map marker overlay → sighting list →
 - Scoring-rules tests: 61 passed
 - Flutter tests: 67 passed (was 59 pre-S33: +8 new)
 - Total: **217 tests, all passing**
+
+## 2026-07-03: Sprint 34 — Pull-to-Refresh on Map
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swipe down to reload sightings from the API.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/lib/features/map/presentation/map_screen.dart` — Body wrapped in `RefreshIndicator` + `SingleChildScrollView` with `AlwaysScrollableScrollPhysics`; pull triggers `_viewModel.fetchMarkers()` in all states (loading, error, no-token, map)
+- `apps/mobile/pakimon_go_app/test/features/map/map_screen_test.dart` — 2 new tests (RefreshIndicator presence + pull gesture triggers fetch)
+- `docs/sprints/SPRINT_34_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 69 passed (was 67 pre-S34: +2 new)
+- Total: **219 tests, all passing**

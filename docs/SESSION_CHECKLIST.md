@@ -53,3 +53,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 47 | Sprint 31 offline draft persistence | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | DraftPersistenceService, SharedPrefsDraftStorage, async CaptureDraftService, 49 Flutter tests, 199 total |
 | 48 | Sprint 32 map markers from API | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | SubmissionMarker model, MapViewModel, MapScreen with loading/error/markers, back-end cell centroid in publicLocation, 59 Flutter tests, 209 total |
 | 49 | Sprint 33 species detail screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | SpeciesDetailScreen, MarkerListScreen, tappable overlay → list → detail, 67 Flutter tests, 217 total |
+| 50 | Sprint 34 pull-to-refresh on map | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | RefreshIndicator on MapScreen body, pull triggers fetchMarkers, 2 new tests, 69 Flutter tests, 219 total |

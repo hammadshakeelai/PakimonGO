@@ -53,6 +53,19 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildBody() {
+    return RefreshIndicator(
+      onRefresh: _viewModel.fetchMarkers,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: _buildContent(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
     if (_viewModel.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }

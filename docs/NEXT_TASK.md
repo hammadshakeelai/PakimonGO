@@ -22,6 +22,15 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
 
+### Sprint 34 Complete
+
+Sprint 34 delivered: **Pull-to-refresh on map.**
+
+- `RefreshIndicator` + `SingleChildScrollView` wrapping MapScreen body
+- Pull-to-refresh triggers `_viewModel.fetchMarkers()` in all states
+- 2 new widget tests
+- 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
+
 ### Sprint 33 Complete
 
 Sprint 33 delivered: **Species detail screen.**
