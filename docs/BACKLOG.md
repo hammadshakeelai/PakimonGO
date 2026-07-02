@@ -24,6 +24,11 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
+- ~~S30-001: Create AuthService (token storage/retrieval)~~ ✅ DONE
+- ~~S30-002: Update ApiClient to use dynamic token provider~~ ✅ DONE
+- ~~S30-003: Create LoginScreen UI~~ ✅ DONE
+- ~~S30-004: Create AuthGate + update main.dart routing~~ ✅ DONE
+- ~~S30-005: Write tests for auth flow~~ ✅ DONE
 - ~~S29-001: Add image_picker dependency to pubspec.yaml~~ ✅ DONE
 - ~~S29-002: Create CaptureMediaService interface + ImagePickerService~~ ✅ DONE
 - ~~S29-003: Update CaptureScreen with camera/gallery buttons~~ ✅ DONE

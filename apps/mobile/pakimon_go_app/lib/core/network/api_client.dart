@@ -7,22 +7,22 @@ import 'api_config.dart';
 class ApiClient {
   final http.Client _client;
   final String _baseUrl;
-  final String _authToken;
+  final String Function() _tokenProvider;
 
   ApiClient({
     http.Client? client,
     String? baseUrl,
-    String? authToken,
+    String Function()? tokenProvider,
   })  : _client = client ?? http.Client(),
         _baseUrl = baseUrl ?? ApiConfig.apiBase,
-        _authToken = authToken ?? ApiConfig.authToken;
+        _tokenProvider = tokenProvider ?? (() => ApiConfig.authToken);
 
   Map<String, String> _headers({bool auth = true}) {
     final headers = <String, String>{
       'Content-Type': 'application/json',
     };
     if (auth) {
-      headers['Authorization'] = 'Bearer $_authToken';
+      headers['Authorization'] = 'Bearer ${_tokenProvider()}';
     }
     return headers;
   }
@@ -76,7 +76,7 @@ class ApiClient {
     final uri = Uri.parse('$_baseUrl$path');
     final request = http.MultipartRequest('PUT', uri);
     if (auth) {
-      request.headers['Authorization'] = 'Bearer $_authToken';
+      request.headers['Authorization'] = 'Bearer ${_tokenProvider()}';
     }
     request.files.add(http.MultipartFile.fromBytes(
       'file',

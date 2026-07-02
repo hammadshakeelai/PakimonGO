@@ -30,7 +30,7 @@ void main() {
       final client = ApiClient(
         client: _mockClient(200, {'status': 'ok'}),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       );
       final result = await client.get('/health');
       expect(result, {'status': 'ok'});
@@ -40,7 +40,7 @@ void main() {
       final client = ApiClient(
         client: _mockClient(200, {'id': 'sub_123'}),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       );
       final result = await client.post('/submissions', body: {'key': 'val'});
       expect(result, {'id': 'sub_123'});
@@ -50,7 +50,7 @@ void main() {
       final client = ApiClient(
         client: _mockClient(404, {'detail': 'Not found'}),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       );
       expect(
         () => client.get('/missing'),
@@ -66,7 +66,7 @@ void main() {
       final client = ApiClient(
         client: _mockClient(400, {'detail': 'Missing field'}),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       );
       expect(
         () => client.post('/test'),
@@ -82,7 +82,7 @@ void main() {
       final client = ApiClient(
         client: _mockClient(200, {'entries': []}),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       );
       final result = await client.get('/public', auth: false);
       expect(result, {'entries': []});

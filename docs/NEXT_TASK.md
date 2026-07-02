@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Sprint 30 — Auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).
+Sprint 31 — Offline draft persistence, map markers from API, or other backlog item (see BACKLOG.md).
 
 ## Sprint 2-26 Complete
 
@@ -21,6 +21,17 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - `infrastructure/docker/.env.docker` for compose env overrides
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+### Sprint 30 Complete
+
+Sprint 30 delivered: **Auth/onboarding UI.**
+
+- `AuthService` ChangeNotifier: loginWithUserId/loginWithToken/logout/isAuthenticated
+- `ApiClient` dynamic token provider pattern (`String Function()`)
+- `LoginScreen` with user ID entry + token paste modes, Sign In with getProfile verification
+- `AuthGate` routing: login screen → home screen, logout button in app bar
+- 13 new tests (8 AuthService + 5 LoginScreen)
+- 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
 
 ### Sprint 29 Complete
 

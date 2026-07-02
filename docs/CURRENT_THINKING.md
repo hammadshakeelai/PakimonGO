@@ -54,4 +54,15 @@ Sprint 29 delivered:
 - 29 Flutter tests total, all passing
 - 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
 
-Next: Sprint 30 — Auth/onboarding UI, offline draft persistence, or map markers from API (see BACKLOG.md).
+**Sprint 30 — Auth/onboarding UI (complete).**
+
+Sprint 30 delivered:
+- `AuthService` ChangeNotifier: loginWithUserId/loginWithToken/logout/isAuthenticated
+- `ApiClient` dynamic token provider pattern (`String Function()`)
+- `LoginScreen` with user ID entry + token paste mode + Sign In button + getProfile verification
+- `AuthGate` routing: shows login when unauthenticated, home after auth; logout button in app bar
+- 13 new tests (8 AuthService unit + 5 LoginScreen widget)
+- 42 Flutter tests total, all passing
+- 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
+
+Next: Sprint 31 — Offline draft persistence, map markers from API, or other backlog item (see BACKLOG.md).

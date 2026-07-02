@@ -1020,3 +1020,32 @@ Sprint 29 replaced fake image bytes in the Flutter capture flow with real device
 - Scoring-rules tests: 61 passed
 - Flutter tests: 29 passed (was 27 pre-S29: +2 new widget tests + 2 rewritten)
 - Total: **179 tests, all passing**
+
+## 2026-07-03: Sprint 30 — Auth/Onboarding UI
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 30 created a login/onboarding flow that stores auth tokens and wires them to the API client, allowing users to sign in before capturing wildlife.
+
+### Changes Made
+
+- `apps/mobile/pakimon_go_app/lib/core/auth/auth_service.dart` — NEW: ChangeNotifier with loginWithUserId/loginWithToken/logout/isAuthenticated, listener notification
+- `apps/mobile/pakimon_go_app/lib/core/network/api_client.dart` — Refactored: accepts `String Function()` token provider instead of fixed string; all endpoints read token dynamically
+- `apps/mobile/pakimon_go_app/lib/features/auth/presentation/login_screen.dart` — NEW: Login UI with user ID entry, token paste mode, Sign In with getProfile verification
+- `apps/mobile/pakimon_go_app/lib/main.dart` — Rewritten: AuthGate routing (login → home), ApiClient with token provider, logout button
+- `apps/mobile/pakimon_go_app/test/core/auth/auth_service_test.dart` — NEW: 8 unit tests
+- `apps/mobile/pakimon_go_app/test/features/auth/login_screen_test.dart` — NEW: 5 widget tests
+- `apps/mobile/pakimon_go_app/test/features/capture/api_client_test.dart` — Updated: authToken → tokenProvider
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_repository_test.dart` — Updated: authToken → tokenProvider
+- `docs/sprints/SPRINT_30_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 42 passed (was 29 pre-S30: +8 unit + 5 widget)
+- Total: **192 tests, all passing**

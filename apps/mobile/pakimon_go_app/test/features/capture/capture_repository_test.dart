@@ -37,7 +37,7 @@ void main() {
           'expiresAt': '2026-07-02T00:00:00Z',
         }),
         baseUrl: 'http://test/api',
-        authToken: 'test',
+        tokenProvider: () => 'test',
       ),
     );
   });
@@ -67,7 +67,7 @@ void main() {
             },
           }),
           baseUrl: 'http://test/api',
-          authToken: 'test',
+          tokenProvider: () => 'test',
         ),
       );
       final result = await repo.completeUpload(
@@ -98,7 +98,7 @@ void main() {
             },
           }),
           baseUrl: 'http://test/api',
-          authToken: 'test',
+          tokenProvider: () => 'test',
         ),
       );
       final result = await repo.createSubmission(
@@ -120,7 +120,7 @@ void main() {
             'email': 'test@example.com',
           }),
           baseUrl: 'http://test/api',
-          authToken: 'test',
+          tokenProvider: () => 'test',
         ),
       );
       final result = await repo.getProfile();
@@ -133,7 +133,7 @@ void main() {
         client: ApiClient(
           client: _mockClient(400, {'detail': 'Missing mediaAssetId'}),
           baseUrl: 'http://test/api',
-          authToken: 'test',
+          tokenProvider: () => 'test',
         ),
       );
       expect(
