@@ -8,7 +8,7 @@ from src.infrastructure.auth.dependencies import get_current_user
 from src.infrastructure.database.repositories import get_or_create_user, get_user_collection, update_user
 from src.infrastructure.database.session import get_db
 
-router = APIRouter(prefix="/v1/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/me")

@@ -1,5 +1,5 @@
 {
-  "mediaAssetId": "media_01JZEXAMPLEUPLOAD001",
-  "uploadUrl": "https://uploads.pakimongo.example/signed-upload-placeholder",
+  "mediaAssetId": "asset_001",
+  "uploadUrl": "/v1/media/upload/asset_001",
   "expiresAt": "2026-07-01T06:10:00Z"
 }

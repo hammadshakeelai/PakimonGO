@@ -7,7 +7,7 @@ from src.infrastructure.auth.dependencies import get_optional_user
 from src.infrastructure.database.repositories import get_leaderboard
 from src.infrastructure.database.session import get_db
 
-router = APIRouter(prefix="/v1/leaderboard", tags=["leaderboard"])
+router = APIRouter(prefix="/leaderboard", tags=["leaderboard"])
 
 
 @router.get("")

@@ -1,0 +1,18 @@
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = [
+  "src.infrastructure.database.models",
+  "src.infrastructure.database.repositories",
+]
+ignore_errors = true

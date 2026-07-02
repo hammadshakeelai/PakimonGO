@@ -1,6 +1,6 @@
 {
   "status": "capped",
-  "visiblePoints": 1,
-  "explanationSummary": "Saved as a zoo/captive photo with bounded participation credit.",
-  "ledger": "participation"
+  "visiblePoints": null,
+  "explanationSummary": "zoo_cap",
+  "ledger": "zoo"
 }

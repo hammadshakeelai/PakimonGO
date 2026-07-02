@@ -1,3 +1,4 @@
 {
-  "sha256": "example_sha256_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  "mediaAssetId": "asset_001",
+  "sha256": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
 }

@@ -27,7 +27,7 @@ sys.path.insert(0, str(_score_pkg))
 from precheck import run_precheck  # noqa: E402
 from scoring_service import StubScoringService  # noqa: E402
 
-router = APIRouter(prefix="/v1/submissions", tags=["submissions"])
+router = APIRouter(prefix="/submissions", tags=["submissions"])
 _scoring = StubScoringService()
 
 

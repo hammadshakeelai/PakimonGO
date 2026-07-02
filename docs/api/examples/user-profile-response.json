@@ -1,0 +1,9 @@
+{
+  "userId": "user_001",
+  "email": "test@example.com",
+  "status": "active",
+  "ageBand": "adult",
+  "homeRegion": "PK-IS",
+  "trustState": "normal",
+  "createdAt": "2026-07-01T06:00:00Z"
+}
