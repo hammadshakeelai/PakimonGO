@@ -77,6 +77,12 @@ def create_submission_endpoint(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Create a new submission (capture record).
+
+    Runs precheck (duplicate detection + context rules).
+    Wild submissions are enqueued for async AI scoring; capped
+    contexts (zoo/pet/duplicate) are scored synchronously.
+    """
     media_asset_id = body.get("mediaAssetId")
     animal_context = body.get("animalContext", "unknown")
     real_name = body.get("realName", "")
@@ -164,6 +170,11 @@ def get_submission_endpoint(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Get a single submission by ID with current score state.
+
+    Returns score status, visible points, explanation, and
+    public location (coarsened or suppressed for sensitive species).
+    """
     result = db_get_submission(db, submission_id)
     if result is None:
         raise HTTPException(status_code=404, detail="Submission not found")
@@ -194,6 +205,11 @@ def list_submissions_endpoint(
     sort_by: str = Query(default="createdAt", enum=["createdAt", "submittedAt", "status", "points", "species"]),
     sort_order: str = Query(default="desc", enum=["asc", "desc"]),
 ):
+    """List submissions for the current user with pagination/filtering/sorting.
+
+    Supports status filter, multiple sort options, and sensitive species
+    suppression by default.
+    """
     items, total = get_submissions(
         db=db,
         user_id=current_user.user_id,

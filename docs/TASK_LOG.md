@@ -875,3 +875,32 @@ Added a scoring service protocol and stub implementation in the scoring-rules pa
 - Ruff: clean (both api and scoring-rules)
 - Mypy: clean
 - QA validations: 3/3 PASS
+
+## 2026-07-02: Sprint 25 — Integration Testing and Documentation
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 25 delivered integration testing, endpoint documentation, README update, OpenAPI schema validation, and a new CI job.
+
+### Changes Made
+
+- `services/api/tests/test_integration.py` — NEW: 6 end-to-end tests (wild capture, zoo capture, duplicate detection, multiuser collection, submission list, health)
+- `services/api/src/modules/*/api/routes.py` — Added FastAPI docstrings to all 14 endpoints
+- `services/api/src/main.py` — Added docstrings to health endpoints
+- `README.md` — Rewritten with current build/run/test instructions and endpoint table
+- `tools/qa/validate_docs.py` — Added check_openapi_examples() function (validates all 15 example JSON files parse)
+- `.github/workflows/docs-validation.yml` — Added integration-tests job (9 total CI jobs)
+
+### Verification
+
+- API tests: 90 passed (84 existing + 6 integration)
+- Scoring-rules tests: 61 passed
+- Flutter tests: 14 passed
+- Total: **159 tests, all passing**
+- QA validations: 4/4 PASS (pre_task_check, validate_docs, validate_json_examples, scan_secrets)
+- Ruff: clean
+- Mypy: clean

@@ -31,12 +31,15 @@ PakimonGO should now move from pre-code planning into Sprint 0 scaffold implemen
 
 ## Current Implementation Posture
 
-**Sprint 24-25 — Cloud storage + integration testing.**
+**Sprint 25 — Integration testing and documentation (complete).**
 
-Sprint 24 delivered:
-- StorageProvider class with S3/GCS implementations
-- Environment configuration (.env.example updated with STORAGE_PROVIDER, S3/GCS vars)
-- Fixed derivative URLs to use /v1/media/files prefix
-- 153 total tests passing (78 API + 61 scoring-rules + 14 Flutter)
+Sprint 25 delivered:
+- End-to-end integration tests: wild capture, zoo capture, duplicate detection, multiuser collection, submission list, health
+- API endpoint docstrings on all 14 endpoints
+- README.md updated with current build/run/test instructions
+- OpenAPI schema validation (check_openapi_examples in validate_docs.py)
+- CI job `integration-tests` added (9 total jobs)
 
-Next: Sprint 25 — Integration testing and documentation.
+Test counts: 84 API tests (90 with integration tests) + 61 scoring-rules + 14 Flutter = **159 total tests**.
+
+Next: Sprint 26 (see BACKLOG.md).

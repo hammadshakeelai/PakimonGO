@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import pytest
 
 
 class TestStorageProviderInterface:
@@ -13,7 +12,6 @@ class TestStorageProviderInterface:
         bucket = "test-bucket"
         region = "us-west-2"
         expected_thumb = f"https://{bucket}.s3.{region}/thumbs/test-id.webp"
-        expected_pub = f"https://{bucket}.s3.{region}/public/test-id.webp"
 
         assert expected_thumb.startswith("https://")
         assert "test-bucket" in expected_thumb
@@ -23,7 +21,6 @@ class TestStorageProviderInterface:
         """Verify GCS URL format is correct."""
         bucket = "test-bucket"
         expected_thumb = f"https://storage.googleapis.com/{bucket}/thumbs/test-id.webp"
-        expected_pub = f"https://storage.googleapis.com/{bucket}/public/test-id.webp"
 
         assert expected_thumb.startswith("https://")
         assert "storage.googleapis.com" in expected_thumb

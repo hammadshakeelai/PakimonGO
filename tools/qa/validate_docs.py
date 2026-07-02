@@ -7,6 +7,7 @@ and future source-file size limits.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -175,10 +176,30 @@ def check_file_sizes() -> CheckResult:
     return CheckResult("file_sizes", not hard_failures, details)
 
 
+def check_openapi_examples() -> CheckResult:
+    examples_dir = ROOT / "docs" / "api" / "examples"
+    if not examples_dir.exists():
+        return CheckResult("openapi_examples", False, ["examples directory not found"])
+    errors: list[str] = []
+    parsed_count = 0
+    for path in sorted(examples_dir.glob("*.json")):
+        try:
+            data = json.loads(read(path))
+            parsed_count += 1
+            if not isinstance(data, dict):
+                errors.append(f"{path.name}: root is not a JSON object")
+        except json.JSONDecodeError as exc:
+            errors.append(f"{path.name}: invalid JSON — {exc}")
+    details = [f"examples_parsed={parsed_count}", f"errors={len(errors)}"]
+    details.extend(errors[:20])
+    return CheckResult("openapi_examples", not errors, details)
+
+
 def run_checks() -> list[CheckResult]:
     return [
         check_traceability(),
         check_openapi(),
+        check_openapi_examples(),
         check_markdown_links(),
         check_mermaid_diagrams(),
         check_file_sizes(),

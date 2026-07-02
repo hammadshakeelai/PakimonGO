@@ -44,4 +44,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 38 | Sprint 23 complete + state docs | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | All files staged, TECH_DEBT updated, validations pass |
 | 39 | Sprint 24 cloud storage interface | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | StorageProvider interface, S3/GCS implementations, .env updated |
 | 40 | Sprint 24 complete + Sprint 25 prep | ✅ PASS | ✅ CURRENT_THINKING.md, NEXT_TASK.md | ✅ ALL PASS | ❌ staging | Ready for integration testing phase |
-| 38 | Sprint 23 complete + state docs | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | All files staged, TECH_DEBT updated, validations pass |
+| 41 | Sprint 25 integration tests + docs | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | 6 e2e tests, docstrings, README, validate_docs extended, CI job |

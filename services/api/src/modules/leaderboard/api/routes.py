@@ -22,6 +22,11 @@ def get_leaderboard_endpoint(
     db: Session = Depends(get_db),
     _=Depends(get_optional_user),
 ):
+    """Get the global leaderboard with pagination and sorting.
+
+    Aggregates total scores across all users. Excludes sensitive
+    species submissions by default. Public endpoint (no auth required).
+    """
     entries, total = get_leaderboard(
         db=db,
         limit=limit,

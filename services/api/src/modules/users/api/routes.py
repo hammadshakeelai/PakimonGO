@@ -16,6 +16,11 @@ def get_my_profile(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Get the current user's profile.
+
+    Auto-creates a user row on first access. Returns userId,
+    email, ageBand, homeRegion, trustState, and status.
+    """
     user = get_or_create_user(db, current_user.user_id)
     return {
         "userId": user.id,
@@ -41,6 +46,12 @@ def get_my_collection(
         default=False, description="Include sensitive species (requires elevated permissions)"
     ),
 ):
+    """Get the current user's species collection with pagination.
+
+    Groups captured species by common name with total points,
+    capture count, and last capture date. Excludes sensitive
+    species by default unless include_sensitive=true.
+    """
     collection, total = get_user_collection(
         db=db,
         user_id=current_user.user_id,
@@ -64,6 +75,10 @@ def patch_my_profile(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Update the current user's profile (ageBand, homeRegion).
+
+    Accepts partial updates — only provided fields are changed.
+    """
     age_band = body.get("ageBand")
     home_region = body.get("homeRegion")
 

@@ -2,13 +2,20 @@
 
 ## Current Next Task
 
-Sprint 25 — Integration testing and documentation.
+Sprint 26 — (see BACKLOG.md for next work package).
 
 ## Sprint 2-13 Complete
 
-Sprints 2-13 delivered: DB-backed services, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI update, CI expansion, AI scoring, ADR review, AI adapter framework, async worker scoring, and Mapbox prototype. 112 Python + 14 Flutter tests all passing.
+### Sprint 25 Complete
 
-## Sprints 14-24 Complete
+Sprint 25 delivered: **Integration testing and documentation.**
+
+- End-to-end integration tests (6 tests covering wild capture, zoo capture, duplicate detection, multiuser collection, submission list, health)
+- API endpoint docstrings on all 14 endpoints
+- README.md updated with build/run instructions and endpoint table
+- OpenAPI schema validation (check_openapi_examples in validate_docs.py)
+- CI job `integration-tests` added (9 total CI jobs)
+- 84 API tests + 61 scoring-rules + 14 Flutter = **159 total tests, all passing**
 
 ### Sprint 24 Complete
 

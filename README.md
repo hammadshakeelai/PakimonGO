@@ -1,83 +1,101 @@
 # PakimonGO
 
-PakimonGO is a planned 13+ mobile app for real-animal photography, discovery, collections, map exploration, privacy-safe social sharing, and server-scored competition.
-
-This repository is currently in scaffold-plus-planning state. It contains the project process, expanded requirements, architecture direction, and a modular monorepo skeleton. It does not yet contain production feature implementation.
+PakimonGO is a 13+ mobile app for real-animal photography, discovery, collections, map exploration, privacy-safe social sharing, and server-scored competition.
 
 ## Current Phase
 
-Phase 5: repository scaffold and implementation readiness.
-
-Before production coding starts, finish the SRS/ADR acceptance pass and define the first Alpha-0 vertical slice.
+Phase 6: Feature implementation. All Sprints 0-24 complete. 84 API tests + 61 scoring-rules tests + 14 Flutter tests all passing.
 
 ## Repository Layout
 
-- `apps/mobile/pakimon_go_app/`: Flutter app home, organized by feature.
-- `services/api/`: FastAPI-style modular monolith shell.
-- `services/workers/`: async media, evidence, scoring, moderation, privacy, and leaderboard jobs.
-- `packages/`: shared contracts and domain rule packages.
-- `infrastructure/`: database, Firebase, Docker, Cloud Run, and IaC assets.
-- `data/goldsets/`: duplicate, zoo, species, scoring, and sensitive-species benchmark datasets.
-- `docs/`: SRS, requirements, process, decisions, risks, roadmap, and templates.
-- `knowledge/`: OKF, Obsidian, and future Graphify/code-graph knowledge outputs.
-- `tools/`: repo automation, graph export, QA, and utility scripts.
+- `apps/mobile/pakimon_go_app/`: Flutter app with Mapbox map prototype.
+- `services/api/`: FastAPI modular monolith (auth, media, submissions, users, leaderboard).
+- `services/workers/`: async scoring worker (in-process daemon thread).
+- `packages/scoring-rules/`: scoring engine, precheck, VisionProvider protocol, goldset runner.
+- `infrastructure/`: database, Firebase, Docker, Cloud Run assets.
+- `data/goldsets/`: duplicate and zoo detection benchmark datasets.
+- `docs/`: SRS, ADRs, process, QA specs, sprint plans, backlog, and state docs.
+- `knowledge/`: OKF and project knowledge files.
+- `tools/qa/`: validation scripts (docs, JSON, secrets, toolchain).
 
-## Contributor Start
+## Quick Start
 
-1. Read `AGENTS.md`.
-2. Read `docs/CURRENT_TASK.md`.
-3. Read `docs/NEXT_TASK.md`.
-4. Read `docs/PROCESS.md`.
-5. Read the relevant module README before editing.
+### Prerequisites
 
-## Planning And Design Artifacts
+- Python 3.11+
+- Flutter SDK (for mobile)
+- PostgreSQL (Docker Compose: `docker compose up -d`)
 
-- Methodology-aligned SRS: `docs/SRS.md`
-- Full requirement catalogue: `docs/REQUIREMENTS.md`
-- Traceability matrix: `docs/TRACEABILITY_MATRIX.md`
-- Software Engineering artifacts: `docs/software-engineering/`
-- OpenAPI draft: `docs/api/OPENAPI_DRAFT.yaml`
-- Database ERD: `docs/data/DATABASE_ERD.md`
-- Data dictionary: `docs/data/DATA_DICTIONARY.md`
-- Threat model: `docs/security/THREAT_MODEL.md`
-- UX flow spec: `docs/ux/UX_FLOW_SPEC.md`
-- Testing master plan: `docs/qa/TESTING_MASTER_PLAN.md`
-- QA spec index: `docs/qa/README.md`
-- Requirement-to-test matrix: `docs/qa/REQUIREMENT_TO_TEST_MATRIX.md`
-- Test case catalogue: `docs/qa/TEST_CASE_CATALOGUE.md`
-- BDD acceptance scenarios: `docs/qa/BDD_ACCEPTANCE_SCENARIOS.md`
-- Sprint 0 test plan: `docs/qa/SPRINT_0_TEST_PLAN.md`
-- Privacy contract test spec: `docs/qa/PRIVACY_CONTRACT_TEST_SPEC.md`
-- Scoring state test spec: `docs/qa/SCORING_STATE_TEST_SPEC.md`
-- Goldset governance and zoo/duplicate benchmarks: `docs/qa/GOLDSET_GOVERNANCE_PLAN.md`, `docs/qa/ZOO_DUPLICATE_BENCHMARK_SPEC.md`
-- Manual Android and security checklists: `docs/qa/MANUAL_ANDROID_QA_CHECKLIST.md`, `docs/qa/SECURITY_TEST_CHECKLIST.md`
-- CI gates and ready/done rules: `docs/qa/CI_GATE_DESIGN.md`, `docs/qa/DEFINITION_OF_READY_DONE.md`
-- Failure and release gates: `docs/qa/FAILURE_MODE_MATRIX.md`, `docs/qa/RELEASE_GATE_CHECKLIST.md`
-- Test harness, coverage, checklist, and fitness rules: `docs/qa/TEST_HARNESS_ARCHITECTURE.md`, `docs/qa/COVERAGE_AND_FLAKY_POLICY.md`, `docs/qa/LOCAL_PR_CHECKLIST.md`, `docs/qa/ARCHITECTURE_FITNESS_RULES.md`
-- Pre-code completion audit: `docs/qa/PRECODE_COMPLETION_AUDIT.md`
-- Test tooling ADR: `docs/adr/ADR-017-test-tooling-standards.md`
-- API examples: `docs/api/examples/`
-- QA JSON fixtures: `docs/qa/fixtures/`
-- Reusable templates: `docs/templates/`
-- GitHub templates and ownership: `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/`, `.github/CODEOWNERS`
-- Sprint 0 plan: `docs/sprints/SPRINT_0_PLAN.md`
-- Sprint 0 task packets: `docs/sprints/sprint-0/`
-- Toolchain readiness: `docs/tooling/TOOLCHAIN_READINESS.md`
-- QA validation tools: `tools/qa/`
-- Obsidian vault home: `docs/OBSIDIAN_VAULT_INDEX.md`
-- Mermaid diagram pack: `docs/diagrams/README.md`
+### Run the API
 
-## Build Status
+```bash
+cd services/api
+pip install -r requirements.txt
+# Set env: SYNC_DATABASE_URL, UPLOAD_BASE (see .env.example)
+python -m uvicorn src.main:app --reload --port 8000
+```
 
-No runnable app or backend exists yet. Do not expect `flutter test`, backend tests, or CI to pass until toolchains are scaffolded in a later task.
+### Run Tests
 
-Current pre-code validation:
+```bash
+# API tests (84 tests)
+cd services/api
+python -m pytest -v
+
+# Scoring-rules tests (61 tests)
+cd packages/scoring-rules
+python -m pytest -v
+
+# Flutter tests (14 tests)
+cd apps/mobile/pakimon_go_app
+flutter test
+
+# All tests
+python -m pytest services/api/tests packages/scoring-rules/tests -v
+```
+
+### QA Validation
 
 ```powershell
 python tools/qa/validate_docs.py
 python tools/qa/validate_json_examples.py
 python tools/qa/scan_secrets.py
-powershell -ExecutionPolicy Bypass -File tools/qa/check_toolchain.ps1
+python tools/qa/pre_task_check.py
 ```
 
-Pre-code planning is now complete enough for Sprint 0 implementation. Remaining test work requires actual scaffold/code files.
+## API Endpoints (all under `/v1/`)
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | /health/live | No | Liveness check |
+| GET | /health/ready | No | Readiness check |
+| POST | /media/upload-intent | Yes | Create upload intent |
+| PUT | /media/upload/{id} | Yes | Upload file |
+| POST | /media/complete-upload | Yes | Complete upload, generate derivatives |
+| GET | /media/derivatives/{id} | Yes | Get derivative URLs |
+| GET | /media/files/{subdir}/{filename} | No | Serve stored file |
+| POST | /submissions | Yes | Create submission (with precheck + scoring) |
+| GET | /submissions | Yes | List user submissions (paginated) |
+| GET | /submissions/{id} | Yes | Get submission details |
+| GET | /users/me | Yes | Get/sync user profile |
+| PATCH | /users/me | Yes | Update profile |
+| GET | /users/me/collection | Yes | Get species collection (paginated) |
+| GET | /leaderboard | No | Global leaderboard (paginated) |
+
+See `docs/api/OPENAPI_DRAFT.yaml` for full schema details.
+
+## Planning & Design Artifacts
+
+- SRS: `docs/SRS.md`
+- Requirements: `docs/REQUIREMENTS.md`
+- Traceability matrix: `docs/TRACEABILITY_MATRIX.md`
+- Architecture decisions: `docs/adr/` (17 ADRs, all accepted)
+- Sprint plans: `docs/sprints/`
+- QA specs: `docs/qa/`
+- State docs: `docs/CURRENT_TASK.md`, `docs/NEXT_TASK.md`, `docs/CURRENT_THINKING.md`
+
+## Process
+
+1. Read `AGENTS.md`, then `docs/CURRENT_TASK.md`, `docs/NEXT_TASK.md`.
+2. Follow the mandatory 9-step task loop (pre-check → read state → do work → validate → commit).
+3. Make short-burst semantic commits with AI attribution trailers.

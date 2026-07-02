@@ -103,6 +103,20 @@ jobs:
         working-directory: packages/scoring-rules
         run: python -m pytest tests/test_goldset_runner.py -v
 
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        working-directory: services/api
+        run: python -m pip install -r requirements.txt
+      - name: Run integration tests
+        working-directory: services/api
+        run: python -m pytest tests/test_integration.py -v
+
   flutter-tests:
     runs-on: ubuntu-latest
     steps:

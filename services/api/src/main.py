@@ -44,9 +44,11 @@ app.include_router(users_router, prefix="/v1")
 
 @app.get("/health/live")
 def health_live():
+    """Liveness check — always returns ok if server is running."""
     return {"status": "ok"}
 
 
 @app.get("/health/ready")
 def health_ready():
+    """Readiness check — always returns ok (no external deps required)."""
     return {"status": "ok"}

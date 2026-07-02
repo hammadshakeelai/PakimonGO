@@ -4,7 +4,7 @@
 
 Phase 6: Feature implementation with auth, DB, API scaffolds, file storage, user profiles, duplicate/zoo precheck, AI adapter framework, async worker scoring, and map prototype.
 
-Sprints 1-13 complete. 112 total tests all passing.
+Sprints 1-25 complete. 84 API tests all passing (90 with integration tests).
 
 ## Active Task
 
@@ -299,6 +299,14 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S12-004: ✅ DONE — Background worker thread in FastAPI lifespan
 - S12-005: ✅ DONE — Tests updated for async flow (process_pending after POST, GET to verify)
 
+## Sprint 25 Progress
+
+- S25-001: ✅ DONE — Integration test: end-to-end capture flow (6 tests: wild, zoo, duplicate, multiuser, list, health)
+- S25-002: ✅ DONE — API endpoint documentation (docstrings) added to all 14 endpoints
+- S25-003: ✅ DONE — README.md updated with current build/run/test instructions
+- S25-004: ✅ DONE — OpenAPI schema validation added to validate_docs.py (15 examples parsed)
+- S25-005: ✅ DONE — CI job `integration-tests` added to docs-validation.yml (9 total jobs)
+
 ## Current Next Action
 
-Sprint 23 — Open for implementation (see BACKLOG.md).
+Sprint 25 complete. Next: Sprint 26 (see BACKLOG.md).

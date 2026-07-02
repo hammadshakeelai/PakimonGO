@@ -28,6 +28,11 @@ def create_upload_intent(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Create an upload intent for a new media asset.
+
+    Returns a mediaAssetId and uploadUrl for the subsequent PUT upload.
+    Validates file size (max 10MB) and content type (jpeg/png/webp).
+    """
     file_name: str | None = body.get("fileName")
     content_type: str | None = body.get("contentType")
     byte_size: int | None = body.get("byteSize")
@@ -57,6 +62,11 @@ def upload_file(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Upload a file for an existing upload intent.
+
+    Accepts multipart file upload, saves original to local storage.
+    Must be called after POST /upload-intent.
+    """
     asset = get_media_asset(db, media_asset_id)
     if asset is None:
         raise HTTPException(status_code=404, detail="Media not found")
@@ -73,6 +83,11 @@ def complete_upload(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Complete an upload intent and generate derivative stubs.
+
+    Confirms SHA256 match, marks asset as ready, and generates
+    thumbnail and public derivative stubs on disk.
+    """
     sha256 = body.get("sha256")
     if not sha256:
         raise HTTPException(status_code=400, detail="Missing sha256")
@@ -107,6 +122,10 @@ def get_media_derivatives(
     db: Session = Depends(get_db),
     current_user: UserContext = Depends(get_current_user),
 ):
+    """Get derivative URLs (thumbnail + public) for a media asset.
+
+    Returns paths suitable for use with GET /media/files/{subdir}/{filename}.
+    """
     asset = get_media_asset(db, media_asset_id)
     if asset is None:
         raise HTTPException(status_code=404, detail="Media not found")
@@ -129,6 +148,11 @@ def get_media_derivatives(
 
 @router.get("/files/{subdir:path}/{filename}")
 def serve_file(subdir: str, filename: str):
+    """Serve a stored file (original, thumbnail, or public derivative).
+
+    Public endpoint (no auth required). Subdir must be one of
+    originals/, thumbs/, or public/.
+    """
     path = _storage.get_path(f"{subdir}/{filename}")
     if path is None:
         raise HTTPException(status_code=404, detail="File not found")
