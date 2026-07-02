@@ -8,6 +8,7 @@ import 'features/auth/presentation/login_screen.dart';
 import 'features/capture/data/capture_repository.dart';
 import 'features/capture/presentation/capture_screen.dart';
 import 'features/capture/presentation/default_capture_media_service.dart';
+import 'features/map/domain/map_viewmodel.dart';
 import 'features/map/presentation/map_screen.dart';
 
 void main() {
@@ -106,9 +107,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  late final MapViewModel _mapViewModel = MapViewModel(
+    repository: CaptureRepository(client: widget.apiClient),
+  );
 
   late final List<Widget> _screens = [
-    const MapScreen(),
+    MapScreen(viewModel: _mapViewModel),
     CaptureScreen(
       mediaService: createDefaultMediaService(),
       repository: CaptureRepository(client: widget.apiClient),

@@ -1,5 +1,6 @@
 import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
+import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 class CaptureRepository {
   final ApiClient _client;
@@ -103,5 +104,19 @@ class CaptureRepository {
       'limit': limit.toString(),
       'offset': offset.toString(),
     }, auth: false);
+  }
+
+  Future<List<SubmissionMarker>> getMapMarkers({int limit = 200}) async {
+    final response = await _client.get('/submissions', queryParams: {
+      'limit': limit.toString(),
+      'offset': '0',
+      'sort_by': 'createdAt',
+      'sort_order': 'desc',
+    });
+    final items = response['submissions'] as List<dynamic>? ?? [];
+    return items
+        .map((e) => SubmissionMarker.fromJson(e as Map<String, dynamic>))
+        .where((m) => m.hasValidLocation)
+        .toList();
   }
 }

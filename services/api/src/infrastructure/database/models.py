@@ -72,6 +72,7 @@ class Submission(Base):
     updated_at = Column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
     media_asset = relationship("MediaAsset")
+    capture_location = relationship("CaptureLocation", uselist=False)
 
 
 class SubmissionAttribute(Base):
@@ -94,6 +95,7 @@ class CaptureLocation(Base):
     accuracy_meters = Column(Float, nullable=True)
     source = Column(String(32), default="gps")
     captured_at = Column(DateTime(timezone=True), default=_utcnow)
+    submission = relationship("Submission", back_populates="capture_location")
 
 
 class PublicLocationCell(Base):

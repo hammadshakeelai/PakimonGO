@@ -2,36 +2,128 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../capture/data/capture_repository.dart';
+import '../../../shared/models/submission_marker.dart';
+import '../domain/map_viewmodel.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  final MapViewModel? viewModel;
+
+  const MapScreen({super.key, this.viewModel});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  late final MapViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = widget.viewModel ?? _createDefaultViewModel();
+    _viewModel.addListener(_onViewModelChanged);
+    _viewModel.fetchMarkers();
+  }
+
+  MapViewModel _createDefaultViewModel() {
+    return MapViewModel(
+      repository: CaptureRepository(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _viewModel.removeListener(_onViewModelChanged);
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  void _onViewModelChanged() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!AppConfig.hasMapboxToken) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('PakimonGO Map')),
-        body: const Center(
-          child: Text(
-            'Map unavailable — set MAPBOX_ACCESS_TOKEN',
-            style: TextStyle(color: Colors.grey),
-          ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('PakimonGO Map')),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_viewModel.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_viewModel.error != null) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 12),
+            Text('Failed to load sightings',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: _viewModel.fetchMarkers,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Retry'),
+            ),
+          ],
         ),
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('PakimonGO Map')),
-      body: MapWidget(
-        styleUri: MapboxStyles.MAPBOX_STREETS,
-        viewport: CameraViewportState(
-          center: Point(coordinates: Position(0, 0)),
-          zoom: 2.0,
+    if (!AppConfig.hasMapboxToken) {
+      return _buildNoTokenFallback();
+    }
+
+    return Stack(
+      children: [
+        MapWidget(
+          styleUri: MapboxStyles.MAPBOX_STREETS,
+          viewport: CameraViewportState(
+            center: Point(coordinates: Position(0, 0)),
+            zoom: 2.0,
+          ),
+        ),
+        if (_viewModel.hasMarkers) _buildMarkerOverlay(),
+      ],
+    );
+  }
+
+  Widget _buildNoTokenFallback() {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.map, size: 64, color: Colors.grey),
+          SizedBox(height: 12),
+          Text('Map unavailable — set MAPBOX_ACCESS_TOKEN',
+              style: TextStyle(color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMarkerOverlay() {
+    return Positioned(
+      left: 12,
+      bottom: 12,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.location_on, size: 18, color: Colors.green),
+              const SizedBox(width: 6),
+              Text('${_viewModel.markerCount} sightings',
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
         ),
       ),
     );

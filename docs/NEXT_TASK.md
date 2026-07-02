@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Sprint 32 — Map markers from API, or other backlog item (see BACKLOG.md).
+Sprint 33 — tbd (see BACKLOG.md).
 
 ## Sprint 2-26 Complete
 
@@ -21,6 +21,16 @@ Sprint 27 delivered: **Docker Compose local dev environment.**
 - `infrastructure/docker/.env.docker` for compose env overrides
 - README updated with Docker as primary dev path
 - 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+
+### Sprint 32 Complete
+
+Sprint 32 delivered: **Map markers from API.**
+
+- Backend: cell centroid in publicLocation (cellLatitude/cellLongitude)
+- `SubmissionMarker` model + `CaptureRepository.getMapMarkers()`
+- `MapViewModel` ChangeNotifier + `MapScreen` with loading/error/marker states
+- 10 new tests (4 viewmodel + 4 screen widget + 2 repository)
+- 89 API tests + 61 scoring-rules + 59 Flutter = **209 total tests, all passing**
 
 ### Sprint 31 Complete
 

@@ -65,14 +65,16 @@ Sprint 30 delivered:
 - 42 Flutter tests total, all passing
 - 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
 
-**Sprint 31 — Offline draft persistence (complete).**
+**Sprint 32 — Map markers from API (complete).**
 
-Sprint 31 delivered:
-- `DraftPersistenceService` abstract interface (save/load/loadAll/delete/clear)
-- `SharedPrefsDraftStorage` using `shared_preferences` (JSON serialization + draft ID index)
-- `CaptureDraftService` now async: all mutating methods persist to storage; `loadPersistedDrafts()` for startup restore
-- `InMemoryDraftStorage` for tests (5 new tests)
-- 49 Flutter tests total, all passing
-- 89 API tests + 61 scoring-rules + 49 Flutter = **199 total tests, all passing**
+Sprint 32 delivered:
+- Backend: cell centroid (cellLatitude/cellLongitude) added to publicLocation response via CaptureLocation relationship
+- `SubmissionMarker` model with fromJson (lat, lng, species, points, status, hasValidLocation filter)
+- `CaptureRepository.getMapMarkers()` — fetches submissions, parses markers, filters zero-location entries
+- `MapViewModel` ChangeNotifier with fetchMarkers, loading, error, markerCount state
+- `MapScreen` refactored: injectable viewModel, loading indicator, error+retry, marker count overlay, MapWidget fallback
+- `main.dart` — MapViewModel wired with ApiClient in HomeScreen
+- 10 new tests (4 viewmodel unit + 4 screen widget + 2 repository)
+- 89 API tests + 61 scoring-rules + 59 Flutter = **209 total tests, all passing**
 
-Next: Sprint 32 — Map markers from API, or other backlog item (see BACKLOG.md).
+Next: Sprint 33 — tbd (see BACKLOG.md).

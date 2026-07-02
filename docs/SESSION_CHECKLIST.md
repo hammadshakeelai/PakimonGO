@@ -50,4 +50,5 @@ Update this after every work burst. Each row tracks one task cycle.
 | 44 | Sprint 28 Flutter API client | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | ApiClient, response models, CaptureRepository, CaptureScreen, 27 Flutter tests, 177 total |
 | 45 | Sprint 29 camera plugin integration | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | CaptureMediaService, ImagePickerService, CaptureScreen two-phase flow, 29 Flutter tests, 179 total |
 | 46 | Sprint 30 auth/onboarding UI | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | AuthService, ApiClient tokenProvider, LoginScreen, AuthGate routing, 42 Flutter tests, 192 total |
-| 47 | Sprint 31 offline draft persistence | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | DraftPersistenceService, SharedPrefsDraftStorage, async CaptureDraftService, 49 Flutter tests, 199 total |
+| 47 | Sprint 31 offline draft persistence | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | DraftPersistenceService, SharedPrefsDraftStorage, async CaptureDraftService, 49 Flutter tests, 199 total |
+| 48 | Sprint 32 map markers from API | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | SubmissionMarker model, MapViewModel, MapScreen with loading/error/markers, back-end cell centroid in publicLocation, 59 Flutter tests, 209 total |

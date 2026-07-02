@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
+import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 http.Client _mockClient(int status, Map<String, dynamic> body) {
   final bodyStr = jsonEncode(body);
@@ -126,6 +127,94 @@ void main() {
       final result = await repo.getProfile();
       expect(result.userId, 'test_user');
       expect(result.email, 'test@example.com');
+    });
+
+    test('getMapMarkers parses submission locations', () async {
+      repo = CaptureRepository(
+        client: ApiClient(
+          client: _mockClient(200, {
+            'submissions': [
+              {
+                'submissionId': 's1',
+                'mediaAssetId': 'm1',
+                'realName': 'Passer domesticus',
+                'scoreState': {
+                  'status': 'scored',
+                  'visiblePoints': 25,
+                  'explanationSummary': 'Wild sighting',
+                  'ledger': 'wild',
+                },
+                'visibility': 'private',
+                'publicLocation': {
+                  'cellLatitude': 51.5,
+                  'cellLongitude': -0.12,
+                  'cellId': 'cell_abc',
+                  'precisionLabel': 'coarse',
+                },
+              },
+              {
+                'submissionId': 's2',
+                'mediaAssetId': 'm2',
+                'realName': 'Felis catus',
+                'scoreState': {
+                  'status': 'capped',
+                  'visiblePoints': 1,
+                  'explanationSummary': 'Pet',
+                  'ledger': 'pet',
+                },
+                'visibility': 'private',
+                'publicLocation': {
+                  'cellLatitude': 48.85,
+                  'cellLongitude': 2.35,
+                  'cellId': 'cell_def',
+                  'precisionLabel': 'coarse',
+                },
+              },
+            ],
+            'pagination': {'limit': 200, 'offset': 0, 'total': 2},
+          }),
+          baseUrl: 'http://test/api',
+          tokenProvider: () => 'test',
+        ),
+      );
+      final markers = await repo.getMapMarkers();
+      expect(markers, hasLength(2));
+      expect(markers[0].submissionId, 's1');
+      expect(markers[0].latitude, 51.5);
+      expect(markers[0].longitude, -0.12);
+      expect(markers[0].species, 'Passer domesticus');
+      expect(markers[0].points, 25);
+      expect(markers[1].submissionId, 's2');
+      expect(markers[1].latitude, 48.85);
+    });
+
+    test('getMapMarkers filters zero-location entries', () async {
+      repo = CaptureRepository(
+        client: ApiClient(
+          client: _mockClient(200, {
+            'submissions': [
+              {
+                'submissionId': 's1',
+                'mediaAssetId': 'm1',
+                'realName': 'Test',
+                'scoreState': {'status': 'scored', 'visiblePoints': 5},
+                'visibility': 'private',
+                'publicLocation': {
+                  'cellLatitude': 0.0,
+                  'cellLongitude': 0.0,
+                  'cellId': 'cell_abc',
+                  'precisionLabel': 'coarse',
+                },
+              },
+            ],
+            'pagination': {'limit': 200, 'offset': 0, 'total': 1},
+          }),
+          baseUrl: 'http://test/api',
+          tokenProvider: () => 'test',
+        ),
+      );
+      final markers = await repo.getMapMarkers();
+      expect(markers, isEmpty);
     });
 
     test('throws on error response', () async {

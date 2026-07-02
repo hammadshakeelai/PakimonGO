@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/capture/domain/capture_media_service.dart';
 import 'package:pakimon_go_app/features/capture/presentation/capture_screen.dart';
+import 'package:pakimon_go_app/features/map/domain/map_viewmodel.dart';
 import 'package:pakimon_go_app/features/map/presentation/map_screen.dart';
+import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 class _NoOpMediaService implements CaptureMediaService {
   @override
   Future<CaptureMediaResult?> pickFromCamera() async => null;
   @override
   Future<CaptureMediaResult?> pickFromGallery() async => null;
+}
+
+class _NoOpRepository extends CaptureRepository {
+  _NoOpRepository() : super();
+
+  @override
+  Future<List<SubmissionMarker>> getMapMarkers({int limit = 200}) {
+    return Future.value([]);
+  }
 }
 
 class _TestHomeScreen extends StatefulWidget {
@@ -22,7 +34,7 @@ class _TestHomeScreenState extends State<_TestHomeScreen> {
   int _currentIndex = 0;
 
   final _screens = [
-    const MapScreen(),
+    MapScreen(viewModel: MapViewModel(repository: _NoOpRepository())),
     CaptureScreen(mediaService: _NoOpMediaService()),
   ];
 

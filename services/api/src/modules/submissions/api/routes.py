@@ -44,17 +44,26 @@ def _build_submission_response(sub, attr, score_event=None, db: Session | None =
     if db and real_name:
         is_sensitive = is_sensitive_species(db, real_name)
 
+    # Derive cell centroid from capture location (rounded to ~111m precision)
+    loc = sub.capture_location
+    cell_lat = round(loc.latitude, 3) if loc and loc.latitude is not None else None
+    cell_lng = round(loc.longitude, 3) if loc and loc.longitude is not None else None
+
     # For sensitive species, suppress exact location in public APIs
     if is_sensitive:
         public_location = {
             "cellId": "cell_suppressed",
             "precisionLabel": "suppressed",
             "suppressedReason": "sensitive_species",
+            "cellLatitude": cell_lat,
+            "cellLongitude": cell_lng,
         }
     else:
         public_location = {
             "cellId": f"cell_{uuid.uuid4().hex[:8]}",
             "precisionLabel": "coarse",
+            "cellLatitude": cell_lat,
+            "cellLongitude": cell_lng,
         }
 
     return {

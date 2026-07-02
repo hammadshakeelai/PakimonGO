@@ -1075,3 +1075,38 @@ Sprint 31 added offline persistence for capture drafts using shared_preferences,
 - Scoring-rules tests: 61 passed
 - Flutter tests: 49 passed (was 42 pre-S31: +7 new/updated draft tests)
 - Total: **199 tests, all passing**
+
+## 2026-07-03: Sprint 32 — Map Markers from API
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 32 added user submission markers to the Mapbox map by fetching data from the API and displaying loading/error/marker states.
+
+### Changes Made
+
+#### Backend
+- `services/api/src/infrastructure/database/models.py` — Added `capture_location` relationship to `Submission` + `submission` back-populate on `CaptureLocation`
+- `services/api/src/modules/submissions/api/routes.py` — `_build_submission_response` now includes `cellLatitude`/`cellLongitude` derived from `CaptureLocation` (rounded to 3dp, ~111m precision)
+
+#### Flutter
+- `apps/mobile/pakimon_go_app/lib/shared/models/submission_marker.dart` — NEW: marker model with fromJson, hasValidLocation filter
+- `apps/mobile/pakimon_go_app/lib/features/capture/data/capture_repository.dart` — NEW `getMapMarkers()`: GET /v1/submissions → parse markers, filter zero-location
+- `apps/mobile/pakimon_go_app/lib/features/map/domain/map_viewmodel.dart` — NEW: ChangeNotifier with fetchMarkers, loading/error/markerCount state
+- `apps/mobile/pakimon_go_app/lib/features/map/presentation/map_screen.dart` — Refactored: injectable viewModel, loading indicator, error+retry, marker count overlay
+- `apps/mobile/pakimon_go_app/lib/main.dart` — MapViewModel wired with ApiClient in HomeScreen
+- `apps/mobile/pakimon_go_app/test/features/map/map_viewmodel_test.dart` — NEW: 4 unit tests
+- `apps/mobile/pakimon_go_app/test/features/map/map_screen_test.dart` — NEW: 4 widget tests (loading, loaded, error, retry)
+- `apps/mobile/pakimon_go_app/test/features/capture/capture_repository_test.dart` — 2 new tests (getMapMarkers parse + zero-location filter)
+- `apps/mobile/pakimon_go_app/test/widget_test.dart` — Updated: uses mock MapViewModel to avoid real HTTP
+- `docs/sprints/SPRINT_32_PLAN.md` — NEW
+
+### Verification
+
+- API tests: 89 passed
+- Scoring-rules tests: 61 passed
+- Flutter tests: 59 passed (was 49 pre-S32: +10 new)
+- Total: **209 tests, all passing**
