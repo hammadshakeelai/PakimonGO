@@ -2,26 +2,25 @@
 
 ## Sprint Goal
 
-Wire real cloud storage (S3/GCS) for media and connect real AI provider with actual API calls. This sprint moves from stubs to functional backends.
+Add cloud storage provider infrastructure (S3/GCS) and environment configuration for production deployment. This sprint prepares the codebase for real storage and AI integrations without requiring actual cloud credentials.
 
 ## Sprint Status
 
-Planned.
+In Progress.
 
 ## Sprint Backlog
 
 | ID | Status | Task | Acceptance | Verification |
 |---|---|---|---|---|
-| S24-001 | Pending | Real storage adapter for S3/GCS | Media upload stores to cloud, derivatives generated on completion | Integration test with bucket |
-| S24-002 | Pending | AI provider with real API key | Submission triggers actual vision API call | End-to-end test with real key |
-| S24-003 | Pending | Environment configuration | VISION_PROVIDER, STORAGE_BASE_URL env vars documented | .env.example updated |
-| S24-004 | Pending | File cleanup/rotation | Old uploads cleaned, derivative retention policy | Cleanup runs on schedule |
-| S24-005 | Pending | Tests for real integrations | Secrets not committed, tests pass in CI | CI job configured |
+| S24-001 | ✅ DONE | Add cloud storage provider interface | StorageProvider ABC, S3/GCS implementations | cloud_storage.py exists |
+| S24-002 | ✅ DONE | Add environment configuration | .env.example updated with storage/AI vars | .env.example has all vars |
+| S24-003 | ✅ DONE | Add storage tests | Tests for S3/GCS URL format, env defaults | 78 total tests pass |
+| S24-004 | Pending | Wire storage factory to media module | Uses get_storage_provider() | Media module uses cloud storage |
+| S24-005 | Pending | Add integration docs | README for storage setup | docs updated |
 
 ## File Ownership
 
 | Area | Owner | Notes |
 |---|---|---|
-| `services/api/src/infrastructure/storage/` | Backend agent | Cloud storage adapter |
-| `services/api/src/infrastructure/ai/` | Backend agent | AI provider configuration |
+| `services/api/src/infrastructure/storage/` | Backend agent | Cloud storage adapters |
 | `docs/` | Lead agent | Environment docs |

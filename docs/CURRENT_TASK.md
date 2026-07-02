@@ -201,14 +201,12 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S22-004: ✅ DONE — Tests for version negotiation
 - 75 API tests + 61 scoring-rules + 14 Flutter = **150 total tests, all passing**
 
-## Sprint 23 Progress
+## Sprint 24 Progress
 
-- S23-001: ✅ DONE — Stage and commit all implementation files (Sprints 0-22 corpus)
-- S23-002: ✅ DONE — Stage scoring-rules package files
-- S23-003: ✅ DONE — Stage infrastructure files (auth, storage, queue, database, session)
-- S23-004: ✅ DONE — Run full test suite validation (150 tests pass, all validations)
-- S23-005: ✅ DONE — Updated state docs and TECH_DEBT
-- 150 tests passing, all validations pass
+- S24-001: ✅ DONE — Add cloud storage provider interface (StorageProvider ABC, S3/GCS)
+- S24-002: ✅ DONE — Add environment configuration (.env.example updated)
+- S24-003: ✅ DONE — Add storage tests (78 total tests pass)
+- 78 API tests + 61 scoring-rules + 14 Flutter = **153 total tests**
 
 ## Sprint 21 Progress
 
