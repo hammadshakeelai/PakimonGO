@@ -201,6 +201,11 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S22-004: ✅ DONE — Tests for version negotiation
 - 75 API tests + 61 scoring-rules + 14 Flutter = **150 total tests, all passing**
 
+## Sprint 23 Progress
+
+- S23-001: ✅ DONE — Stage and commit all implementation files (Sprints 0-22 corpus)
+- 150 total tests passing, all validations pass
+
 ## Sprint 21 Progress
 
 - S21-001: ✅ DONE — Updated GET /v1/users/me/collection with include_sensitive param
