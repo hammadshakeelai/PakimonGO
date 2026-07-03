@@ -766,6 +766,12 @@ components:
           example: sub_001
         mediaAssetId:
           type: string
+        realName:
+          type: string
+          description: Scientific or common species name
+        animalContext:
+          type: string
+          enum: [wild, zoo, pet, unknown]
         scoreState:
           $ref: "#/components/schemas/ScoreState"
         visibility:
