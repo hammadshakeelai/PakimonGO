@@ -443,6 +443,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S44-005: ✅ DONE — 11 new Flutter tests (8 viewmodel + 3 screen widget)
 - 103 API tests + 61 scoring-rules + 113 Flutter = **277 total tests, all passing**
 
+## Sprint 45 Progress
+
+- S45-001: ✅ DONE — `CollectionEntry` model + `CollectionResult` in api_models.dart
+- S45-002: ✅ DONE — `getCollection()` returns typed `CollectionResult` with sorting/filter params
+- S45-003: ✅ DONE — `CollectionViewModel` ChangeNotifier (fetch, sort, context filter, loading/empty/error states)
+- S45-004: ✅ DONE — `CollectionScreen` with filter bar (sort + context dropdowns, sort order toggle), species list with avatars, pull-to-refresh
+- S45-005: ✅ DONE — "View Collection" button in ProfileScreen navigates to CollectionScreen
+- S45-006: ✅ DONE — 10 new Flutter tests (6 viewmodel + 4 screen widget)
+- 103 API tests + 61 scoring-rules + 123 Flutter = **287 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 44 complete. Next: Sprint 45 (see BACKLOG.md).
+Sprint 45 complete. Next: Sprint 46 (see BACKLOG.md).

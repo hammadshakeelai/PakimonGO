@@ -221,6 +221,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   builder: (_) => ProfileScreen(
                     viewModel: _profileViewModel,
                     authService: widget.authService,
+                    repository: CaptureRepository(client: widget.apiClient),
                   ),
                 ),
               );

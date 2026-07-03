@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/core/auth/auth_service.dart';
+import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
+import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
+import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/profile/domain/profile_viewmodel.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ProfileViewModel viewModel;
   final AuthService authService;
+  final CaptureRepository? repository;
 
   const ProfileScreen({
     super.key,
     required this.viewModel,
     required this.authService,
+    this.repository,
   });
 
   @override
@@ -32,6 +37,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _onChanged() {
     setState(() {});
+  }
+
+  void _openCollection() {
+    if (widget.repository == null) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CollectionScreen(
+          viewModel: CollectionViewModel(repository: widget.repository!),
+        ),
+      ),
+    );
   }
 
   static const _ageBands = ['', 'child', 'teen', 'adult', 'senior'];
@@ -82,6 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _infoRow(theme, 'Email', profile.email!),
                 if (profile.trustState != null)
                   _infoRow(theme, 'Trust State', profile.trustState!),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: _openCollection,
+                  icon: const Icon(Icons.collections_bookmark),
+                  label: const Text('View Collection'),
+                ),
               ],
             ),
           ),

@@ -197,6 +197,39 @@ class NotificationModel {
   }
 }
 
+class CollectionResult {
+  final List<CollectionEntry> species;
+  final int total;
+
+  CollectionResult({required this.species, required this.total});
+}
+
+class CollectionEntry {
+  final String species;
+  final String? context;
+  final int totalPoints;
+  final int captureCount;
+  final String? lastCaptured;
+
+  CollectionEntry({
+    required this.species,
+    this.context,
+    required this.totalPoints,
+    required this.captureCount,
+    this.lastCaptured,
+  });
+
+  factory CollectionEntry.fromJson(Map<String, dynamic> json) {
+    return CollectionEntry(
+      species: json['species'] as String,
+      context: json['context'] as String?,
+      totalPoints: json['totalPoints'] as int? ?? 0,
+      captureCount: json['captureCount'] as int? ?? 0,
+      lastCaptured: json['lastCaptured'] as String?,
+    );
+  }
+}
+
 class UserProfileResponse {
   final String userId;
   final String? email;

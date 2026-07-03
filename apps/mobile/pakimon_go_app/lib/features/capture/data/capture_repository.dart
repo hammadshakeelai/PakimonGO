@@ -97,14 +97,29 @@ class CaptureRepository {
     return UserProfileResponse.fromJson(response);
   }
 
-  Future<Map<String, dynamic>> getCollection({
+  Future<CollectionResult> getCollection({
     int limit = 20,
     int offset = 0,
+    String? context,
+    String sortBy = 'totalPoints',
+    String sortOrder = 'desc',
   }) async {
-    return _client.get('/users/me/collection', queryParams: {
+    final params = <String, String>{
       'limit': limit.toString(),
       'offset': offset.toString(),
-    });
+      'sort_by': sortBy,
+      'sort_order': sortOrder,
+    };
+    if (context != null) params['context'] = context;
+    final response = await _client.get('/users/me/collection', queryParams: params);
+    final speciesList = (response['species'] as List<dynamic>)
+        .map((e) => CollectionEntry.fromJson(e as Map<String, dynamic>))
+        .toList();
+    final pagination = response['pagination'] as Map<String, dynamic>;
+    return CollectionResult(
+      species: speciesList,
+      total: pagination['total'] as int? ?? 0,
+    );
   }
 
   Future<Map<String, dynamic>> getLeaderboard({

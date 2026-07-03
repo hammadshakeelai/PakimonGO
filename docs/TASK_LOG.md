@@ -1415,3 +1415,28 @@ Sprint 44 added a profile/settings screen: view user info, edit age band and hom
 
 - 113 Flutter tests pass (+11)
 - 103 API + 61 scoring-rules + 113 Flutter = 277 total tests
+
+## 2026-07-03: Sprint 45 — Flutter Collection Screen
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 45 added a species collection screen: view captured species with points, counts, sorting/filtering, and pull-to-refresh, accessible from the ProfileScreen.
+
+### Changes Made
+
+- `lib/shared/models/api_models.dart` — Added `CollectionResult` class + `CollectionEntry` model with fromJson
+- `lib/features/capture/data/capture_repository.dart` — Refactored `getCollection()` to return typed `CollectionResult` with sort/filter params (context, sortBy, sortOrder)
+- `lib/features/collection/domain/collection_viewmodel.dart` — NEW: ChangeNotifier with fetchCollection, setSortBy, setSortOrder, setContextFilter, refresh; loading/loaded/empty/error states
+- `lib/features/collection/presentation/collection_screen.dart` — NEW: Filter bar (sort dropdown + sort order toggle + context dropdown), species list with CircleAvatar, points display, pull-to-refresh, empty/error states
+- `lib/features/profile/presentation/profile_screen.dart` — Added "View Collection" button in profile card; accepts optional `CaptureRepository`; navigates to CollectionScreen
+- `lib/main.dart` — Passes `CaptureRepository` to ProfileScreen for collection navigation
+- `test/features/collection/collection_test.dart` — NEW: 10 tests (6 viewmodel + 4 screen widget)
+
+### Verification
+
+- 123 Flutter tests pass (+10)
+- 103 API + 61 scoring-rules + 123 Flutter = 287 total tests
