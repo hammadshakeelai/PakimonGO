@@ -1160,6 +1160,30 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 42 — Flutter Leaderboard Screen
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 42 added a leaderboard screen to the Flutter app: model, viewmodel, screen with pull-to-refresh, and 4th bottom nav tab.
+
+### Changes Made
+
+- `lib/shared/models/api_models.dart` — Added `LeaderboardEntry` model with fromJson
+- `lib/features/leaderboard/domain/leaderboard_viewmodel.dart` — NEW: ChangeNotifier with fetchLeaderboard
+- `lib/features/leaderboard/presentation/leaderboard_screen.dart` — NEW: Screen with loading/empty/error/list states, pull-to-refresh, rank numbers, score display
+- `lib/main.dart` — Added 4th bottom nav tab "Leaderboard" with `Icons.leaderboard`
+- `test/widget_test.dart` — Updated with `_NoOpLeaderboardRepository` + 4th tab
+- `test/features/leaderboard/leaderboard_test.dart` — NEW: 8 tests (2 model + 3 viewmodel + 3 widget)
+
+### Verification
+
+- 102 Flutter tests pass (+8)
+- 103 API + 61 scoring-rules + 102 Flutter = 266 total tests
+
 ## 2026-07-03: Sprint 41 — Flutter Notification Center
 
 ### Status

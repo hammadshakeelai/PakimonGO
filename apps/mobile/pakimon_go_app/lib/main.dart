@@ -10,6 +10,8 @@ import 'features/capture/presentation/capture_screen.dart';
 import 'features/capture/presentation/default_capture_media_service.dart';
 import 'features/map/domain/map_viewmodel.dart';
 import 'features/map/presentation/map_screen.dart';
+import 'features/leaderboard/domain/leaderboard_viewmodel.dart';
+import 'features/leaderboard/presentation/leaderboard_screen.dart';
 import 'features/notifications/domain/notification_viewmodel.dart';
 import 'features/notifications/presentation/notification_screen.dart';
 import 'features/submissions/domain/submission_history_viewmodel.dart';
@@ -122,6 +124,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       NotificationViewModel(
     repository: CaptureRepository(client: widget.apiClient),
   );
+  late final LeaderboardViewModel _leaderboardViewModel =
+      LeaderboardViewModel(
+    repository: CaptureRepository(client: widget.apiClient),
+  );
 
   late final List<Widget> _screens = [
     MapScreen(viewModel: _mapViewModel),
@@ -130,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       repository: CaptureRepository(client: widget.apiClient),
     ),
     SubmissionHistoryScreen(viewModel: _historyViewModel),
+    LeaderboardScreen(viewModel: _leaderboardViewModel),
   ];
 
   @override
@@ -219,6 +226,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               icon: Icon(Icons.camera_alt), label: 'Capture'),
           NavigationDestination(
               icon: Icon(Icons.history), label: 'History'),
+          NavigationDestination(
+              icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
         ],
       ),
     );

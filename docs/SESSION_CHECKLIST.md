@@ -61,3 +61,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 55 | Sprint 39 API error handling middleware | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ErrorHandlingMiddleware, http_exception_handler, 8 tests, 244 total |
 | 56 | Sprint 40 user notifications backend | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Notification model, migration, repository, routes, scoring wiring, 6 tests, 250 total |
 | 57 | Sprint 41 Flutter notification center | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | NotificationModel, ViewModel, Screen, bell badge, 8 tests, 258 total |
+| 58 | Sprint 42 Flutter leaderboard screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | LeaderboardEntry, ViewModel, Screen, 4th tab, 8 tests, 266 total |

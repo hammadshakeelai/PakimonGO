@@ -134,4 +134,11 @@ Sprint 41 delivered:
 - Bell icon with unread badge in HomeScreen app bar
 - 8 new Flutter tests; 103 API + 61 scoring-rules + 94 Flutter = 258 total
 
-Next: Sprint 42 — production deployment CI/CD or further Flutter features (see BACKLOG.md).
+**Sprint 42 — Flutter leaderboard screen (complete).**
+
+Sprint 42 delivered:
+- LeaderboardEntry model + LeaderboardViewModel + LeaderboardScreen
+- 4th bottom nav tab with rank/scores display
+- 8 new Flutter tests; 103 API + 61 scoring-rules + 102 Flutter = 266 total
+
+Next: Sprint 43 — production deployment CI/CD or further Flutter features (see BACKLOG.md).

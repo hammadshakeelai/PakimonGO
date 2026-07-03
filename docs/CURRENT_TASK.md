@@ -415,6 +415,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S41-006: ✅ DONE — 8 new Flutter tests (5 viewmodel + 3 screen widget)
 - 103 API tests + 61 scoring-rules + 94 Flutter = **258 total tests, all passing**
 
+## Sprint 42 Progress
+
+- S42-001: ✅ DONE — `LeaderboardEntry` model + `LeaderboardResponse` in api_models.dart
+- S42-002: ✅ DONE — `LeaderboardViewModel` ChangeNotifier
+- S42-003: ✅ DONE — `LeaderboardScreen` with loading/empty/error/list states + pull-to-refresh
+- S42-004: ✅ DONE — 4th bottom nav tab (Leaderboard) in main.dart
+- S42-005: ✅ DONE — 8 new Flutter tests (2 model + 3 viewmodel + 3 screen widget)
+- 103 API tests + 61 scoring-rules + 102 Flutter = **266 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 41 complete. Next: Sprint 42 (see BACKLOG.md).
+Sprint 42 complete. Next: Sprint 43 (see BACKLOG.md).

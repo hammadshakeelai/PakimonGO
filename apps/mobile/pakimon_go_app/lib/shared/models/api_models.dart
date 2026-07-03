@@ -136,6 +136,32 @@ class SubmissionResponse {
   }
 }
 
+class LeaderboardEntry {
+  final String userId;
+  final String? ageBand;
+  final String? homeRegion;
+  final int totalScore;
+  final int submissionCount;
+
+  LeaderboardEntry({
+    required this.userId,
+    this.ageBand,
+    this.homeRegion,
+    required this.totalScore,
+    required this.submissionCount,
+  });
+
+  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
+    return LeaderboardEntry(
+      userId: json['userId'] as String,
+      ageBand: json['ageBand'] as String?,
+      homeRegion: json['homeRegion'] as String?,
+      totalScore: json['totalScore'] as int? ?? 0,
+      submissionCount: json['submissionCount'] as int? ?? 0,
+    );
+  }
+}
+
 class NotificationModel {
   final String id;
   final String notificationType;

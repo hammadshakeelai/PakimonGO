@@ -2,7 +2,18 @@
 
 ## Current Next Task
 
-Sprint 42 — Production deployment CI/CD or further Flutter features (see BACKLOG.md).
+Sprint 43 — Production deployment CI/CD or further Flutter features (see BACKLOG.md).
+
+## Sprint 42 Complete
+
+Sprint 42 delivered: **Flutter leaderboard screen.**
+
+- `LeaderboardEntry` model in api_models.dart
+- `LeaderboardViewModel` ChangeNotifier
+- `LeaderboardScreen` — loading/empty/error/list states, pull-to-refresh, rank numbers, score display
+- 4th bottom nav tab (Leaderboard) with trophy icon
+- 8 new Flutter tests (2 model + 3 viewmodel + 3 screen widget)
+- 103 API + 61 scoring-rules + 102 Flutter = **266 total tests**, all passing
 
 ## Sprint 41 Complete
 
