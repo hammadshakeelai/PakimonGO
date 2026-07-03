@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
+import 'package:pakimon_go_app/features/species/presentation/species_detail_screen.dart';
+import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 class CollectionScreen extends StatefulWidget {
   final CollectionViewModel viewModel;
@@ -176,6 +178,22 @@ class _CollectionScreenState extends State<CollectionScreen> {
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.primary,
+              ),
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => SpeciesDetailScreen(
+                  marker: SubmissionMarker(
+                    submissionId: '',
+                    mediaAssetId: '',
+                    species: e.species,
+                    status: 'scored',
+                    points: e.totalPoints,
+                    latitude: 0,
+                    longitude: 0,
+                  ),
+                ),
               ),
             ),
           );

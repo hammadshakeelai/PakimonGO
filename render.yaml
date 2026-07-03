@@ -21,6 +21,8 @@ services:
         value: dummy
       - key: PYTHONPATH
         value: /opt/render/project/src/services/api/src
+      - key: CORS_ORIGINS
+        value: https://pakimongo-app.vercel.app
 
 databases:
   - name: pakimongo-db

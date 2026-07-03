@@ -59,4 +59,12 @@ class NotificationViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
+
+  Future<SubmissionResponse?> getSubmissionById(String id) async {
+    try {
+      return await _repository.getSubmission(id);
+    } catch (_) {
+      return null;
+    }
+  }
 }

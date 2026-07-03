@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/notifications/domain/notification_viewmodel.dart';
+import 'package:pakimon_go_app/features/submissions/presentation/submission_detail_screen.dart';
+import 'package:pakimon_go_app/shared/models/api_models.dart';
 
 class NotificationScreen extends StatefulWidget {
   final NotificationViewModel viewModel;
@@ -98,8 +100,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
               ),
               subtitle: n.body != null ? Text(n.body!) : null,
-              onTap: () {
-                widget.viewModel.markAsRead(n);
+              onTap: () async {
+                await widget.viewModel.markAsRead(n);
+                if (n.referenceType == 'submission' &&
+                    n.referenceId != null) {
+                  final sub =
+                      await widget.viewModel.getSubmissionById(n.referenceId!);
+                  if (sub != null && context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            SubmissionDetailScreen(submission: sub),
+                      ),
+                    );
+                  }
+                }
               },
             ),
           );

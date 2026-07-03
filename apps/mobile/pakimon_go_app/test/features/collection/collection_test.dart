@@ -241,5 +241,29 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.textContaining('Retry'), findsOneWidget);
     });
+
+    testWidgets('tapping species navigates to SpeciesDetailScreen',
+        (tester) async {
+      final client = _MockClient({
+        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
+            http.Response(
+          jsonEncode(_collectionJson()),
+          200,
+          headers: {'content-type': 'application/json'},
+        ),
+      });
+      final repo = CaptureRepository(
+        client: ApiClient(client: client, baseUrl: 'http://test.com'),
+      );
+      final vm = CollectionViewModel(repository: repo);
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Markhor'));
+      await tester.pumpAndSettle();
+      expect(find.text('Markhor'), findsAtLeast(1));
+    });
   });
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pakimon_go_app/core/config/app_config.dart';
+import 'package:pakimon_go_app/core/network/api_config.dart';
 import 'package:pakimon_go_app/features/species/presentation/species_detail_screen.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
 import 'package:pakimon_go_app/shared/models/submission_marker.dart';
@@ -129,7 +129,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
   }
 
   Widget _buildPhoto(ThemeData theme) {
-    final url = '${AppConfig.apiBase}/v1/media/files/thumbs/${widget.submission.mediaAssetId}.jpg';
+    final url = '${ApiConfig.apiBase}/v1/media/files/thumbs/${widget.submission.mediaAssetId}.jpg';
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Image.network(

@@ -1,7 +1,9 @@
+import os
 import threading
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -41,6 +43,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="PakimonGO API", version="0.1.0", lifespan=lifespan)
+_cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_credentials=_cors_origins != ["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(VersionNegotiationMiddleware)
 app.add_exception_handler(HTTPException, http_exception_handler)
