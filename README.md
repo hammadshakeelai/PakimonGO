@@ -1,5 +1,19 @@
 <p align="center">
+  <img src="docs/assets/app-icon.svg" alt="PakimonGO app icon" width="120" height="120">
+</p>
+
+<p align="center">
   <img src="docs/assets/banner.svg" alt="PakimonGO" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/hammadshakeelai">
+    <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="34">
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/in/hammadshakeelai">
+    <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="34">
+  </a>
 </p>
 
 # PakimonGO
@@ -132,6 +146,16 @@ See `docs/api/OPENAPI_DRAFT.yaml` for full schema details.
 ## 👤 Author
 
 **Hammad Shakeel** — [@hammadshakeelai](https://github.com/hammadshakeelai)
+
+<p>
+  <a href="https://github.com/hammadshakeelai">
+    <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="30">
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/in/hammadshakeelai">
+    <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="30">
+  </a>
+</p>
 
 Builder of AI-agent tooling, scientific simulators, and full-stack apps. PakimonGO is
 one of many projects exploring agent-driven engineering at scale.
