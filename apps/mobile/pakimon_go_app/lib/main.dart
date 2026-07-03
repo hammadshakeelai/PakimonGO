@@ -10,6 +10,10 @@ import 'features/capture/presentation/capture_screen.dart';
 import 'features/capture/presentation/default_capture_media_service.dart';
 import 'features/map/domain/map_viewmodel.dart';
 import 'features/map/presentation/map_screen.dart';
+import 'features/notifications/domain/notification_viewmodel.dart';
+import 'features/notifications/presentation/notification_screen.dart';
+import 'features/submissions/domain/submission_history_viewmodel.dart';
+import 'features/submissions/presentation/submission_history_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -105,9 +109,17 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
   late final MapViewModel _mapViewModel = MapViewModel(
+    repository: CaptureRepository(client: widget.apiClient),
+  );
+  late final SubmissionHistoryViewModel _historyViewModel =
+      SubmissionHistoryViewModel(
+    repository: CaptureRepository(client: widget.apiClient),
+  );
+  late final NotificationViewModel _notificationViewModel =
+      NotificationViewModel(
     repository: CaptureRepository(client: widget.apiClient),
   );
 
@@ -117,7 +129,36 @@ class _HomeScreenState extends State<HomeScreen> {
       mediaService: createDefaultMediaService(),
       repository: CaptureRepository(client: widget.apiClient),
     ),
+    SubmissionHistoryScreen(viewModel: _historyViewModel),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _notificationViewModel.fetchUnreadCount();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _notificationViewModel.fetchUnreadCount();
+    }
+  }
+
+  void _openNotifications() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => NotificationScreen(viewModel: _notificationViewModel),
+      ),
+    ).then((_) => _notificationViewModel.fetchUnreadCount());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +166,41 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('PakimonGO'),
         actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                onPressed: _openNotifications,
+              ),
+              if (_notificationViewModel.unreadCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
+                    child: Text(
+                      _notificationViewModel.unreadCount > 99
+                          ? '99+'
+                          : '${_notificationViewModel.unreadCount}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
@@ -141,6 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(icon: Icon(Icons.map), label: 'Map'),
           NavigationDestination(
               icon: Icon(Icons.camera_alt), label: 'Capture'),
+          NavigationDestination(
+              icon: Icon(Icons.history), label: 'History'),
         ],
       ),
     );

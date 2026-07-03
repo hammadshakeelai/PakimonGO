@@ -136,6 +136,41 @@ class SubmissionResponse {
   }
 }
 
+class NotificationModel {
+  final String id;
+  final String notificationType;
+  final String title;
+  final String? body;
+  final String? referenceType;
+  final String? referenceId;
+  bool isRead;
+  final String? createdAt;
+
+  NotificationModel({
+    required this.id,
+    required this.notificationType,
+    required this.title,
+    this.body,
+    this.referenceType,
+    this.referenceId,
+    required this.isRead,
+    this.createdAt,
+  });
+
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    return NotificationModel(
+      id: json['id'] as String,
+      notificationType: json['notificationType'] as String,
+      title: json['title'] as String,
+      body: json['body'] as String?,
+      referenceType: json['referenceType'] as String?,
+      referenceId: json['referenceId'] as String?,
+      isRead: json['isRead'] as bool,
+      createdAt: json['createdAt'] as String?,
+    );
+  }
+}
+
 class UserProfileResponse {
   final String userId;
   final String? email;

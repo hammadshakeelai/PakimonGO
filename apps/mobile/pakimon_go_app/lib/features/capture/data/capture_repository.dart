@@ -106,6 +106,45 @@ class CaptureRepository {
     }, auth: false);
   }
 
+  Future<Map<String, dynamic>> getSubmissions({
+    int limit = 20,
+    int offset = 0,
+    String? status,
+    String sortBy = 'createdAt',
+    String sortOrder = 'desc',
+  }) async {
+    final params = <String, String>{
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+      'sort_by': sortBy,
+      'sort_order': sortOrder,
+    };
+    if (status != null) params['status'] = status;
+    return _client.get('/submissions', queryParams: params);
+  }
+
+  Future<Map<String, dynamic>> getNotifications({
+    int limit = 20,
+    int offset = 0,
+    bool unreadOnly = false,
+  }) async {
+    final params = <String, String>{
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+    };
+    if (unreadOnly) params['unread_only'] = 'true';
+    return _client.get('/notifications', queryParams: params);
+  }
+
+  Future<Map<String, dynamic>> markNotificationRead(String notificationId) async {
+    return _client.patch('/notifications/$notificationId/read');
+  }
+
+  Future<int> getUnreadNotificationCount() async {
+    final response = await _client.get('/notifications/unread-count');
+    return response['count'] as int;
+  }
+
   Future<List<SubmissionMarker>> getMapMarkers({int limit = 200}) async {
     final response = await _client.get('/submissions', queryParams: {
       'limit': limit.toString(),

@@ -1160,6 +1160,31 @@ Sprint 34 added pull-to-refresh gesture to the MapScreen, allowing users to swip
 - Flutter tests: 69 passed (was 67 pre-S34: +2 new)
 - Total: **219 tests, all passing**
 
+## 2026-07-03: Sprint 41 — Flutter Notification Center
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 41 added the Flutter notification center: model, repository methods, viewmodel, screen, and app bar badge integration.
+
+### Changes Made
+
+- `lib/shared/models/api_models.dart` — Added `NotificationModel` with fromJson
+- `lib/features/capture/data/capture_repository.dart` — Added `getNotifications()`, `markNotificationRead()`, `getUnreadNotificationCount()`
+- `lib/features/notifications/domain/notification_viewmodel.dart` — NEW: ChangeNotifier with fetchNotifications, fetchUnreadCount, markAsRead
+- `lib/features/notifications/presentation/notification_screen.dart` — NEW: Screen with loading/empty/error/list states, pull-to-refresh, tap-to-mark-read, read/unread visual distinction
+- `lib/main.dart` — Added bell icon with red badge in app bar; navigates to NotificationScreen; refreshes unread count on resume and return
+- `test/features/notifications/notification_viewmodel_test.dart` — NEW: 5 tests (empty start, fetch, error, mark read, fetch count)
+- `test/features/notifications/notification_screen_test.dart` — NEW: 3 widget tests (loading, empty, error+retry)
+
+### Verification
+
+- 94 Flutter tests pass (+8)
+- 103 API + 61 scoring-rules + 94 Flutter = 258 total tests
+
 ## 2026-07-03: Sprint 40 — User Notifications (Backend)
 
 ### Status

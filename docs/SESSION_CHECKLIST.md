@@ -60,3 +60,4 @@ Update this after every work burst. Each row tracks one task cycle.
 | 54 | Sprint 38 CI workflow update | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | needs chains, Flutter 3.x, test count echo, summary job, 236 total |
 | 55 | Sprint 39 API error handling middleware | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ErrorHandlingMiddleware, http_exception_handler, 8 tests, 244 total |
 | 56 | Sprint 40 user notifications backend | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Notification model, migration, repository, routes, scoring wiring, 6 tests, 250 total |
+| 57 | Sprint 41 Flutter notification center | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | NotificationModel, ViewModel, Screen, bell badge, 8 tests, 258 total |

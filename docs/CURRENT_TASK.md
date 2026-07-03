@@ -405,6 +405,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S40-005: ✅ DONE — 6 new tests
 - 103 API tests + 61 scoring-rules + 86 Flutter = **250 total tests, all passing**
 
+## Sprint 41 Progress
+
+- S41-001: ✅ DONE — `NotificationModel` in api_models.dart
+- S41-002: ✅ DONE — `CaptureRepository.getNotifications()`, `markNotificationRead()`, `getUnreadNotificationCount()`
+- S41-003: ✅ DONE — `NotificationViewModel` ChangeNotifier
+- S41-004: ✅ DONE — `NotificationScreen` with loading/empty/error/list states + pull-to-refresh + tap to mark read
+- S41-005: ✅ DONE — Bell icon with unread badge in app bar, navigates to notification screen
+- S41-006: ✅ DONE — 8 new Flutter tests (5 viewmodel + 3 screen widget)
+- 103 API tests + 61 scoring-rules + 94 Flutter = **258 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 40 complete. Next: Sprint 41 (see BACKLOG.md).
+Sprint 41 complete. Next: Sprint 42 (see BACKLOG.md).

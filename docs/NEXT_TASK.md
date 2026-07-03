@@ -2,7 +2,20 @@
 
 ## Current Next Task
 
-Sprint 41 — Flutter notification center screen or production deployment CI/CD (see BACKLOG.md).
+Sprint 42 — Production deployment CI/CD or further Flutter features (see BACKLOG.md).
+
+## Sprint 41 Complete
+
+Sprint 41 delivered: **Flutter notification center.**
+
+- `NotificationModel` with fromJson
+- `CaptureRepository` now has `getNotifications()`, `markNotificationRead()`, `getUnreadNotificationCount()`
+- `NotificationViewModel` ChangeNotifier with fetchNotifications, fetchUnreadCount, markAsRead
+- `NotificationScreen` — loading/empty/error states, notification list with read/unread styling, pull-to-refresh, tap to mark read
+- Bell icon with unread badge in app bar, navigates to notification screen (pushed route)
+- Unread count refreshes on app resume and after returning from notification screen
+- 8 new Flutter tests (5 viewmodel + 3 screen widget)
+- 103 API + 61 scoring-rules + 94 Flutter = **258 total tests**, all passing
 
 ## Sprint 40 Complete
 

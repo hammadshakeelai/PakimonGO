@@ -126,4 +126,12 @@ Sprint 40 delivered:
 - Notifications scored in both sync and async scoring paths
 - 6 new tests; 103 API + 61 scoring-rules = 164 Python tests, 250 total
 
-Next: Sprint 41 — Flutter notification center screen or production deployment CI/CD (see BACKLOG.md).
+**Sprint 41 — Flutter notification center (complete).**
+
+Sprint 41 delivered:
+- NotificationModel + repository methods + NotificationViewModel
+- NotificationScreen (loading/empty/error/list) with pull-to-refresh + tap-to-mark-read
+- Bell icon with unread badge in HomeScreen app bar
+- 8 new Flutter tests; 103 API + 61 scoring-rules + 94 Flutter = 258 total
+
+Next: Sprint 42 — production deployment CI/CD or further Flutter features (see BACKLOG.md).
