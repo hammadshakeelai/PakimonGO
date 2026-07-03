@@ -1364,3 +1364,31 @@ Sprint 35 added a dedicated submission history screen showing past submissions w
 - Flutter tests: 78 passed (was 69 pre-S35: +9 new)
 - Total: **228 tests, all passing**
 - QA validations: 4/4 PASS
+
+## 2026-07-03: Sprint 43 — Production Deployment CI/CD
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 43 added production deployment infrastructure: DB-connected health check, gunicorn config, multi-stage Dockerfile, Render IaC, and deploy workflow.
+
+### Changes Made
+
+- `services/api/src/main.py` — `/health/ready` now verifies DB via `SELECT 1` (503 on failure), imports `Depends`, `get_db`, `Session`, `text`
+- `services/api/gunicorn.conf.py` — NEW: 4 uvicorn workers, 120s timeout, stdout access log
+- `Dockerfile` — NEW: Multi-stage build (builder + python:3.13-slim runtime), HEALTHCHECK, gunicorn CMD
+- `render.yaml` — NEW: Render web service + PostgreSQL (free plan), health check and env var mapping
+- `.github/workflows/deploy.yml` — NEW: workflow_dispatch trigger, curl to Render API with secrets
+- `README.md` — Added "Deploy to Render" section, updated endpoint table + test counts
+- `tests/test_health.py` — Updated `test_health_ready` assertion to match new response shape
+
+### Verification
+
+- 103 API tests pass
+- 61 scoring-rules tests pass
+- 102 Flutter tests pass
+- Total: **266 tests, all passing**
+- QA validations: 4/4 PASS

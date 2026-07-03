@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: pakimongo-api
+    runtime: python
+    repo: https://github.com/anomalyco/PakimonGO
+    plan: free
+    region: oregon
+    buildCommand: pip install -r services/api/requirements.txt gunicorn
+    startCommand: cd services/api && gunicorn src.main:app -c gunicorn.conf.py
+    healthCheckPath: /health/live
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pakimongo-db
+          property: connectionString
+      - key: STORAGE_PROVIDER
+        value: local
+      - key: UPLOAD_BASE
+        value: /var/data/uploads
+      - key: VISION_PROVIDER
+        value: dummy
+      - key: PYTHONPATH
+        value: /opt/render/project/src/services/api/src
+
+databases:
+  - name: pakimongo-db
+    plan: free
+    region: oregon
+    databaseName: pakimongo
+    user: pakimongo

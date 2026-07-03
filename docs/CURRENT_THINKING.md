@@ -141,4 +141,15 @@ Sprint 42 delivered:
 - 4th bottom nav tab with rank/scores display
 - 8 new Flutter tests; 103 API + 61 scoring-rules + 102 Flutter = 266 total
 
-Next: Sprint 43 — production deployment CI/CD or further Flutter features (see BACKLOG.md).
+**Sprint 43 — Production deployment CI/CD (complete).**
+
+Sprint 43 delivered:
+- `/health/ready` now verifies DB connectivity via `SELECT 1` (returns 503 on failure)
+- `gunicorn.conf.py` — 4 uvicorn workers, 120s timeout, stdout access log
+- `Dockerfile` — multi-stage build (Python 3.13-slim), HEALTHCHECK, gunicorn CMD
+- `render.yaml` — Render Infrastructure as Code (web service + PostgreSQL, free plan)
+- `.github/workflows/deploy.yml` — manual-trigger deploy via Render API
+- README updated: deploy section + endpoint table + test count refresh
+- 103 API + 61 scoring-rules + 102 Flutter = **266 total tests**, all passing
+
+Next: Sprint 44 — further Flutter features (see BACKLOG.md).

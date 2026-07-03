@@ -1,9 +1,11 @@
 import threading
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-from fastapi import HTTPException
+from .infrastructure.database.session import get_db
 
 from .infrastructure.middleware.error_middleware import ErrorHandlingMiddleware, http_exception_handler
 from .infrastructure.middleware.version_middleware import VersionNegotiationMiddleware
@@ -56,6 +58,14 @@ def health_live():
 
 
 @app.get("/health/ready")
-def health_ready():
-    """Readiness check — always returns ok (no external deps required)."""
-    return {"status": "ok"}
+def health_ready(db: Session = Depends(get_db)):
+    """Readiness check — verifies DB connectivity."""
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "ok", "database": "connected"}
+    except Exception:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=503,
+            content={"status": "error", "database": "unreachable"},
+        )

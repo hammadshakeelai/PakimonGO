@@ -424,6 +424,16 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S42-005: ✅ DONE — 8 new Flutter tests (2 model + 3 viewmodel + 3 screen widget)
 - 103 API tests + 61 scoring-rules + 102 Flutter = **266 total tests, all passing**
 
+## Sprint 43 Progress
+
+- S43-001: ✅ DONE — DB-connected health check (`/health/ready` verifies DB connectivity, 503 on failure)
+- S43-002: ✅ DONE — Production gunicorn config (4 uvicorn workers, 120s timeout, access log to stdout)
+- S43-003: ✅ DONE — Production Dockerfile (multi-stage: builder + slim runtime, HEALTHCHECK, curl, gunicorn CMD)
+- S43-004: ✅ DONE — `render.yaml` (Render IaC: web service + PostgreSQL, free plan)
+- S43-005: ✅ DONE — GitHub Actions deploy workflow (manual trigger via workflow_dispatch)
+- S43-006: ✅ DONE — README updated: deploy section + endpoint table + test counts
+- 103 API tests + 61 scoring-rules + 102 Flutter = **266 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 42 complete. Next: Sprint 43 (see BACKLOG.md).
+Sprint 43 complete. Next: Sprint 44 (see BACKLOG.md).

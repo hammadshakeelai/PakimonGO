@@ -62,7 +62,8 @@ New ideas must be added here before implementation. Each item should later becom
 - ~~S40-001: User notifications (backend)~~ ✅ DONE
 - ~~S41-001: Flutter notification center screen~~ ✅ DONE
 - ~~S42-001: Flutter leaderboard screen~~ ✅ DONE
-- S43-001: Production deployment CI/CD or further Flutter features
+- ~~S43-001: Production deployment CI/CD~~ ✅ DONE
+- S44-001: Further Flutter features
 - ~~S0-001: Generate Flutter project template~~ ✅ DONE
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE

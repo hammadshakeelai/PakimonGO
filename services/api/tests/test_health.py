@@ -16,4 +16,6 @@ def test_health_live():
 def test_health_ready():
     response = client.get("/health/ready")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["database"] == "connected"

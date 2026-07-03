@@ -4,7 +4,7 @@ PakimonGO is a 13+ mobile app for real-animal photography, discovery, collection
 
 ## Current Phase
 
-Phase 6: Feature implementation. All Sprints 0-24 complete. 84 API tests + 61 scoring-rules tests + 14 Flutter tests all passing.
+Phase 6: Feature implementation. All Sprints 2-42 complete. 103 API tests + 61 scoring-rules tests + 102 Flutter tests = 266 total, all passing.
 
 ## Repository Layout
 
@@ -48,10 +48,22 @@ pip install -r requirements.txt
 python -m uvicorn src.main:app --reload --port 8000
 ```
 
+### Deploy to Render
+
+```bash
+# 1. Push repo to GitHub, then connect at https://render.com
+# 2. Render auto-detects render.yaml — click "Deploy"
+# 3. Set secrets (see .env.example) in Render dashboard
+# 4. First deploy: apply Alembic migrations:
+#    render shell: cd services/api && alembic upgrade head
+```
+
+See `render.yaml` for service definition. The API uses gunicorn + uvicorn workers for production.
+
 ### Run Tests
 
 ```bash
-# API tests (89 tests)
+# API tests (103 tests)
 cd services/api
 python -m pytest -v
 
@@ -59,7 +71,7 @@ python -m pytest -v
 cd packages/scoring-rules
 python -m pytest -v
 
-# Flutter tests (14 tests)
+# Flutter tests (102 tests)
 cd apps/mobile/pakimon_go_app
 flutter test
 ```
@@ -91,6 +103,9 @@ python tools/qa/pre_task_check.py
 | PATCH | /users/me | Yes | Update profile |
 | GET | /users/me/collection | Yes | Get species collection (paginated) |
 | GET | /leaderboard | No | Global leaderboard (paginated) |
+| GET | /notifications | Yes | List notifications (paginated, unread filter) |
+| PATCH | /notifications/{id}/read | Yes | Mark notification as read |
+| GET | /notifications/unread-count | Yes | Unread notification count |
 
 See `docs/api/OPENAPI_DRAFT.yaml` for full schema details.
 
