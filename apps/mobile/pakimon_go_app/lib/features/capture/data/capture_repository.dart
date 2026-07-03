@@ -86,6 +86,17 @@ class CaptureRepository {
     return UserProfileResponse.fromJson(response);
   }
 
+  Future<UserProfileResponse> updateProfile({
+    String? ageBand,
+    String? homeRegion,
+  }) async {
+    final body = <String, dynamic>{};
+    if (ageBand != null) body['ageBand'] = ageBand;
+    if (homeRegion != null) body['homeRegion'] = homeRegion;
+    final response = await _client.patch('/users/me', body: body);
+    return UserProfileResponse.fromJson(response);
+  }
+
   Future<Map<String, dynamic>> getCollection({
     int limit = 20,
     int offset = 0,

@@ -8,12 +8,14 @@ import 'features/auth/presentation/login_screen.dart';
 import 'features/capture/data/capture_repository.dart';
 import 'features/capture/presentation/capture_screen.dart';
 import 'features/capture/presentation/default_capture_media_service.dart';
-import 'features/map/domain/map_viewmodel.dart';
-import 'features/map/presentation/map_screen.dart';
 import 'features/leaderboard/domain/leaderboard_viewmodel.dart';
 import 'features/leaderboard/presentation/leaderboard_screen.dart';
+import 'features/map/domain/map_viewmodel.dart';
+import 'features/map/presentation/map_screen.dart';
 import 'features/notifications/domain/notification_viewmodel.dart';
 import 'features/notifications/presentation/notification_screen.dart';
+import 'features/profile/domain/profile_viewmodel.dart';
+import 'features/profile/presentation/profile_screen.dart';
 import 'features/submissions/domain/submission_history_viewmodel.dart';
 import 'features/submissions/presentation/submission_history_screen.dart';
 
@@ -128,6 +130,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       LeaderboardViewModel(
     repository: CaptureRepository(client: widget.apiClient),
   );
+  late final ProfileViewModel _profileViewModel = ProfileViewModel(
+    repository: CaptureRepository(client: widget.apiClient),
+  );
 
   late final List<Widget> _screens = [
     MapScreen(viewModel: _mapViewModel),
@@ -209,9 +214,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ],
           ),
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.person),
             onPressed: () {
-              widget.authService.logout();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProfileScreen(
+                    viewModel: _profileViewModel,
+                    authService: widget.authService,
+                  ),
+                ),
+              );
             },
           ),
         ],

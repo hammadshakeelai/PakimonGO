@@ -152,4 +152,14 @@ Sprint 43 delivered:
 - README updated: deploy section + endpoint table + test count refresh
 - 103 API + 61 scoring-rules + 102 Flutter = **266 total tests**, all passing
 
-Next: Sprint 44 — further Flutter features (see BACKLOG.md).
+**Sprint 44 — Flutter profile screen (complete).**
+
+Sprint 44 delivered:
+- `CaptureRepository.updateProfile()` — PATCH /v1/users/me for ageBand and homeRegion
+- `ProfileViewModel` ChangeNotifier — fetch profile, edit ageBand/homeRegion, save, loading/error/saving states
+- `ProfileScreen` — profile info card (userId, email, trustState), settings card (ageBand dropdown, homeRegion text field, save button), about card (app name, version), logout button
+- Person icon in app bar navigates to ProfileScreen (replaces direct logout button; logout now inside profile)
+- 11 new Flutter tests (8 viewmodel + 3 screen widget)
+- 103 API + 61 scoring-rules + 113 Flutter = **277 total tests**, all passing
+
+Next: Sprint 45 — further Flutter features (see BACKLOG.md).

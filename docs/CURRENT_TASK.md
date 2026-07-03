@@ -434,6 +434,15 @@ Sprint 1: WP-015 Alpha-0 Private Capture Slice. 4 tasks planned.
 - S43-006: ✅ DONE — README updated: deploy section + endpoint table + test counts
 - 103 API tests + 61 scoring-rules + 102 Flutter = **266 total tests, all passing**
 
+## Sprint 44 Progress
+
+- S44-001: ✅ DONE — `updateProfile()` method on `CaptureRepository` (PATCH /v1/users/me)
+- S44-002: ✅ DONE — `ProfileViewModel` ChangeNotifier (fetch, edit ageBand/homeRegion, save, loading/error states)
+- S44-003: ✅ DONE — `ProfileScreen` (profile info card, settings card with ageBand dropdown + homeRegion text field, about card, logout button)
+- S44-004: ✅ DONE — Person icon in app bar navigates to ProfileScreen (replaces direct logout button)
+- S44-005: ✅ DONE — 11 new Flutter tests (8 viewmodel + 3 screen widget)
+- 103 API tests + 61 scoring-rules + 113 Flutter = **277 total tests, all passing**
+
 ## Current Next Action
 
-Sprint 43 complete. Next: Sprint 44 (see BACKLOG.md).
+Sprint 44 complete. Next: Sprint 45 (see BACKLOG.md).

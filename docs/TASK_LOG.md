@@ -1392,3 +1392,26 @@ Sprint 43 added production deployment infrastructure: DB-connected health check,
 - 102 Flutter tests pass
 - Total: **266 tests, all passing**
 - QA validations: 4/4 PASS
+
+## 2026-07-03: Sprint 44 — Flutter Profile Screen
+
+### Status
+
+Complete.
+
+### Summary
+
+Sprint 44 added a profile/settings screen: view user info, edit age band and home region, with a person icon in the app bar replacing the direct logout button.
+
+### Changes Made
+
+- `lib/features/capture/data/capture_repository.dart` — Added `updateProfile()` (PATCH /v1/users/me with ageBand/homeRegion)
+- `lib/features/profile/domain/profile_viewmodel.dart` — NEW: ChangeNotifier with fetchProfile, setAgeBand, setHomeRegion, saveProfile, hasChanges, loading/error/saving states
+- `lib/features/profile/presentation/profile_screen.dart` — NEW: Profile info card (userId, email, trustState), settings card (ageBand dropdown, homeRegion text field, save button), about card (app name, version), logout button
+- `lib/main.dart` — Added `ProfileViewModel`, replaced logout `IconButton` with person icon that navigates to `ProfileScreen`; logout moved inside profile screen
+- `test/features/profile/profile_test.dart` — NEW: 11 tests (8 viewmodel + 3 screen widget)
+
+### Verification
+
+- 113 Flutter tests pass (+11)
+- 103 API + 61 scoring-rules + 113 Flutter = 277 total tests
