@@ -84,3 +84,19 @@ def get_submission(db: Session, submission_id: str) -> tuple | None:
         .first()
     )
     return sub, attr
+
+
+def get_last_submission_time(db: Session, user_id: str | None) -> datetime | None:
+    """Return the created_at of the user's most recent submission, or None.
+
+    Used to enforce a per-user submission cooldown (NFR-SEC-004).
+    """
+    if not user_id:
+        return None
+    sub = (
+        db.query(Submission)
+        .filter(Submission.user_id == user_id)
+        .order_by(Submission.created_at.desc())
+        .first()
+    )
+    return sub.created_at if sub else None

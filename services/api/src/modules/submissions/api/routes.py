@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 import sys
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -13,6 +15,7 @@ from src.infrastructure.database.repositories import create_notification
 from src.infrastructure.database.repositories import create_score_event
 from src.infrastructure.database.repositories import create_submission as db_create_submission
 from src.infrastructure.database.repositories import get_all_submission_sha256s
+from src.infrastructure.database.repositories import get_last_submission_time
 from src.infrastructure.database.repositories import get_latest_score_event
 from src.infrastructure.database.repositories import get_media_asset
 from src.infrastructure.database.repositories import get_submission as db_get_submission
@@ -30,6 +33,14 @@ from scoring_service import StubScoringService  # noqa: E402
 
 router = APIRouter(prefix="/submissions", tags=["submissions"])
 _scoring = StubScoringService()
+
+
+def _submission_cooldown_seconds() -> int:
+    """Per-user cooldown (seconds) between submissions. 0 disables (NFR-SEC-004)."""
+    try:
+        return int(os.environ.get("SUBMISSION_COOLDOWN_SECONDS", "30"))
+    except ValueError:
+        return 30
 
 
 def _build_submission_response(sub, attr, score_event=None, db: Session | None = None) -> dict:
@@ -123,6 +134,20 @@ def create_submission_endpoint(
 
     if not media_asset_id:
         raise HTTPException(status_code=400, detail="Missing mediaAssetId")
+
+    cooldown = _submission_cooldown_seconds()
+    if cooldown > 0:
+        last_at = get_last_submission_time(db, current_user.user_id)
+        if last_at is not None:
+            if last_at.tzinfo is None:
+                last_at = last_at.replace(tzinfo=timezone.utc)
+            elapsed = (datetime.now(timezone.utc) - last_at).total_seconds()
+            if elapsed < cooldown:
+                remaining = int(cooldown - elapsed) + 1
+                raise HTTPException(
+                    status_code=429,
+                    detail=f"Please wait {remaining}s before submitting again.",
+                )
 
     latitude = None
     longitude = None

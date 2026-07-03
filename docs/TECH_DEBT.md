@@ -2,41 +2,28 @@
 
 ## Current Known Debt
 
-Production code exists (Sprint 0-22 complete). Current debt items:
+All 49 sprints complete. 289 tests pass. Current debt items:
 
 ## Implementation Debt
 
 - API versioning uses middleware but no v2 routes exist yet (placeholder only)
 - Storage uses local filesystem; needs cloud storage migration (S3/GCS) for production
 - VisionProvider configured for Google but no real API key/environment tested
-- Mapbox access token placeholder; MapScreen falls back to message without token
-- No actual camera plugin integration; capture draft is in-memory only; Flutter API client uses fake image bytes
-- Database uses SQLite for tests; PostgreSQL connection string not wired to real DB
+- Mapbox wired for local dev (--dart-define + gradle.properties download token); production token/CI injection still needed
+- Database uses SQLite for dev; PostgreSQL connection string not wired to production DB
+- Release APK is 105.8MB — needs optimization (ProGuard, R8, asset compression)
+- No iOS build tested
+- Submission rate limiting uses a single-instance DB-query cooldown; a multi-instance deployment needs a shared limiter (e.g. Redis) — NFR-SEC-004
 
 ## Decision Debt
 
-- Exact Flutter generated package structure will be locked during S0-001, using the feature-first direction already documented.
-- Backend framework is selected for Sprint 0: FastAPI modular monolith. Revisit only if ADR-007 reversal conditions appear.
-- Map provider decision needs cost and SDK prototype validation.
-- Firebase Data Connect vs direct Cloud SQL access needs current pricing, limits, and local development validation.
-- AI provider mix needs cost, latency, accuracy, and privacy testing.
-- Species rarity source of truth needs a clear taxonomy and update workflow.
-- Location privacy model needs legal and app-store review.
-- Scoring point ranges and economy formulas are intentionally undefined until product review.
-- Moderation staffing/tooling is undefined.
-- Graphify integration is planned but not validated because no code exists yet.
-- Actual Flutter and FastAPI project code is not scaffolded yet; only repo boundaries and tooling standards exist.
-- CI covers docs, JSON examples, secret scan, API tests (26), worker tests, scoring-rules tests (18), and Flutter tests (14). Phase 2 scaffold CI is complete. Phase 3-5 CI gates (security, benchmark, release) remain for future sprints.
-- Conversation archive contains summaries and a paste target; the complete full visible chat export depends on a user-provided paste/export.
-- OpenAPI, ERD, threat model, UX, QA, and methodology diagrams are draft docs, not validated against executable code yet.
-- Mermaid diagrams are source diagrams; final report rendering/figure QA is not done yet.
-- Data dictionary is a planning dictionary, not final migrations.
-- GitHub Actions workflow exists for docs validation, JSON example validation, and lightweight secret scanning; branch protection must be enabled later in GitHub repository settings.
-- Direct `adb` is not on PATH; use the SDK path or add platform-tools to PATH when direct device commands are needed.
-- QA specs are now detailed, but the actual pytest/Dart/benchmark tests do not exist until Sprint 0 code scaffolds the modules.
-- Exact pass thresholds for zoo/duplicate/species goldsets are planning gates only until licensed fixtures and benchmark reports exist.
-- API examples and QA fixtures are syntax-validated only; schema validation should be added after contract tooling/generation exists.
-- GitHub CODEOWNERS uses placeholder teams until real repository users/teams exist.
+- Scoring point ranges and economy formulas intentionally undefined until product review
+- Moderation staffing/tooling undefined
+- Species rarity taxonomy needs formal source of truth
+- GitHub CODEOWNERS uses placeholder teams
+- Branch protection not enabled in GitHub repository settings
+- adb not on PATH (at SDK path: AppData/Local/Android/sdk/platform-tools)
+- Full conversation export not pasted to raw archive; only summaries exist
 
 ## Future Debt Controls
 

@@ -1440,3 +1440,33 @@ Sprint 45 added a species collection screen: view captured species with points, 
 
 - 123 Flutter tests pass (+10)
 - 103 API + 61 scoring-rules + 123 Flutter = 287 total tests
+
+## 2026-07-04: Tier 1 — Mapbox Wiring + Submission Rate Limiting
+
+### Status
+
+Complete.
+
+### Summary
+
+Wired Mapbox for local dev (public pk. token via --dart-define=MAPBOX_ACCESS_TOKEN, secret sk. download token in ~/.gradle/gradle.properties); the debug APK built, installed, and launched on the Pixel_9a emulator. Implemented per-user submission rate limiting (Tier 1 #4, NFR-SEC-004): a configurable cooldown on POST /v1/submissions returning 429 too_many_requests before any DB write.
+
+### Artifacts Changed
+
+- services/api/src/modules/submissions/api/routes.py — _submission_cooldown_seconds() helper + cooldown check before create
+- services/api/src/infrastructure/database/repositories/submission.py — get_last_submission_time()
+- services/api/src/infrastructure/database/repositories/__init__.py — export new repo fn
+- services/api/tests/conftest.py — SUBMISSION_COOLDOWN_SECONDS=0 for the suite
+- services/api/tests/test_submission.py — 2 new tests (429 enforced; disabled-allows-rapid control)
+
+### Config
+
+- SUBMISSION_COOLDOWN_SECONDS (default 30, 0 disables). Read per-request so it is monkeypatch-testable.
+
+### Validation
+
+- API: 105 passed (103 + 2 new). scoring-rules: 61 passed. validate_docs / validate_json_examples / scan_secrets: PASS.
+
+### Next Exact Action
+
+Tier 1 #5: APK size optimization (ProGuard/R8/split-per-ABI) — no external creds needed. Then Firebase Auth + Google Vision (need cloud projects).

@@ -2,12 +2,13 @@
 
 ## Current Bugs
 
-No app code exists yet, so there are no implementation bugs.
+No known bugs. 289 tests pass. Ruff clean. Mypy clean. Flutter analyze: 0 warnings.
 
 ## Repository Health Notes
 
-- Previous broken Git metadata was repaired with fresh `git init` on 2026-07-01.
-- Empty scaffold folders now contain `.gitkeep` placeholders so Git can track the intended structure.
+- 85 commits. 49 sprints completed.
+- All validation scripts PASS.
+- Pre-task check PASS.
 
 ## Product Risks
 
@@ -35,7 +36,7 @@ No app code exists yet, so there are no implementation bugs.
 - Blur or cell-aggregate public map locations by default.
 - Use deterministic prechecks before AI scoring.
 - Keep all score writes server-side.
-- Add rate limits, cooldowns, duplicate checks, and negative-point rules.
+- Add rate limits, cooldowns, duplicate checks, and negative-point rules. (Per-user submission cooldown implemented — NFR-SEC-004; env `SUBMISSION_COOLDOWN_SECONDS`, default 30s → 429.)
 - Provide report, block, delete, moderation, and appeal flows.
 - Add catch-up mechanics and diminishing returns for repetitive uploads.
 

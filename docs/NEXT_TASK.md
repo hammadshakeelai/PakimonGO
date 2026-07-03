@@ -2,237 +2,31 @@
 
 ## Current Next Task
 
-Sprint 44 — Further Flutter features (see BACKLOG.md).
-
-## Sprint 43 Complete
-
-Sprint 43 delivered: **Production deployment CI/CD.**
-
-- `/health/ready` now verifies DB connectivity via `SELECT 1` (returns 503 on failure)
-- `gunicorn.conf.py` — 4 uvicorn workers, 120s timeout, stdout access log
-- `Dockerfile` — multi-stage build (Python 3.13-slim), HEALTHCHECK, gunicorn CMD
-- `render.yaml` — Render Infrastructure as Code (web service + PostgreSQL, free plan)
-- `.github/workflows/deploy.yml` — manual-trigger deploy via Render API
-- README updated: deploy section + endpoint table (notifications, leaderboard) + test count refresh
-- 103 API + 61 scoring-rules + 102 Flutter = **266 total tests**, all passing
-
-## Sprint 42 Complete
-
-Sprint 42 delivered: **Flutter leaderboard screen.**
-
-- `LeaderboardEntry` model in api_models.dart
-- `LeaderboardViewModel` ChangeNotifier
-- `LeaderboardScreen` — loading/empty/error/list states, pull-to-refresh, rank numbers, score display
-- 4th bottom nav tab (Leaderboard) with trophy icon
-- 8 new Flutter tests (2 model + 3 viewmodel + 3 screen widget)
-- 103 API + 61 scoring-rules + 102 Flutter = **266 total tests**, all passing
-
-## Sprint 41 Complete
-
-Sprint 41 delivered: **Flutter notification center.**
-
-- `NotificationModel` with fromJson
-- `CaptureRepository` now has `getNotifications()`, `markNotificationRead()`, `getUnreadNotificationCount()`
-- `NotificationViewModel` ChangeNotifier with fetchNotifications, fetchUnreadCount, markAsRead
-- `NotificationScreen` — loading/empty/error states, notification list with read/unread styling, pull-to-refresh, tap to mark read
-- Bell icon with unread badge in app bar, navigates to notification screen (pushed route)
-- Unread count refreshes on app resume and after returning from notification screen
-- 8 new Flutter tests (5 viewmodel + 3 screen widget)
-- 103 API + 61 scoring-rules + 94 Flutter = **258 total tests**, all passing
-
-## Sprint 40 Complete
-
-Sprint 40 delivered: **User notifications (backend).**
-
-- Notification DB model + Alembic migration 002
-- Repository: create, get_notifications (paginated, unread-only), mark_read, unread_count
-- Routes: GET /v1/notifications, PATCH /v1/notifications/{id}/read, GET /v1/notifications/unread-count
-- Notifications wired into sync and async scoring paths
-- 6 new tests; 103 API + 61 scoring-rules = 164 Python tests, 250 total
-
-## Sprint 39 Complete
-
-Sprint 39 delivered: **API error handling middleware.**
-
-- `ErrorHandlingMiddleware` catches ValueError → 400, KeyError → 400, PermissionError → 403, FileNotFoundError → 404, Exception → 500
-- `http_exception_handler` registered via `app.add_exception_handler(HTTPException, ...)` returns structured JSON
-- Response format: `{"error": {"code": "...", "message": "...", "details": {}}}`
-- 8 new tests; 5xx errors logged with stack trace
-- 97 API + 61 scoring-rules = 158 Python tests pass
-
-## Sprint 38 Complete
-
-Sprint 38 delivered: **CI workflow update.**
-
-- `needs:` dependency chain across all 9 CI jobs (docs → lint → test → integration → summary)
-- Flutter version broadened from `3.38.x` to `3.x`
-- Test count echo steps in API, scoring-rules, and Flutter jobs
-- `all-checks-pass` summary job reports total test status
-- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests**
-
-## Sprint 37 Complete
-
-Sprint 37 delivered: **Map marker clustering.**
-
-- `ClusterMarker` model + `ClusterService` utility (haversine distance, 2km default radius)
-- `MapViewModel` now exposes `clusters` and `clusterCount` when markers exceed 3
-- `MapScreen` overlay shows "X clusters · Y sightings" when clustered, "Y sightings" otherwise
-- 8 new tests (6 cluster service + 2 viewmodel)
-- 89 API tests + 61 scoring-rules + 86 Flutter = **236 total tests, all passing**
-
-## Sprint 36 Complete
-
-Sprint 36 delivered: **Photo thumbnail in species detail.**
-
-- `mediaAssetId` added to `SubmissionMarker` model
-- SpeciesDetailScreen now shows `Image.network()` with thumbnail from `/v1/media/files/thumbs/{id}.jpg`
-- Loading state shows placeholder text "Loading photo…"; error state shows "Failed to load photo"
-- All SubmissionMarker constructors across 4 test files updated
-- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
-
-## Sprint 35 Complete
-
-Sprint 35 delivered: **Submission history screen.**
-
-- Backend: `realName` + `animalContext` added to `_build_submission_response`
-- Flutter: `SubmissionResponse.toMarker()`, `CaptureRepository.getSubmissions()`, `SubmissionHistoryViewModel`
-- `SubmissionHistoryScreen` with species name, points, status — tap navigates to `SpeciesDetailScreen`
-- History tab in bottom nav (Map / Capture / History)
-- 9 new Flutter tests (5 viewmodel + 4 screen widget)
-- 89 API tests + 61 scoring-rules + 78 Flutter = **228 total tests, all passing**
+Tier 1 production-hardening. ✅ Mapbox token wired (local dev) and ✅ submission rate limiting implemented. Next: APK size optimization (no creds needed), then Firebase Auth + Google Vision (need cloud projects).
 
 ## Sprint 2-26 Complete
 
-Sprints 2-26 delivered the core API: DB-backed repositories, auth, file upload, user profiles, duplicate/zoo precheck, OpenAPI, CI, scoring pipeline, AI adapter framework, async worker, map prototype, Google Vision provider, collection/leaderboard endpoints, goldset benchmarks, pagination/filtering/sorting, sensitive species suppression, API version negotiation, and cloud storage infrastructure.
+All sprints 2-26 complete. Full backend implemented: DB, auth, upload, user profiles, precheck, scoring, AI vision, async worker, map prototype, collection/leaderboard, pagination, sensitive species suppression, API versioning, cloud storage, Docker Compose, integration tests.
 
-89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**.
+## Sprint 49 Complete
 
-## Sprint 2-27 Complete
+All 49 sprints complete. 289 tests pass. App is a working prototype.
 
-### Sprint 27 Complete
+## Tier 1 Queue (Alpha)
 
-Sprint 27 delivered: **Docker Compose local dev environment.**
+The app is code-complete as a prototype. The next phase is production-hardening. See `docs/REMAINING_WORK.md` for the full prioritized queue.
 
-- `services/api/Dockerfile` (Python 3.13-slim, uvicorn on 8000)
-- `infrastructure/docker/docker-compose.local.yml` expanded with `api` + `db` services (health check, named volumes)
-- `infrastructure/docker/.env.docker` for compose env overrides
-- README updated with Docker as primary dev path
-- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
+| Priority | Task | Effort | Status |
+|----------|------|--------|--------|
+| 1 | Provision Mapbox token | 10 min | ✅ Done (local dev; prod token pending) |
+| 2 | Create Firebase project + configure Auth | 1-2 days | ⬜ Needs cloud project |
+| 3 | Enable Google Vision API + create key | 1 day | ⬜ Needs cloud project |
+| 4 | Add rate limiting on submissions | 0.5 day | ✅ Done (NFR-SEC-004) |
+| 5 | Optimize APK size (ProGuard, R8, split) | 1 day | ⬜ Next (no creds needed) |
 
-### Sprint 34 Complete
+## How To Start
 
-Sprint 34 delivered: **Pull-to-refresh on map.**
-
-- `RefreshIndicator` + `SingleChildScrollView` wrapping MapScreen body
-- Pull-to-refresh triggers `_viewModel.fetchMarkers()` in all states
-- 2 new widget tests
-- 89 API tests + 61 scoring-rules + 69 Flutter = **219 total tests, all passing**
-
-### Sprint 33 Complete
-
-Sprint 33 delivered: **Species detail screen.**
-
-- `SpeciesDetailScreen` (species name, points, status, coordinates, photo placeholder)
-- `MarkerListScreen` (tappable list → detail navigation)
-- MapScreen overlay tappable with chevron
-- 8 new widget tests
-- 89 API tests + 61 scoring-rules + 67 Flutter = **217 total tests, all passing**
-
-### Sprint 32 Complete
-
-Sprint 32 delivered: **Map markers from API.**
-
-- Backend: cell centroid in publicLocation (cellLatitude/cellLongitude)
-- `SubmissionMarker` model + `CaptureRepository.getMapMarkers()`
-- `MapViewModel` ChangeNotifier + `MapScreen` with loading/error/marker states
-- 10 new tests (4 viewmodel + 4 screen widget + 2 repository)
-- 89 API tests + 61 scoring-rules + 59 Flutter = **209 total tests, all passing**
-
-### Sprint 31 Complete
-
-Sprint 31 delivered: **Offline draft persistence.**
-
-- `DraftPersistenceService` abstract interface + `SharedPrefsDraftStorage` impl
-- `CaptureDraftService` now async with persistence (create/save/restore/delete persist)
-- `InMemoryDraftStorage` for tests (5 new tests)
-- 89 API tests + 61 scoring-rules + 49 Flutter = **199 total tests, all passing**
-
-### Sprint 30 Complete
-
-Sprint 30 delivered: **Auth/onboarding UI.**
-
-- `AuthService` ChangeNotifier: loginWithUserId/loginWithToken/logout/isAuthenticated
-- `ApiClient` dynamic token provider pattern (`String Function()`)
-- `LoginScreen` with user ID entry + token paste modes, Sign In with getProfile verification
-- `AuthGate` routing: login screen → home screen, logout button in app bar
-- 13 new tests (8 AuthService + 5 LoginScreen)
-- 89 API tests + 61 scoring-rules + 42 Flutter = **192 total tests, all passing**
-
-### Sprint 29 Complete
-
-Sprint 29 delivered: **Camera plugin integration.**
-
-- `CaptureMediaService` abstract interface + `ImagePickerService` real impl
-- `CaptureScreen` two-phase flow: Camera/Gallery buttons → preview → submit
-- Broken image fallback via `errorBuilder`
-- 4 new widget tests
-- 89 API tests + 61 scoring-rules + 29 Flutter = **179 total tests, all passing**
-
-### Sprint 28 Complete
-
-Sprint 28 delivered: **Connect Flutter mobile to API.**
-
-- `ApiClient` HTTP wrapper with auth, GET/POST/PATCH/putFile, ApiException
-- 6 API response models (`fromJson`)
-- `CaptureRepository` with 8 API methods
-- `CaptureScreen` UI with species/context/caption fields, upload→submit flow
-- `main.dart` HomeScreen with bottom nav (Map + Capture tabs)
-- 10 new Flutter unit tests + 2 widget tests
-- 89 API tests + 61 scoring-rules + 27 Flutter = **177 total tests, all passing**
-
-### Sprint 26 Complete
-
-Sprint 26 delivered: **Cloud storage wired into media flow.**
-
-- `generate_derivative_stubs()` added to `StorageProvider` interface and both cloud implementations
-- Media routes use `get_storage_provider()` factory (env-based selection: local/s3/gcs)
-- 8 cloud storage tests (factory defaults, S3/GCS URL formats, ImportError checks, media roundtrip)
-- 89 API tests + 61 scoring-rules + 14 Flutter = **164 total tests, all passing**
-
-### Sprint 25 Complete
-
-Sprint 25 delivered: **Integration testing and documentation.**
-
-- End-to-end integration tests (6 tests covering wild capture, zoo capture, duplicate detection, multiuser collection, submission list, health)
-- API endpoint docstrings on all 14 endpoints
-- README.md updated with build/run instructions and endpoint table
-- OpenAPI schema validation (check_openapi_examples in validate_docs.py)
-- CI job `integration-tests` added (9 total CI jobs)
-- 84 API tests + 61 scoring-rules + 14 Flutter = **159 total tests, all passing**
-
-### Sprint 24 Complete
-
-Sprint 24 delivered: **Cloud storage infrastructure - StorageProvider interface with S3/GCS implementations.**
-
-- StorageProvider class with S3StorageProvider and GCSStorageProvider
-- Environment configuration (.env.example updated with STORAGE_PROVIDER, S3/GCS vars)
-- Fixed derivative URLs to use /v1/media/files prefix
-- 153 total tests passing (78 API + 61 scoring-rules + 14 Flutter)
-
-### Sprint 23 Complete
-
-Sprint 23 delivered: **Production readiness foundation — staging and committing all implementation files.**
-
-- All Sprints 0-22 implementation files committed to repository
-- 150 total tests passing (75 API + 61 scoring-rules + 14 Flutter)
-- TECH_DEBT.md updated with implementation debt items
-- All validations and pre-task checks pass
-
-### Sprint 22 Complete
-
-Sprint 22 delivered: **API versioning - v1 prefix + Accept-Version header + OpenAPI v2 placeholder.**
-
-- Main app includes all routers with prefix="/v1"
-- Version negotiation middleware: Accept-Version header → v1/v2 selection, API-Version response header
-- OpenAPI has `x-versions: [v1, v2]` metadata and v2 health endpoint placeholder
-- 150 total tests passing (75 API + 61 scoring-rules + 14 Flutter)
+1. Read `docs/REMAINING_WORK.md` for full context
+2. Read `CLAUDE.md` for codebase grounding
+3. Pick the first task from Tier 1
+4. Execute per the mandatory workflow in `AGENTS.md`

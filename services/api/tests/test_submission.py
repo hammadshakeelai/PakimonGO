@@ -160,3 +160,46 @@ def test_duplicate_submission_capped():
     assert second.json()["scoreState"]["status"] == "capped"
     assert second.json()["scoreState"]["visiblePoints"] == 0
     assert second.json()["scoreState"]["explanationSummary"] == "duplicate_cap"
+
+
+def test_submission_rate_limited(monkeypatch):
+    """NFR-SEC-004: a per-user cooldown blocks rapid re-submission with 429."""
+    monkeypatch.setenv("SUBMISSION_COOLDOWN_SECONDS", "30")
+    token = {"Authorization": "Bearer test_user_ratelimit"}
+
+    first = client.post("/v1/submissions", json={
+        "mediaAssetId": _create_upload("r"),
+        "animalContext": "zoo",
+        "realName": "Peacock",
+        "cuteName": "Feather King",
+        "caption": "first",
+        "tags": [],
+    }, headers=token)
+    assert first.status_code == 200
+
+    second = client.post("/v1/submissions", json={
+        "mediaAssetId": _create_upload("s"),
+        "animalContext": "zoo",
+        "realName": "Peacock",
+        "cuteName": "Feather King",
+        "caption": "second",
+        "tags": [],
+    }, headers=token)
+    assert second.status_code == 429
+    assert second.json()["error"]["code"] == "too_many_requests"
+
+
+def test_submission_cooldown_disabled_allows_rapid(monkeypatch):
+    """With the cooldown set to 0, the same user can submit back-to-back."""
+    monkeypatch.setenv("SUBMISSION_COOLDOWN_SECONDS", "0")
+    token = {"Authorization": "Bearer test_user_nocooldown"}
+    for suffix in ("x", "y"):
+        resp = client.post("/v1/submissions", json={
+            "mediaAssetId": _create_upload(suffix),
+            "animalContext": "zoo",
+            "realName": "Peacock",
+            "cuteName": "K",
+            "caption": "c",
+            "tags": [],
+        }, headers=token)
+        assert resp.status_code == 200

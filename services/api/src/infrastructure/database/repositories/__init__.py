@@ -22,6 +22,7 @@ from .sensitive_species import (
 from .submission import (
     create_submission,
     get_all_submission_sha256s,
+    get_last_submission_time,
     get_submission,
     update_submission_status,
 )
@@ -40,6 +41,7 @@ __all__ = [
     "get_derivatives",
     "create_submission",
     "get_all_submission_sha256s",
+    "get_last_submission_time",
     "update_submission_status",
     "get_submission",
     "create_score_event",

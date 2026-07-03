@@ -4,6 +4,9 @@ import tempfile
 _db_path = os.path.join(tempfile.gettempdir(), "pakimongo_test.db")
 os.environ["SYNC_DATABASE_URL"] = f"sqlite:///{_db_path}"
 os.environ["UPLOAD_BASE"] = os.path.join(tempfile.gettempdir(), "pakimongo_test_uploads")
+# Disable the per-user submission cooldown for the suite; the dedicated
+# rate-limit test re-enables it via monkeypatch (see test_submission.py).
+os.environ["SUBMISSION_COOLDOWN_SECONDS"] = "0"
 
 from src.infrastructure.database.models import Base  # noqa: E402
 from src.infrastructure.database.session import get_engine  # noqa: E402

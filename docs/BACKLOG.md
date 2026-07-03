@@ -24,49 +24,26 @@ New ideas must be added here before implementation. Each item should later becom
 
 ## Engineering Backlog
 
-- ~~S31-001: Add shared_preferences dependency~~ ✅ DONE
-- ~~S31-002: Create DraftPersistenceService interface + SharedPrefsDraftStorage~~ ✅ DONE
-- ~~S31-003: Update CaptureDraftService for persistence~~ ✅ DONE
-- ~~S31-005: Update tests + write new persistence tests~~ ✅ DONE
-- ~~S30-001: Create AuthService (token storage/retrieval)~~ ✅ DONE
-- ~~S30-002: Update ApiClient to use dynamic token provider~~ ✅ DONE
-- ~~S30-003: Create LoginScreen UI~~ ✅ DONE
-- ~~S30-004: Create AuthGate + update main.dart routing~~ ✅ DONE
-- ~~S30-005: Write tests for auth flow~~ ✅ DONE
-- ~~S29-001: Add image_picker dependency to pubspec.yaml~~ ✅ DONE
-- ~~S29-002: Create CaptureMediaService interface + ImagePickerService~~ ✅ DONE
-- ~~S29-003: Update CaptureScreen with camera/gallery buttons~~ ✅ DONE
-- ~~S29-004: Write tests for camera integration~~ ✅ DONE
-- ~~S28-001: Add `http` package to pubspec.yaml~~ ✅ DONE
-- ~~S28-002: Create `ApiClient` HTTP wrapper~~ ✅ DONE
-- ~~S28-003: Create `ApiConfig` env-var reader~~ ✅ DONE
-- ~~S28-004: Create API response models~~ ✅ DONE
-- ~~S28-005: Create `CaptureRepository`~~ ✅ DONE
-- ~~S28-006: Build `CaptureScreen` UI~~ ✅ DONE
-- ~~S28-007: Update `main.dart` with tab nav~~ ✅ DONE
-- ~~S28-008: Write `ApiClient` unit tests~~ ✅ DONE
-- ~~S28-009: Write `CaptureRepository` unit tests~~ ✅ DONE
-- ~~S28-010: Write `CaptureScreen` widget tests~~ ✅ DONE
+All 49 sprints complete. All code built. Remaining items require external services.
 
-- ~~S35-001: Backend: add realName + animalContext to response~~ ✅ DONE
-- ~~S35-002: Flutter: update SubmissionResponse model~~ ✅ DONE
-- ~~S35-003: Flutter: add getSubmissions() to CaptureRepository~~ ✅ DONE
-- ~~S35-004: Flutter: create SubmissionHistoryViewModel~~ ✅ DONE
-- ~~S35-005: Flutter: create SubmissionHistoryScreen~~ ✅ DONE
-- ~~S35-006: Flutter: wire History tab in main.dart~~ ✅ DONE
-- ~~S35-007: Tests for submission history~~ ✅ DONE
-- ~~S36-001: Photo thumbnail in species detail screen~~ ✅ DONE
-- ~~S37-001: Map marker clustering~~ ✅ DONE
-- ~~S38-001: CI workflow update~~ ✅ DONE
-- ~~S39-001: API error handling middleware~~ ✅ DONE
-- ~~S40-001: User notifications (backend)~~ ✅ DONE
-- ~~S41-001: Flutter notification center screen~~ ✅ DONE
-- ~~S42-001: Flutter leaderboard screen~~ ✅ DONE
-- ~~S43-001: Production deployment CI/CD~~ ✅ DONE
-- ~~S44-001: Flutter profile screen~~ ✅ DONE
-- ~~S45-001: Flutter collection screen~~ ✅ DONE
-- S46-001: Further Flutter features
-- ~~S0-001: Generate Flutter project template~~ ✅ DONE
+### External Services (need credentials)
+- Get MAPBOX_ACCESS_TOKEN from mapbox.com — ✅ done for local dev (production token still pending)
+- Create Firebase project + configure Firebase Auth
+- Enable Google Cloud Vision API + create API key
+- Create Render account + deploy
+- Create S3/GCS bucket for production storage
+- Set up real PostgreSQL database
+
+### Future Features (code exists only at planning level)
+- Onboarding screens (FR-ONB-001–005)
+- Age gate (FR-AGE-001–003)
+- Email/password auth (FR-AUTH-002)
+- Friends & groups
+- Comments & likes
+- Public feed
+- Sharing & reposts
+- Moderation queues
+- Report/block flows
 - ~~S0-002: Implement FastAPI project scaffold~~ ✅ DONE
 - ~~S0-006: Privacy DTO tests~~ ✅ DONE
 - ~~S0-007: Score state model/tests~~ ✅ DONE
