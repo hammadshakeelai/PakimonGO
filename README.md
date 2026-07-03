@@ -1,3 +1,21 @@
+<p align="center">
+  <img src="docs/assets/app-icon.svg" alt="PakimonGO app icon" width="120" height="120">
+</p>
+
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="PakimonGO" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/hammadshakeelai">
+    <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="34">
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/in/hammadshakeelai">
+    <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="34">
+  </a>
+</p>
+
 # PakimonGO
 
 PakimonGO is a 13+ mobile app for real-animal photography, discovery, collections, map exploration, privacy-safe social sharing, and server-scored competition.
@@ -124,3 +142,58 @@ See `docs/api/OPENAPI_DRAFT.yaml` for full schema details.
 1. Read `AGENTS.md`, then `docs/CURRENT_TASK.md`, `docs/NEXT_TASK.md`.
 2. Follow the mandatory 9-step task loop (pre-check → read state → do work → validate → commit).
 3. Make short-burst semantic commits with AI attribution trailers.
+
+## 👤 Author
+
+**Hammad Shakeel** — [@hammadshakeelai](https://github.com/hammadshakeelai)
+
+<p>
+  <a href="https://github.com/hammadshakeelai">
+    <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="30">
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/in/hammadshakeelai">
+    <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="30">
+  </a>
+</p>
+
+Builder of AI-agent tooling, scientific simulators, and full-stack apps. PakimonGO is
+one of many projects exploring agent-driven engineering at scale.
+
+### Skills & Tech
+
+| Area | Tools & Technologies |
+|------|----------------------|
+| **Languages** | Python, Dart, TypeScript, JavaScript, C++, C, Java, R, NASM Assembly, SQL |
+| **AI / ML** | Machine Learning, Deep Learning, NLP, LSTMs, computer vision, agentic AI, RAG |
+| **Mobile & Web** | Flutter, FastAPI, Node/TypeScript, vanilla JS, HTML/CSS, Vercel |
+| **Backend & Data** | REST APIs, PostgreSQL, pgvector, Docker, OpenAPI, databases & data structures |
+| **AI Agent Tooling** | Claude Code skills & slash commands, Kaggle automation, multi-agent workflows |
+| **CS Foundations** | Operating systems, computer architecture, assembly/NASM, algorithms |
+
+## 🔗 More of My Work
+
+A selection of other projects and ideas I've built:
+
+### AI Agents & Developer Tooling
+- [**agentic-ai-megaproject-template**](https://github.com/hammadshakeelai/agentic-ai-megaproject-template) — Topic-agnostic starter for building super-large software projects with AI agents: phase-gated lifecycle, state-file memory, traceability chain, adversarial ADRs, and CI gates. *(The methodology behind PakimonGO.)*
+- [**kaggle-run-skill**](https://github.com/hammadshakeelai/kaggle-run-skill) — Kaggle slash command for Claude Code & 35+ AI agents: deploy notebooks, auto-fix 13 error patterns, submit competitions — a token-minimal 165-line router + Python scripts.
+- [**mcq-maker**](https://github.com/hammadshakeelai/mcq-maker) — Reusable Claude Skill that turns any document into a high-quality MCQ quiz (interactive site + Word export).
+- [**cli-chatbot**](https://github.com/hammadshakeelai/cli-chatbot) — Web terminal with agents, built for phones — a step toward web-based full computer systems.
+- [**chatbot-like-claude**](https://github.com/hammadshakeelai/chatbot-like-claude) — Minimal, self-hostable Claude-style AI chat app with streaming replies and OpenAI-compatible models.
+- [**food-suggestor**](https://github.com/hammadshakeelai/food-suggestor) — 🍽️ Pink Plate (Agnes AI): a mobile-first AI recipe chatbot, zero deps, Vercel-ready.
+- [**ClaudeSessionScheduler**](https://github.com/hammadshakeelai/ClaudeSessionScheduler) — Fast, offline, single-file planner for sleep, life, and up to 10 Claude sessions per reset cycle.
+
+### Scientific Simulation & Visualization
+- [**RetinoTwin**](https://github.com/hammadshakeelai/RetinoTwin) — Synthetic retinoblastoma digital-twin & multimodal imaging simulator using real volumetric MRI from the MNI152 eye atlas.
+- [**Nano-Swarm-Intelligence-Coronary-Clot-Simulator**](https://github.com/hammadshakeelai/Nano-Swarm-Intelligence-Coronary-Clot-Simulator) — Swarm-intelligence simulation of nanobots clearing coronary clots.
+- [**LSTM-visualized**](https://github.com/hammadshakeelai/LSTM-visualized) — Interactive visualization of LSTM internals.
+- [**TOP-10-NLP-ALGORITHMS-SIMULATORS**](https://github.com/hammadshakeelai/TOP-10-NLP-ALGORITHMS-SIMULATORS) — Simulators for the top 10 NLP algorithms.
+
+### Apps & Systems
+- [**Game-Database-Project**](https://github.com/hammadshakeelai/Game-Database-Project) — A game built to be deployed and appified.
+- [**Software-Engineering-Project--UTOS**](https://github.com/hammadshakeelai/Software-Engineering-Project--UTOS) — University timetabling & scheduling website.
+- [**GPA-Calculator-Adanced-Project-IMS**](https://github.com/hammadshakeelai/GPA-Calculator-Adanced-Project-IMS) — Fast public/private GPA calculator with presets.
+- [**Mafia-Host-Tool**](https://github.com/hammadshakeelai/Mafia-Host-Tool) — Web tool that distributes Mafia roles between players.
+
+> Explore the full set at [github.com/hammadshakeelai](https://github.com/hammadshakeelai?tab=repositories).

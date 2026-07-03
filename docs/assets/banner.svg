@@ -1,0 +1,66 @@
+<svg width="1280" height="360" viewBox="0 0 1280 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PakimonGO">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b3d2e"/>
+      <stop offset="0.5" stop-color="#12674a"/>
+      <stop offset="1" stop-color="#1f9d6b"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c9f7e4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7dffc4" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7dffc4" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="360" rx="24" fill="url(#bg)"/>
+
+  <!-- subtle grid / map contour lines -->
+  <g stroke="#ffffff" stroke-opacity="0.06" stroke-width="1.5" fill="none">
+    <path d="M0 90 C 200 60, 420 120, 640 92 S 1080 60, 1280 96"/>
+    <path d="M0 160 C 220 130, 440 190, 660 162 S 1100 130, 1280 166"/>
+    <path d="M0 232 C 210 204, 460 262, 680 234 S 1120 200, 1280 238"/>
+    <path d="M0 300 C 240 274, 470 326, 690 300 S 1110 268, 1280 304"/>
+  </g>
+
+  <circle cx="1030" cy="180" r="240" fill="url(#glow)"/>
+
+  <!-- Location pin + paw emblem -->
+  <g transform="translate(120,86)">
+    <path d="M96 0 C43 0 0 41 0 92 c0 63 96 196 96 196 s96 -133 96 -196 C192 41 149 0 96 0 Z" fill="#0b3d2e" filter="url(#soft)" opacity="0.5"/>
+    <path d="M92 -6 C39 -6 -4 35 -4 86 c0 63 96 196 96 196 s96 -133 96 -196 C188 35 145 -6 92 -6 Z" fill="#ffffff"/>
+    <!-- paw -->
+    <g transform="translate(92,86)" fill="#12674a">
+      <ellipse cx="0" cy="16" rx="34" ry="26"/>
+      <circle cx="-30" cy="-16" r="12"/>
+      <circle cx="-11" cy="-30" r="12"/>
+      <circle cx="11" cy="-30" r="12"/>
+      <circle cx="30" cy="-16" r="12"/>
+    </g>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(360,150)">
+    <text x="0" y="0" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="96" font-weight="800" fill="url(#title)" letter-spacing="-2">Pakimon<tspan fill="#7dffc4">GO</tspan></text>
+    <text x="4" y="58" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="500" fill="#d7fff0" letter-spacing="0.5">Photograph real animals. Discover, collect, explore.</text>
+    <g transform="translate(4,96)" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="600">
+      <g fill="#0b3d2e">
+        <rect x="0" y="-22" width="150" height="34" rx="17" fill="#7dffc4"/>
+        <text x="20" y="1">📷 Capture</text>
+      </g>
+      <g fill="#0b3d2e">
+        <rect x="168" y="-22" width="168" height="34" rx="17" fill="#a8f7d6"/>
+        <text x="190" y="1">🗺️ Map explore</text>
+      </g>
+      <g fill="#0b3d2e">
+        <rect x="354" y="-22" width="176" height="34" rx="17" fill="#d7fff0"/>
+        <text x="376" y="1">🏆 Compete</text>
+      </g>
+    </g>
+  </g>
+</svg>
