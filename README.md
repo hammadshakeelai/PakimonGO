@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="34">
   </a>
   &nbsp;
-  <a href="https://www.linkedin.com/in/hammadshakeelai">
+  <a href="https://www.linkedin.com/in/muhammad-hammad-shakeel-2905a0410">
     <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="34">
   </a>
 </p>
@@ -152,7 +152,7 @@ See `docs/api/OPENAPI_DRAFT.yaml` for full schema details.
     <img src="https://img.shields.io/badge/GitHub-hammadshakeelai-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="30">
   </a>
   &nbsp;
-  <a href="https://www.linkedin.com/in/hammadshakeelai">
+  <a href="https://www.linkedin.com/in/muhammad-hammad-shakeel-2905a0410">
     <img src="https://img.shields.io/badge/LinkedIn-Hammad_Shakeel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="30">
   </a>
 </p>
