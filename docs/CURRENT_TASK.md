@@ -4,7 +4,7 @@
 
 **Handoff from code-complete to production-hardening.**
 
-49 sprints done. 289 tests pass. The app is a working technical prototype. Honest remaining work is documented in `docs/REMAINING_WORK.md`.
+46 sprints done. 291 tests pass. 92 commits. The app is a working technical prototype. Honest remaining work is documented in `docs/REMAINING_WORK.md`.
 
 ## What Exists
 
@@ -18,7 +18,7 @@ The app works **locally** with dev providers (SQLite, fake auth, dummy AI, local
 - No real AI scoring (DummyVisionProvider)
 - Map wired to Mapbox (local dev token); production token still needed
 - Submission rate limiting implemented (per-user cooldown, NFR-SEC-004)
-- APK is 105.8MB (needs optimization)
+- APK optimized: split-per-ABI + R8, arm64 39.8MB (was 105.8MB); release-build map render still to verify on a physical device
 - No iOS build at all
 - No social features
 - No moderation

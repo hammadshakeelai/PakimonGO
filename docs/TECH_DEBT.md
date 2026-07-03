@@ -2,7 +2,7 @@
 
 ## Current Known Debt
 
-All 49 sprints complete. 289 tests pass. Current debt items:
+All 46 sprints complete. 291 tests pass. Current debt items:
 
 ## Implementation Debt
 
@@ -11,7 +11,7 @@ All 49 sprints complete. 289 tests pass. Current debt items:
 - VisionProvider configured for Google but no real API key/environment tested
 - Mapbox wired for local dev (--dart-define + gradle.properties download token); production token/CI injection still needed
 - Database uses SQLite for dev; PostgreSQL connection string not wired to production DB
-- Release APK is 105.8MB — needs optimization (ProGuard, R8, asset compression)
+- APK optimized (R8 minify + shrinkResources + split-per-ABI, arm64 39.8MB). R8 logs benign com.mapbox.common ClassNotFound warnings at startup; verify map renders on a physical arm64 release build (emulator x86_64 can't fully confirm Mapbox native)
 - No iOS build tested
 - Submission rate limiting uses a single-instance DB-query cooldown; a multi-instance deployment needs a shared limiter (e.g. Redis) — NFR-SEC-004
 

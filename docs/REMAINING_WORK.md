@@ -2,7 +2,7 @@
 
 ## Quick Summary
 
-The app is a **working technical prototype** (289 tests, 49 sprints). It is **not production-ready**. Getting to a Play Store release requires an estimated **2-3 months** of additional work, mostly in operations, hardening, and missing features.
+The app is a **working technical prototype** (291 tests, 46 sprints, 92 commits). It is **not production-ready**. Getting to a Play Store release requires an estimated **2-3 months** of additional work, mostly in operations, hardening, and missing features.
 
 ---
 
@@ -16,7 +16,7 @@ These must be done before any real user touches the app.
 | 2 | **Firebase Auth** | Create Firebase project, download `google-services.json`, replace `FakeAuthAdapter` with Firebase Admin SDK token verification | 1-2 days | — |
 | 3 | **Google Vision key** | Enable Cloud Vision API in GCP, create API key, set `VISION_PROVIDER=google` + `GOOGLE_VISION_API_KEY` | 1 day | — |
 | 4 | **Rate limiting** ✅ DONE | Per-user cooldown on POST /v1/submissions via `SUBMISSION_COOLDOWN_SECONDS` (default 30s) → 429 `too_many_requests`. | 0.5 day | — |
-| 5 | **APK size optimization** | Release APK is 105.8MB. Needs ProGuard, R8, split APKs per ABI, asset compression. | 1 day | — |
+| 5 | **APK size optimization** ✅ DONE | R8 minify + shrinkResources + split-per-ABI. arm64 105.8MB→39.8MB (−62%); `proguard-rules.pro` keeps Mapbox/Google/Flutter. Verify map render on a physical arm64 release build. | 1 day | — |
 
 ## Tier 2 — Required For Beta (wider test audience)
 
@@ -26,7 +26,7 @@ These must be done before any real user touches the app.
 | 7 | **Error handling in Flutter** | 1-2 days | Many screens lack offline detection, network retry, timeout. Currently shows basic snackbar. |
 | 8 | **Onboarding screens** | 2-3 days | FR-ONB-001 through 005: safety education, privacy explanation, scoring honesty, permission requests with context. |
 | 9 | **Age gate (13+)** | 1 day | FR-AGE-001 through 003: neutral birth-year gate, block <13, stricter defaults for 13-17. |
-| 10 | **End-to-end tests on real device** | 2-3 days | All 289 tests are unit/widget. No real-device E2E testing for camera, map, upload, scoring flow. |
+| 10 | **End-to-end tests on real device** | 2-3 days | All 291 tests are unit/widget. No real-device E2E testing for camera, map, upload, scoring flow. |
 | 11 | **CI secrets setup** | 0.5 day | Deploy workflow references `RENDER_API_KEY` GitHub secret — not configured. |
 
 ## Tier 3 — Required For Production (Play Store)

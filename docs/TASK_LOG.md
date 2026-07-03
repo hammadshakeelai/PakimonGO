@@ -1470,3 +1470,34 @@ Wired Mapbox for local dev (public pk. token via --dart-define=MAPBOX_ACCESS_TOK
 ### Next Exact Action
 
 Tier 1 #5: APK size optimization (ProGuard/R8/split-per-ABI) — no external creds needed. Then Firebase Auth + Google Vision (need cloud projects).
+
+## 2026-07-04: Tier 1 #5 — APK Size Optimization (R8 + split-per-ABI)
+
+### Status
+
+Complete (config + build verified; physical-device map render pending).
+
+### Summary
+
+Enabled R8 minify + shrinkResources + ProGuard in the release buildType and per-ABI APK splitting via `flutter build apk --split-per-abi`. Added android/app/proguard-rules.pro keeping Mapbox/Google/Flutter classes. Release build compiles cleanly under R8; app installs, launches, and stays running on the x86_64 emulator.
+
+### Results
+
+- arm64-v8a: 39.8MB (was 105.8MB fat, -62%)
+- armeabi-v7a: 30.8MB
+- x86_64: 42.7MB
+- MaterialIcons tree-shaken 99.7%.
+
+### Notes / Risk
+
+- First attempt used a Gradle splits{} block which conflicts with the plugin-injected ndk.abiFilters; switched to the Flutter --split-per-abi flag (no gradle splits block).
+- R8 logs benign com.mapbox.common.* ClassNotFound warnings at startup (caught, non-fatal). Verify the map renders on a physical arm64 release build.
+
+### Artifacts Changed
+
+- apps/mobile/pakimon_go_app/android/app/build.gradle.kts
+- apps/mobile/pakimon_go_app/android/app/proguard-rules.pro (new)
+
+### Next Exact Action
+
+Remaining Tier 1 (Firebase Auth, Google Vision) needs cloud projects. No-cred work: Tier 2 (Postgres wiring, Flutter error handling).
