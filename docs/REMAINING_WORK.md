@@ -13,7 +13,7 @@ These must be done before any real user touches the app.
 | # | Task | What's Needed | Effort | Depends On |
 |---|------|---------------|--------|------------|
 | 1 | **Mapbox token** ✅ DONE | Wired for local dev: `pk.` token via `--dart-define`, `sk.` download token in `~/.gradle/gradle.properties`. Production token/CI injection still needed. | 10 min | — |
-| 2 | **Firebase Auth** ✅ DONE (code) | Backend `FirebaseAuthAdapter` (`AUTH_PROVIDER=firebase`, verified: fake token→401) + full Flutter Google sign-in (firebase_core/auth + google_sign_in 7.x → Firebase ID token). Builds, runs, 125 tests pass. Live sign-in needs a Google account on the emulator/device; release keystore SHA-1 for prod. | 1-2 days | — |
+| 2 | **Firebase Auth** ✅ DONE (live-verified) | Backend `FirebaseAuthAdapter` (`AUTH_PROVIDER=firebase`) + Flutter Google sign-in (google_sign_in 7.x → Firebase ID token). **Live-verified on a real phone**: Google → Firebase ID token → backend `/v1/users/me` 200 (fake token → 401). Prod still needs the release keystore SHA-1 registered. | 1-2 days | — |
 | 3 | **AI vision scoring** ✅ DONE (Groq) | Free-tier `GroqVisionProvider` wired (`VISION_PROVIDER=groq` + `GROQ_API_KEY`, no billing). Live-verified: bear photo → `Ursus arctos`/wild/0.99. Google Vision path also intact. | 1 day | — |
 | 4 | **Rate limiting** ✅ DONE | Per-user cooldown on POST /v1/submissions via `SUBMISSION_COOLDOWN_SECONDS` (default 30s) → 429 `too_many_requests`. | 0.5 day | — |
 | 5 | **APK size optimization** ✅ DONE | R8 minify + shrinkResources + split-per-ABI. arm64 105.8MB→39.8MB (−62%); `proguard-rules.pro` keeps Mapbox/Google/Flutter. Verify map render on a physical arm64 release build. | 1 day | — |

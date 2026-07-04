@@ -9,7 +9,7 @@ All 46 sprints complete. 291 tests pass. Current debt items:
 - API versioning uses middleware but no v2 routes exist yet (placeholder only)
 - Storage uses local filesystem; needs cloud storage migration (S3/GCS) for production
 - AI vision: Groq provider live-verified (VISION_PROVIDER=groq, free tier, no billing). Google Vision path present but untested (needs billing). GROQ_MODEL default may need updating as Groq deprecates vision models.
-- Firebase auth fully wired (backend adapter + Flutter Google sign-in). firebase-admin installed; service account at ~/.pakimongo/ (outside repo); google-services.json in android/app/ (gitignored). Live Google sign-in unverified — emulator has no Google account (add one or use a physical device). Only the debug SHA-1 is registered; production needs the release keystore SHA-1.
+- Firebase auth live-verified on a real phone (Google sign-in → /v1/users/me 200). firebase-admin installed; service account at ~/.pakimongo/ (outside repo); google-services.json in android/app/ (gitignored). Only the DEBUG SHA-1 is registered; production needs the release keystore SHA-1.
 - Mapbox wired for local dev (--dart-define + gradle.properties download token); production token/CI injection still needed
 - Database uses SQLite for dev; PostgreSQL connection string not wired to production DB
 - APK optimized (R8 minify + shrinkResources + split-per-ABI, arm64 39.8MB). R8 logs benign com.mapbox.common ClassNotFound warnings at startup; verify map renders on a physical arm64 release build (emulator x86_64 can't fully confirm Mapbox native)

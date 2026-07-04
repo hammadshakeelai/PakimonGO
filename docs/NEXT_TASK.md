@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Tier 1 code-complete: ✅ Mapbox, ✅ rate limiting, ✅ APK optimization, ✅ AI vision (Groq), ✅ Firebase Auth (backend + Flutter Google sign-in). Live Google sign-in needs a Google account on the emulator/device. Next: Tier 2 (Postgres wiring, Flutter error handling).
+Tier 1 complete & live-verified: ✅ Mapbox, ✅ rate limiting, ✅ APK optimization, ✅ AI vision (Groq), ✅ Firebase Auth (Google sign-in verified on a real phone → /v1/users/me 200). Next: Tier 2 (Postgres wiring, Flutter error handling).
 
 ## Sprint 2-26 Complete
 

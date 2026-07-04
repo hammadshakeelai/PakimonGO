@@ -171,7 +171,7 @@ class CaptureRepository {
     return response['count'] as int;
   }
 
-  Future<List<SubmissionMarker>> getMapMarkers({int limit = 200}) async {
+  Future<List<SubmissionMarker>> getMapMarkers({int limit = 100}) async {
     final response = await _client.get('/submissions', queryParams: {
       'limit': limit.toString(),
       'offset': '0',

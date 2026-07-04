@@ -1589,3 +1589,25 @@ Backend: firebase-admin installed, service account at ~/.pakimongo/ (outside rep
 ### Next Exact Action
 
 Add a Google account to the emulator (or use a physical device) to complete the live Google sign-in test. Then Tier 2. For production: register the release keystore SHA-1 in Firebase.
+
+## 2026-07-04: Firebase Auth live-verified + map marker limit fix
+
+### Status
+
+Complete. Tier 1 now 100% complete and live-verified.
+
+### Firebase Auth — live-verified
+
+Installed the debug arm64 APK on a real Android phone (served over LAN; API reachable at 192.168.100.54:8000). Signed in with Google -> Firebase ID token -> backend. Backend logs (from phone 192.168.100.117): GET /v1/users/me 200, notifications 200, POST /v1/submissions 200, leaderboard 200 -> real Firebase token accepted (fake token still 401). Full real-auth chain confirmed on a real device.
+
+### Bug fix — map markers 422
+
+CaptureRepository.getMapMarkers requested limit=200 on GET /v1/submissions, but the endpoint caps limit at 100 (le=100) -> 422, so the map marker overlay silently failed to load. Changed the default to limit=100. 125 Flutter tests pass.
+
+### Artifacts Changed
+
+- apps/mobile/pakimon_go_app/lib/features/capture/data/capture_repository.dart (getMapMarkers limit 200 -> 100)
+
+### Next Exact Action
+
+Tier 2: Postgres wiring, Flutter error handling. For production: register the release keystore SHA-1 in Firebase.
