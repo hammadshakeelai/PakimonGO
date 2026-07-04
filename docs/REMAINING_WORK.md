@@ -13,7 +13,7 @@ These must be done before any real user touches the app.
 | # | Task | What's Needed | Effort | Depends On |
 |---|------|---------------|--------|------------|
 | 1 | **Mapbox token** ✅ DONE | Wired for local dev: `pk.` token via `--dart-define`, `sk.` download token in `~/.gradle/gradle.properties`. Production token/CI injection still needed. | 10 min | — |
-| 2 | **Firebase Auth** | Create Firebase project, download `google-services.json`, replace `FakeAuthAdapter` with Firebase Admin SDK token verification | 1-2 days | — |
+| 2 | **Firebase Auth** 🟡 backend ready | `FirebaseAuthAdapter` built + env-selectable (`AUTH_PROVIDER=firebase`), unit-tested. Still needs: Firebase project, `google-services.json`, service-account key, and Flutter `firebase_auth`/`google_sign_in` wiring. | 1-2 days | — |
 | 3 | **Google Vision key** | Enable Cloud Vision API in GCP, create API key, set `VISION_PROVIDER=google` + `GOOGLE_VISION_API_KEY` | 1 day | — |
 | 4 | **Rate limiting** ✅ DONE | Per-user cooldown on POST /v1/submissions via `SUBMISSION_COOLDOWN_SECONDS` (default 30s) → 429 `too_many_requests`. | 0.5 day | — |
 | 5 | **APK size optimization** ✅ DONE | R8 minify + shrinkResources + split-per-ABI. arm64 105.8MB→39.8MB (−62%); `proguard-rules.pro` keeps Mapbox/Google/Flutter. Verify map render on a physical arm64 release build. | 1 day | — |

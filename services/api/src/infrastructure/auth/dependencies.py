@@ -7,7 +7,20 @@ from .fake_adapter import FakeAuthAdapter
 
 _bearer = HTTPBearer(auto_error=False)
 
-_adapter: AuthAdapter = FakeAuthAdapter()
+
+def _build_adapter() -> AuthAdapter:
+    """Select the auth adapter from AUTH_PROVIDER (default: fake dev adapter)."""
+    import os
+
+    provider = os.environ.get("AUTH_PROVIDER", "fake").lower()
+    if provider == "firebase":
+        from .firebase_adapter import FirebaseAuthAdapter
+
+        return FirebaseAuthAdapter()
+    return FakeAuthAdapter()
+
+
+_adapter: AuthAdapter = _build_adapter()
 
 
 def get_auth_adapter() -> AuthAdapter:

@@ -19,7 +19,7 @@ The app is code-complete as a prototype. The next phase is production-hardening.
 | Priority | Task | Effort | Status |
 |----------|------|--------|--------|
 | 1 | Provision Mapbox token | 10 min | ✅ Done (local dev; prod token pending) |
-| 2 | Create Firebase project + configure Auth | 1-2 days | ⬜ Needs cloud project |
+| 2 | Create Firebase project + configure Auth | 1-2 days | 🟡 Backend adapter built; needs project + google-services.json + Flutter |
 | 3 | Enable Google Vision API + create key | 1 day | ⬜ Needs cloud project |
 | 4 | Add rate limiting on submissions | 0.5 day | ✅ Done (NFR-SEC-004) |
 | 5 | Optimize APK size (ProGuard, R8, split) | 1 day | ✅ Done (arm64 39.8MB, −62%) |

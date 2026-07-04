@@ -8,7 +8,8 @@ All 46 sprints complete. 291 tests pass. Current debt items:
 
 - API versioning uses middleware but no v2 routes exist yet (placeholder only)
 - Storage uses local filesystem; needs cloud storage migration (S3/GCS) for production
-- VisionProvider configured for Google but no real API key/environment tested
+- VisionProvider configured for Google but no real API key/environment tested (activates via VISION_PROVIDER=google + GOOGLE_VISION_API_KEY)
+- Firebase auth backend adapter built (AUTH_PROVIDER=firebase) but not activated: needs firebase-admin installed, GOOGLE_APPLICATION_CREDENTIALS, google-services.json, and Flutter sign-in wiring
 - Mapbox wired for local dev (--dart-define + gradle.properties download token); production token/CI injection still needed
 - Database uses SQLite for dev; PostgreSQL connection string not wired to production DB
 - APK optimized (R8 minify + shrinkResources + split-per-ABI, arm64 39.8MB). R8 logs benign com.mapbox.common ClassNotFound warnings at startup; verify map renders on a physical arm64 release build (emulator x86_64 can't fully confirm Mapbox native)

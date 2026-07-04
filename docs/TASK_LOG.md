@@ -1501,3 +1501,29 @@ Enabled R8 minify + shrinkResources + ProGuard in the release buildType and per-
 ### Next Exact Action
 
 Remaining Tier 1 (Firebase Auth, Google Vision) needs cloud projects. No-cred work: Tier 2 (Postgres wiring, Flutter error handling).
+
+## 2026-07-04: Tier 1 #2 (partial) — Firebase Auth backend adapter
+
+### Status
+
+Backend adapter built + tested; not yet activated (needs creds + Flutter sign-in).
+
+### Summary
+
+Added FirebaseAuthAdapter (firebase-admin verify_id_token, lazy get_app/initialize_app, injectable verifier) and made the auth adapter env-selectable via AUTH_PROVIDER (default: fake). Added firebase-admin to requirements. 4 unit tests via a mocked verifier — no live creds needed. Existing 105 tests unaffected (fake adapter still default). API suite now 109 passing.
+
+### Activation (when creds arrive)
+
+- Backend: pip install firebase-admin; set AUTH_PROVIDER=firebase + GOOGLE_APPLICATION_CREDENTIALS=<service-account.json>.
+- Flutter: add firebase_auth + google_sign_in, place google-services.json in android/app/, send the Firebase ID token as the Bearer token (still to build).
+
+### Artifacts Changed
+
+- services/api/src/infrastructure/auth/firebase_adapter.py (new)
+- services/api/src/infrastructure/auth/dependencies.py (env-based selection)
+- services/api/requirements.txt (+firebase-admin)
+- services/api/tests/test_firebase_auth.py (new, 4 tests)
+
+### Next Exact Action
+
+Google Vision needs no code — user provides GOOGLE_VISION_API_KEY and we set VISION_PROVIDER=google. Firebase: user provides google-services.json + service-account key -> activate backend + build Flutter sign-in.
