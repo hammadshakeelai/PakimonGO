@@ -1527,3 +1527,37 @@ Added FirebaseAuthAdapter (firebase-admin verify_id_token, lazy get_app/initiali
 ### Next Exact Action
 
 Google Vision needs no code — user provides GOOGLE_VISION_API_KEY and we set VISION_PROVIDER=google. Firebase: user provides google-services.json + service-account key -> activate backend + build Flutter sign-in.
+
+## 2026-07-04: Tier 1 #3 — AI Vision Scoring via Groq (free tier)
+
+### Status
+
+Complete + live-verified.
+
+### Summary
+
+Added GroqVisionProvider (packages/scoring-rules/src/groq_vision_provider.py): a free-tier vision provider using Groq's OpenAI-compatible chat-completions endpoint with an image data URI and JSON-mode output (species + wild/zoo/pet + confidence). Wired VISION_PROVIDER=groq selection into scoring_worker.py. 8 mocked unit tests. Groq's free tier needs no billing/card (unlike Google Vision, which requires billing enabled even for its free tier).
+
+### Live verification
+
+- /models probe: key authenticates on the free tier (17 models); meta-llama/llama-4-scout-17b-16e-instruct is live.
+- Real classification of a bear photo -> species "Ursus arctos", context "wild", confidence 0.99; JSON parsed correctly.
+
+### Tests
+
+scoring-rules 69 (61+8 new), API 109. All 3 validators pass.
+
+### Artifacts Changed
+
+- packages/scoring-rules/src/groq_vision_provider.py (new)
+- packages/scoring-rules/tests/test_groq_vision_provider.py (new, 8 tests)
+- services/api/src/infrastructure/worker/scoring_worker.py (groq branch)
+- .env.example (VISION_PROVIDER / GROQ_API_KEY / GROQ_MODEL)
+
+### Activation
+
+Set VISION_PROVIDER=groq + GROQ_API_KEY in the API environment (GROQ_MODEL optional). Key lives in gitignored .env.local.
+
+### Next Exact Action
+
+Firebase Auth Flutter integration (firebase_auth + google_sign_in + google-services.json). Then Tier 2.

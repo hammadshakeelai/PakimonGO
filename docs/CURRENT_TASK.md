@@ -15,7 +15,7 @@ All code is built. Full inventory in `CLAUDE.md` and `PROJECT_COMPLETE.md`.
 The app works **locally** with dev providers (SQLite, fake auth, dummy AI, local storage). It is **not production-ready**. Key gaps:
 
 - No real auth (FakeAuthAdapter)
-- No real AI scoring (DummyVisionProvider)
+- Real AI scoring available via Groq free tier (VISION_PROVIDER=groq, live-verified); DummyVisionProvider is the default
 - Map wired to Mapbox (local dev token); production token still needed
 - Submission rate limiting implemented (per-user cooldown, NFR-SEC-004)
 - APK optimized: split-per-ABI + R8, arm64 39.8MB (was 105.8MB); release-build map render still to verify on a physical device

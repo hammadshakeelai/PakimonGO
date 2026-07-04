@@ -8,7 +8,7 @@ All 46 sprints complete. 291 tests pass. Current debt items:
 
 - API versioning uses middleware but no v2 routes exist yet (placeholder only)
 - Storage uses local filesystem; needs cloud storage migration (S3/GCS) for production
-- VisionProvider configured for Google but no real API key/environment tested (activates via VISION_PROVIDER=google + GOOGLE_VISION_API_KEY)
+- AI vision: Groq provider live-verified (VISION_PROVIDER=groq, free tier, no billing). Google Vision path present but untested (needs billing). GROQ_MODEL default may need updating as Groq deprecates vision models.
 - Firebase auth backend adapter built (AUTH_PROVIDER=firebase) but not activated: needs firebase-admin installed, GOOGLE_APPLICATION_CREDENTIALS, google-services.json, and Flutter sign-in wiring
 - Mapbox wired for local dev (--dart-define + gradle.properties download token); production token/CI injection still needed
 - Database uses SQLite for dev; PostgreSQL connection string not wired to production DB

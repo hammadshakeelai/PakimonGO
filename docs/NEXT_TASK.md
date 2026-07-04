@@ -2,7 +2,7 @@
 
 ## Current Next Task
 
-Tier 1 production-hardening. ✅ Mapbox wired, ✅ rate limiting, ✅ APK optimization (arm64 39.8MB). Remaining Tier 1 (Firebase Auth, Google Vision) needs cloud projects. No-cred work now lives in Tier 2 (Postgres wiring, Flutter error handling).
+Tier 1: ✅ Mapbox, ✅ rate limiting, ✅ APK optimization, ✅ AI vision (Groq free tier, live-verified). Remaining: Firebase Auth — backend adapter built; needs Flutter sign-in + google-services.json wiring. Then Tier 2 (Postgres, Flutter error handling).
 
 ## Sprint 2-26 Complete
 
@@ -20,7 +20,7 @@ The app is code-complete as a prototype. The next phase is production-hardening.
 |----------|------|--------|--------|
 | 1 | Provision Mapbox token | 10 min | ✅ Done (local dev; prod token pending) |
 | 2 | Create Firebase project + configure Auth | 1-2 days | 🟡 Backend adapter built; needs project + google-services.json + Flutter |
-| 3 | Enable Google Vision API + create key | 1 day | ⬜ Needs cloud project |
+| 3 | AI vision scoring | 1 day | ✅ Done via Groq free tier (live-verified) |
 | 4 | Add rate limiting on submissions | 0.5 day | ✅ Done (NFR-SEC-004) |
 | 5 | Optimize APK size (ProGuard, R8, split) | 1 day | ✅ Done (arm64 39.8MB, −62%) |
 

@@ -25,6 +25,12 @@ if _vision_env in ("google", "gcp"):
         _VISION_IMPL = GoogleVisionProvider()
     except (ImportError, ValueError):
         pass
+elif _vision_env == "groq":
+    try:
+        from groq_vision_provider import GroqVisionProvider
+        _VISION_IMPL = GroqVisionProvider()
+    except (ImportError, ValueError):
+        pass
 
 
 def process_score_job(job: Job, scoring_service: AIScoringService | None = None) -> None:
