@@ -1611,3 +1611,22 @@ CaptureRepository.getMapMarkers requested limit=200 on GET /v1/submissions, but 
 ### Next Exact Action
 
 Tier 2: Postgres wiring, Flutter error handling. For production: register the release keystore SHA-1 in Firebase.
+
+## 2026-07-04: Tier 2 #7 (partial) — ApiClient network hardening
+
+### Status
+
+Network layer done; per-screen offline/retry UI still TODO.
+
+### Summary
+
+Hardened ApiClient: added a 15s request timeout; normalized transport failures (TimeoutException / SocketException / http.ClientException) into ApiException(isNetworkError: true) so callers catch one type; fixed error-message extraction to read the backend's {"error":{"message"}} format AND FastAPI's {"detail":...} (string or 422 list) — previously a 422 list crashed the `as String` cast. Added an isNetworkError flag to ApiException. 4 new tests (structured error, 422 list, transport failure, timeout). Flutter suite 129 passing.
+
+### Artifacts Changed
+
+- apps/mobile/pakimon_go_app/lib/core/network/api_client.dart
+- apps/mobile/pakimon_go_app/test/features/capture/api_client_test.dart
+
+### Next Exact Action
+
+Surface ApiException.isNetworkError in the UI (offline banner + retry) on the map/history/leaderboard screens. Then Tier 2 #6 Postgres wiring.

@@ -24,6 +24,30 @@ class _MockClient extends http.BaseClient {
   }
 }
 
+class _ThrowingClient extends http.BaseClient {
+  final Object error;
+
+  _ThrowingClient(this.error);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    throw error;
+  }
+}
+
+class _DelayedClient extends http.BaseClient {
+  final http.StreamedResponse _response;
+  final Duration delay;
+
+  _DelayedClient(this._response, this.delay);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    await Future.delayed(delay);
+    return _response;
+  }
+}
+
 void main() {
   group('ApiClient', () {
     test('GET returns parsed JSON', () async {
@@ -86,6 +110,73 @@ void main() {
       );
       final result = await client.get('/public', auth: false);
       expect(result, {'entries': []});
+    });
+
+    test('extracts message from structured {"error": {...}} body', () async {
+      final client = ApiClient(
+        client: _mockClient(429, {
+          'error': {'code': 'too_many_requests', 'message': 'Slow down'}
+        }),
+        baseUrl: 'http://test/api',
+        tokenProvider: () => 'test',
+      );
+      expect(
+        () => client.post('/submissions'),
+        throwsA(isA<ApiException>()
+            .having((e) => e.message, 'message', 'Slow down')),
+      );
+    });
+
+    test('handles 422 detail list without crashing', () async {
+      final client = ApiClient(
+        client: _mockClient(422, {
+          'detail': [
+            {
+              'msg': 'value too large',
+              'loc': ['query', 'limit'],
+            }
+          ]
+        }),
+        baseUrl: 'http://test/api',
+        tokenProvider: () => 'test',
+      );
+      expect(
+        () => client.get('/submissions'),
+        throwsA(isA<ApiException>()
+            .having((e) => e.statusCode, 'statusCode', 422)
+            .having((e) => e.message, 'message', 'value too large')),
+      );
+    });
+
+    test('transport failure becomes ApiException(isNetworkError)', () async {
+      final client = ApiClient(
+        client: _ThrowingClient(http.ClientException('boom')),
+        baseUrl: 'http://test/api',
+        tokenProvider: () => 'test',
+      );
+      expect(
+        () => client.get('/health'),
+        throwsA(isA<ApiException>()
+            .having((e) => e.isNetworkError, 'isNetworkError', true)),
+      );
+    });
+
+    test('slow request times out to ApiException(isNetworkError)', () async {
+      final resp = http.StreamedResponse(
+        http.ByteStream.fromBytes(utf8.encode('{}')),
+        200,
+      );
+      final client = ApiClient(
+        client: _DelayedClient(resp, const Duration(milliseconds: 200)),
+        baseUrl: 'http://test/api',
+        tokenProvider: () => 'test',
+        timeout: const Duration(milliseconds: 10),
+      );
+      expect(
+        () => client.get('/health'),
+        throwsA(isA<ApiException>()
+            .having((e) => e.isNetworkError, 'isNetworkError', true)),
+      );
     });
   });
 }
