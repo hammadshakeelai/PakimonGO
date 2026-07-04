@@ -1561,3 +1561,31 @@ Set VISION_PROVIDER=groq + GROQ_API_KEY in the API environment (GROQ_MODEL optio
 ### Next Exact Action
 
 Firebase Auth Flutter integration (firebase_auth + google_sign_in + google-services.json). Then Tier 2.
+
+## 2026-07-04: Tier 1 #2 complete (code) — Firebase Auth (backend + Flutter Google Sign-In)
+
+### Status
+
+Code-complete + tests pass. Live Google sign-in blocked by the emulator having no Google account.
+
+### Summary
+
+Backend: firebase-admin installed, service account at ~/.pakimongo/ (outside repo), FirebaseAuthAdapter active via AUTH_PROVIDER=firebase — verified (dev token -> 401; real Firebase ID token accepted). Flutter: added firebase_core 4.11 / firebase_auth 6.5 / google_sign_in 7.2, the google-services gradle plugin, minSdk 23, Firebase.initializeApp() in main, and a real "Sign in with Google" button (google_sign_in 7.x authenticate -> Firebase credential -> Firebase ID token -> backend). Debug APK builds/installs/runs; Firebase initializes. Fixed a login-screen RenderFlex overflow by wrapping the form in SingleChildScrollView. Flutter 125 tests pass.
+
+### Live verification notes
+
+- Registered the debug SHA-1 in Firebase (SHA-256 alone did NOT create the Android OAuth client); google-services.json now has the type-1 Android client.
+- Backend rejects fake tokens (401) with AUTH_PROVIDER=firebase.
+- Google Sign-In UI showed a black screen because the emulator has no Google account -> add a Google account to the emulator/device to finish the interactive flow.
+
+### Artifacts Changed
+
+- apps/mobile/pakimon_go_app/pubspec.yaml, pubspec.lock (firebase deps)
+- apps/mobile/pakimon_go_app/android/settings.gradle.kts, android/app/build.gradle.kts (google-services plugin, minSdk 23)
+- apps/mobile/pakimon_go_app/lib/main.dart (Firebase.initializeApp)
+- apps/mobile/pakimon_go_app/lib/features/auth/presentation/login_screen.dart (Google sign-in + scroll fix)
+- .gitignore (google-services.json). Not committed (secrets): google-services.json, .env.local, service account.
+
+### Next Exact Action
+
+Add a Google account to the emulator (or use a physical device) to complete the live Google sign-in test. Then Tier 2. For production: register the release keystore SHA-1 in Firebase.

@@ -48,3 +48,4 @@ ios/Flutter/flutter_export_environment.sh
 knowledge/graph/graphify-out/*
 !knowledge/graph/graphify-out/README.md
 reports/
+apps/mobile/pakimon_go_app/android/app/google-services.json

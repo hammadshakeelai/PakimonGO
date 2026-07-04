@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -19,8 +20,10 @@ import 'features/profile/presentation/profile_screen.dart';
 import 'features/submissions/domain/submission_history_viewmodel.dart';
 import 'features/submissions/presentation/submission_history_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   if (AppConfig.hasMapboxToken) {
     MapboxOptions.setAccessToken(AppConfig.mapboxAccessToken);

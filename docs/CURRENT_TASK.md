@@ -14,7 +14,7 @@ All code is built. Full inventory in `CLAUDE.md` and `PROJECT_COMPLETE.md`.
 
 The app works **locally** with dev providers (SQLite, fake auth, dummy AI, local storage). It is **not production-ready**. Key gaps:
 
-- No real auth (FakeAuthAdapter)
+- Firebase Auth wired (backend adapter + Flutter Google sign-in, AUTH_PROVIDER=firebase); FakeAuthAdapter is the dev default. Live sign-in needs a Google account on the device.
 - Real AI scoring available via Groq free tier (VISION_PROVIDER=groq, live-verified); DummyVisionProvider is the default
 - Map wired to Mapbox (local dev token); production token still needed
 - Submission rate limiting implemented (per-user cooldown, NFR-SEC-004)
