@@ -35,7 +35,7 @@ These must be done before any real user touches the app.
 |---|------|--------|---------|
 | 12 | **iOS build** | 1-2 weeks | Not started. Needs macOS + Xcode, iOS adaptation, camera/map permissions rework, TestFlight. |
 | 13 | **Privacy policy + terms** | 1 week | Required for store submission. Must cover data collection, location use, AI processing, minors, account deletion. |
-| 14 | **Moderation tools** | 2-3 weeks | FR-MOD requirements: report/block flows, content moderation queue, appeal system. None built. |
+| 14 | **Moderation tools** | 2-3 weeks | 🟡 User-facing half DONE: report submission/user (6 reasons, audited), block/unblock with leaderboard filtering, Blocked Users screen (FR-MOD-001..003, 009). Moderator console/appeals still unbuilt. |
 | 15 | **App store review prep** | 1 week | Screenshots, descriptions, age rating, privacy questionnaire, test accounts for reviewers. |
 
 ## Tier 4 — Social Features (post-launch)

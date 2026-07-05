@@ -58,7 +58,7 @@ You have already provisioned: **Mapbox token**, **Groq key**, **Firebase project
 ## 🎯 Goal 4 — Google Play submission (production)
 
 - [ ] **Privacy policy + Terms** (required). Must cover data collection, location use, AI processing, **minors**, and account deletion. (Your onboarding/age-gate copy is a starting point.)
-- [ ] **Moderation tools** — report / block / appeal flows are **not built yet**; Play requires UGC moderation. This is real dev work (say the word and I'll build the report/block flow — it's no-credential).
+- [x] **Moderation tools (user-facing)** — report + block flows are **built** (report submissions/users, block/unblock, leaderboard filtering, audit log). A moderator review console + appeals remain post-launch work.
 - [ ] Play Console ($25 one-time): create the app, store listing, screenshots, feature graphic, **content/age rating**, and the **Data Safety** form.
 - [ ] Upload the signed **AAB** (Goal 1 keystore) with Play App Signing; add reviewer test accounts.
 
@@ -83,4 +83,4 @@ You have already provisioned: **Mapbox token**, **Groq key**, **Firebase project
 
 The app builds, tests, and runs locally today (`.\run_local.ps1` + `flutter run`). The list above is only for **shipping to other people / the stores**.
 
-The single biggest remaining **code** item for the store is **moderation (report/block)** — everything else on your side is accounts, keys, and paperwork.
+Report/block moderation is now built — everything left on your side is accounts, keys, and paperwork.

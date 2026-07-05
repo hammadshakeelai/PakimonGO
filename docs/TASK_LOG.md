@@ -1816,3 +1816,34 @@ leaderboard → notifications → profile → dark mode → collection.
 
 Moderation (report/block) — last code blocker for Play Store. User-side:
 release keystore + SHA-1 (see docs/LAUNCH_CHECKLIST.md).
+
+---
+
+## 2026-07-06 (later) — Moderation + map overhaul + UI polish
+
+### Built
+
+- **Moderation (FR-MOD-001..003, 009)**: reports (6 reasons, dedup 409,
+  audit rows), blocks (idempotent, one-directional leaderboard filtering),
+  17 API tests. Flutter: report dialog, report action on submission detail,
+  leaderboard report/block menu, Profile -> Blocked Users screen, 9 tests.
+- **Map overhaul**: markers drawn as colored circle annotations, camera
+  auto-fit with street-biased zoom (z16 tight), Mapbox Standard 3D style
+  with 55° pitch at street zooms, Snapchat-style camera FAB -> Capture tab,
+  AppBar refresh (pull-to-refresh removed, it fought panning).
+- **Backend location fix**: list payload now carries publicLocation with
+  ~1km rounded cells (never exact coords) — the map previously had NO
+  coordinates to draw. Marker parser handles both payload shapes.
+- **Profile redesign**: identity header (avatar/email/trust chip),
+  own Scaffold + AppBar (it had neither -> Chip crash + no back button),
+  full-width actions. MapViewModel dispose-ownership crash fixed.
+
+### State
+
+145 backend tests (129 API pre-location +1, +17 moderation), 162 Flutter
+tests, analyze clean, migrations 001->004 apply cleanly. Deployed to
+Render on push (auto-deploy).
+
+### Next
+
+Moderator console (post-launch), loading shimmers, accessibility.
