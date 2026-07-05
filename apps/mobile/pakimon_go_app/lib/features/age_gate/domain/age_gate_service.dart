@@ -1,6 +1,7 @@
 /// Neutral 13+ age gate (FR-AGE-001..003). Collects a birth year without
 /// revealing the threshold, blocks under-13, and records a coarse band
 /// (teen 13–17 / adult 18+) for stricter defaults later.
+library;
 
 enum AgeGateStatus { unknown, blocked, verified }
 

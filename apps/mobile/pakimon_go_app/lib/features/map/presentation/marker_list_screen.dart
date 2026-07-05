@@ -15,7 +15,7 @@ class MarkerListScreen extends StatelessWidget {
           ? const Center(child: Text('No sightings yet'))
           : ListView.separated(
               itemCount: markers.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final marker = markers[index];
                 return ListTile(

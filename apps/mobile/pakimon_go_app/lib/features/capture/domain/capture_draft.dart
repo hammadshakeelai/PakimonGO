@@ -1,6 +1,7 @@
 /// Represents a local capture draft — no camera, upload, or scoring logic.
 ///
 /// Requirements: FR-CAP-001, FR-CAP-003, FR-CAP-004, FR-CAP-019
+library;
 
 import 'draft_persistence_service.dart';
 

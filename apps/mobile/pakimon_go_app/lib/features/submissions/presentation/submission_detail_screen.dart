@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/core/network/api_config.dart';
 import 'package:pakimon_go_app/features/species/presentation/species_detail_screen.dart';
@@ -145,7 +144,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
             child: const Center(child: CircularProgressIndicator()),
           );
         },
-        errorBuilder: (_, __, ___) => Container(
+        errorBuilder: (_, _, _) => Container(
           height: 250,
           color: theme.colorScheme.surfaceContainerHighest,
           child: Column(

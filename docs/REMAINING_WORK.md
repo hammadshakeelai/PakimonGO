@@ -59,7 +59,7 @@ These must be done before any real user touches the app.
 | API docs cleanup | 0.5 day | OpenAPI has placeholder v2 entries |
 | Release APK optimization | 1 day | 105.8MB → target <60MB |
 | Error analytics | 1 day | Crashlytics or Sentry integration |
-| Flutter analyze warnings | 1 day | 8 info-level issues remain |
+| Flutter analyze warnings | 1 day | ✅ DONE — `flutter analyze` clean (0 issues) |
 
 ## Key Architectural Gaps (non-obvious)
 

@@ -1,6 +1,7 @@
 /// First-run onboarding (FR-ONB-001..005): safety, privacy, and scoring-honesty
 /// education shown once. Persistence is behind a tiny interface so it is
 /// testable without the shared_preferences plugin.
+library;
 
 abstract class OnboardingStore {
   Future<bool> hasSeen();

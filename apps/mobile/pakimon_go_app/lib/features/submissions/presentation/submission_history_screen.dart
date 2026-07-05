@@ -62,7 +62,7 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
       child: ListView.separated(
         padding: const EdgeInsets.all(8),
         itemCount: widget.viewModel.submissions.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
+        separatorBuilder: (_, _) => const Divider(height: 1),
         itemBuilder: (context, index) {
           final sub = widget.viewModel.submissions[index];
           final statusColor = switch (sub.scoreState.status) {

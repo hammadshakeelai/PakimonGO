@@ -120,7 +120,7 @@ void main() {
   });
 
   group('LeaderboardScreen', () {
-    Widget _buildTestApp(LeaderboardViewModel vm) {
+    Widget buildTestApp(LeaderboardViewModel vm) {
       return MaterialApp(
         home: Scaffold(body: LeaderboardScreen(viewModel: vm)),
       );
@@ -134,7 +134,7 @@ void main() {
         repository: CaptureRepository(client: client),
       );
       vm.fetchLeaderboard();
-      await tester.pumpWidget(_buildTestApp(vm));
+      await tester.pumpWidget(buildTestApp(vm));
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
@@ -145,7 +145,7 @@ void main() {
       final vm = LeaderboardViewModel(
         repository: CaptureRepository(client: client),
       );
-      await tester.pumpWidget(_buildTestApp(vm));
+      await tester.pumpWidget(buildTestApp(vm));
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       expect(find.text('No leaderboard data yet'), findsOneWidget);
@@ -164,7 +164,7 @@ void main() {
       final vm = LeaderboardViewModel(
         repository: CaptureRepository(client: client),
       );
-      await tester.pumpWidget(_buildTestApp(vm));
+      await tester.pumpWidget(buildTestApp(vm));
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
 
