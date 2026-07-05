@@ -124,7 +124,7 @@ void main() {
     await tester.pumpWidget(_buildTestScreen(vm));
     await tester.pumpAndSettle();
 
-    expect(find.text('Failed to load submissions'), findsOneWidget);
+    expect(find.text('Something went wrong'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
   });
 }

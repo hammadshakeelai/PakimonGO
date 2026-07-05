@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/submissions/domain/submission_history_viewmodel.dart';
 import 'package:pakimon_go_app/features/submissions/presentation/submission_detail_screen.dart';
+import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
 class SubmissionHistoryScreen extends StatefulWidget {
   final SubmissionHistoryViewModel viewModel;
@@ -35,22 +36,10 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
     }
 
     if (widget.viewModel.error != null && widget.viewModel.submissions.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.error_outline, size: 48, color: Colors.red.shade300),
-            const SizedBox(height: 8),
-            Text('Failed to load submissions',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8),
-            FilledButton.tonalIcon(
-              onPressed: widget.viewModel.fetchSubmissions,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
+      return ErrorRetryView(
+        message: widget.viewModel.error!,
+        onRetry: widget.viewModel.fetchSubmissions,
+        isOffline: widget.viewModel.isOffline,
       );
     }
 

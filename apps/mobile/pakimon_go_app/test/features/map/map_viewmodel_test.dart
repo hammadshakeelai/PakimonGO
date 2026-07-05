@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakimon_go_app/core/network/api_client.dart';
@@ -81,7 +79,9 @@ void main() {
 
     test('fetchMarkers handles error', () async {
       final vm = MapViewModel(
-        repository: _MockRepository(error: Exception('API error')),
+        repository: _MockRepository(
+          error: ApiException(statusCode: 500, message: 'API error'),
+        ),
       );
 
       await vm.fetchMarkers();

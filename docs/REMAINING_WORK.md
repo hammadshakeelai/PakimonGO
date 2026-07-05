@@ -23,7 +23,7 @@ These must be done before any real user touches the app.
 | # | Task | Effort | Details |
 |---|------|--------|---------|
 | 6 | **PostgreSQL migration** | 1 day | Wire real Postgres connection string. Docker Compose already configured for PG. |
-| 7 | **Error handling in Flutter** 🟡 in progress | Network layer hardened: `ApiClient` now has a 15s timeout, normalizes timeout/offline/unreachable into `ApiException(isNetworkError)`, and extracts backend `{"error":{...}}` + 422 messages correctly (+4 tests). TODO: per-screen offline banners + retry UI. |
+| 7 | **Error handling in Flutter** ✅ core done | `ApiClient`: 15s timeout, transport errors → `ApiException(isNetworkError)`, correct backend/422 message extraction. Viewmodels expose `isOffline` + clean messages; shared `ErrorRetryView` (offline vs error + Retry) on Map/History/Leaderboard. 129 tests. TODO: extend to Profile/Collection + inline retry on partial data. |
 | 8 | **Onboarding screens** | 2-3 days | FR-ONB-001 through 005: safety education, privacy explanation, scoring honesty, permission requests with context. |
 | 9 | **Age gate (13+)** | 1 day | FR-AGE-001 through 003: neutral birth-year gate, block <13, stricter defaults for 13-17. |
 | 10 | **End-to-end tests on real device** | 2-3 days | All 291 tests are unit/widget. No real-device E2E testing for camera, map, upload, scoring flow. |

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../../shared/widgets/error_retry_view.dart';
 import '../../capture/data/capture_repository.dart';
-import '../../../shared/models/submission_marker.dart';
 import '../domain/map_viewmodel.dart';
 import 'marker_list_screen.dart';
 
@@ -71,22 +71,10 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     if (_viewModel.error != null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 12),
-            Text('Failed to load sightings',
-                style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            FilledButton.icon(
-              onPressed: _viewModel.fetchMarkers,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
+      return ErrorRetryView(
+        message: _viewModel.error!,
+        onRetry: _viewModel.fetchMarkers,
+        isOffline: _viewModel.isOffline,
       );
     }
 
@@ -124,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Widget _buildMarkerOverlay() {
     final clusters = _viewModel.clusters;
-    final hasClusters = clusters.length > 0;
+    final hasClusters = clusters.isNotEmpty;
 
     return Positioned(
       left: 12,

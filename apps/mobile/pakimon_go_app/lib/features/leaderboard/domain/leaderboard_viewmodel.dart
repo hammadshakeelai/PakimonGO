@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
 
@@ -7,21 +8,25 @@ class LeaderboardViewModel extends ChangeNotifier {
 
   List<LeaderboardEntry> _entries = [];
   int _total = 0;
-  int _limit = 50;
+  final int _limit;
   bool _isLoading = false;
   String? _error;
+  bool _isOffline = false;
 
   LeaderboardViewModel({required CaptureRepository repository})
-      : _repository = repository;
+      : _repository = repository,
+        _limit = 50;
 
   List<LeaderboardEntry> get entries => _entries;
   int get total => _total;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  bool get isOffline => _isOffline;
 
   Future<void> fetchLeaderboard() async {
     _isLoading = true;
     _error = null;
+    _isOffline = false;
     notifyListeners();
 
     try {
@@ -32,7 +37,10 @@ class LeaderboardViewModel extends ChangeNotifier {
           .toList();
       _total = _entries.length;
     } catch (e) {
-      _error = e.toString();
+      _isOffline = e is ApiException && e.isNetworkError;
+      _error = e is ApiException
+          ? e.message
+          : 'Something went wrong. Please try again.';
     }
 
     _isLoading = false;

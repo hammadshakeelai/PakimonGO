@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/map/domain/cluster_service.dart';
 import 'package:pakimon_go_app/shared/models/submission_marker.dart';
@@ -9,6 +10,7 @@ class MapViewModel extends ChangeNotifier {
   List<ClusterMarker> _clusters = [];
   bool _isLoading = false;
   String? _error;
+  bool _isOffline = false;
 
   MapViewModel({required CaptureRepository repository})
       : _repository = repository;
@@ -17,6 +19,7 @@ class MapViewModel extends ChangeNotifier {
   List<ClusterMarker> get clusters => _clusters;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  bool get isOffline => _isOffline;
   int get markerCount => _markers.length;
   int get clusterCount => _clusters.length;
   bool get hasMarkers => _markers.isNotEmpty;
@@ -24,13 +27,17 @@ class MapViewModel extends ChangeNotifier {
   Future<void> fetchMarkers() async {
     _isLoading = true;
     _error = null;
+    _isOffline = false;
     notifyListeners();
 
     try {
       _markers = await _repository.getMapMarkers();
       _clusters = _buildClusters();
     } catch (e) {
-      _error = e.toString();
+      _isOffline = e is ApiException && e.isNetworkError;
+      _error = e is ApiException
+          ? e.message
+          : 'Something went wrong. Please try again.';
       _markers = [];
       _clusters = [];
     }

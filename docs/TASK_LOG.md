@@ -1630,3 +1630,24 @@ Hardened ApiClient: added a 15s request timeout; normalized transport failures (
 ### Next Exact Action
 
 Surface ApiException.isNetworkError in the UI (offline banner + retry) on the map/history/leaderboard screens. Then Tier 2 #6 Postgres wiring.
+
+## 2026-07-05: Tier 2 #7 — offline/error + Retry UI on Map/History/Leaderboard
+
+### Status
+
+Core error handling done.
+
+### Summary
+
+Added a shared ErrorRetryView widget (cloud-off + "You appear to be offline" for transport failures; error icon + "Something went wrong" otherwise; both show the real message + a Retry button). MapViewModel, SubmissionHistoryViewModel and LeaderboardViewModel now expose isOffline and store a clean message (ApiException.message, or a generic line for unexpected errors) instead of raw e.toString(). Wired ErrorRetryView into the Map, History and Leaderboard screens (replacing their bespoke error blocks). Updated 3 tests that asserted the old hardcoded titles. Flutter suite 129 passing.
+
+### Artifacts Changed
+
+- lib/shared/widgets/error_retry_view.dart (new)
+- lib/features/{map,submissions,leaderboard}/domain/*_viewmodel.dart (isOffline + clean messages)
+- lib/features/{map,submissions,leaderboard}/presentation/*_screen.dart (use ErrorRetryView)
+- test: map_viewmodel_test (throw ApiException), map_screen_test + submission_history_screen_test (new error-state text)
+
+### Next Exact Action
+
+Extend the same pattern to Profile/Collection screens; then Tier 2 #6 Postgres wiring.

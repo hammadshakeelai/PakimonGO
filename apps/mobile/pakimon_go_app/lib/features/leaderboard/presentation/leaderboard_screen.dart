@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/leaderboard/domain/leaderboard_viewmodel.dart';
+import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   final LeaderboardViewModel viewModel;
@@ -38,20 +39,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     }
 
     if (vm.error != null && vm.entries.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 16),
-            Text('Failed to load leaderboard', style: theme.textTheme.bodyLarge),
-            const SizedBox(height: 8),
-            FilledButton.tonal(
-              onPressed: _onRefresh,
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
+      return ErrorRetryView(
+        message: vm.error!,
+        onRetry: _onRefresh,
+        isOffline: vm.isOffline,
       );
     }
 

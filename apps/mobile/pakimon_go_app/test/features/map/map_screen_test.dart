@@ -82,7 +82,7 @@ void main() {
     repo.completeError(Exception('Network error'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Failed to load sightings'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
     expect(find.byIcon(Icons.refresh), findsOneWidget);
   });
 
