@@ -108,14 +108,29 @@ class SubmissionResponse {
   });
 
   factory SubmissionResponse.fromJson(Map<String, dynamic> json) {
+    // Two payload shapes exist: the detail/create response carries
+    // `scoreState`/`realName`/`publicLocation`, while the list endpoint
+    // returns `species`/`context`/`status` with a compact `scoreEvent`.
+    final scoreStateJson = json['scoreState'] as Map<String, dynamic>?;
+    final scoreEvent = json['scoreEvent'] as Map<String, dynamic>?;
+    final scoreState = scoreStateJson != null
+        ? ScoreState.fromJson(scoreStateJson)
+        : ScoreState(
+            status: json['status'] as String? ?? 'pending',
+            visiblePoints: scoreEvent?['points'] as int?,
+            explanationSummary: scoreEvent?['explanation'] as String?,
+            ledger: scoreEvent?['ledger'] as String?,
+            submissionId: json['submissionId'] as String?,
+          );
     return SubmissionResponse(
       submissionId: json['submissionId'] as String,
       mediaAssetId: json['mediaAssetId'] as String,
-      realName: json['realName'] as String?,
-      animalContext: json['animalContext'] as String?,
-      scoreState: ScoreState.fromJson(json['scoreState'] as Map<String, dynamic>),
-      visibility: json['visibility'] as String,
-      publicLocation: json['publicLocation'] as Map<String, dynamic>,
+      realName: (json['realName'] ?? json['species']) as String?,
+      animalContext: (json['animalContext'] ?? json['context']) as String?,
+      scoreState: scoreState,
+      visibility: json['visibility'] as String? ?? 'private',
+      publicLocation:
+          json['publicLocation'] as Map<String, dynamic>? ?? const {},
     );
   }
 

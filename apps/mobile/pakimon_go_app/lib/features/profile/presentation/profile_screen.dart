@@ -126,23 +126,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                 ],
-                DropdownButtonFormField<String>(
-                  initialValue: vm.selectedAgeBand.isEmpty ? null : vm.selectedAgeBand,
-                  decoration: const InputDecoration(
-                    labelText: 'Age Band',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: _ageBands
-                      .where((b) => b.isNotEmpty)
-                      .map((b) => DropdownMenuItem(
-                            value: b,
-                            child: Text(b[0].toUpperCase() + b.substring(1)),
-                          ))
-                      .toList(),
-                  onChanged: (v) {
-                    if (v != null) vm.setAgeBand(v);
-                  },
-                ),
+                Builder(builder: (context) {
+                  // The backend may hold a band outside our preset list
+                  // (e.g. legacy "18_24"); include it so the dropdown
+                  // renders instead of crashing on an unknown value.
+                  final options = [
+                    ..._ageBands.where((b) => b.isNotEmpty),
+                    if (vm.selectedAgeBand.isNotEmpty &&
+                        !_ageBands.contains(vm.selectedAgeBand))
+                      vm.selectedAgeBand,
+                  ];
+                  return DropdownButtonFormField<String>(
+                    initialValue:
+                        vm.selectedAgeBand.isEmpty ? null : vm.selectedAgeBand,
+                    decoration: const InputDecoration(
+                      labelText: 'Age Band',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: options
+                        .map((b) => DropdownMenuItem(
+                              value: b,
+                              child:
+                                  Text(b[0].toUpperCase() + b.substring(1)),
+                            ))
+                        .toList(),
+                    onChanged: (v) {
+                      if (v != null) vm.setAgeBand(v);
+                    },
+                  );
+                }),
                 const SizedBox(height: 12),
                 TextFormField(
                   initialValue: vm.homeRegion,

@@ -42,6 +42,45 @@ class _MockRepository extends CaptureRepository {
   }
 }
 
+/// Mirrors the REAL GET /v1/submissions list payload (submission_list.py),
+/// which differs from the detail/create shape: `species`/`context`/`status`
+/// plus a compact `scoreEvent` instead of `scoreState`/`publicLocation`.
+class _ListShapeRepository extends CaptureRepository {
+  _ListShapeRepository() : super();
+
+  @override
+  Future<Map<String, dynamic>> getSubmissions({
+    int limit = 20,
+    int offset = 0,
+    String? status,
+    String sortBy = 'createdAt',
+    String sortOrder = 'desc',
+  }) {
+    return Future.value({
+      'submissions': <Map<String, dynamic>>[
+        {
+          'submissionId': 'seed_sub_4',
+          'userId': 'seed_user_alpha',
+          'mediaAssetId': 'seed_media_4',
+          'status': 'ai_evaluated',
+          'submittedAt': '2026-07-03T17:32:22.414104',
+          'createdAt': '2026-07-03T17:32:22.414255',
+          'species': 'Golden Eagle',
+          'context': 'wild',
+          'cuteName': 'Golden Eagle',
+          'caption': 'A beautiful Golden Eagle spotted in the wild!',
+          'scoreEvent': {
+            'points': 50,
+            'ledger': 'wild',
+            'explanation': 'wild',
+          },
+        },
+      ],
+      'pagination': <String, dynamic>{'limit': 20, 'offset': 0, 'total': 1},
+    });
+  }
+}
+
 class _ErrorRepository extends CaptureRepository {
   _ErrorRepository() : super();
 
@@ -105,6 +144,24 @@ void main() {
       expect(vm.error, isNotNull);
       expect(vm.total, 0);
       expect(vm.isLoading, false);
+    });
+
+    test('fetchSubmissions parses the real list-endpoint shape', () async {
+      final repo = _ListShapeRepository();
+      final vm = SubmissionHistoryViewModel(repository: repo);
+
+      await vm.fetchSubmissions();
+
+      expect(vm.error, isNull);
+      expect(vm.submissions.length, 1);
+      final sub = vm.submissions.first;
+      expect(sub.realName, 'Golden Eagle');
+      expect(sub.animalContext, 'wild');
+      expect(sub.scoreState.status, 'ai_evaluated');
+      expect(sub.points, 50);
+      expect(sub.scoreState.ledger, 'wild');
+      expect(sub.publicLocation, isEmpty);
+      expect(vm.total, 1);
     });
 
     test('toMarker converts SubmissionResponse correctly', () async {

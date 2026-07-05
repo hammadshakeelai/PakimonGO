@@ -5,7 +5,6 @@ import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/profile/domain/profile_viewmodel.dart';
 import 'package:pakimon_go_app/features/profile/presentation/profile_screen.dart';
-import 'package:pakimon_go_app/shared/models/api_models.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -210,6 +209,33 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('user-123'), findsOneWidget);
       expect(find.text('test@example.com'), findsOneWidget);
+    });
+
+    testWidgets('renders when backend holds an age band outside the presets',
+        (tester) async {
+      // Regression: seed users carry legacy bands like "18_24"; an unknown
+      // dropdown value used to crash the whole Profile screen.
+      final client = _MockClient({
+        'GET http://test.com/users/me': http.Response(
+          jsonEncode(_profileJson(ageBand: '18_24', homeRegion: 'PK')),
+          200,
+          headers: {'content-type': 'application/json'},
+        ),
+      });
+      final repo = CaptureRepository(
+        client: ApiClient(client: client, baseUrl: 'http://test.com'),
+      );
+      final vm = ProfileViewModel(repository: repo);
+      await tester.pumpWidget(MaterialApp(
+        home: ProfileScreen(
+          viewModel: vm,
+          authService: AuthService(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('user-123'), findsOneWidget);
+      expect(find.text('18_24'), findsOneWidget);
     });
 
     testWidgets('shows error state with retry button', (tester) async {
