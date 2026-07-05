@@ -1776,4 +1776,43 @@ Added light + dark Material 3 themes (AppTheme) seeded from the brand green. The
 
 ### Next Exact Action
 
-Tier 5 polish: accessibility (semantic labels), loading shimmers, or address the 8 flutter analyze info warnings.
+Tier 5 polish: accessibility (semantic labels), loading shimmers. (analyze warnings: DONE)
+
+---
+
+## 2026-07-06 — Render deploy LIVE + emulator UI walkthrough (3 crashes fixed)
+
+### What Happened
+
+**Backend deployed to production:** `https://pakimongo-api.onrender.com` via
+Blueprint (pakimongo-db Postgres + pakimongo-api web service, free tier).
+Deploy fixes needed: correct repo URL, SYNC_DATABASE_URL from managed DB,
+PYTHONPATH to api root, migrations in startCommand (free tier lacks
+preDeployCommand), $PORT bind, postgres:// scheme normalization,
+python-multipart in requirements (FastAPI Form/File crashed without it).
+All 3 alembic migrations applied on Render Postgres. Smoke-verified:
+/health/live, /health/ready (DB connected), authed /v1/users/me.
+
+**Full emulator UI walkthrough** (Pixel 9a, fake auth + real seed data)
+found and fixed 3 crashes the mock-based tests missed:
+1. History tab: SubmissionResponse.fromJson only parsed the detail shape;
+   the list endpoint returns species/context/status + scoreEvent → parse
+   now handles both (regression test w/ real payload).
+2. Profile: DropdownButtonFormField crashed on legacy ageBand "18_24"
+   not in preset items → unknown bands appended to options.
+3. Collection: pushed as a route with no Scaffold → 'No Material widget
+   found' from its dropdowns → screen now supplies Scaffold + AppBar;
+   tests un-wrapped to pump it bare like the real route.
+
+Verified working on emulator: age gate → onboarding (4 pages) → login →
+map (real Mapbox globe w/ --dart-define token) → history (real data) →
+leaderboard → notifications → profile → dark mode → collection.
+
+### Tests
+
+153 Flutter (was 151), 112 API, 69 scoring — all green. analyze clean.
+
+### Next Exact Action
+
+Moderation (report/block) — last code blocker for Play Store. User-side:
+release keystore + SHA-1 (see docs/LAUNCH_CHECKLIST.md).
