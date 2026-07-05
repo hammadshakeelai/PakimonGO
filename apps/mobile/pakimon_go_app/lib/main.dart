@@ -5,6 +5,9 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'core/auth/auth_service.dart';
 import 'core/config/app_config.dart';
 import 'core/network/api_client.dart';
+import 'features/age_gate/data/shared_prefs_age_gate_store.dart';
+import 'features/age_gate/domain/age_gate_service.dart';
+import 'features/age_gate/presentation/age_gate.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/capture/data/capture_repository.dart';
 import 'features/capture/presentation/capture_screen.dart';
@@ -36,6 +39,8 @@ class PakimonGoApp extends StatelessWidget {
   PakimonGoApp({super.key});
 
   final AuthService _authService = AuthService();
+  final AgeGateService _ageGate =
+      AgeGateService(store: SharedPrefsAgeGateStore());
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,10 @@ class PakimonGoApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: _AuthGate(authService: _authService),
+      home: AgeGate(
+        service: _ageGate,
+        child: _AuthGate(authService: _authService),
+      ),
     );
   }
 }

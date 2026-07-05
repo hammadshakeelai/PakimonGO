@@ -1693,3 +1693,21 @@ PUT /v1/media/upload previously read the whole file with no checks. Added: (1) o
 ### Next Exact Action
 
 Tier 2 #6 Postgres wiring (needs Docker) or Tier 2 #8/#9 onboarding + age gate.
+
+## 2026-07-05: Tier 2 #9 — age gate (13+)
+
+### Summary
+
+Added a neutral COPPA-style age gate (FR-AGE-001..003). AgeGateService collects a birth year (without revealing the threshold), blocks under-13, and records a coarse band (teen 13–17 / adult 18+) for future stricter defaults. Persisted via a small AgeGateStore interface (SharedPreferences impl for prod, in-memory for tests) so it asks once. AgeGate wraps the whole app before the auth gate: spinner while loading, neutral birth-year screen when unknown, blocked screen for under-13, otherwise the app. 11 tests (7 service logic + 4 widget proving the gating behaviour). Analyze clean; Flutter suite 140.
+
+### Artifacts Changed
+
+- lib/features/age_gate/domain/age_gate_service.dart (new)
+- lib/features/age_gate/data/shared_prefs_age_gate_store.dart (new)
+- lib/features/age_gate/presentation/age_gate.dart (new)
+- lib/main.dart (wrap home in AgeGate)
+- test/features/age_gate/{age_gate_service_test,age_gate_widget_test}.dart (new)
+
+### Next Exact Action
+
+Tier 2 #8 onboarding screens, or #6 Postgres wiring (needs Docker). Also: persist the age band to the backend profile on first sign-in.
