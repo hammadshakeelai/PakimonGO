@@ -24,7 +24,7 @@ These must be done before any real user touches the app.
 |---|------|--------|---------|
 | 6 | **PostgreSQL migration** | 1 day | Wire real Postgres connection string. Docker Compose already configured for PG. |
 | 7 | **Error handling in Flutter** ✅ DONE | `ApiClient`: 15s timeout, transport errors → `ApiException(isNetworkError)`, correct backend/422 message extraction. All 5 data screens (Map/History/Leaderboard/Profile/Collection) use the shared `ErrorRetryView` (offline vs error + real message + Retry) via `isOffline` on the viewmodels. 129 tests. |
-| 8 | **Onboarding screens** | 2-3 days | FR-ONB-001 through 005: safety education, privacy explanation, scoring honesty, permission requests with context. |
+| 8 | **Onboarding screens** ✅ DONE | 4-page first-run flow (FR-ONB-001..005): welcome, wildlife safety, location privacy + permission context, scoring honesty. Persisted via `OnboardingGate` (after the age gate, before auth). 6 tests. |
 | 9 | **Age gate (13+)** ✅ DONE | Neutral birth-year gate (FR-AGE-001..003): blocks <13, records a teen/adult band, persisted so it asks once. `AgeGate` wraps the whole app before auth. 11 tests (logic + widget). |
 | 10 | **End-to-end tests on real device** | 2-3 days | All 291 tests are unit/widget. No real-device E2E testing for camera, map, upload, scoring flow. |
 | 11 | **CI secrets setup** | 0.5 day | Deploy workflow references `RENDER_API_KEY` GitHub secret — not configured. |

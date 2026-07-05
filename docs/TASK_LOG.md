@@ -1711,3 +1711,23 @@ Added a neutral COPPA-style age gate (FR-AGE-001..003). AgeGateService collects 
 ### Next Exact Action
 
 Tier 2 #8 onboarding screens, or #6 Postgres wiring (needs Docker). Also: persist the age band to the backend profile on first sign-in.
+
+## 2026-07-05: Tier 2 #8 — onboarding screens
+
+### Summary
+
+Added a 4-page first-run onboarding flow (FR-ONB-001..005): welcome, wildlife safety (don't chase/touch/feed), location privacy + "we only ask for camera/location when you use them", and scoring honesty (wild scores most; zoo/pet capped; duplicates don't score; AI isn't perfect). OnboardingService persists a seen flag via a small OnboardingStore interface (SharedPreferences prod / in-memory test). OnboardingGate wraps the app after the age gate and before auth: spinner while loading, the PageView flow when unseen (page dots + Next/Get started + Skip), otherwise the app. 6 tests (2 service + 4 widget covering first-launch, Skip, full paging, already-seen). Analyze clean; Flutter suite 146.
+
+Startup chain is now: AgeGate -> OnboardingGate -> AuthGate -> Home.
+
+### Artifacts Changed
+
+- lib/features/onboarding/domain/onboarding_service.dart (new)
+- lib/features/onboarding/data/shared_prefs_onboarding_store.dart (new)
+- lib/features/onboarding/presentation/onboarding.dart (new)
+- lib/main.dart (wrap child in OnboardingGate)
+- test/features/onboarding/{onboarding_service_test,onboarding_widget_test}.dart (new)
+
+### Next Exact Action
+
+Tier 2 #6 Postgres wiring (Docker is now running) or #11 CI secrets. Also: persist age band + onboarding completion to the backend profile.

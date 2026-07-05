@@ -17,6 +17,9 @@ import 'features/leaderboard/presentation/leaderboard_screen.dart';
 import 'features/map/domain/map_viewmodel.dart';
 import 'features/map/presentation/map_screen.dart';
 import 'features/notifications/domain/notification_viewmodel.dart';
+import 'features/onboarding/data/shared_prefs_onboarding_store.dart';
+import 'features/onboarding/domain/onboarding_service.dart';
+import 'features/onboarding/presentation/onboarding.dart';
 import 'features/notifications/presentation/notification_screen.dart';
 import 'features/profile/domain/profile_viewmodel.dart';
 import 'features/profile/presentation/profile_screen.dart';
@@ -41,6 +44,8 @@ class PakimonGoApp extends StatelessWidget {
   final AuthService _authService = AuthService();
   final AgeGateService _ageGate =
       AgeGateService(store: SharedPrefsAgeGateStore());
+  final OnboardingService _onboarding =
+      OnboardingService(store: SharedPrefsOnboardingStore());
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,10 @@ class PakimonGoApp extends StatelessWidget {
       ),
       home: AgeGate(
         service: _ageGate,
-        child: _AuthGate(authService: _authService),
+        child: OnboardingGate(
+          service: _onboarding,
+          child: _AuthGate(authService: _authService),
+        ),
       ),
     );
   }
