@@ -17,6 +17,8 @@ class LeaderboardViewModel extends ChangeNotifier {
       : _repository = repository,
         _limit = 50;
 
+  CaptureRepository get repository => _repository;
+
   List<LeaderboardEntry> get entries => _entries;
   int get total => _total;
   bool get isLoading => _isLoading;

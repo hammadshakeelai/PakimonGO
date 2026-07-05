@@ -77,6 +77,7 @@ def get_leaderboard(
     sort_by: str = "totalScore",
     sort_order: str = "desc",
     include_sensitive: bool = False,
+    exclude_user_ids: set[str] | None = None,
 ) -> tuple[list[dict], int]:
     query = (
         db.query(
@@ -99,6 +100,10 @@ def get_leaderboard(
             .exists()
         )
         query = query.filter(~sensitive_subq)
+
+    # FR-MOD-003: hide users the requester has blocked.
+    if exclude_user_ids:
+        query = query.filter(~User.id.in_(exclude_user_ids))
 
     query = query.group_by(User.id, User.age_band, User.home_region)
 

@@ -6,6 +6,13 @@ from .media_asset import (
     get_media_asset,
     update_media_asset_storage_key,
 )
+from .moderation import (
+    create_block,
+    create_report,
+    delete_block,
+    get_blocked_user_ids,
+    get_blocks,
+)
 from .notification import (
     create_notification,
     get_notifications,
@@ -30,6 +37,11 @@ from .submission_list import get_submissions
 from .user import get_or_create_user, update_user
 
 __all__ = [
+    "create_block",
+    "create_report",
+    "delete_block",
+    "get_blocked_user_ids",
+    "get_blocks",
     "create_media_asset",
     "create_notification",
     "get_media_asset",

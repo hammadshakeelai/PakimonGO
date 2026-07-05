@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/core/network/api_config.dart';
+import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
+import 'package:pakimon_go_app/features/moderation/presentation/report_dialog.dart';
 import 'package:pakimon_go_app/features/species/presentation/species_detail_screen.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
 import 'package:pakimon_go_app/shared/models/submission_marker.dart';
@@ -7,7 +9,11 @@ import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 class SubmissionDetailScreen extends StatefulWidget {
   final SubmissionResponse submission;
 
-  const SubmissionDetailScreen({super.key, required this.submission});
+  /// When provided, the AppBar shows a report action (FR-MOD-001).
+  final CaptureRepository? repository;
+
+  const SubmissionDetailScreen(
+      {super.key, required this.submission, this.repository});
 
   @override
   State<SubmissionDetailScreen> createState() => _SubmissionDetailScreenState();
@@ -30,6 +36,20 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(s.realName ?? 'Submission Detail'),
+        actions: [
+          if (widget.repository != null)
+            IconButton(
+              icon: const Icon(Icons.flag_outlined),
+              tooltip: 'Report this submission',
+              onPressed: () => showReportDialog(
+                context,
+                repository: widget.repository!,
+                targetType: 'submission',
+                targetId: s.submissionId,
+                targetLabel: s.realName,
+              ),
+            ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

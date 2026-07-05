@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.dependencies import get_optional_user
-from src.infrastructure.database.repositories import get_leaderboard
+from src.infrastructure.database.repositories import get_blocked_user_ids, get_leaderboard
 from src.infrastructure.database.session import get_db
 
 router = APIRouter(prefix="/leaderboard", tags=["leaderboard"])
@@ -20,13 +20,15 @@ def get_leaderboard_endpoint(
         default=False, description="Include sensitive species (requires elevated permissions)"
     ),
     db: Session = Depends(get_db),
-    _=Depends(get_optional_user),
+    user=Depends(get_optional_user),
 ):
     """Get the global leaderboard with pagination and sorting.
 
     Aggregates total scores across all users. Excludes sensitive
-    species submissions by default. Public endpoint (no auth required).
+    species submissions by default, and users the requester has
+    blocked (FR-MOD-003). Public endpoint (no auth required).
     """
+    exclude = get_blocked_user_ids(db, user.user_id) if user else None
     entries, total = get_leaderboard(
         db=db,
         limit=limit,
@@ -34,6 +36,7 @@ def get_leaderboard_endpoint(
         sort_by=sort_by,
         sort_order=sort_order,
         include_sensitive=include_sensitive,
+        exclude_user_ids=exclude,
     )
     return {
         "entries": entries,

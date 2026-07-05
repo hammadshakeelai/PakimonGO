@@ -163,6 +163,36 @@ class Notification(Base):
     created_at = Column(DateTime(timezone=True), default=_utcnow)
 
 
+class Report(Base):
+    __tablename__ = "reports"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    reporter_user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    target_type = Column(String(16), nullable=False)  # "submission" | "user"
+    target_id = Column(String(36), nullable=False, index=True)
+    reason = Column(String(48), nullable=False)
+    details = Column(Text, nullable=True)
+    status = Column(String(16), default="open")  # open | reviewed | dismissed | actioned
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("reporter_user_id", "target_type", "target_id"),
+    )
+
+
+class Block(Base):
+    __tablename__ = "blocks"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    blocker_user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    blocked_user_id = Column(String(36), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("blocker_user_id", "blocked_user_id"),
+    )
+
+
 class IdempotencyKey(Base):
     __tablename__ = "idempotency_keys"
 

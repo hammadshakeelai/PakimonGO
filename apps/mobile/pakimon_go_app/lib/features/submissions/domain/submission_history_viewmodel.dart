@@ -14,6 +14,8 @@ class SubmissionHistoryViewModel extends ChangeNotifier {
   SubmissionHistoryViewModel({required CaptureRepository repository})
       : _repository = repository;
 
+  CaptureRepository get repository => _repository;
+
   List<SubmissionResponse> get submissions => _submissions;
   bool get isLoading => _isLoading;
   String? get error => _error;

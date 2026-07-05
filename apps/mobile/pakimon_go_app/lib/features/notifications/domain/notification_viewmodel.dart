@@ -14,6 +14,8 @@ class NotificationViewModel extends ChangeNotifier {
   NotificationViewModel({required CaptureRepository repository})
       : _repository = repository;
 
+  CaptureRepository get repository => _repository;
+
   List<NotificationModel> get notifications => _notifications;
   int get total => _total;
   int get unreadCount => _unreadCount;

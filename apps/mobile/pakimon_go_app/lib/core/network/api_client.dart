@@ -68,6 +68,14 @@ class ApiClient {
         ));
   }
 
+  Future<Map<String, dynamic>> delete(
+    String path, {
+    bool auth = true,
+  }) {
+    final uri = Uri.parse('$_baseUrl$path');
+    return _send(() => _client.delete(uri, headers: _headers(auth: auth)));
+  }
+
   Future<Map<String, dynamic>> putFile(
     String path, {
     required List<int> fileBytes,

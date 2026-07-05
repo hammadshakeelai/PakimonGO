@@ -171,6 +171,34 @@ class CaptureRepository {
     return response['count'] as int;
   }
 
+  /// FR-MOD-001/002: report a submission or a user.
+  Future<Map<String, dynamic>> submitReport({
+    required String targetType,
+    required String targetId,
+    required String reason,
+    String? details,
+  }) {
+    return _client.post('/reports', body: {
+      'targetType': targetType,
+      'targetId': targetId,
+      'reason': reason,
+      if (details != null && details.isNotEmpty) 'details': details,
+    });
+  }
+
+  /// FR-MOD-003: block a user (their leaderboard entries disappear for you).
+  Future<Map<String, dynamic>> blockUser(String userId) {
+    return _client.post('/blocks/$userId');
+  }
+
+  Future<Map<String, dynamic>> unblockUser(String userId) {
+    return _client.delete('/blocks/$userId');
+  }
+
+  Future<Map<String, dynamic>> getBlockedUsers() {
+    return _client.get('/blocks');
+  }
+
   Future<List<SubmissionMarker>> getMapMarkers({int limit = 100}) async {
     final response = await _client.get('/submissions', queryParams: {
       'limit': limit.toString(),

@@ -97,7 +97,10 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => SubmissionDetailScreen(submission: sub),
+                builder: (_) => SubmissionDetailScreen(
+                  submission: sub,
+                  repository: widget.viewModel.repository,
+                ),
               ),
             ),
           );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/notifications/domain/notification_viewmodel.dart';
 import 'package:pakimon_go_app/features/submissions/presentation/submission_detail_screen.dart';
-import 'package:pakimon_go_app/shared/models/api_models.dart';
 
 class NotificationScreen extends StatefulWidget {
   final NotificationViewModel viewModel;
@@ -110,8 +109,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            SubmissionDetailScreen(submission: sub),
+                        builder: (_) => SubmissionDetailScreen(
+                          submission: sub,
+                          repository: widget.viewModel.repository,
+                        ),
                       ),
                     );
                   }
