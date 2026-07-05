@@ -22,7 +22,7 @@ These must be done before any real user touches the app.
 
 | # | Task | Effort | Details |
 |---|------|--------|---------|
-| 6 | **PostgreSQL migration** | 1 day | Wire real Postgres connection string. Docker Compose already configured for PG. |
+| 6 | **PostgreSQL migration** ✅ DONE | Verified the API end-to-end on the pgvector container. Fixed a broken index in migration 002 + added the missing `sensitive_species` table (003); `env.py` now honors `SYNC_DATABASE_URL`; compose host port is overridable (`DB_HOST_PORT`) to dodge a native Postgres. Full CRUD confirmed on Postgres. |
 | 7 | **Error handling in Flutter** ✅ DONE | `ApiClient`: 15s timeout, transport errors → `ApiException(isNetworkError)`, correct backend/422 message extraction. All 5 data screens (Map/History/Leaderboard/Profile/Collection) use the shared `ErrorRetryView` (offline vs error + real message + Retry) via `isOffline` on the viewmodels. 129 tests. |
 | 8 | **Onboarding screens** ✅ DONE | 4-page first-run flow (FR-ONB-001..005): welcome, wildlife safety, location privacy + permission context, scoring honesty. Persisted via `OnboardingGate` (after the age gate, before auth). 6 tests. |
 | 9 | **Age gate (13+)** ✅ DONE | Neutral birth-year gate (FR-AGE-001..003): blocks <13, records a teen/adult band, persisted so it asks once. `AgeGate` wraps the whole app before auth. 11 tests (logic + widget). |
@@ -71,7 +71,7 @@ These must be done before any real user touches the app.
 | **Scoring worker is in-process** | InMemoryJobQueue and worker thread die with the server. No persistence, no retries, no DLQ. |
 | **No background location** | FR-PERM-003 forbids it, but no map features work without at least foreground location. |
 | **Notifications are fire-and-forget** | No push notifications. Only in-app polling via GET /v1/notifications. |
-| **DB migrations in dev only** | Alembic migrations exist but aren't auto-run. No production migration strategy. |
+| ~~DB migrations broken/incomplete on Postgres~~ 🟡 improved | Migrations now apply cleanly on Postgres and cover all 12 model tables (fixed a broken partial index + the missing `sensitive_species` table). Still not auto-run at API startup — run `alembic upgrade head` on deploy. |
 
 ## Effort Totals
 

@@ -8,7 +8,8 @@ services:
       POSTGRES_PASSWORD: dummy_local_password
       POSTGRES_DB: pakimongo_local
     ports:
-      - "5432:5432"
+      # Host port overridable to avoid clashing with a native Postgres on 5432.
+      - "${DB_HOST_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

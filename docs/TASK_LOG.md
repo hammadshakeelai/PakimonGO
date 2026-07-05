@@ -1731,3 +1731,32 @@ Startup chain is now: AgeGate -> OnboardingGate -> AuthGate -> Home.
 ### Next Exact Action
 
 Tier 2 #6 Postgres wiring (Docker is now running) or #11 CI secrets. Also: persist age band + onboarding completion to the backend profile.
+
+## 2026-07-05: Tier 2 #6 — PostgreSQL wiring (verified end-to-end)
+
+### Summary
+
+Brought up the pgvector Postgres container and verified the API runs against real Postgres, not just SQLite. Found and fixed two migration bugs that were hidden because dev uses create_all on SQLite (never the migration path): (1) migration 002 built an invalid index `ON notifications (user_id, NOT is_read)` — a bare expression in the column list — fixed to a partial index `(user_id) WHERE NOT is_read`; (2) the sensitive_species table was never captured in a migration, so added 003. env.py now honors SYNC_DATABASE_URL so migrations target the same DB as the app. Parameterized the compose host port (DB_HOST_PORT, default 5432) because a native Postgres already held 5432 and shadowed the container.
+
+### Verification
+
+- Ran `alembic upgrade head` -> 001,002,003 apply cleanly; all 12 model tables present on Postgres.
+- API on Postgres: /health/ready 200; authed CRUD (users/me, upload-intent, POST submission, collection, notifications) all 200; rows confirmed in Postgres (users/media/submissions/score_events/notifications = 1 each).
+- SQLite test suite unaffected: API 112 passing.
+
+### How to run the API on Postgres locally
+
+DB_HOST_PORT=5433 docker compose -f infrastructure/docker/docker-compose.local.yml up -d db
+cd services/api && SYNC_DATABASE_URL=postgresql://postgres:dummy_local_password@127.0.0.1:5433/pakimongo_local python -c "from alembic.config import main; main(argv=['upgrade','head'])"
+# then run uvicorn with the same SYNC_DATABASE_URL.
+
+### Artifacts Changed
+
+- services/api/alembic/env.py (honor SYNC_DATABASE_URL)
+- services/api/alembic/versions/002_add_notifications.py (fix invalid index)
+- services/api/alembic/versions/003_add_sensitive_species.py (new)
+- infrastructure/docker/docker-compose.local.yml (DB_HOST_PORT override)
+
+### Next Exact Action
+
+Auto-run migrations on deploy (or at API startup in non-test envs); CI secrets (#11).

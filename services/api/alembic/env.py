@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -11,6 +12,11 @@ from sqlalchemy import engine_from_config, pool
 from infrastructure.database.models import Base
 
 config = context.config
+# Honor the app's SYNC_DATABASE_URL so migrations target the same database
+# as the running API, regardless of what alembic.ini hardcodes.
+_db_url = os.getenv("SYNC_DATABASE_URL")
+if _db_url:
+    config.set_main_option("sqlalchemy.url", _db_url)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 

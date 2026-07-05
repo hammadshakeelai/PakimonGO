@@ -30,7 +30,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
     op.create_index("ix_notifications_user", "notifications", ["user_id"])
-    op.create_index("ix_notifications_user_unread", "notifications", ["user_id", sa.text("NOT is_read")], postgresql_where=sa.text("NOT is_read"))
+    op.create_index("ix_notifications_user_unread", "notifications", ["user_id"], postgresql_where=sa.text("NOT is_read"))
 
 
 def downgrade() -> None:
