@@ -6,8 +6,8 @@ services:
     plan: free
     region: oregon
     buildCommand: pip install -r services/api/requirements.txt gunicorn
-    preDeployCommand: cd services/api && alembic upgrade head
-    startCommand: cd services/api && gunicorn src.main:app -c gunicorn.conf.py
+    # Free tier does not support preDeployCommand, so run migrations at boot.
+    startCommand: cd services/api && alembic upgrade head && gunicorn src.main:app -c gunicorn.conf.py
     healthCheckPath: /health/live
     envVars:
       # Postgres connection string, injected from the managed database below.
