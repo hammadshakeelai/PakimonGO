@@ -4,6 +4,8 @@ import 'package:pakimon_go_app/core/theme/theme_controller.dart';
 import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
 import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
+import 'package:pakimon_go_app/features/moderation/domain/blocked_users_viewmodel.dart';
+import 'package:pakimon_go_app/features/moderation/presentation/blocked_users_screen.dart';
 import 'package:pakimon_go_app/features/profile/domain/profile_viewmodel.dart';
 import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
@@ -52,10 +54,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _openBlockedUsers() {
+    if (widget.repository == null) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlockedUsersScreen(
+          viewModel: BlockedUsersViewModel(repository: widget.repository!),
+        ),
+      ),
+    );
+  }
+
   static const _ageBands = ['', 'child', 'teen', 'adult', 'senior'];
 
   @override
   Widget build(BuildContext context) {
+    // Pushed as its own route — needs its own Scaffold (Material ancestor
+    // for chips/ink) and an AppBar so there is always a back button.
+    return Scaffold(
+      appBar: AppBar(title: const Text('Profile')),
+      body: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     final vm = widget.viewModel;
     final theme = Theme.of(context);
 
@@ -76,27 +98,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Profile', style: theme.textTheme.titleLarge),
-                const SizedBox(height: 12),
-                _infoRow(theme, 'User ID', profile.userId),
-                if (profile.email != null)
-                  _infoRow(theme, 'Email', profile.email!),
-                if (profile.trustState != null)
-                  _infoRow(theme, 'Trust State', profile.trustState!),
-                const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: _openCollection,
-                  icon: const Icon(Icons.collections_bookmark),
-                  label: const Text('View Collection'),
+        // ---- Identity header -------------------------------------------
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primaryContainer,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: theme.colorScheme.primary,
+                child: Text(
+                  profile.userId.isNotEmpty
+                      ? profile.userId[0].toUpperCase()
+                      : '?',
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: theme.colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                profile.userId,
+                style: theme.textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              if (profile.email != null) ...[
+                const SizedBox(height: 4),
+                Text(
+                  profile.email!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onPrimaryContainer
+                        .withValues(alpha: 0.8),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
-            ),
+              if (profile.trustState != null) ...[
+                const SizedBox(height: 10),
+                Chip(
+                  avatar: Icon(
+                    profile.trustState == 'verified'
+                        ? Icons.verified
+                        : Icons.shield_outlined,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                  label: Text(profile.trustState!),
+                  visualDensity: VisualDensity.compact,
+                ),
+              ],
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: _openCollection,
+                icon: const Icon(Icons.collections_bookmark),
+                label: const Text('View Collection'),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -165,6 +227,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   onChanged: vm.setHomeRegion,
                 ),
+                if (widget.repository != null) ...[
+                  const SizedBox(height: 4),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.block),
+                    title: const Text('Blocked Users'),
+                    subtitle:
+                        const Text('Manage who is hidden from your app'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: _openBlockedUsers,
+                  ),
+                ],
                 if (vm.saveError != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
@@ -173,68 +247,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(color: theme.colorScheme.error),
                     ),
                   ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed:
-                      vm.hasChanges && !vm.isSaving ? vm.saveProfile : null,
-                  icon: vm.isSaving
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.save),
-                  label: Text(vm.isSaving ? 'Saving...' : 'Save'),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed:
+                        vm.hasChanges && !vm.isSaving ? vm.saveProfile : null,
+                    icon: vm.isSaving
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.save),
+                    label: Text(vm.isSaving ? 'Saving...' : 'Save Changes'),
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('About', style: theme.textTheme.titleLarge),
-                const SizedBox(height: 8),
-                _infoRow(theme, 'App', 'PakimonGO'),
-                _infoRow(theme, 'Version', '0.1.0'),
-              ],
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () => widget.authService.logout(),
+            icon: const Icon(Icons.logout),
+            label: const Text('Log Out'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: theme.colorScheme.error,
+              side: BorderSide(color: theme.colorScheme.error),
+              padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        OutlinedButton.icon(
-          onPressed: () => widget.authService.logout(),
-          icon: const Icon(Icons.logout),
-          label: const Text('Log Out'),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: theme.colorScheme.error,
-            side: BorderSide(color: theme.colorScheme.error),
+        const SizedBox(height: 16),
+        Center(
+          child: Text(
+            'PakimonGO · v0.1.0',
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.outline),
           ),
         ),
         const SizedBox(height: 32),
       ],
-    );
-  }
-
-  Widget _infoRow(ThemeData theme, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(label,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-          ),
-          Expanded(child: Text(value, style: theme.textTheme.bodyMedium)),
-        ],
-      ),
     );
   }
 }

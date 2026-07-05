@@ -164,13 +164,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   );
 
   late final List<Widget> _screens = [
-    MapScreen(viewModel: _mapViewModel),
+    MapScreen(
+      viewModel: _mapViewModel,
+      onCameraTap: () => setState(() => _currentIndex = 1),
+    ),
     CaptureScreen(
       mediaService: createDefaultMediaService(),
       repository: CaptureRepository(client: widget.apiClient),
     ),
     SubmissionHistoryScreen(viewModel: _historyViewModel),
-    LeaderboardScreen(viewModel: _leaderboardViewModel),
+    LeaderboardScreen(
+      viewModel: _leaderboardViewModel,
+      currentUserId: widget.authService.userId,
+    ),
   ];
 
   @override

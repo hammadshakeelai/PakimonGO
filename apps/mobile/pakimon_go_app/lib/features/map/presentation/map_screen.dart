@@ -1,16 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../../shared/models/submission_marker.dart';
 import '../../../shared/widgets/error_retry_view.dart';
 import '../../capture/data/capture_repository.dart';
+import '../../species/presentation/species_detail_screen.dart';
 import '../domain/map_viewmodel.dart';
 import 'marker_list_screen.dart';
 
 class MapScreen extends StatefulWidget {
   final MapViewModel? viewModel;
 
-  const MapScreen({super.key, this.viewModel});
+  /// Called when the user taps the capture button on the map — the
+  /// home shell switches to the Capture tab.
+  final VoidCallback? onCameraTap;
+
+  const MapScreen({super.key, this.viewModel, this.onCameraTap});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -18,10 +24,17 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   late final MapViewModel _viewModel;
+  // Only dispose a viewmodel this screen created itself — an injected one
+  // belongs to the caller (HomeScreen keeps it across tab switches).
+  late final bool _ownsViewModel;
+  MapboxMap? _map;
+  CircleAnnotationManager? _circles;
+  final Map<String, SubmissionMarker> _annotationToMarker = {};
 
   @override
   void initState() {
     super.initState();
+    _ownsViewModel = widget.viewModel == null;
     _viewModel = widget.viewModel ?? _createDefaultViewModel();
     _viewModel.addListener(_onViewModelChanged);
     _viewModel.fetchMarkers();
@@ -36,37 +49,126 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _viewModel.removeListener(_onViewModelChanged);
-    _viewModel.dispose();
+    if (_ownsViewModel) _viewModel.dispose();
     super.dispose();
   }
 
   void _onViewModelChanged() {
+    if (!mounted) return;
     setState(() {});
+    _drawMarkers();
   }
+
+  // ---- Mapbox wiring -------------------------------------------------
+
+  Future<void> _onMapCreated(MapboxMap map) async {
+    _map = map;
+    _circles = await map.annotations.createCircleAnnotationManager();
+    _circles!.tapEvents(onTap: (annotation) {
+      final marker = _annotationToMarker[annotation.id];
+      if (marker != null) _openMarker(marker);
+    });
+    await _drawMarkers();
+  }
+
+  Future<void> _drawMarkers() async {
+    final circles = _circles;
+    if (circles == null) return;
+    final markers =
+        _viewModel.markers.where((m) => m.hasValidLocation).toList();
+    await circles.deleteAll();
+    _annotationToMarker.clear();
+    if (markers.isEmpty) return;
+
+    for (final marker in markers) {
+      final annotation = await circles.create(CircleAnnotationOptions(
+        geometry: Point(
+          coordinates: Position(marker.longitude, marker.latitude),
+        ),
+        circleRadius: 10,
+        circleColor: _statusColor(marker.status).toARGB32(),
+        circleStrokeWidth: 2.5,
+        circleStrokeColor: 0xFFFFFFFF,
+        circleOpacity: 0.9,
+      ));
+      _annotationToMarker[annotation.id] = marker;
+    }
+    await _fitCameraTo(markers);
+  }
+
+  Color _statusColor(String status) => switch (status) {
+        'scored' => Colors.green,
+        'ai_evaluated' => Colors.orange,
+        'capped' => Colors.blue,
+        _ => Colors.grey,
+      };
+
+  Future<void> _fitCameraTo(List<SubmissionMarker> markers) async {
+    final map = _map;
+    if (map == null || markers.isEmpty) return;
+    var minLat = markers.first.latitude, maxLat = markers.first.latitude;
+    var minLng = markers.first.longitude, maxLng = markers.first.longitude;
+    for (final m in markers) {
+      if (m.latitude < minLat) minLat = m.latitude;
+      if (m.latitude > maxLat) maxLat = m.latitude;
+      if (m.longitude < minLng) minLng = m.longitude;
+      if (m.longitude > maxLng) maxLng = m.longitude;
+    }
+    final spread =
+        (maxLat - minLat).abs() + (maxLng - minLng).abs(); // rough degrees
+    final zoom = spread < 0.2
+        ? 11.0
+        : spread < 1
+            ? 8.5
+            : spread < 5
+                ? 6.0
+                : spread < 20
+                    ? 4.0
+                    : 2.5;
+    await map.setCamera(CameraOptions(
+      center: Point(
+        coordinates: Position((minLng + maxLng) / 2, (minLat + maxLat) / 2),
+      ),
+      zoom: zoom,
+    ));
+  }
+
+  void _openMarker(SubmissionMarker marker) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => SpeciesDetailScreen(marker: marker)),
+    );
+  }
+
+  // ---- UI ------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('PakimonGO Map')),
+      appBar: AppBar(
+        title: const Text('PakimonGO Map'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Refresh sightings',
+            onPressed: _viewModel.fetchMarkers,
+          ),
+        ],
+      ),
       body: _buildBody(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: widget.onCameraTap == null
+          ? null
+          : FloatingActionButton.large(
+              tooltip: 'Capture wildlife',
+              onPressed: widget.onCameraTap,
+              child: const Icon(Icons.photo_camera, size: 36),
+            ),
     );
   }
 
   Widget _buildBody() {
-    return RefreshIndicator(
-      onRefresh: _viewModel.fetchMarkers,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: _buildContent(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    if (_viewModel.isLoading) {
+    if (_viewModel.isLoading && _viewModel.markers.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -86,6 +188,7 @@ class _MapScreenState extends State<MapScreen> {
       children: [
         MapWidget(
           styleUri: MapboxStyles.MAPBOX_STREETS,
+          onMapCreated: _onMapCreated,
           viewport: CameraViewportState(
             center: Point(coordinates: Position(0, 0)),
             zoom: 2.0,
@@ -111,28 +214,24 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerOverlay() {
-    final clusters = _viewModel.clusters;
-    final hasClusters = clusters.isNotEmpty;
-
+    final theme = Theme.of(context);
     return Positioned(
       left: 12,
-      bottom: 12,
-      child: GestureDetector(
-        onTap: _openMarkerList,
-        child: Card(
+      top: 12,
+      child: Card(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: _openMarkerList,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.location_on, size: 18, color: Colors.green),
+                Icon(Icons.location_on,
+                    size: 18, color: theme.colorScheme.primary),
                 const SizedBox(width: 6),
-                hasClusters
-                    ? Text(
-                        '${clusters.length} clusters · ${_viewModel.markerCount} sightings',
-                        style: Theme.of(context).textTheme.bodyMedium)
-                    : Text('${_viewModel.markerCount} sightings',
-                        style: Theme.of(context).textTheme.bodyMedium),
+                Text('${_viewModel.markerCount} sightings',
+                    style: theme.textTheme.bodyMedium),
                 const SizedBox(width: 4),
                 const Icon(Icons.chevron_right, size: 16),
               ],
@@ -152,3 +251,4 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
+

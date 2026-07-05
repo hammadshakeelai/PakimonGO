@@ -83,7 +83,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Retry'), findsOneWidget);
-    expect(find.byIcon(Icons.refresh), findsOneWidget);
+    // Two refresh affordances exist: the Retry button and the AppBar action.
+    expect(find.byIcon(Icons.refresh), findsWidgets);
   });
 
   testWidgets('retry button calls fetchMarkers again',
@@ -97,7 +98,7 @@ void main() {
     repo.completeError(Exception('First fail'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.refresh));
+    await tester.tap(find.text('Retry'));
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -106,7 +107,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('RefreshIndicator present on loaded state',
+  testWidgets('AppBar refresh action present on loaded state',
       (WidgetTester tester) async {
     final repo = _ControllableRepository();
     final vm = MapViewModel(repository: repo);
@@ -117,11 +118,12 @@ void main() {
     repo.complete([]);
     await tester.pumpAndSettle();
 
-    expect(find.byType(RefreshIndicator), findsOneWidget);
+    // Pull-to-refresh was removed (it fought with map panning); refresh
+    // now lives in the AppBar.
+    expect(find.byTooltip('Refresh sightings'), findsOneWidget);
   });
 
-  testWidgets('RefreshIndicator pull triggers fetch',
-      (WidgetTester tester) async {
+  testWidgets('AppBar refresh triggers fetch', (WidgetTester tester) async {
     final repo = _ControllableRepository();
     final vm = MapViewModel(repository: repo);
 
@@ -131,10 +133,8 @@ void main() {
     repo.complete([]);
     await tester.pumpAndSettle();
 
-    await tester.fling(find.byType(SingleChildScrollView),
-        const Offset(0, 300), 1000);
+    await tester.tap(find.byTooltip('Refresh sightings'));
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 

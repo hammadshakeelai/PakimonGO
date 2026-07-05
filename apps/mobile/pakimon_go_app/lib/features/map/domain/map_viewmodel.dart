@@ -15,6 +15,20 @@ class MapViewModel extends ChangeNotifier {
   MapViewModel({required CaptureRepository repository})
       : _repository = repository;
 
+  bool _disposed = false;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  void _notify() {
+    // An in-flight fetch can complete after the owning screen is gone;
+    // notifying a disposed ChangeNotifier crashes the app.
+    if (!_disposed) notifyListeners();
+  }
+
   List<SubmissionMarker> get markers => _markers;
   List<ClusterMarker> get clusters => _clusters;
   bool get isLoading => _isLoading;
@@ -28,7 +42,7 @@ class MapViewModel extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     _isOffline = false;
-    notifyListeners();
+    _notify();
 
     try {
       _markers = await _repository.getMapMarkers();
@@ -43,7 +57,7 @@ class MapViewModel extends ChangeNotifier {
     }
 
     _isLoading = false;
-    notifyListeners();
+    _notify();
   }
 
   List<ClusterMarker> _buildClusters() {
