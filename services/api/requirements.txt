@@ -1,4 +1,6 @@
 fastapi
+python-multipart
+PyYAML
 uvicorn
 pytest
 httpx
