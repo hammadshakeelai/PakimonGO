@@ -4,6 +4,7 @@ import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.d
 import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/profile/domain/profile_viewmodel.dart';
+import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ProfileViewModel viewModel;
@@ -62,21 +63,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     if (vm.state == ProfileLoadState.error) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Failed to load profile', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(vm.error ?? '', style: theme.textTheme.bodySmall),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: vm.fetchProfile,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
+      return ErrorRetryView(
+        message: vm.error ?? 'Something went wrong.',
+        onRetry: vm.fetchProfile,
+        isOffline: vm.isOffline,
       );
     }
 
@@ -118,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text('Settings', style: theme.textTheme.titleLarge),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  value: vm.selectedAgeBand.isEmpty ? null : vm.selectedAgeBand,
+                  initialValue: vm.selectedAgeBand.isEmpty ? null : vm.selectedAgeBand,
                   decoration: const InputDecoration(
                     labelText: 'Age Band',
                     border: OutlineInputBorder(),

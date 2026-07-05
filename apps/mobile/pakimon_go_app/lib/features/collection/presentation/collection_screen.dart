@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
 import 'package:pakimon_go_app/features/species/presentation/species_detail_screen.dart';
 import 'package:pakimon_go_app/shared/models/submission_marker.dart';
+import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
 class CollectionScreen extends StatefulWidget {
   final CollectionViewModel viewModel;
@@ -52,22 +53,10 @@ class _CollectionScreenState extends State<CollectionScreen> {
     }
 
     if (vm.state == CollectionLoadState.error) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Failed to load collection',
-                style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(vm.error ?? '', style: theme.textTheme.bodySmall),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: vm.refresh,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
+      return ErrorRetryView(
+        message: vm.error ?? 'Something went wrong.',
+        onRetry: vm.refresh,
+        isOffline: vm.isOffline,
       );
     }
 
@@ -101,7 +90,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: vm.sortBy,
+                      initialValue: vm.sortBy,
                       decoration: const InputDecoration(
                         labelText: 'Sort',
                         border: OutlineInputBorder(),
@@ -129,7 +118,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: DropdownButtonFormField<String?>(
-                      value: vm.contextFilter,
+                      initialValue: vm.contextFilter,
                       decoration: const InputDecoration(
                         labelText: 'Context',
                         border: OutlineInputBorder(),

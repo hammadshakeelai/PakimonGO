@@ -1651,3 +1651,18 @@ Added a shared ErrorRetryView widget (cloud-off + "You appear to be offline" for
 ### Next Exact Action
 
 Extend the same pattern to Profile/Collection screens; then Tier 2 #6 Postgres wiring.
+
+## 2026-07-05: Tier 2 #7 done — offline/error + Retry on Profile & Collection
+
+### Summary
+
+Extended the shared ErrorRetryView + isOffline pattern to ProfileViewModel/ProfileScreen and CollectionViewModel/CollectionScreen (both use a load-state enum). Their error states now show the offline-vs-error UI with the real message + Retry, replacing bespoke error columns. Tier 2 #7 (Flutter error handling) now covers all 5 data screens. Analyze clean; Flutter suite 129 passing.
+
+### Artifacts Changed
+
+- lib/features/profile/domain/profile_viewmodel.dart, presentation/profile_screen.dart
+- lib/features/collection/domain/collection_viewmodel.dart, presentation/collection_screen.dart
+
+### Next Exact Action
+
+Tier 2 #6 Postgres wiring (needs Docker), or Tier 2 #8/#9 onboarding + age-gate screens.

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
 
@@ -20,6 +21,9 @@ class CollectionViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  bool _isOffline = false;
+  bool get isOffline => _isOffline;
+
   String _sortBy = 'totalPoints';
   String get sortBy => _sortBy;
 
@@ -32,6 +36,7 @@ class CollectionViewModel extends ChangeNotifier {
   Future<void> fetchCollection() async {
     _state = CollectionLoadState.loading;
     _error = null;
+    _isOffline = false;
     notifyListeners();
 
     try {
@@ -46,7 +51,10 @@ class CollectionViewModel extends ChangeNotifier {
           ? CollectionLoadState.empty
           : CollectionLoadState.loaded;
     } catch (e) {
-      _error = e.toString();
+      _isOffline = e is ApiException && e.isNetworkError;
+      _error = e is ApiException
+          ? e.message
+          : 'Something went wrong. Please try again.';
       _state = CollectionLoadState.error;
     }
     notifyListeners();

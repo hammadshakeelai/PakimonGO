@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/shared/models/api_models.dart';
 
@@ -17,6 +18,9 @@ class ProfileViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  bool _isOffline = false;
+  bool get isOffline => _isOffline;
+
   bool _isSaving = false;
   bool get isSaving => _isSaving;
 
@@ -32,6 +36,7 @@ class ProfileViewModel extends ChangeNotifier {
   Future<void> fetchProfile() async {
     _state = ProfileLoadState.loading;
     _error = null;
+    _isOffline = false;
     notifyListeners();
 
     try {
@@ -40,7 +45,10 @@ class ProfileViewModel extends ChangeNotifier {
       _homeRegion = _profile?.homeRegion ?? '';
       _state = ProfileLoadState.loaded;
     } catch (e) {
-      _error = e.toString();
+      _isOffline = e is ApiException && e.isNetworkError;
+      _error = e is ApiException
+          ? e.message
+          : 'Something went wrong. Please try again.';
       _state = ProfileLoadState.error;
     }
     notifyListeners();
