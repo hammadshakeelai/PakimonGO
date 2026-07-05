@@ -203,3 +203,34 @@ def test_submission_cooldown_disabled_allows_rapid(monkeypatch):
             "tags": [],
         }, headers=token)
         assert resp.status_code == 200
+
+def test_submission_list_includes_coarse_public_location():
+    """The list payload must carry a coarse (~1km rounded) cell location so
+    the map can place markers — but never the exact capture coordinates."""
+    media_asset_id = _create_upload("7")
+    client.post("/v1/submissions", json={
+        "mediaAssetId": media_asset_id,
+        "animalContext": "wild",
+        "realName": "Rose-ringed Parakeet",
+        "cuteName": "Screech",
+        "caption": "On a wire.",
+        "tags": ["parakeet"],
+        "visibility": "private",
+        "foregroundLocation": {
+            "latitude": 33.684412,
+            "longitude": 73.047882,
+            "accuracyMeters": 10.0,
+        },
+    }, headers=AUTH_HEADER)
+
+    resp = client.get("/v1/submissions?limit=100", headers=AUTH_HEADER)
+    assert resp.status_code == 200
+    items = resp.json()["submissions"]
+    with_loc = [s for s in items if s.get("publicLocation")]
+    assert with_loc, "expected at least one submission with a publicLocation"
+    loc = with_loc[0]["publicLocation"]
+    assert loc["cellLatitude"] == 33.68
+    assert loc["cellLongitude"] == 73.05
+    # Exact coordinates must never leak into the list payload.
+    assert loc["cellLatitude"] != 33.684412
+    assert "latitude" not in with_loc[0]

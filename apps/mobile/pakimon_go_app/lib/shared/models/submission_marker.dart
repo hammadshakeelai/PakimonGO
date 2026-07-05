@@ -18,21 +18,23 @@ class SubmissionMarker {
   });
 
   factory SubmissionMarker.fromJson(Map<String, dynamic> json) {
+    // Handles both payload shapes: the detail response
+    // (realName/scoreState) and the list response (species/scoreEvent).
     final loc = json['publicLocation'] as Map<String, dynamic>? ?? {};
+    final scoreState = json['scoreState'] as Map<String, dynamic>?;
+    final scoreEvent = json['scoreEvent'] as Map<String, dynamic>?;
     return SubmissionMarker(
       submissionId: json['submissionId'] as String,
       mediaAssetId: json['mediaAssetId'] as String? ?? '',
       latitude: (loc['cellLatitude'] as num?)?.toDouble() ?? 0.0,
       longitude: (loc['cellLongitude'] as num?)?.toDouble() ?? 0.0,
-      species: json['realName'] as String? ?? 'Unknown',
-      points: (json['scoreState'] is Map
-              ? (json['scoreState'] as Map)['visiblePoints']
-              : null)
-          as int? ?? 0,
-      status: (json['scoreState'] is Map
-              ? (json['scoreState'] as Map)['status']
-              : null)
-          as String? ?? 'pending',
+      species:
+          (json['realName'] ?? json['species']) as String? ?? 'Unknown',
+      points: (scoreState?['visiblePoints'] ?? scoreEvent?['points'])
+              as int? ??
+          0,
+      status: (scoreState?['status'] ?? json['status']) as String? ??
+          'pending',
     );
   }
 

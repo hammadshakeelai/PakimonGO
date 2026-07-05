@@ -1,7 +1,7 @@
 
 from sqlalchemy.orm import Session
 
-from ..models import ScoreEvent, SensitiveSpecies, Submission, SubmissionAttribute
+from ..models import CaptureLocation, ScoreEvent, SensitiveSpecies, Submission, SubmissionAttribute
 
 
 def get_submissions(
@@ -31,10 +31,13 @@ def get_submissions(
             ScoreEvent.points,
             ScoreEvent.ledger,
             ScoreEvent.explanation_category,
+            CaptureLocation.latitude,
+            CaptureLocation.longitude,
         )
         .select_from(Submission)
         .join(SubmissionAttribute, SubmissionAttribute.submission_id == Submission.id, isouter=True)
         .join(ScoreEvent, ScoreEvent.submission_id == Submission.id, isouter=True)
+        .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
     )
 
     if user_id:
@@ -77,6 +80,18 @@ def get_submissions(
                 "ledger": row.ledger,
                 "explanation": row.explanation_category,
             }
+        # Coarse public location: rounded to ~1km cells so the exact
+        # capture spot is never exposed (sensitive species are already
+        # filtered out of this listing entirely).
+        public_location = None
+        if row.latitude is not None and row.longitude is not None:
+            cell_lat = round(row.latitude, 2)
+            cell_lng = round(row.longitude, 2)
+            public_location = {
+                "cellId": f"cell_{cell_lat:.2f}_{cell_lng:.2f}",
+                "cellLatitude": cell_lat,
+                "cellLongitude": cell_lng,
+            }
         items.append(
             {
                 "submissionId": row.id,
@@ -90,6 +105,7 @@ def get_submissions(
                 "cuteName": row.cute_name,
                 "caption": row.caption,
                 "scoreEvent": score_event,
+                "publicLocation": public_location,
             }
         )
     return items, total

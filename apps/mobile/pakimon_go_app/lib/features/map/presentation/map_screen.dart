@@ -116,20 +116,29 @@ class _MapScreenState extends State<MapScreen> {
     }
     final spread =
         (maxLat - minLat).abs() + (maxLng - minLng).abs(); // rough degrees
-    final zoom = spread < 0.2
-        ? 11.0
-        : spread < 1
-            ? 8.5
-            : spread < 5
-                ? 6.0
-                : spread < 20
-                    ? 4.0
-                    : 2.5;
+    // Bias towards close, street-level views: a single sighting or a tight
+    // cluster should land you on the streets, not a continent.
+    final zoom = spread < 0.02
+        ? 16.0
+        : spread < 0.1
+            ? 14.0
+            : spread < 0.5
+                ? 12.0
+                : spread < 2
+                    ? 9.5
+                    : spread < 8
+                        ? 7.0
+                        : spread < 25
+                            ? 4.5
+                            : 3.0;
     await map.setCamera(CameraOptions(
       center: Point(
         coordinates: Position((minLng + maxLng) / 2, (minLat + maxLat) / 2),
       ),
       zoom: zoom,
+      // Tilt the camera at street zooms so 3D buildings read like the
+      // classic AR-game look; stay top-down when zoomed out.
+      pitch: zoom >= 12 ? 55.0 : 0.0,
     ));
   }
 
@@ -187,7 +196,8 @@ class _MapScreenState extends State<MapScreen> {
     return Stack(
       children: [
         MapWidget(
-          styleUri: MapboxStyles.MAPBOX_STREETS,
+          // Mapbox Standard: 3D buildings + landmarks at street zooms.
+          styleUri: MapboxStyles.STANDARD,
           onMapCreated: _onMapCreated,
           viewport: CameraViewportState(
             center: Point(coordinates: Position(0, 0)),
