@@ -45,6 +45,15 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // This screen is pushed as its own route, so it must supply its own
+    // Scaffold — Material-dependent children (dropdowns, ink) crash without it.
+    return Scaffold(
+      appBar: AppBar(title: const Text('My Collection')),
+      body: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     final vm = widget.viewModel;
     final theme = Theme.of(context);
 

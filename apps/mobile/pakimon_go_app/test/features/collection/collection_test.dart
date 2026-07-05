@@ -4,7 +4,6 @@ import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
 import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
-import 'package:pakimon_go_app/shared/models/api_models.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -179,7 +178,7 @@ void main() {
       );
       final vm = CollectionViewModel(repository: repo);
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+        home: CollectionScreen(viewModel: vm),
       ));
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -198,7 +197,7 @@ void main() {
       );
       final vm = CollectionViewModel(repository: repo);
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+        home: CollectionScreen(viewModel: vm),
       ));
       await tester.pumpAndSettle();
       expect(find.text('Markhor'), findsOneWidget);
@@ -223,7 +222,7 @@ void main() {
       );
       final vm = CollectionViewModel(repository: repo);
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+        home: CollectionScreen(viewModel: vm),
       ));
       await tester.pumpAndSettle();
       expect(find.text('No species collected yet'), findsOneWidget);
@@ -236,7 +235,7 @@ void main() {
       );
       final vm = CollectionViewModel(repository: repo);
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+        home: CollectionScreen(viewModel: vm),
       ));
       await tester.pumpAndSettle();
       expect(find.textContaining('Retry'), findsOneWidget);
@@ -257,7 +256,7 @@ void main() {
       );
       final vm = CollectionViewModel(repository: repo);
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CollectionScreen(viewModel: vm)),
+        home: CollectionScreen(viewModel: vm),
       ));
       await tester.pumpAndSettle();
 
