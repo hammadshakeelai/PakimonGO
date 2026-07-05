@@ -10,6 +10,8 @@ AUTH_HEADER = {"Authorization": "Bearer test_token_valid"}
 
 SAMPLE_SHA = "a" * 64
 BIG_SHA = "b" * 64
+# Minimal valid JPEG signature + padding so upload image-validation accepts it.
+_JPEG_BYTES = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 64
 
 
 def test_create_upload_intent():
@@ -137,7 +139,7 @@ def test_upload_file_roundtrip():
 
     upload_resp = client.put(
         f"/v1/media/upload/{media_asset_id}",
-        files={"file": ("test.jpg", b"fake-image-bytes", "image/jpeg")},
+        files={"file": ("test.jpg", _JPEG_BYTES, "image/jpeg")},
         headers=AUTH_HEADER,
     )
     assert upload_resp.status_code == 200
@@ -149,3 +151,44 @@ def test_upload_file_roundtrip():
     }, headers=AUTH_HEADER)
     assert complete_resp.status_code == 200
     assert complete_resp.json()["status"] == "ok"
+
+
+def _make_intent() -> str:
+    resp = client.post("/v1/media/upload-intent", json={
+        "fileName": "sparrow.jpg",
+        "contentType": "image/jpeg",
+        "byteSize": 500000,
+        "sha256": SAMPLE_SHA,
+    }, headers=AUTH_HEADER)
+    return resp.json()["mediaAssetId"]
+
+
+def test_upload_rejects_non_image():
+    media_asset_id = _make_intent()
+    resp = client.put(
+        f"/v1/media/upload/{media_asset_id}",
+        files={"file": ("note.txt", b"this is plainly not an image file", "image/jpeg")},
+        headers=AUTH_HEADER,
+    )
+    assert resp.status_code == 400
+
+
+def test_upload_rejects_oversized():
+    media_asset_id = _make_intent()
+    oversized = b"\xff\xd8\xff\xe0" + b"\x00" * (10 * 1024 * 1024 + 1)
+    resp = client.put(
+        f"/v1/media/upload/{media_asset_id}",
+        files={"file": ("big.jpg", oversized, "image/jpeg")},
+        headers=AUTH_HEADER,
+    )
+    assert resp.status_code == 413
+
+
+def test_upload_rejects_other_users_asset():
+    media_asset_id = _make_intent()  # owned by the default user
+    resp = client.put(
+        f"/v1/media/upload/{media_asset_id}",
+        files={"file": ("test.jpg", _JPEG_BYTES, "image/jpeg")},
+        headers={"Authorization": "Bearer test_user_intruder"},
+    )
+    assert resp.status_code == 403

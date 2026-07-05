@@ -1666,3 +1666,30 @@ Extended the shared ErrorRetryView + isOffline pattern to ProfileViewModel/Profi
 ### Next Exact Action
 
 Tier 2 #6 Postgres wiring (needs Docker), or Tier 2 #8/#9 onboarding + age-gate screens.
+
+## 2026-07-05: Security — harden media upload (size + image + ownership)
+
+### Status
+
+Complete. Closes two flagged architectural gaps + a BOLA hole.
+
+### Summary
+
+PUT /v1/media/upload previously read the whole file with no checks. Added: (1) ownership check — only the intent's owner_user_id may upload (403), previously any authenticated user could write to another user's intent (BOLA); (2) size enforcement on the actual bytes via file.size and len() (413), not just the client-declared byteSize; (3) empty-file rejection (400); (4) image content validation by magic bytes (JPEG/PNG/WebP) — non-images rejected (400). Added 413 -> payload_too_large to the error middleware. Path traversal on GET /media/files was already handled by LocalFileStorage.get_path (resolve + containment check).
+
+### Tests
+
+- 3 new: non-image rejected (400), oversized rejected (413), other-user's asset rejected (403).
+- Updated 4 tests that uploaded fake bytes (media_upload/integration/cloud_storage/media_derivative) to valid JPEG signatures.
+- Fixed test_gcs_provider_requires_gcs: google-cloud-storage is now installed (firebase-admin dep), so GCS construction fails on credentials, not ImportError.
+- API 112 passing, scoring-rules 69.
+
+### Artifacts Changed
+
+- services/api/src/modules/media/api/routes.py (_is_supported_image + upload validation)
+- services/api/src/infrastructure/middleware/error_middleware.py (413)
+- services/api/tests/{test_media_upload,test_integration,test_cloud_storage,test_media_derivative}.py
+
+### Next Exact Action
+
+Tier 2 #6 Postgres wiring (needs Docker) or Tier 2 #8/#9 onboarding + age gate.

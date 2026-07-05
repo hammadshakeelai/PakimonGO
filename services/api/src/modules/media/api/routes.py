@@ -22,6 +22,19 @@ router = APIRouter(prefix="/media", tags=["media"])
 _storage = get_storage_provider()
 
 
+def _is_supported_image(data: bytes) -> bool:
+    """True if the bytes begin with a JPEG, PNG, or WebP signature."""
+    if len(data) < 12:
+        return False
+    if data[:3] == b"\xff\xd8\xff":  # JPEG
+        return True
+    if data[:8] == b"\x89PNG\r\n\x1a\n":  # PNG
+        return True
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":  # WebP
+        return True
+    return False
+
+
 @router.post("/upload-intent")
 def create_upload_intent(
     body: dict,
@@ -64,14 +77,29 @@ def upload_file(
 ):
     """Upload a file for an existing upload intent.
 
-    Accepts multipart file upload, saves original to local storage.
-    Must be called after POST /upload-intent.
+    Enforces ownership, a 10MB size cap, and that the bytes are actually a
+    supported image (jpeg/png/webp). The intent's declared size/type are not
+    trusted for the real payload. Must be called after POST /upload-intent.
     """
     asset = get_media_asset(db, media_asset_id)
     if asset is None:
         raise HTTPException(status_code=404, detail="Media not found")
+    if asset.owner_user_id is not None and asset.owner_user_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not allowed to upload to this asset")
 
+    if file.size is not None and file.size > MAX_BYTE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
     body_bytes = file.file.read()
+    if not body_bytes:
+        raise HTTPException(status_code=400, detail="Empty file")
+    if len(body_bytes) > MAX_BYTE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+    if not _is_supported_image(body_bytes):
+        raise HTTPException(
+            status_code=400,
+            detail="File is not a supported image (jpeg/png/webp)",
+        )
+
     _storage.save_original(media_asset_id, body_bytes)
     update_media_asset_storage_key(db, media_asset_id, f"originals/{media_asset_id}")
     return {"status": "ok", "mediaAssetId": media_asset_id}

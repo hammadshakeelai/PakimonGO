@@ -24,7 +24,7 @@ def _create_upload_intent():
 def _upload_file(media_asset_id: str):
     client.put(
         f"/v1/media/upload/{media_asset_id}",
-        files={"file": ("test.jpg", b"fake-image-bytes", "image/jpeg")},
+        files={"file": ("test.jpg", b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 64, "image/jpeg")},
         headers=AUTH_HEADER,
     )
 

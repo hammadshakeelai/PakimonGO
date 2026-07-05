@@ -33,7 +33,7 @@ def _full_upload_flow(sha_suffix: str):
 
     client.put(
         f"/v1/media/upload/{media_id}",
-        files={"file": ("test.jpg", b"fake-image-bytes", "image/jpeg")},
+        files={"file": ("test.jpg", b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 64, "image/jpeg")},
         headers=AUTH,
     )
 
@@ -150,7 +150,7 @@ def test_end_to_end_multiuser_collection():
     media_b_id = intent_b.json()["mediaAssetId"]
     client.put(
         f"/v1/media/upload/{media_b_id}",
-        files={"file": ("eagle.jpg", b"eagle-img", "image/jpeg")},
+        files={"file": ("eagle.jpg", b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 64, "image/jpeg")},
         headers=AUTH2,
     )
     client.post("/v1/media/complete-upload", json={

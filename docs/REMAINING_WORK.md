@@ -66,8 +66,8 @@ These must be done before any real user touches the app.
 | Gap | Risk |
 |-----|------|
 | **No auth token expiry** | FakeAuthAdapter accepts any `test_user_*` token forever. Firebase will fix this, but currently there's no session management. |
-| **No file size enforcement in upload** | Client sends `byteSize` in intent, but server doesn't verify actual upload matches. |
-| **No image validation** | Any file type can be uploaded via PUT after intent creation. Only the intent endpoint checks content type. |
+| ~~No file size enforcement in upload~~ ✅ FIXED | `PUT /media/upload` now caps the *actual* bytes at 10MB (413) and rejects empty files. Also added an ownership check (403 — was a BOLA hole). |
+| ~~No image validation~~ ✅ FIXED | `PUT /media/upload` validates JPEG/PNG/WebP magic bytes and rejects non-images (400). |
 | **Scoring worker is in-process** | InMemoryJobQueue and worker thread die with the server. No persistence, no retries, no DLQ. |
 | **No background location** | FR-PERM-003 forbids it, but no map features work without at least foreground location. |
 | **Notifications are fire-and-forget** | No push notifications. Only in-app polling via GET /v1/notifications. |
