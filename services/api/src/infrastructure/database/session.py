@@ -6,16 +6,25 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from .models import Base
 
-SYNC_DATABASE_URL = os.getenv(
-    "SYNC_DATABASE_URL",
-    (
-        f"postgresql://{os.getenv('DB_USER', 'postgres')}"
-        f":{os.getenv('DB_PASSWORD', 'dummy_local_password')}"
-        f"@{os.getenv('DB_HOST', 'localhost')}"
-        f":{os.getenv('DB_PORT', '5432')}"
-        f"/{os.getenv('DB_NAME', 'pakimongo_local')}"
-    ),
-)
+def _resolve_database_url() -> str:
+    # Managed Postgres hosts (Render, Heroku) expose a single connection URL.
+    # Accept SYNC_DATABASE_URL first, then fall back to DATABASE_URL.
+    raw = os.getenv("SYNC_DATABASE_URL") or os.getenv("DATABASE_URL")
+    if not raw:
+        raw = (
+            f"postgresql://{os.getenv('DB_USER', 'postgres')}"
+            f":{os.getenv('DB_PASSWORD', 'dummy_local_password')}"
+            f"@{os.getenv('DB_HOST', 'localhost')}"
+            f":{os.getenv('DB_PORT', '5432')}"
+            f"/{os.getenv('DB_NAME', 'pakimongo_local')}"
+        )
+    # SQLAlchemy 2.0 rejects the legacy "postgres://" scheme these hosts hand out.
+    if raw.startswith("postgres://"):
+        raw = "postgresql://" + raw[len("postgres://"):]
+    return raw
+
+
+SYNC_DATABASE_URL = _resolve_database_url()
 
 _engine = None
 _SessionLocal = None

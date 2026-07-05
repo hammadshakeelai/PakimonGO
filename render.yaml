@@ -2,27 +2,38 @@ services:
   - type: web
     name: pakimongo-api
     runtime: python
-    repo: https://github.com/anomalyco/PakimonGO
+    repo: https://github.com/hammadshakeelai/PakimonGO
     plan: free
     region: oregon
     buildCommand: pip install -r services/api/requirements.txt gunicorn
+    preDeployCommand: cd services/api && alembic upgrade head
     startCommand: cd services/api && gunicorn src.main:app -c gunicorn.conf.py
     healthCheckPath: /health/live
     envVars:
-      - key: DATABASE_URL
+      # Postgres connection string, injected from the managed database below.
+      - key: SYNC_DATABASE_URL
         fromDatabase:
           name: pakimongo-db
           property: connectionString
+      # Import root so `src.main:app` and the scoring-rules package resolve.
+      - key: PYTHONPATH
+        value: /opt/render/project/src/services/api
       - key: STORAGE_PROVIDER
         value: local
       - key: UPLOAD_BASE
-        value: /var/data/uploads
+        value: /tmp/uploads
+      # Auth: "fake" works out of the box. Switch to "firebase" and upload the
+      # service-account JSON (set GOOGLE_APPLICATION_CREDENTIALS) for real login.
+      - key: AUTH_PROVIDER
+        value: fake
+      # Vision: "dummy" scores without a key. Switch to "groq" and set
+      # GROQ_API_KEY below for real AI scoring (free tier, no billing).
       - key: VISION_PROVIDER
         value: dummy
-      - key: PYTHONPATH
-        value: /opt/render/project/src/services/api/src
+      - key: GROQ_API_KEY
+        sync: false
       - key: CORS_ORIGINS
-        value: https://pakimongo-app.vercel.app
+        value: "*"
 
 databases:
   - name: pakimongo-db

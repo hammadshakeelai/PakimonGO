@@ -14,8 +14,10 @@ from infrastructure.database.models import Base
 config = context.config
 # Honor the app's SYNC_DATABASE_URL so migrations target the same database
 # as the running API, regardless of what alembic.ini hardcodes.
-_db_url = os.getenv("SYNC_DATABASE_URL")
+_db_url = os.getenv("SYNC_DATABASE_URL") or os.getenv("DATABASE_URL")
 if _db_url:
+    if _db_url.startswith("postgres://"):
+        _db_url = "postgresql://" + _db_url[len("postgres://"):]
     config.set_main_option("sqlalchemy.url", _db_url)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
