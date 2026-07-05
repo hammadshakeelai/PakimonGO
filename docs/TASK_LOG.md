@@ -1760,3 +1760,20 @@ cd services/api && SYNC_DATABASE_URL=postgresql://postgres:dummy_local_password@
 ### Next Exact Action
 
 Auto-run migrations on deploy (or at API startup in non-test envs); CI secrets (#11).
+
+## 2026-07-05: Tier 5 — dark mode
+
+### Summary
+
+Added light + dark Material 3 themes (AppTheme) seeded from the brand green. ThemeController holds the ThemeMode (system/light/dark), persists it (ThemeStore interface; SharedPreferences prod / in-memory test), and is exposed app-wide via ThemeScope (InheritedNotifier) so any screen can read/change it without constructor threading. main.dart wraps MaterialApp in ThemeScope + ListenableBuilder with theme/darkTheme/themeMode. Added a 3-way theme toggle to the Profile Settings card (hidden when no ThemeScope, so profile_test is unaffected). Fixed a real concurrency bug: the constructor's async _load() could clobber a setMode() that raced ahead — added a hydration guard. 5 tests (4 controller + 1 widget proving the scope flips brightness). Analyze clean; Flutter suite 151.
+
+### Artifacts Changed
+
+- lib/core/theme/{app_theme,theme_controller,shared_prefs_theme_store}.dart (new)
+- lib/main.dart (ThemeScope + darkTheme + themeMode)
+- lib/features/profile/presentation/profile_screen.dart (theme toggle)
+- test/core/theme/theme_controller_test.dart (new)
+
+### Next Exact Action
+
+Tier 5 polish: accessibility (semantic labels), loading shimmers, or address the 8 flutter analyze info warnings.

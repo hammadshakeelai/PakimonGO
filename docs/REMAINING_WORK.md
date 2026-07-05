@@ -54,7 +54,7 @@ These must be done before any real user touches the app.
 | Task | Effort | Notes |
 |------|--------|-------|
 | Loading shimmer animations | 1-2 days | Currently `CircularProgressIndicator` everywhere |
-| Dark mode | 1-2 days | Not implemented |
+| Dark mode | 1-2 days | ✅ DONE — light + dark M3 themes, `ThemeController` (system/light/dark, persisted) via `ThemeScope`, toggle in Profile. 5 tests (incl. a load-vs-setMode race fix). |
 | Accessibility | 2-3 days | No semantic labels, no screen reader testing |
 | API docs cleanup | 0.5 day | OpenAPI has placeholder v2 entries |
 | Release APK optimization | 1 day | 105.8MB → target <60MB |

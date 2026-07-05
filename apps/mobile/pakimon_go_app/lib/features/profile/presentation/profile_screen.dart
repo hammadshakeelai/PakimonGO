@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pakimon_go_app/core/auth/auth_service.dart';
+import 'package:pakimon_go_app/core/theme/theme_controller.dart';
 import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
 import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
@@ -107,6 +108,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Text('Settings', style: theme.textTheme.titleLarge),
                 const SizedBox(height: 12),
+                if (ThemeScope.maybeOf(context) case final tc?) ...[
+                  Text('Theme', style: theme.textTheme.labelLarge),
+                  const SizedBox(height: 8),
+                  SegmentedButton<ThemeMode>(
+                    showSelectedIcon: false,
+                    segments: const [
+                      ButtonSegment(
+                          value: ThemeMode.system, label: Text('System')),
+                      ButtonSegment(
+                          value: ThemeMode.light, label: Text('Light')),
+                      ButtonSegment(
+                          value: ThemeMode.dark, label: Text('Dark')),
+                    ],
+                    selected: {tc.mode},
+                    onSelectionChanged: (s) => tc.setMode(s.first),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 DropdownButtonFormField<String>(
                   initialValue: vm.selectedAgeBand.isEmpty ? null : vm.selectedAgeBand,
                   decoration: const InputDecoration(

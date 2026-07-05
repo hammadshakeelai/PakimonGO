@@ -5,6 +5,9 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'core/auth/auth_service.dart';
 import 'core/config/app_config.dart';
 import 'core/network/api_client.dart';
+import 'core/theme/app_theme.dart';
+import 'core/theme/shared_prefs_theme_store.dart';
+import 'core/theme/theme_controller.dart';
 import 'features/age_gate/data/shared_prefs_age_gate_store.dart';
 import 'features/age_gate/domain/age_gate_service.dart';
 import 'features/age_gate/presentation/age_gate.dart';
@@ -46,21 +49,28 @@ class PakimonGoApp extends StatelessWidget {
       AgeGateService(store: SharedPrefsAgeGateStore());
   final OnboardingService _onboarding =
       OnboardingService(store: SharedPrefsOnboardingStore());
+  final ThemeController _theme =
+      ThemeController(store: SharedPrefsThemeStore());
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PakimonGO',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home: AgeGate(
-        service: _ageGate,
-        child: OnboardingGate(
-          service: _onboarding,
-          child: _AuthGate(authService: _authService),
+    return ThemeScope(
+      controller: _theme,
+      child: ListenableBuilder(
+        listenable: _theme,
+        builder: (context, _) => MaterialApp(
+          title: 'PakimonGO',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: _theme.mode,
+          home: AgeGate(
+            service: _ageGate,
+            child: OnboardingGate(
+              service: _onboarding,
+              child: _AuthGate(authService: _authService),
+            ),
+          ),
         ),
       ),
     );
