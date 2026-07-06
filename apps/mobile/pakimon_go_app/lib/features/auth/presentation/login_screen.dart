@@ -85,11 +85,17 @@ class _LoginScreenState extends State<LoginScreen> {
       final userCred = await FirebaseAuth.instance.signInWithCredential(
         GoogleAuthProvider.credential(idToken: idToken),
       );
-      final firebaseIdToken = await userCred.user?.getIdToken();
-      if (firebaseIdToken == null) {
+      final firebaseUser = userCred.user;
+      final firebaseIdToken = await firebaseUser?.getIdToken();
+      if (firebaseUser == null || firebaseIdToken == null) {
         throw Exception('Firebase did not return an ID token');
       }
-      widget.authService.loginWithToken(firebaseIdToken);
+      // Register a refresher: Firebase ID tokens expire after ~1 hour, so
+      // every API call pulls a currently-valid token from the SDK cache.
+      widget.authService.loginWithToken(
+        firebaseIdToken,
+        refresher: () => firebaseUser.getIdToken(),
+      );
 
       final repo = CaptureRepository(
         client: ApiClient(

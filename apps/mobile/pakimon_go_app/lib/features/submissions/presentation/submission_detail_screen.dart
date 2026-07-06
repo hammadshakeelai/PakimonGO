@@ -148,7 +148,10 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
   }
 
   Widget _buildPhoto(ThemeData theme) {
-    final url = '${ApiConfig.apiBase}/v1/media/files/thumbs/${widget.submission.mediaAssetId}.jpg';
+    // baseUrl (NOT apiBase, which already ends in /v1) + the .webp
+    // extension the derivative pipeline actually writes.
+    final url =
+        '${ApiConfig.baseUrl}/v1/media/files/thumbs/${widget.submission.mediaAssetId}.webp';
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Image.network(

@@ -22,10 +22,12 @@ services:
         value: local
       - key: UPLOAD_BASE
         value: /tmp/uploads
-      # Auth: "fake" works out of the box. Switch to "firebase" and upload the
-      # service-account JSON (set GOOGLE_APPLICATION_CREDENTIALS) for real login.
+      # Real Google Sign-In: Firebase ID tokens are verified against
+      # Google's public certs using only the project id (no secret file).
       - key: AUTH_PROVIDER
-        value: fake
+        value: firebase
+      - key: FIREBASE_PROJECT_ID
+        value: pakimongo
       # Vision: "dummy" scores without a key. Switch to "groq" and set
       # GROQ_API_KEY below for real AI scoring (free tier, no billing).
       - key: VISION_PROVIDER

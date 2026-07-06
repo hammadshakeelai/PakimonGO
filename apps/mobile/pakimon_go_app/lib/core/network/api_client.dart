@@ -9,25 +9,27 @@ import 'api_config.dart';
 class ApiClient {
   final http.Client _client;
   final String _baseUrl;
-  final String Function() _tokenProvider;
+  final FutureOr<String> Function() _tokenProvider;
   final Duration _timeout;
 
   ApiClient({
     http.Client? client,
     String? baseUrl,
-    String Function()? tokenProvider,
+    FutureOr<String> Function()? tokenProvider,
     Duration timeout = const Duration(seconds: 15),
   })  : _client = client ?? http.Client(),
         _baseUrl = baseUrl ?? ApiConfig.apiBase,
         _tokenProvider = tokenProvider ?? (() => ApiConfig.authToken),
         _timeout = timeout;
 
-  Map<String, String> _headers({bool auth = true}) {
+  /// Async because the token provider may need to refresh an expired
+  /// Firebase ID token before the request goes out.
+  Future<Map<String, String>> _headers({bool auth = true}) async {
     final headers = <String, String>{
       'Content-Type': 'application/json',
     };
     if (auth) {
-      headers['Authorization'] = 'Bearer ${_tokenProvider()}';
+      headers['Authorization'] = 'Bearer ${await _tokenProvider()}';
     }
     return headers;
   }
@@ -39,7 +41,7 @@ class ApiClient {
   }) {
     final uri =
         Uri.parse('$_baseUrl$path').replace(queryParameters: queryParams);
-    return _send(() => _client.get(uri, headers: _headers(auth: auth)));
+    return _send(() async => _client.get(uri, headers: await _headers(auth: auth)));
   }
 
   Future<Map<String, dynamic>> post(
@@ -48,9 +50,9 @@ class ApiClient {
     bool auth = true,
   }) {
     final uri = Uri.parse('$_baseUrl$path');
-    return _send(() => _client.post(
+    return _send(() async => _client.post(
           uri,
-          headers: _headers(auth: auth),
+          headers: await _headers(auth: auth),
           body: body != null ? jsonEncode(body) : null,
         ));
   }
@@ -61,9 +63,9 @@ class ApiClient {
     bool auth = true,
   }) {
     final uri = Uri.parse('$_baseUrl$path');
-    return _send(() => _client.patch(
+    return _send(() async => _client.patch(
           uri,
-          headers: _headers(auth: auth),
+          headers: await _headers(auth: auth),
           body: body != null ? jsonEncode(body) : null,
         ));
   }
@@ -73,7 +75,7 @@ class ApiClient {
     bool auth = true,
   }) {
     final uri = Uri.parse('$_baseUrl$path');
-    return _send(() => _client.delete(uri, headers: _headers(auth: auth)));
+    return _send(() async => _client.delete(uri, headers: await _headers(auth: auth)));
   }
 
   Future<Map<String, dynamic>> putFile(
@@ -87,7 +89,7 @@ class ApiClient {
     return _send(() async {
       final request = http.MultipartRequest('PUT', uri);
       if (auth) {
-        request.headers['Authorization'] = 'Bearer ${_tokenProvider()}';
+        request.headers['Authorization'] = 'Bearer ${await _tokenProvider()}';
       }
       request.files.add(http.MultipartFile.fromBytes(
         'file',

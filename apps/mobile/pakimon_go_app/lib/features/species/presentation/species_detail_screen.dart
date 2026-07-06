@@ -7,8 +7,9 @@ class SpeciesDetailScreen extends StatelessWidget {
 
   const SpeciesDetailScreen({super.key, required this.marker});
 
+  // The derivative pipeline writes .webp thumbnails.
   String get _thumbnailUrl =>
-      '${ApiConfig.baseUrl}/v1/media/files/thumbs/${marker.mediaAssetId}.jpg';
+      '${ApiConfig.baseUrl}/v1/media/files/thumbs/${marker.mediaAssetId}.webp';
 
   @override
   Widget build(BuildContext context) {

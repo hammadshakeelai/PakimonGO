@@ -18,6 +18,21 @@ class FirebaseAuthAdapter:
         self._verifier = verifier
 
     def _default_verifier(self, token: str) -> dict:
+        import os
+
+        # Credential-free path for hosts without a service-account file
+        # (e.g. Render): ID tokens are verified against Google's public
+        # certs — only the Firebase project id is needed, and that is
+        # not a secret.
+        project_id = os.getenv("FIREBASE_PROJECT_ID")
+        if project_id and not os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+            from google.auth.transport import requests as g_requests
+            from google.oauth2 import id_token as g_id_token
+
+            return g_id_token.verify_firebase_token(
+                token, g_requests.Request(), audience=project_id
+            )
+
         import firebase_admin
         from firebase_admin import auth as fb_auth
 
