@@ -49,3 +49,7 @@ knowledge/graph/graphify-out/*
 !knowledge/graph/graphify-out/README.md
 reports/
 apps/mobile/pakimon_go_app/android/app/google-services.json
+
+# Raw pasted conversation exports stay local — only the empty template is tracked.
+docs/conversation-archive/raw/*
+!docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt
