@@ -1847,3 +1847,234 @@ Render on push (auto-deploy).
 ### Next
 
 Moderator console (post-launch), loading shimmers, accessibility.
+
+---
+
+## 2026-07-06 (docs) - Ground active handoff state
+
+### Summary
+
+Updated the active handoff docs so they no longer point agents at completed
+Tier 1/Tier 2 work. The docs now distinguish demoable alpha state from
+store-ready production state: Render backend live, Render Postgres verified,
+Firebase/Groq live checks recorded, user-facing moderation done, map/profile
+polish landed, but iOS, real-device E2E, production storage, release auth
+SHA-1, moderator console/appeals, accessibility, loading polish, and store
+materials remain.
+
+### Artifacts Changed
+
+- docs/CURRENT_TASK.md
+- docs/NEXT_TASK.md
+- docs/CURRENT_THINKING.md
+- docs/BACKLOG.md
+- docs/BUGS_AND_RISKS.md
+- docs/TECH_DEBT.md
+- docs/TASK_LOG.md
+- docs/SESSION_CHECKLIST.md
+
+### Verification
+
+- `python tools/qa/pre_task_check.py` passed before edits.
+- `python tools/qa/pre_task_check.py` passed after edits.
+- `python tools/qa/validate_docs.py` passed.
+- `python tools/qa/validate_json_examples.py` passed.
+- `python tools/qa/scan_secrets.py` passed.
+- Full backend/scoring/Flutter suites were not re-run for this doc-only update.
+
+### Next
+
+Recommended no-credential task: accessibility pass across the Flutter app.
+Alternative small polish: loading shimmer/skeleton states. Larger launch work:
+real-device E2E, durable object storage, release Firebase SHA-1, moderator
+console/appeals, and store/legal materials.
+
+---
+
+## 2026-07-06 (design) - Social game UI concept
+
+### Summary
+
+Read the conversation archive index, raw archived planning chats, archive
+summaries, requirements, SRS, UX flow spec, scoring/economy plan, expanded
+blueprint, and launch checklist. Captured the user's original game direction:
+real-animal map/camera discovery, surprise scoring, collection building,
+friends/groups, social posting, likes/comments/reposts/shares, hashtags,
+leaderboards, and safety/privacy gates.
+
+Added a high-level V2 UI/product concept for a more exciting social game layer:
+Map, Capture, Feed, Collection, Rank; score reveal cards; profile grid; field
+stories; discovery reels; squad quests; habitat challenges; and social post
+cards with visibility, reactions, comments, repost/share, report, and block.
+
+The user clarified that this is V2 design work and pointed to V1 screenshots in
+`docs/assets/COMPLETE UI SCREENSHOTS - V1/`. Audited all 10 screenshots and
+expanded the concept with V1 gaps, V2 directions, and external inspiration
+directions from map games, social photo apps, group/community apps, challenge
+apps, and nature-ID apps.
+
+### Artifacts Changed
+
+- docs/ux/SOCIAL_GAME_UI_CONCEPT.md
+- docs/ux/UX_FLOW_SPEC.md
+- docs/conversation-archive/summaries/2026-07-06-social-game-ui-concept.md
+- docs/CURRENT_TASK.md
+- docs/NEXT_TASK.md
+- docs/CURRENT_THINKING.md
+- docs/BACKLOG.md
+- docs/BUGS_AND_RISKS.md
+- docs/TECH_DEBT.md
+- docs/TASK_LOG.md
+- docs/SESSION_CHECKLIST.md
+
+### Verification
+
+- `python tools/qa/pre_task_check.py` passed.
+- `python tools/qa/validate_docs.py` passed.
+- `python tools/qa/validate_json_examples.py` passed.
+- `python tools/qa/scan_secrets.py` passed.
+- Full backend/scoring/Flutter suites were not re-run because this was a
+  doc/design-only update.
+
+### Next
+
+Review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and choose the first V2 wireframe
+pack before any social UI implementation begins.
+
+---
+
+## 2026-07-06 (design prototype) - V2 clickable HTML/CSS/JS prototype
+
+### Summary
+
+Built a clickable, hardcoded HTML/CSS/JavaScript prototype for the PakimonGO V2
+direction using the 10 downloaded V2 concept panels as visual input. The
+prototype lives under `docs/prototypes/v2-ui-html/` and recreates the major
+planning screens: Map Home, Capture Review, Score Reveal, Social Feed, Player
+Profile, Field Guide Collection, Rank Hub, Group Page, Notifications, and
+Empty/Error State.
+
+The app uses hash routing, a bottom navigation shell, dummy state, selectable
+chips/tabs, form fields, social reactions, report/block/appeal modals, share
+and offline toasts, and privacy-safe location labels.
+
+This is a design-planning artifact only. It is not wired to Flutter, the API,
+auth, scoring, persistence, moderation workflows, or production feature flags.
+
+### Artifacts Changed
+
+- docs/prototypes/v2-ui-html/index.html
+- docs/prototypes/v2-ui-html/style.css
+- docs/prototypes/v2-ui-html/app.js
+- docs/prototypes/v2-ui-html/README.md
+- docs/ux/SOCIAL_GAME_UI_CONCEPT.md
+- docs/assets/V2 UI CONCEPT PANELS/README.md
+- docs/CURRENT_TASK.md
+- docs/NEXT_TASK.md
+- docs/CURRENT_THINKING.md
+- docs/BACKLOG.md
+- docs/BUGS_AND_RISKS.md
+- docs/TECH_DEBT.md
+- docs/TASK_LOG.md
+- docs/SESSION_CHECKLIST.md
+
+### Verification
+
+- `python tools/qa/pre_task_check.py` passed before edits.
+- `python tools/qa/pre_task_check.py` passed after edits.
+- `python tools/qa/validate_docs.py` passed.
+- `python tools/qa/validate_json_examples.py` passed.
+- `python tools/qa/scan_secrets.py` passed.
+- `node --check docs/prototypes/v2-ui-html/app.js` passed.
+- Edge headless screenshots rendered for Map, Feed, and Score routes.
+- Full backend/scoring/Flutter suites were not re-run because this was a
+  static docs/prototype-only update.
+
+### Next
+
+Open `docs/prototypes/v2-ui-html/index.html`, click through the dummy app flow,
+and choose which screens/interactions should become accepted wireframes or
+requirements before V2 Flutter implementation begins.
+
+---
+
+## 2026-07-06 (design prototype) - V2 prototype polish pass
+
+### Summary
+
+Improved the clickable V2 HTML/CSS/JS prototype after review. The pass focused
+on making the dummy app feel closer to the V2 concept panels while staying a
+real HTML prototype: stronger map HUD, better nearby activity sheet,
+photo-first capture review, richer score reveal, tighter social feed card,
+more polished group/profile/collection/rank surfaces, active tabs/chips,
+notification filters, modals, toasts, and clearer safety/privacy affordances.
+
+This remains a planning prototype only. It is not Flutter code and does not
+implement backend social, scoring, moderation, storage, auth, or push features.
+
+### Artifacts Changed
+
+- docs/prototypes/v2-ui-html/style.css
+- docs/prototypes/v2-ui-html/app.js
+- docs/prototypes/v2-ui-html/README.md
+- docs/CURRENT_TASK.md
+- docs/NEXT_TASK.md
+- docs/CURRENT_THINKING.md
+- docs/BACKLOG.md
+- docs/BUGS_AND_RISKS.md
+- docs/TECH_DEBT.md
+- docs/TASK_LOG.md
+- docs/SESSION_CHECKLIST.md
+
+### Verification
+
+- `python tools/qa/pre_task_check.py` passed before edits.
+- `python tools/qa/pre_task_check.py` passed after edits.
+- `python tools/qa/validate_docs.py` passed.
+- `python tools/qa/validate_json_examples.py` passed.
+- `python tools/qa/scan_secrets.py` passed.
+- `node --check docs/prototypes/v2-ui-html/app.js` passed.
+- Edge headless screenshots rendered for Map, Feed, and Score routes.
+- The dedicated web-game Playwright client could not run because its local
+  `playwright` package was missing; Edge headless screenshot verification was
+  used instead.
+- Full backend/scoring/Flutter suites were not re-run because this was a static
+  docs/prototype-only update.
+
+### Next
+
+Review the improved prototype and choose which V2 interactions should be
+promoted into requirements, wireframes, or future backlog.
+
+---
+
+## 2026-07-06 (prod debugging) — Google sign-in, photos, real GPS
+
+User field-tested the v0.2.0-alpha APK against production and reported:
+Google sign-in broken ("expired token" on History, map replaced by error),
+photos never render, leaderboard empty, captures mapped to wrong area.
+
+### Root causes + fixes
+
+1. **Server ran AUTH_PROVIDER=fake** → rejected real Firebase ID tokens
+   (dev user-id logins worked, Google did not — exactly the reported split).
+   FirebaseAuthAdapter gained a credential-free path: verify ID tokens
+   against Google's public certs with FIREBASE_PROJECT_ID only (no secret
+   file on the host). render.yaml now ships AUTH_PROVIDER=firebase.
+   Verified live: dev tokens 401, health green.
+2. **Client never refreshed the Firebase ID token** (expires ~1h).
+   AuthService registers a refresher (SDK getIdToken cache); ApiClient
+   awaits a FutureOr token provider on every request.
+3. **Photos 404'd always**: submission detail built apiBase + /v1/... →
+   double /v1; both detail screens asked for .jpg while the pipeline
+   writes .webp.
+4. **Captures were hardcoded to Islamabad + jitter.** Added geolocator:
+   permission flow, 10s high-accuracy fix, last-known fallback, graceful
+   no-location submission. Injectable LocationService for tests.
+5. Leaderboard "empty" was simply a fresh prod DB — populates as users
+   submit (verified: alice at 50 pts from live testing).
+
+### State
+
+130 API + 162 Flutter tests, analyze clean. Rebuilt v0.2.0-alpha APKs
+pointed at prod with all fixes.
