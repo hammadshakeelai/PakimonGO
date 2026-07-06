@@ -118,7 +118,7 @@ void main() {
     await tester.tap(find.text('Capture'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Test Capture'), findsOneWidget);
+    expect(find.text('Capture'), findsWidgets);
     expect(find.text('Camera'), findsOneWidget);
     expect(find.text('Gallery'), findsOneWidget);
   });

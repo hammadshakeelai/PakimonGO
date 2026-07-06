@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
+import '../../../core/location/location_service.dart';
 import '../../../core/network/api_client.dart';
 import '../data/capture_repository.dart';
 import '../domain/capture_media_service.dart';
@@ -10,11 +9,13 @@ import '../../../shared/models/api_models.dart';
 class CaptureScreen extends StatefulWidget {
   final CaptureMediaService mediaService;
   final CaptureRepository? repository;
+  final LocationService? locationService;
 
   const CaptureScreen({
     super.key,
     required this.mediaService,
     this.repository,
+    this.locationService,
   });
 
   @override
@@ -23,6 +24,7 @@ class CaptureScreen extends StatefulWidget {
 
 class _CaptureScreenState extends State<CaptureScreen> {
   late final CaptureRepository _repo;
+  late final LocationService _location;
   final _speciesCtrl = TextEditingController(text: 'Passer domesticus');
   final _cuteNameCtrl = TextEditingController(text: 'Test Sparrow');
   final _captionCtrl = TextEditingController(text: 'Submitted via Flutter');
@@ -36,6 +38,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
   void initState() {
     super.initState();
     _repo = widget.repository ?? CaptureRepository();
+    _location = widget.locationService ?? GeolocatorLocationService();
   }
 
   Future<void> _pickFromCamera() async {
@@ -85,8 +88,15 @@ class _CaptureScreenState extends State<CaptureScreen> {
         sha256: media.sha256,
       );
 
-      final rng = Random();
-      _status = 'Creating submission...';
+      _status = 'Getting your location...';
+      setState(() {});
+      // Real device GPS — the sighting is mapped where the photo was
+      // actually submitted. Falls back to no location when denied/off.
+      final loc = await _location.getCurrentLocation();
+
+      _status = loc == null
+          ? 'Location unavailable — submitting without it...'
+          : 'Creating submission...';
       setState(() {});
       final submission = await _repo.createSubmission(
         mediaAssetId: intent.mediaAssetId,
@@ -95,9 +105,9 @@ class _CaptureScreenState extends State<CaptureScreen> {
         cuteName: _cuteNameCtrl.text,
         caption: _captionCtrl.text,
         tags: [_context, _speciesCtrl.text],
-        latitude: 33.6844 + rng.nextDouble() * 0.01,
-        longitude: 73.0479 + rng.nextDouble() * 0.01,
-        accuracyMeters: 18.5,
+        latitude: loc?.latitude,
+        longitude: loc?.longitude,
+        accuracyMeters: loc?.accuracyMeters,
       );
 
       _status =
@@ -123,7 +133,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Test Capture')),
+      appBar: AppBar(title: const Text('Capture')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

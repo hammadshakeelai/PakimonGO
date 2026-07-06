@@ -49,7 +49,7 @@ void main() {
     await tester.pumpWidget(_buildScreen(_NullMediaService()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Test Capture'), findsOneWidget);
+    expect(find.text('Capture'), findsWidgets);
     expect(find.text('Camera'), findsOneWidget);
     expect(find.text('Gallery'), findsOneWidget);
     expect(find.text('Context'), findsOneWidget);
