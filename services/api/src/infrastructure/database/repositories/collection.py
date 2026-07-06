@@ -2,7 +2,40 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import ScoreEvent, SensitiveSpecies, Submission, SubmissionAttribute, User
+from ..models import CaptureLocation, ScoreEvent, SensitiveSpecies, Submission, SubmissionAttribute, User
+
+
+def _representatives_for(db: Session, user_id: str) -> dict:
+    """Latest scored submission per (species, context) group for a user.
+
+    Uses a row_number() window (SQLite >=3.25 and Postgres both support it)
+    so the collection can show a representative photo and a coarse location
+    for each species entry.
+    """
+    rn = func.row_number().over(
+        partition_by=(SubmissionAttribute.real_name, SubmissionAttribute.animal_context),
+        order_by=(ScoreEvent.created_at.desc(), Submission.created_at.desc()),
+    ).label("rn")
+    subq = (
+        db.query(
+            Submission.id.label("submission_id"),
+            Submission.primary_media_asset_id.label("media_asset_id"),
+            SubmissionAttribute.real_name.label("real_name"),
+            SubmissionAttribute.animal_context.label("animal_context"),
+            CaptureLocation.latitude.label("latitude"),
+            CaptureLocation.longitude.label("longitude"),
+            rn,
+        )
+        .select_from(Submission)
+        .join(SubmissionAttribute, SubmissionAttribute.submission_id == Submission.id)
+        .join(ScoreEvent, ScoreEvent.submission_id == Submission.id)
+        .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
+        .filter(Submission.user_id == user_id)
+        .filter(Submission.status.in_(["scored", "capped"]))
+        .subquery()
+    )
+    rows = db.query(subq).filter(subq.c.rn == 1).all()
+    return {(r.real_name, r.animal_context): r for r in rows}
 
 
 def get_user_collection(
@@ -57,16 +90,33 @@ def get_user_collection(
 
     rows = query.limit(limit).offset(offset).all()
 
-    items = [
-        {
-            "species": row.real_name,
-            "context": row.animal_context,
-            "totalPoints": row.total_points or 0,
-            "captureCount": row.capture_count,
-            "lastCaptured": row.last_captured.isoformat() if row.last_captured else None,
-        }
-        for row in rows
-    ]
+    reps = _representatives_for(db, user_id)
+    items = []
+    for row in rows:
+        rep = reps.get((row.real_name, row.animal_context))
+        # Coarse cell only (~1km rounding) — same privacy rule as the
+        # submission list; the exact capture spot is never exposed.
+        public_location = None
+        if rep is not None and rep.latitude is not None and rep.longitude is not None:
+            cell_lat = round(rep.latitude, 2)
+            cell_lng = round(rep.longitude, 2)
+            public_location = {
+                "cellId": f"cell_{cell_lat:.2f}_{cell_lng:.2f}",
+                "cellLatitude": cell_lat,
+                "cellLongitude": cell_lng,
+            }
+        items.append(
+            {
+                "species": row.real_name,
+                "context": row.animal_context,
+                "totalPoints": row.total_points or 0,
+                "captureCount": row.capture_count,
+                "lastCaptured": row.last_captured.isoformat() if row.last_captured else None,
+                "submissionId": rep.submission_id if rep is not None else None,
+                "mediaAssetId": rep.media_asset_id if rep is not None else None,
+                "publicLocation": public_location,
+            }
+        )
     return items, total
 
 

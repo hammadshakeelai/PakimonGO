@@ -22,7 +22,15 @@ AUTH2 = {"Authorization": "Bearer test_user_user2"}
 _DEFAULT_USER = "test_user_default"
 
 
-def _seed(user_id: str, species: str, context: str, points: int, status: str = "scored"):
+def _seed(
+    user_id: str,
+    species: str,
+    context: str,
+    points: int,
+    status: str = "scored",
+    lat: float | None = None,
+    lng: float | None = None,
+):
     db = next(get_db())
     try:
         get_or_create_user(db, user_id)
@@ -37,6 +45,7 @@ def _seed(user_id: str, species: str, context: str, points: int, status: str = "
             db=db, media_asset_id=asset.id, animal_context=context,
             real_name=species, cute_name=f"cute_{species}",
             caption=f"A {species}", tags=[context], user_id=user_id,
+            latitude=lat, longitude=lng,
         )
         update_submission_status(db, sub.id, status)
         create_score_event(
@@ -45,7 +54,7 @@ def _seed(user_id: str, species: str, context: str, points: int, status: str = "
             explanation_category="species_match" if status == "scored" else "context_cap",
             previous_state="ai_evaluated", new_state=status,
         )
-        db.close()
+        return asset.id
     finally:
         db.close()
 
@@ -179,3 +188,41 @@ def test_leaderboard_includes_sensitive_with_flag():
     assert user_entry is not None
     # With flag, both sensitive and non-sensitive should count
     assert user_entry["totalScore"] >= 50
+
+class TestCollectionRepresentative:
+    """The collection payload carries a representative (most recent)
+    submission per species so the detail view can show a photo and a
+    coarse location (the bug: 'Photo not available' + 0.0000 coords)."""
+
+    def test_latest_submission_wins(self):
+        user = f"rep_user_{uuid.uuid4().hex[:8]}"
+        auth = {"Authorization": f"Bearer test_user_{user}"}
+        _seed(user, "Vulpes vulpes", "wild", 25)
+        latest_asset = _seed(user, "Vulpes vulpes", "wild", 25)
+
+        resp = client.get("/v1/users/me/collection", headers=auth)
+        assert resp.status_code == 200
+        entry = resp.json()["species"][0]
+        assert entry["mediaAssetId"] == latest_asset
+        assert entry["submissionId"] is not None
+
+    def test_public_location_is_coarse(self):
+        user = f"rep_user_{uuid.uuid4().hex[:8]}"
+        auth = {"Authorization": f"Bearer test_user_{user}"}
+        _seed(user, "Upupa epops", "wild", 25, lat=33.68432, lng=73.04789)
+
+        entry = client.get("/v1/users/me/collection", headers=auth).json()["species"][0]
+        loc = entry["publicLocation"]
+        assert loc["cellLatitude"] == 33.68
+        assert loc["cellLongitude"] == 73.05
+        # Exact coordinates must never leak.
+        assert "33.68432" not in str(entry)
+
+    def test_no_location_gives_null_public_location(self):
+        user = f"rep_user_{uuid.uuid4().hex[:8]}"
+        auth = {"Authorization": f"Bearer test_user_{user}"}
+        _seed(user, "Corvus splendens", "wild", 25)
+
+        entry = client.get("/v1/users/me/collection", headers=auth).json()["species"][0]
+        assert entry["publicLocation"] is None
+        assert entry["mediaAssetId"] is not None

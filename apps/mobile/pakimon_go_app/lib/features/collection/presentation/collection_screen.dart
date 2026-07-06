@@ -183,13 +183,13 @@ class _CollectionScreenState extends State<CollectionScreen> {
               MaterialPageRoute(
                 builder: (_) => SpeciesDetailScreen(
                   marker: SubmissionMarker(
-                    submissionId: '',
-                    mediaAssetId: '',
+                    submissionId: e.submissionId ?? '',
+                    mediaAssetId: e.mediaAssetId ?? '',
                     species: e.species,
                     status: 'scored',
                     points: e.totalPoints,
-                    latitude: 0,
-                    longitude: 0,
+                    latitude: e.cellLatitude ?? 0,
+                    longitude: e.cellLongitude ?? 0,
                   ),
                 ),
               ),

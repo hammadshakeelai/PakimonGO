@@ -21,8 +21,12 @@ class SpeciesDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPhoto(theme),
-            const SizedBox(height: 16),
+            // No representative photo -> skip the section entirely
+            // instead of showing a permanent "Photo not available" box.
+            if (marker.mediaAssetId.isNotEmpty) ...[
+              _buildPhoto(theme),
+              const SizedBox(height: 16),
+            ],
             _buildInfoCard(theme),
           ],
         ),
@@ -31,9 +35,6 @@ class SpeciesDetailScreen extends StatelessWidget {
   }
 
   Widget _buildPhoto(ThemeData theme) {
-    if (marker.mediaAssetId.isEmpty) {
-      return _buildPhotoPlaceholder(theme, 'Photo not available');
-    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Image.network(
@@ -93,12 +94,18 @@ class SpeciesDetailScreen extends StatelessWidget {
             _buildInfoRow(Icons.score, 'Points', '${marker.points}'),
             const SizedBox(height: 8),
             _buildInfoRow(Icons.check_circle, 'Status', marker.status),
-            const SizedBox(height: 8),
-            _buildInfoRow(Icons.location_on, 'Latitude',
-                marker.latitude.toStringAsFixed(4)),
-            const SizedBox(height: 8),
-            _buildInfoRow(Icons.location_on, 'Longitude',
-                marker.longitude.toStringAsFixed(4)),
+            if (marker.hasValidLocation) ...[
+              const SizedBox(height: 8),
+              _buildInfoRow(Icons.location_on, 'Latitude',
+                  marker.latitude.toStringAsFixed(4)),
+              const SizedBox(height: 8),
+              _buildInfoRow(Icons.location_on, 'Longitude',
+                  marker.longitude.toStringAsFixed(4)),
+            ] else ...[
+              const SizedBox(height: 8),
+              _buildInfoRow(
+                  Icons.location_off, 'Location', 'Hidden for privacy'),
+            ],
           ],
         ),
       ),

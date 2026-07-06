@@ -40,6 +40,13 @@ Map<String, dynamic> _collectionJson() => {
           'totalPoints': 75,
           'captureCount': 3,
           'lastCaptured': '2026-07-03T10:00:00',
+          'submissionId': 'sub_markhor_latest',
+          'mediaAssetId': 'media_markhor_latest',
+          'publicLocation': {
+            'cellId': 'cell_33.68_73.05',
+            'cellLatitude': 33.68,
+            'cellLongitude': 73.05,
+          },
         },
         {
           'species': 'Peacock',
@@ -47,6 +54,9 @@ Map<String, dynamic> _collectionJson() => {
           'totalPoints': 5,
           'captureCount': 5,
           'lastCaptured': '2026-07-02T10:00:00',
+          'submissionId': null,
+          'mediaAssetId': null,
+          'publicLocation': null,
         },
       ],
       'pagination': {'limit': 20, 'offset': 0, 'total': 2},
@@ -263,6 +273,39 @@ void main() {
       await tester.tap(find.text('Markhor'));
       await tester.pumpAndSettle();
       expect(find.text('Markhor'), findsAtLeast(1));
+      // Regression: the detail marker now carries the representative
+      // submission's coarse cell location instead of 0.0000.
+      expect(find.text('33.6800'), findsOneWidget);
+      expect(find.text('73.0500'), findsOneWidget);
+      expect(find.text('Photo not available'), findsNothing);
+    });
+
+    testWidgets(
+        'entry without representative photo/location degrades gracefully',
+        (tester) async {
+      final client = _MockClient({
+        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
+            http.Response(
+          jsonEncode(_collectionJson()),
+          200,
+          headers: {'content-type': 'application/json'},
+        ),
+      });
+      final repo = CaptureRepository(
+        client: ApiClient(client: client, baseUrl: 'http://test.com'),
+      );
+      final vm = CollectionViewModel(repository: repo);
+      await tester.pumpWidget(MaterialApp(
+        home: CollectionScreen(viewModel: vm),
+      ));
+      await tester.pumpAndSettle();
+
+      // Peacock has null mediaAssetId + publicLocation in the fixture.
+      await tester.tap(find.text('Peacock'));
+      await tester.pumpAndSettle();
+      expect(find.text('Photo not available'), findsNothing);
+      expect(find.textContaining('Latitude'), findsNothing);
+      expect(find.text('Hidden for privacy'), findsOneWidget);
     });
   });
 }

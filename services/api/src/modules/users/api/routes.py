@@ -48,9 +48,11 @@ def get_my_collection(
 ):
     """Get the current user's species collection with pagination.
 
-    Groups captured species by common name with total points,
-    capture count, and last capture date. Excludes sensitive
-    species by default unless include_sensitive=true.
+    Groups captured species by common name with total points, capture
+    count, and last capture date, plus a representative (most recent)
+    submission's mediaAssetId and coarse publicLocation cell for the
+    detail view. Excludes sensitive species by default unless
+    include_sensitive=true.
     """
     collection, total = get_user_collection(
         db=db,

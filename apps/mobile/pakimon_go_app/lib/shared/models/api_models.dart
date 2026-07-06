@@ -226,21 +226,37 @@ class CollectionEntry {
   final int captureCount;
   final String? lastCaptured;
 
+  /// Representative (most recent) submission for this species —
+  /// powers the photo and coarse location on the detail screen.
+  final String? submissionId;
+  final String? mediaAssetId;
+  final double? cellLatitude;
+  final double? cellLongitude;
+
   CollectionEntry({
     required this.species,
     this.context,
     required this.totalPoints,
     required this.captureCount,
     this.lastCaptured,
+    this.submissionId,
+    this.mediaAssetId,
+    this.cellLatitude,
+    this.cellLongitude,
   });
 
   factory CollectionEntry.fromJson(Map<String, dynamic> json) {
+    final loc = json['publicLocation'] as Map<String, dynamic>?;
     return CollectionEntry(
       species: json['species'] as String,
       context: json['context'] as String?,
       totalPoints: json['totalPoints'] as int? ?? 0,
       captureCount: json['captureCount'] as int? ?? 0,
       lastCaptured: json['lastCaptured'] as String?,
+      submissionId: json['submissionId'] as String?,
+      mediaAssetId: json['mediaAssetId'] as String?,
+      cellLatitude: (loc?['cellLatitude'] as num?)?.toDouble(),
+      cellLongitude: (loc?['cellLongitude'] as num?)?.toDouble(),
     );
   }
 }
