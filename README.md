@@ -20,9 +20,23 @@
 
 PakimonGO is a 13+ mobile app for real-animal photography, discovery, collections, map exploration, privacy-safe social sharing, and server-scored competition.
 
+## 📱 App Showcase
+
+| Onboarding | Sign In | 3D Live Map | Submissions |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/assets/screenshots/onboarding.png" width="200"> | <img src="docs/assets/screenshots/login.png" width="200"> | <img src="docs/assets/screenshots/map.png" width="200"> | <img src="docs/assets/screenshots/history.png" width="200"> |
+
+| Notifications | Leaderboard | Profile (Dark) | Collection (Dark) |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/assets/screenshots/notifications.png" width="200"> | <img src="docs/assets/screenshots/leaderboard.png" width="200"> | <img src="docs/assets/screenshots/profile_dark.png" width="200"> | <img src="docs/assets/screenshots/collection_dark.png" width="200"> |
+
+## 📦 Download
+
+Grab the latest Android APK from **[Releases](../../releases)** — it's pre-wired to the live API (Google Sign-In, real AI scoring via Groq, Mapbox 3D map). Install the `arm64-v8a` variant on most modern phones.
+
 ## Current Phase
 
-Phase 6: Feature implementation. All Sprints 2-42 complete. 103 API tests + 61 scoring-rules tests + 102 Flutter tests = 266 total, all passing.
+Production-hardening. Live backend on Render (PostgreSQL, Firebase auth, Groq vision), age gate + onboarding, dark mode, offline handling, upload security, rate limiting, and report/block moderation. **145 backend tests + 162 Flutter tests, all passing; `flutter analyze` clean.**
 
 ## Repository Layout
 
