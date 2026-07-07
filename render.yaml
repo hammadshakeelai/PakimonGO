@@ -22,6 +22,9 @@ services:
         value: local
       - key: UPLOAD_BASE
         value: /tmp/uploads
+      # Proof-of-concept content by the official demo user (idempotent).
+      - key: DEMO_SEED
+        value: "1"
       # Real Google Sign-In: Firebase ID tokens are verified against
       # Google's public certs using only the project id (no secret file).
       - key: AUTH_PROVIDER

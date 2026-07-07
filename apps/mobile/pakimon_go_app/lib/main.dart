@@ -93,7 +93,7 @@ class _AuthGateState extends State<_AuthGate> {
   void initState() {
     super.initState();
     _apiClient = ApiClient(
-      tokenProvider: () => widget.authService.effectiveToken,
+      tokenProvider: () => widget.authService.freshToken(),
     );
     widget.authService.addListener(_onAuthChanged);
   }
@@ -116,7 +116,7 @@ class _AuthGateState extends State<_AuthGate> {
         authService: widget.authService,
         onLoginComplete: () {
           _apiClient = ApiClient(
-            tokenProvider: () => widget.authService.effectiveToken,
+            tokenProvider: () => widget.authService.freshToken(),
           );
         },
       );

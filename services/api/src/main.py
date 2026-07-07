@@ -37,8 +37,33 @@ def _start_worker_thread():
     return thread
 
 
+def _run_demo_seed_if_enabled():
+    """DEMO_SEED=1 seeds proof-of-concept content owned by the official
+    demo user (idempotent; re-materializes files on ephemeral disks)."""
+    if os.getenv("DEMO_SEED") != "1":
+        return
+    import sys
+    from pathlib import Path
+
+    scripts_dir = Path(__file__).resolve().parents[1] / "scripts"
+    sys.path.insert(0, str(scripts_dir))
+    try:
+        from demo_seed import run_demo_seed
+
+        db = next(get_db())
+        try:
+            run_demo_seed(db)
+        finally:
+            db.close()
+    except Exception:  # never block startup on demo content
+        import traceback
+
+        traceback.print_exc()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    _run_demo_seed_if_enabled()
     _start_worker_thread()
     yield
 

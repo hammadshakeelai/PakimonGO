@@ -25,11 +25,42 @@ class GroqVisionProvider:
     _VALID_CONTEXTS = frozenset({"wild", "zoo", "pet", "unknown"})
     _TIMEOUT = 30
     _PROMPT = (
-        "You are a wildlife identification assistant. Identify the single most "
-        "prominent animal in the photo and whether it was taken in the wild, in a "
-        "zoo/aquarium/captivity, or is a domestic pet. Respond with ONLY a JSON "
-        'object and no other text: {"species": string or null, "context": one of '
-        '"wild"|"zoo"|"pet"|"unknown", "confidence": number between 0 and 1}.'
+        "You are PakimonGO's expert wildlife field judge. Analyze the photo and "
+        "score it for a wildlife-photography game that rewards SAFE, HONEST, "
+        "WILD encounters. Work through this rubric:\n"
+        "1. SPECIES: identify the single most prominent animal. Give the "
+        "scientific (Latin binomial) name and the common English name. If no "
+        "real animal is visible, say so.\n"
+        "2. CONTEXT: decide wild / zoo / pet / unknown using visual evidence — "
+        "enclosures, fences, glass, exhibit signage, concrete or artificial "
+        "habitat mean zoo; collars, leashes, indoor domestic settings, or "
+        "domesticated breeds (dogs, house cats, livestock) mean pet; natural "
+        "habitat with no human artifacts means wild; otherwise unknown. State "
+        "your evidence in one short sentence.\n"
+        "3. RARITY: judge how notable the species is for the habitat shown — "
+        "common | uncommon | rare | exceptional.\n"
+        "4. SAFETY & WELFARE: judge whether the photographer kept a respectful "
+        "distance (signs of stress, alarm posture, flight response, defensive "
+        "display mean they did not), whether the animal shows disturbance, and "
+        "whether anything raises a welfare concern (injury, baiting/feeding, "
+        "handling of wildlife, captivity distress).\n"
+        "5. AESTHETIC: rate sharpness, composition, and lighting each 0-1.\n"
+        "6. AUTHENTICITY: flag if this looks like a photo of a screen or print, "
+        "AI-generated art, a watermark/stock image, or a heavily manipulated "
+        "picture.\n"
+        "Be conservative: when the evidence is ambiguous, lower confidence and "
+        "prefer context=unknown over guessing wild. Respond with ONLY this JSON "
+        "object, no other text: "
+        '{"species_scientific": string|null, "species_common": string|null, '
+        '"confidence": number 0-1, "context": "wild"|"zoo"|"pet"|"unknown", '
+        '"context_evidence": string, "animal_present": boolean, '
+        '"animal_count": integer, '
+        '"rarity": "common"|"uncommon"|"rare"|"exceptional", '
+        '"safety": {"respectful_distance": boolean, "signs_of_disturbance": '
+        'boolean, "welfare_concern": boolean, "notes": string}, '
+        '"aesthetic": {"sharpness": number 0-1, "composition": number 0-1, '
+        '"lighting": number 0-1}, '
+        '"authenticity": {"suspected_fake": boolean, "notes": string}}'
     )
 
     def __init__(self, api_key: str | None = None, model: str | None = None) -> None:
@@ -82,7 +113,16 @@ class GroqVisionProvider:
                                   {"provider": "groq", "error": "no_content", "raw": data})
 
         parsed = cls._extract_json(content)
-        species = parsed.get("species") or None
+        # Prefer the detailed v2 keys; fall back to the legacy "species" key
+        # so older stubbed responses keep parsing.
+        species = (
+            parsed.get("species_scientific")
+            or parsed.get("species")
+            or parsed.get("species_common")
+            or None
+        )
+        if parsed.get("animal_present") is False:
+            species = None
         context = str(parsed.get("context", "unknown")).lower()
         if context not in cls._VALID_CONTEXTS:
             context = "unknown"
@@ -94,7 +134,11 @@ class GroqVisionProvider:
             detected_species=species,
             confidence=confidence,
             suggested_context=context,
-            raw_evidence={"provider": "groq", "content": content},
+            raw_evidence={
+                "provider": "groq",
+                "content": content,
+                "analysis": parsed,
+            },
         )
 
     @staticmethod
