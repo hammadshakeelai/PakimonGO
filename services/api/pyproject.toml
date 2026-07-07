@@ -13,6 +13,8 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = [
   "src.infrastructure.database.models",
+  "src.infrastructure.database.models.*",
   "src.infrastructure.database.repositories",
+  "src.infrastructure.database.repositories.*",
 ]
 ignore_errors = true

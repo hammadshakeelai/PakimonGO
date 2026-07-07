@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PakimonGO V2 UI Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="board-hero">
+      <div>
+        <p class="eyebrow">PakimonGO V2 concept prototype</p>
+        <h1>Social wildlife adventure app shell</h1>
+        <p>Hardcoded HTML/CSS screens based on the 10 V2 concept panels. Use this to compare flow, density, and visual direction before Flutter V2 implementation.</p>
+      </div>
+      <nav class="jump-nav" aria-label="Prototype screens">
+        <a href="#map">Map</a>
+        <a href="#capture">Capture</a>
+        <a href="#score">Score</a>
+        <a href="#feed">Feed</a>
+        <a href="#profile">Profile</a>
+        <a href="#collection">Collection</a>
+        <a href="#rank">Rank</a>
+        <a href="#group">Group</a>
+        <a href="#notifications">Inbox</a>
+        <a href="#empty">Empty</a>
+      </nav>
+    </header>
+
+    <main class="screen-grid">
+      <section class="phone map-phone" id="map" aria-label="V2 map home screen">
+        <div class="phone-top"><span>9:41</span><span>LTE 82%</span></div>
+        <div class="map-canvas">
+          <div class="hud">
+            <div class="avatar">A</div>
+            <div><strong>Lvl 22</strong><span>28 day streak</span></div>
+            <div class="brand">PakimonGO</div>
+            <button aria-label="Notifications">!</button>
+          </div>
+          <div class="mission"><strong>Find a bird near a park</strong><span>2 safe sightings nearby</span></div>
+          <span class="zone zone-a">3</span>
+          <span class="zone zone-b">6</span>
+          <span class="zone zone-c">2</span>
+          <span class="route"></span>
+          <div class="activity-sheet">
+            <div class="sheet-grip"></div>
+            <h2>Nearby Activity</h2>
+            <div class="activity-row"><span class="mini-img bird"></span><div><strong>House Sparrow</strong><span>Garden habitat - exact location hidden</span></div><b>12 pts</b></div>
+            <div class="activity-row"><span class="mini-img peacock"></span><div><strong>Indian Peafowl</strong><span>Park area - safe distance</span></div><b>44 pts</b></div>
+            <div class="activity-row"><span class="mini-img butterfly"></span><div><strong>Plain Tiger</strong><span>Trail edge - recent safe shot</span></div><b>18 pts</b></div>
+          </div>
+        </div>
+        <button class="capture-fab" aria-label="Open capture">+</button>
+        <nav class="bottom-nav"><b>Map</b><span>Feed</span><span>Capture</span><span>Guide</span><span>Rank</span></nav>
+      </section>
+
+      <section class="phone" id="capture" aria-label="V2 capture review screen">
+        <div class="phone-top"><span>9:42</span><span>Safe capture</span></div>
+        <header class="appbar"><button aria-label="Back">‹</button><h2>Capture Review</h2><button aria-label="Drafts">D</button></header>
+        <div class="photo-card bulbul"><span class="score-chip">Likely 20-45 pts</span><span class="photo-count">1/1</span></div>
+        <div class="chip-row"><b>Wild</b><span>Pet</span><span>Zoo</span><span>Unsure</span></div>
+        <div class="form-card">
+          <label>Species guess <strong>Red-vented Bulbul</strong></label>
+          <label>Cute name <strong>Rafi</strong></label>
+          <label>Caption <strong>Perched near the morning path.</strong></label>
+          <div class="tag-row"><span>#urbanbird</span><span>#safeShot</span><span>#Islamabad</span></div>
+        </div>
+        <div class="visibility"><b>Private</b><span>Friends</span><span>Public</span></div>
+        <p class="privacy-note">Location saved privately. Feed posts show only a broad area.</p>
+        <div class="checklist"><span>No chasing</span><span>No touching</span><span>Respect distance</span></div>
+        <button class="primary">Submit for Score Reveal</button>
+      </section>
+
+      <section class="phone score-phone" id="score" aria-label="V2 score reveal screen">
+        <div class="phone-top"><span>9:43</span><span>Server scored</span></div>
+        <header class="appbar center"><h2>Rare Safe Shot!</h2></header>
+        <div class="photo-card eagle"><span class="score-chip gold">Wild</span><span class="score-chip right">New entry</span></div>
+        <div class="score-card"><span>Total Score</span><strong>75 pts</strong><p>Golden Eagle - exact location hidden</p></div>
+        <div class="breakdown">
+          <div><b>+35</b><span>Rarity</span></div><div><b>+15</b><span>Safety</span></div><div><b>+10</b><span>Aesthetic</span></div><div><b>+5</b><span>Name</span></div><div><b>+10</b><span>Novelty</span></div>
+        </div>
+        <div class="action-row"><button>Share Card</button><button>View Guide</button><button>Appeal</button></div>
+        <p class="trust-copy">Server-scored. Public views never expose precise coordinates.</p>
+      </section>
+
+      <section class="phone" id="feed" aria-label="V2 social feed screen">
+        <div class="phone-top"><span>9:44</span><span>Friends</span></div>
+        <header class="appbar"><h2>Field Stories</h2><button aria-label="Settings">S</button></header>
+        <div class="stories"><span class="story bird"></span><span class="story peacock"></span><span class="story cat"></span><span class="story butterfly"></span></div>
+        <article class="post">
+          <div class="post-head"><span class="avatar">N</span><div><strong>nature_traveler</strong><span>Friends - broad area</span></div><b>75 pts</b></div>
+          <div class="photo-card sparrow"><div class="species-card"><b>House Sparrow</b><span>Passer domesticus</span></div></div>
+          <p>Clean safe shot from a garden walk. Loved the morning light.</p>
+          <div class="tag-row"><span>#safeShot</span><span>#birds</span><span>#garden</span></div>
+          <div class="reaction-row"><button>Wow</button><button>Cute</button><button>Rare</button><button>Safe Shot</button></div>
+          <div class="social-actions"><span>Like</span><span>Comment</span><span>Repost</span><span>Share</span><span>Report</span></div>
+        </article>
+        <p class="privacy-note">Exact locations and sensitive species are hidden by default.</p>
+      </section>
+
+      <section class="phone" id="profile" aria-label="V2 player profile screen">
+        <div class="phone-top"><span>9:45</span><span>Explorer profile</span></div>
+        <header class="profile-hero">
+          <span class="avatar big">A</span>
+          <div><h2>seed_user_alpha</h2><p>@alpha.explorer - Garden Guardian</p></div>
+          <button aria-label="Settings">S</button>
+        </header>
+        <div class="stats"><div><b>7,860</b><span>points</span></div><div><b>28</b><span>streak</span></div><div><b>#128</b><span>rank</span></div></div>
+        <h3>Pinned Captures</h3>
+        <div class="pin-row"><div class="pin eagle"><b>75 pts</b></div><div class="pin peacock"><b>44 pts</b></div><div class="pin cat"><b>12 pts</b></div></div>
+        <div class="badge-row"><span>Bird Watcher</span><span>Safe Shot</span><span>Garden Guardian</span></div>
+        <div class="tabs"><b>Grid</b><span>Collections</span><span>Stories</span><span>Stats</span></div>
+        <div class="mini-grid"><span class="sparrow"></span><span class="bulbul"></span><span class="butterfly"></span><span class="peacock"></span></div>
+        <nav class="bottom-nav"><span>Map</span><span>Feed</span><b>Profile</b><span>Guide</span><span>Rank</span></nav>
+      </section>
+
+      <section class="phone" id="collection" aria-label="V2 field guide collection screen">
+        <div class="phone-top"><span>9:46</span><span>Field guide</span></div>
+        <header class="appbar"><h2>My Field Guide</h2><button aria-label="Search">Q</button></header>
+        <div class="rings"><div><b>63%</b><span>Birds</span></div><div><b>41%</b><span>Pets</span></div><div><b>18%</b><span>Rare</span></div></div>
+        <div class="chip-row"><b>All</b><span>Wild</span><span>Pet</span><span>Zoo</span><span>Rare</span><span>Private</span></div>
+        <div class="collection-grid">
+          <article class="species-card-tile kingfisher"><b>Common Kingfisher</b><span>Best 62 pts</span></article>
+          <article class="species-card-tile eagle"><b>Golden Eagle</b><span>Rare wild</span></article>
+          <article class="species-card-tile dog"><b>Golden Retriever</b><span>Pet shelf</span></article>
+          <article class="species-card-tile peacock"><b>Indian Peafowl</b><span>Zoo journal</span></article>
+          <article class="species-card-tile locked"><b>Unknown trail</b><span>Keep exploring</span></article>
+          <article class="species-card-tile locked"><b>Water habitat</b><span>Missing card</span></article>
+        </div>
+        <div class="callout">Next set: 2 safe bird captures to unlock Urban Birds I.</div>
+      </section>
+
+      <section class="phone" id="rank" aria-label="V2 rank hub screen">
+        <div class="phone-top"><span>9:47</span><span>Season 2</span></div>
+        <header class="appbar"><h2>Wild Chronicles</h2><button aria-label="Rules">?</button></header>
+        <div class="season-card"><span>Ranger II</span><strong>#128</strong><p>2,865 pts - 6 days left</p><div class="meter"><i></i></div></div>
+        <div class="tabs"><b>Friends</b><span>Local</span><span>Country</span><span>Global</span></div>
+        <ol class="leaderboard">
+          <li><span>1</span><b>Mina</b><em>4,910 pts</em></li>
+          <li><span>2</span><b>Omar</b><em>4,420 pts</em></li>
+          <li class="me"><span>128</span><b>You</b><em>2,865 pts</em></li>
+        </ol>
+        <p class="trust-copy">Zoo, pet, and social points are capped for fairness.</p>
+        <div class="mission-stack"><div>Weekly Challenge <b>3 park birds</b></div><div>Comeback Mission <b>+120 possible</b></div><div>Safe Shot Showcase <b>Enter 1</b></div></div>
+      </section>
+
+      <section class="phone" id="group" aria-label="V2 group page screen">
+        <div class="phone-top"><span>9:48</span><span>Group</span></div>
+        <div class="group-hero"><span class="avatar big">IW</span><div><h2>Islamabad Wildlife Squad</h2><p>Public group - 128 members</p></div><button>Invite</button></div>
+        <div class="stats group-stats"><div><b>12.4k</b><span>weekly pts</span></div><div><b>8</b><span>quests</span></div><div><b>36</b><span>captures</span></div></div>
+        <div class="tabs"><b>Feed</b><span>Quests</span><span>Members</span><span>Rank</span></div>
+        <div class="quest-card"><b>Park Birds Week</b><span>18/30 safe captures</span><button>Join</button></div>
+        <article class="post compact"><div class="post-head"><span class="avatar">M</span><div><strong>moderator_mina</strong><span>Admin - Friends</span></div><b>44 pts</b></div><div class="photo-card peacock"></div><div class="social-actions"><span>Wow</span><span>Comment</span><span>Share</span><span>Report</span></div></article>
+      </section>
+
+      <section class="phone" id="notifications" aria-label="V2 notifications screen">
+        <div class="phone-top"><span>9:49</span><span>Inbox</span></div>
+        <header class="appbar"><h2>Activity</h2><button aria-label="Notification settings">S</button></header>
+        <div class="chip-row"><b>All</b><span>Social</span><span>Game</span><span>Updates</span><span>Safety</span></div>
+        <div class="notice-list">
+          <article><span class="notice-icon reward"></span><div><b>Score Revealed</b><p>Golden Eagle earned 75 pts.</p></div><button>Open</button></article>
+          <article><span class="notice-icon social"></span><div><b>Friend liked your capture</b><p>nature_traveler reacted Safe Shot.</p></div><button>Reply</button></article>
+          <article><span class="notice-icon group"></span><div><b>Group quest complete</b><p>Islamabad Wildlife Squad unlocked a badge.</p></div><button>View</button></article>
+          <article><span class="notice-icon pending"></span><div><b>Scoring in progress</b><p>Your bulbul photo is being reviewed.</p></div><button>Track</button></article>
+          <article><span class="notice-icon safety"></span><div><b>Report resolved</b><p>Thanks for helping keep the feed safe.</p></div><button>Done</button></article>
+        </div>
+      </section>
+
+      <section class="phone empty-phone" id="empty" aria-label="V2 empty and error state screen">
+        <div class="phone-top"><span>9:50</span><span>Offline</span></div>
+        <header class="appbar"><h2>PakimonGO V2</h2><button aria-label="Profile">A</button></header>
+        <div class="quiet-forest"><span></span></div>
+        <div class="empty-copy"><h2>Trail went quiet</h2><p>We could not load this yet. Your captures are safe.</p></div>
+        <div class="action-row"><button class="primary">Retry</button><button>Offline Mode</button></div>
+        <div class="trust-panel"><div><b>Your data is private</b><span>Precise locations stay protected.</span></div><div><b>Safety first</b><span>No score is worth disturbing wildlife.</span></div><div><b>Nothing lost</b><span>Drafts sync when the trail returns.</span></div></div>
+        <nav class="bottom-nav"><span>Map</span><span>Feed</span><b>Capture</b><span>Guide</span><span>Rank</span></nav>
+      </section>
+    </main>
+  </body>
+</html>

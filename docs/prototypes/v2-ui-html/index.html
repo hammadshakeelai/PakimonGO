@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PakimonGO V2 Clickable Prototype</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="stage">
+      <section class="phone" aria-label="PakimonGO V2 mobile prototype">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>LTE 82%</span>
+        </div>
+        <section id="screen" class="screen" aria-live="polite"></section>
+        <nav id="bottomNav" class="bottom-nav" aria-label="Primary navigation"></nav>
+      </section>
+      <aside class="prototype-note">
+        <p class="eyebrow">PakimonGO V2</p>
+        <h1>Clickable mobile app prototype</h1>
+        <p>
+          Dummy HTML/CSS/JS build for planning the V2 flow before Flutter work.
+          It uses real UI elements, fake data, safe locations, and no backend.
+        </p>
+        <div class="note-actions">
+          <button data-route="map">Start at Map</button>
+          <button data-route="empty">View Error State</button>
+        </div>
+      </aside>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="modal" class="modal" aria-hidden="true"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

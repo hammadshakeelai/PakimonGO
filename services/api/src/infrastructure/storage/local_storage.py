@@ -2,6 +2,8 @@ import os
 import shutil
 from pathlib import Path
 
+from src.infrastructure.storage.base import StorageProvider
+
 UPLOAD_BASE = Path(os.getenv("UPLOAD_BASE", "data/uploads"))
 
 _HAS_PIL = False
@@ -12,16 +14,19 @@ except ImportError:
     Image = None  # type: ignore[assignment]
 
 
-class LocalFileStorage:
+class LocalFileStorage(StorageProvider):
     def __init__(self, base_dir: Path | None = None):
         self._base = base_dir or UPLOAD_BASE
         for sub in ("originals", "thumbs", "public"):
             (self._base / sub).mkdir(parents=True, exist_ok=True)
 
-    def save_original(self, asset_id: str, content: bytes) -> Path:
+    def save_original(self, asset_id: str, content: bytes) -> str:
         path = self._original_path(asset_id)
         path.write_bytes(content)
-        return path
+        return str(path)
+
+    def get_url(self, key: str) -> str | None:
+        return None
 
     def read_original(self, asset_id: str) -> bytes | None:
         path = self._original_path(asset_id)

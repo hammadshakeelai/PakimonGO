@@ -48,8 +48,9 @@ def test_seed_creates_full_demo_content(db_session, tmp_path):
     assert len(subs) == len(DEMO_CAPTURES)
     assert all(s.status == "scored" for s in subs)
 
-    # Every capture has a location, a score event, and stored files.
-    assert db_session.query(CaptureLocation).count() == len(DEMO_CAPTURES)
+    # Every capture has a location, a score event, and stored files
+    # (community accounts add their own locations on top).
+    assert db_session.query(CaptureLocation).count() >= len(DEMO_CAPTURES)
     assert db_session.query(ScoreEvent).filter(
         ScoreEvent.user_id == DEMO_USER_ID).count() == len(DEMO_CAPTURES)
     assert db_session.query(Notification).filter(
@@ -82,3 +83,34 @@ def test_seed_restores_missing_files(db_session, tmp_path):
     asset = db_session.query(MediaAsset).filter(
         MediaAsset.owner_user_id == DEMO_USER_ID).first()
     assert (originals / asset.id).exists()
+
+
+def test_feed_returns_seeded_timeline(db_session):
+    """/v1/feed serves the public timeline with coarse areas only."""
+    from fastapi.testclient import TestClient
+    from src.infrastructure.database.session import get_db
+    from src.main import app
+
+    run_demo_seed(db_session)
+
+    def _override():
+        yield db_session
+
+    app.dependency_overrides[get_db] = _override
+    try:
+        client = TestClient(app)
+        resp = client.get("/v1/feed?limit=30")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["pagination"]["total"] >= len(DEMO_CAPTURES)
+        item = data["items"][0]
+        for key in ("submissionId", "userId", "mediaAssetId", "species",
+                    "points", "caption"):
+            assert key in item
+        # Exact coordinates never appear — only 2-decimal cells.
+        assert "latitude" not in item and "longitude" not in item
+        users = {i["userId"] for i in data["items"]}
+        assert "pakimongo_official" in users
+        assert "wildlens_aisha" in users  # community accounts present
+    finally:
+        app.dependency_overrides.clear()

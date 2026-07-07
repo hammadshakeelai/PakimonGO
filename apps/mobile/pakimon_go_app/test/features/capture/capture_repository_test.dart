@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
-import 'package:pakimon_go_app/shared/models/submission_marker.dart';
 
 http.Client _mockClient(int status, Map<String, dynamic> body) {
   final bodyStr = jsonEncode(body);

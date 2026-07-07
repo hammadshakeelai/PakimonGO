@@ -40,11 +40,8 @@ void main() {
   testWidgets('login with user ID calls authService.loginWithUserId',
       (WidgetTester tester) async {
     final auth = AuthService();
-    bool completed = false;
 
-    await tester.pumpWidget(_buildScreen(auth, onComplete: () {
-      completed = true;
-    }));
+    await tester.pumpWidget(_buildScreen(auth, onComplete: () {}));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextField), 'alice');
@@ -77,14 +74,8 @@ void main() {
   testWidgets('login calls onLoginComplete callback',
       (WidgetTester tester) async {
     final auth = AuthService();
-    int callbackCalls = 0;
 
-    // The callback fires after getProfile succeeds, which will fail
-    // since there's no real API. So we test that auth state is set
-    // before the API call fails.
-    await tester.pumpWidget(_buildScreen(auth, onComplete: () {
-      callbackCalls++;
-    }));
+    await tester.pumpWidget(_buildScreen(auth, onComplete: () {}));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Sign In'));

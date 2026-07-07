@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-from src.infrastructure.database.models import Base, Notification
+from src.infrastructure.database.models import Base
 from src.infrastructure.database.repositories import create_notification
 from src.infrastructure.database.session import get_db
 from src.main import app

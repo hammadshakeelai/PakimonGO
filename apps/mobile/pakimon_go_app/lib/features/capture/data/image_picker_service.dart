@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:image_picker/image_picker.dart';
 
 import '../domain/capture_media_service.dart';

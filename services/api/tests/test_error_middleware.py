@@ -4,8 +4,6 @@ import pytest
 from fastapi import FastAPI, HTTPException
 from fastapi.testclient import TestClient
 
-from fastapi import HTTPException
-
 from src.infrastructure.middleware.error_middleware import ErrorHandlingMiddleware, http_exception_handler
 
 

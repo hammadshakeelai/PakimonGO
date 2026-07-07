@@ -11,6 +11,7 @@ from .infrastructure.database.session import get_db
 
 from .infrastructure.middleware.error_middleware import ErrorHandlingMiddleware, http_exception_handler
 from .infrastructure.middleware.version_middleware import VersionNegotiationMiddleware
+from .modules.feed.api.routes import router as feed_router
 from .modules.leaderboard.api.routes import router as leaderboard_router
 from .modules.media.api.routes import router as media_router
 from .modules.moderation.api.routes import router as moderation_router
@@ -80,6 +81,7 @@ app.add_middleware(
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(VersionNegotiationMiddleware)
 app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore[arg-type]
+app.include_router(feed_router, prefix="/v1")
 app.include_router(leaderboard_router, prefix="/v1")
 app.include_router(media_router, prefix="/v1")
 app.include_router(moderation_router, prefix="/v1")

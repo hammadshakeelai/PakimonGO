@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PakimonGO V2 Dummy Phone Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <input class="screen-toggle" id="map" name="screen" type="radio" checked>
+    <input class="screen-toggle" id="capture" name="screen" type="radio">
+    <input class="screen-toggle" id="score" name="screen" type="radio">
+    <input class="screen-toggle" id="feed" name="screen" type="radio">
+    <input class="screen-toggle" id="profile" name="screen" type="radio">
+    <input class="screen-toggle" id="collection" name="screen" type="radio">
+    <input class="screen-toggle" id="rank" name="screen" type="radio">
+    <input class="screen-toggle" id="group" name="screen" type="radio">
+    <input class="screen-toggle" id="notifications" name="screen" type="radio">
+    <input class="screen-toggle" id="empty" name="screen" type="radio">
+
+    <main class="prototype">
+      <section class="left-panel" aria-label="Prototype controls">
+        <p class="eyebrow">PakimonGO V2 dummy website</p>
+        <h1>One phone, hardcoded V2 pages.</h1>
+        <p class="summary">
+          Press a button to swap the phone screen. This uses the downloaded V2
+          concept images directly so it looks like the screenshots while we
+          decide the app direction.
+        </p>
+        <nav class="controls" aria-label="Change phone screen">
+          <label for="map">Map Home</label>
+          <label for="capture">Capture Review</label>
+          <label for="score">Score Reveal</label>
+          <label for="feed">Social Feed</label>
+          <label for="profile">Profile</label>
+          <label for="collection">Collection</label>
+          <label for="rank">Rank Hub</label>
+          <label for="group">Group Page</label>
+          <label for="notifications">Notifications</label>
+          <label for="empty">Empty State</label>
+        </nav>
+      </section>
+
+      <section class="phone-wrap" aria-label="Phone preview">
+        <div class="phone">
+          <div class="speaker"></div>
+          <div class="screen">
+            <img class="shot shot-map" src="../../assets/V2 UI CONCEPT PANELS/01-v2-map-home.png" alt="V2 Map Home">
+            <img class="shot shot-capture" src="../../assets/V2 UI CONCEPT PANELS/02-v2-capture-review.png" alt="V2 Capture Review">
+            <img class="shot shot-score" src="../../assets/V2 UI CONCEPT PANELS/03-v2-score-reveal.png" alt="V2 Score Reveal">
+            <img class="shot shot-feed" src="../../assets/V2 UI CONCEPT PANELS/04-v2-social-feed.png" alt="V2 Social Feed">
+            <img class="shot shot-profile" src="../../assets/V2 UI CONCEPT PANELS/05-v2-player-profile.png" alt="V2 Player Profile">
+            <img class="shot shot-collection" src="../../assets/V2 UI CONCEPT PANELS/06-v2-field-guide-collection.png" alt="V2 Field Guide Collection">
+            <img class="shot shot-rank" src="../../assets/V2 UI CONCEPT PANELS/07-v2-rank-hub.png" alt="V2 Rank Hub">
+            <img class="shot shot-group" src="../../assets/V2 UI CONCEPT PANELS/08-v2-group-page.png" alt="V2 Group Page">
+            <img class="shot shot-notifications" src="../../assets/V2 UI CONCEPT PANELS/09-v2-notifications.png" alt="V2 Notifications">
+            <img class="shot shot-empty" src="../../assets/V2 UI CONCEPT PANELS/10-v2-empty-error-state.png" alt="V2 Empty Error State">
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

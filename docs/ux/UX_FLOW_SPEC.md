@@ -1,5 +1,10 @@
 # UX Flow Specification
 
+For the broader social/game UI direction, see
+`docs/ux/SOCIAL_GAME_UI_CONCEPT.md`. That file captures high-level product/UI
+ideas from the archived chats and should be treated as concept backlog until
+approved into requirements.
+
 ## Product Navigation
 
 Primary tabs:

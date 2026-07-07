@@ -2,31 +2,71 @@
 
 ## Current Next Task
 
-Tier 1 complete & live-verified: ✅ Mapbox, ✅ rate limiting, ✅ APK optimization, ✅ AI vision (Groq), ✅ Firebase Auth (Google sign-in verified on a real phone → /v1/users/me 200). Next: Tier 2 (Postgres wiring, Flutter error handling).
+The old "next: Tier 1/Tier 2" guidance is stale. Tier 1 is done, and the major
+Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
+Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
+Groq vision, rate limiting, and APK optimization.
+
+**Recommended next design action:** review the V2 brainstorm in
+`docs/ux/SOCIAL_GAME_UI_CONCEPT.md`, compare it against the V1 screenshots in
+`docs/assets/COMPLETE UI SCREENSHOTS - V1/`, inspect the polished clickable
+prototype at `docs/prototypes/v2-ui-html/index.html`, and choose the first V2
+wireframe pack.
+
+**Recommended next implementation after that:** accessibility hardening.
+
+Why this is the grounded default:
+
+- It needs no new cloud credentials.
+- It directly supports app-store quality and safer use by younger users.
+- `docs/REMAINING_WORK.md` still lists accessibility as unfinished.
+- The latest task log already points to "loading shimmers, accessibility" after
+  moderation and map polish landed.
+- The new social/game UI ideas are intentionally concept backlog, not code scope
+  yet.
 
 ## Sprint 2-26 Complete
 
-All sprints 2-26 complete. Full backend implemented: DB, auth, upload, user profiles, precheck, scoring, AI vision, async worker, map prototype, collection/leaderboard, pagination, sensitive species suppression, API versioning, cloud storage, Docker Compose, integration tests.
+This section name is retained because `tools/qa/pre_task_check.py` verifies it
+as a required handoff anchor. The content is now broader than the original
+Sprint 2-26 window: the original sprint packets through Sprint 46 are complete,
+and post-sprint hardening has continued with deployment, auth/vision live
+checks, Postgres verification, APK optimization, age gate, onboarding,
+user-facing moderation, map overhaul, and UI polish.
 
-## Sprint 46 Complete
+## Do Not Rebuild Unless Broken
 
-All 46 sprints complete. 291 tests pass. App is a working prototype.
+Avoid treating these as the next task unless a regression is found:
 
-## Tier 1 Queue (Alpha)
+- Mapbox local wiring and map marker overhaul.
+- Firebase Google sign-in path.
+- Groq vision provider wiring.
+- Submission rate limiting.
+- APK split/R8 optimization.
+- Postgres migrations and Render Postgres smoke verification.
+- Flutter error/retry UI across data screens.
+- Age gate and onboarding.
+- User-facing report/block flows.
 
-The app is code-complete as a prototype. The next phase is production-hardening. See `docs/REMAINING_WORK.md` for the full prioritized queue.
+## Next Work Queue
 
-| Priority | Task | Effort | Status |
-|----------|------|--------|--------|
-| 1 | Provision Mapbox token | 10 min | ✅ Done (local dev; prod token pending) |
-| 2 | Create Firebase project + configure Auth | 1-2 days | ✅ Code done (backend + Flutter Google sign-in); live sign-in needs a Google account on the device |
-| 3 | AI vision scoring | 1 day | ✅ Done via Groq free tier (live-verified) |
-| 4 | Add rate limiting on submissions | 0.5 day | ✅ Done (NFR-SEC-004) |
-| 5 | Optimize APK size (ProGuard, R8, split) | 1 day | ✅ Done (arm64 39.8MB, −62%) |
+| Priority | Task | Credential Needed | Grounded Scope |
+|---|---|---:|---|
+| 1 | Promote/trim V2 social UI concept | No | Review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md`, `docs/assets/V2 UI CONCEPT PANELS/README.md`, and the polished prototype at `docs/prototypes/v2-ui-html/index.html`; decide which ideas become requirements, V2 wireframes, or future backlog. |
+| 2 | Accessibility pass | No | Add semantic labels, verify screen-reader order, check tap targets, add widget tests for key screens. |
+| 3 | Loading shimmers/skeletons | No | Replace obvious `CircularProgressIndicator` states where a skeleton improves perceived quality. |
+| 4 | Real-device E2E testing | Device/account | Cover camera, map, upload, scoring, auth, and main navigation on a physical Android device. |
+| 5 | Release keystore/Firebase SHA-1 | Yes | Register release SHA-1 so production Google sign-in works outside debug builds. |
+| 6 | Durable object storage | Yes | Configure S3/GCS or equivalent; local storage is not production-safe. |
+| 7 | Moderator console/appeals | No/Maybe | Build moderator review tooling, appeals, takedowns, and audit workflows after scoping. |
+| 8 | Store readiness docs | No/Legal review | Privacy policy, terms, store listing, age rating, reviewer accounts, screenshots. |
 
 ## How To Start
 
-1. Read `docs/REMAINING_WORK.md` for full context
-2. Read `CLAUDE.md` for codebase grounding
-3. Pick the first task from Tier 1
-4. Execute per the mandatory workflow in `AGENTS.md`
+1. Read `CLAUDE.md`.
+2. Run `python tools/qa/pre_task_check.py`.
+3. Read `docs/CURRENT_TASK.md`, this file, `docs/CURRENT_THINKING.md`, and
+   `docs/REMAINING_WORK.md`.
+4. For accessibility work, read the relevant UX/accessibility docs and the
+   screens under `apps/mobile/pakimon_go_app/lib/features/`.
+5. Keep files small and update state docs after the work burst.

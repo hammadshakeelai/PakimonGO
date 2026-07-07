@@ -37,7 +37,7 @@ def get_notifications(
 ) -> tuple[list[Notification], int]:
     q = db.query(Notification).filter(Notification.user_id == user_id)
     if unread_only:
-        q = q.filter(Notification.is_read == False)
+        q = q.filter(Notification.is_read.is_(False))
     total = q.count()
     items = q.order_by(Notification.created_at.desc()).offset(offset).limit(limit).all()
     return items, total
@@ -58,5 +58,5 @@ def mark_notification_read(db: Session, notification_id: str, user_id: str) -> N
 def unread_notification_count(db: Session, user_id: str) -> int:
     return db.query(Notification).filter(
         Notification.user_id == user_id,
-        Notification.is_read == False,
+        Notification.is_read.is_(False),
     ).count()

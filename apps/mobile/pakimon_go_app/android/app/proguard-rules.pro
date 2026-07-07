@@ -17,6 +17,10 @@
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
 
+# Firebase (core + auth)
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**
+
 # Kotlin runtime metadata used by plugins
 -dontwarn kotlin.**
 -dontwarn kotlinx.**

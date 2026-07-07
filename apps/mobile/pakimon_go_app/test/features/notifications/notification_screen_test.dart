@@ -7,7 +7,6 @@ import 'package:pakimon_go_app/core/network/api_client.dart';
 import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/notifications/domain/notification_viewmodel.dart';
 import 'package:pakimon_go_app/features/notifications/presentation/notification_screen.dart';
-import 'package:pakimon_go_app/features/submissions/presentation/submission_detail_screen.dart';
 
 class _EmptyClient extends http.BaseClient {
   @override

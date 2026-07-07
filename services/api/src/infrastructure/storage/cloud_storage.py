@@ -3,6 +3,8 @@
 import os
 from pathlib import Path
 
+from .base import StorageProvider
+
 _HAS_BOTO3 = False
 _HAS_GCS = False
 try:
@@ -18,26 +20,6 @@ try:
     _HAS_GCS = True
 except ImportError:
     pass
-
-
-class StorageProvider:
-    """Storage provider interface - duck typing compatible with LocalFileStorage."""
-
-    def save_original(self, asset_id: str, content: bytes) -> str:
-        """Save original file, return storage key."""
-        ...
-
-    def generate_derivative_stubs(self, asset_id: str) -> dict[str, str]:
-        """Generate derivative stubs (thumbnail, public) and return URLs."""
-        ...
-
-    def get_url(self, key: str) -> str | None:
-        """Get public URL for key."""
-        ...
-
-    def get_path(self, relative: str) -> Path | None:
-        """Get local path for file (for local storage compatibility)."""
-        ...
 
 
 class S3StorageProvider(StorageProvider):

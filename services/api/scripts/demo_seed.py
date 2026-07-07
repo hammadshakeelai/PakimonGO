@@ -21,6 +21,19 @@ from sqlalchemy.orm import Session
 log = logging.getLogger("demo_seed")
 
 DEMO_USER_ID = "pakimongo_official"
+
+# Additional community accounts so the feed and leaderboard feel alive.
+# (file, owner) — files come from the same demo asset pool.
+COMMUNITY = [
+    ("card_kingfisher.jpg", "wildlens_aisha", "Alcedo atthis", "wild", 60, 33.7511, 73.1022,
+     "Patience pays off at the lake edge."),
+    ("hero_sparrow.jpg", "trailcam_omar", "Passer domesticus", "wild", 25, 33.7233, 73.0644,
+     "Morning regular at the feeder tree."),
+    ("card_myna.jpg", "safeshot_sara", "Acridotheres tristis", "wild", 20, 33.6977, 73.0512,
+     "Mynas own this park and they know it."),
+    ("thumb_butterfly.jpg", "wildlens_aisha", "Danaus chrysippus", "wild", 30, 33.7150, 73.0898,
+     "Wings out in the noon sun."),
+]
 _ASSETS = Path(__file__).resolve().parents[1] / "assets" / "demo"
 
 # (file, scientific name, cute name, context, points, lat, lng, caption)
@@ -77,8 +90,10 @@ def run_demo_seed(db: Session) -> bool:
         db.commit()
 
     if already_seeded:
-        # Rows exist — just re-materialize files on ephemeral disks.
+        # Rows exist — re-materialize files on ephemeral disks, and seed
+        # any community accounts added since the first deploy.
         _restore_files(db, storage)
+        _seed_community(db, storage)
         return False
 
     for file_name, species, cute, context, points, lat, lng, caption in DEMO_CAPTURES:
@@ -128,17 +143,65 @@ def run_demo_seed(db: Session) -> bool:
             reference_type="submission", reference_id=sub.id,
         )
 
+    _seed_community(db, storage)
+
     log.info("demo seed created %d captures for %s", len(DEMO_CAPTURES), DEMO_USER_ID)
     return True
+
+
+def _seed_community(db: Session, storage) -> None:
+    """Idempotent per-account seeding for the community demo users."""
+    from src.infrastructure.database.models import (
+        CaptureLocation,
+        Submission,
+        SubmissionAttribute,
+        User,
+    )
+    from src.infrastructure.database.repositories import (
+        complete_media_asset,
+        create_media_asset,
+        create_score_event,
+        update_submission_status,
+    )
+
+    for file_name, owner, species, context, points, lat, lng, caption in COMMUNITY:
+        if db.query(User).filter(User.id == owner).first() is not None:
+            continue  # this account already seeded
+        db.add(User(id=owner, trust_state="verified", age_band="adult", home_region="PK"))
+        db.commit()
+        content = (_ASSETS / file_name).read_bytes()
+        sha = hashlib.sha256(content + owner.encode()).hexdigest()
+        asset = create_media_asset(
+            db, file_name, "image/jpeg", len(content), sha, owner_user_id=owner)
+        storage.save_original(asset.id, content)
+        storage.generate_derivative_stubs(asset.id)
+        complete_media_asset(db, asset.id, sha)
+        sub = Submission(user_id=owner, primary_media_asset_id=asset.id,
+                         status="scored", visibility="private")
+        db.add(sub)
+        db.flush()
+        db.add(SubmissionAttribute(
+            submission_id=sub.id, animal_context=context, real_name=species,
+            cute_name=species.split()[0], caption=caption, tags=context))
+        db.add(CaptureLocation(submission_id=sub.id, latitude=lat, longitude=lng,
+                               accuracy_meters=15.0, source="gps"))
+        db.commit()
+        update_submission_status(db, sub.id, "scored")
+        create_score_event(
+            db=db, submission_id=sub.id, user_id=owner, ledger="wild",
+            points=points, event_type="scored", formula_version="ai-v2",
+            explanation_category="normal",
+            previous_state="ai_evaluated", new_state="scored")
 
 
 def _restore_files(db: Session, storage) -> None:
     """Re-copy demo image files for existing rows (ephemeral disk hosts)."""
     from src.infrastructure.database.models import MediaAsset
 
+    demo_owners = [DEMO_USER_ID] + sorted({c[1] for c in COMMUNITY})
     assets = (
         db.query(MediaAsset)
-        .filter(MediaAsset.owner_user_id == DEMO_USER_ID)
+        .filter(MediaAsset.owner_user_id.in_(demo_owners))
         .all()
     )
     for asset in assets:

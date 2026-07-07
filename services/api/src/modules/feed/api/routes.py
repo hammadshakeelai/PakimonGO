@@ -1,0 +1,97 @@
+from __future__ import annotations
+
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session
+
+from src.infrastructure.auth.dependencies import get_optional_user
+from src.infrastructure.database.models import (
+    CaptureLocation,
+    ScoreEvent,
+    SensitiveSpecies,
+    Submission,
+    SubmissionAttribute,
+)
+from src.infrastructure.database.repositories import get_blocked_user_ids
+from src.infrastructure.database.session import get_db
+
+router = APIRouter(prefix="/feed", tags=["feed"])
+
+
+@router.get("")
+def get_feed(
+    limit: int = Query(default=20, ge=1, le=50),
+    offset: int = Query(default=0, ge=0),
+    db: Session = Depends(get_db),
+    user=Depends(get_optional_user),
+) -> dict:
+    """Public timeline: recent scored captures across all users.
+
+    Photo-first feed items with species, points, and a coarse area label —
+    exact coordinates never leave the server. Sensitive species are
+    excluded; users the requester has blocked are hidden (FR-MOD-003).
+    """
+    query = (
+        db.query(
+            Submission.id,
+            Submission.user_id,
+            Submission.primary_media_asset_id,
+            Submission.created_at,
+            SubmissionAttribute.real_name,
+            SubmissionAttribute.cute_name,
+            SubmissionAttribute.animal_context,
+            SubmissionAttribute.caption,
+            ScoreEvent.points,
+            CaptureLocation.latitude,
+            CaptureLocation.longitude,
+        )
+        .select_from(Submission)
+        .join(SubmissionAttribute, SubmissionAttribute.submission_id == Submission.id)
+        .join(ScoreEvent, ScoreEvent.submission_id == Submission.id)
+        .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
+        .filter(Submission.status.in_(["scored", "capped"]))
+        .filter(ScoreEvent.points.isnot(None))
+    )
+
+    sensitive_subq = (
+        db.query(SensitiveSpecies.scientific_name)
+        .filter(SensitiveSpecies.scientific_name.ilike(SubmissionAttribute.real_name))
+        .exists()
+    )
+    query = query.filter(~sensitive_subq)
+
+    if user:
+        blocked = get_blocked_user_ids(db, user.user_id)
+        if blocked:
+            query = query.filter(~Submission.user_id.in_(blocked))
+
+    total = query.count()
+    rows = (
+        query.order_by(Submission.created_at.desc())
+        .limit(limit)
+        .offset(offset)
+        .all()
+    )
+
+    items = []
+    for row in rows:
+        area = None
+        if row.latitude is not None and row.longitude is not None:
+            area = f"cell {round(row.latitude, 2):.2f}, {round(row.longitude, 2):.2f}"
+        items.append(
+            {
+                "submissionId": row.id,
+                "userId": row.user_id,
+                "mediaAssetId": row.primary_media_asset_id,
+                "species": row.real_name,
+                "cuteName": row.cute_name,
+                "context": row.animal_context,
+                "caption": row.caption,
+                "points": row.points,
+                "area": area,
+                "createdAt": row.created_at.isoformat() if row.created_at else None,
+            }
+        )
+    return {
+        "items": items,
+        "pagination": {"limit": limit, "offset": offset, "total": total},
+    }

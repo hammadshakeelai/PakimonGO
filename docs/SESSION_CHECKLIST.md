@@ -62,3 +62,14 @@ Update this after every work burst. Each row tracks one task cycle.
 | 56 | Sprint 40 user notifications backend | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | Notification model, migration, repository, routes, scoring wiring, 6 tests, 250 total |
 | 57 | Sprint 41 Flutter notification center | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | NotificationModel, ViewModel, Screen, bell badge, 8 tests, 258 total |
 | 58 | Sprint 42 Flutter leaderboard screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | LeaderboardEntry, ViewModel, Screen, 4th tab, 8 tests, 266 total |
+| 59 | Sprint 43 production CI/CD | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | DB health check, gunicorn, Dockerfile, render.yaml, deploy workflow, 266 total |
+| 60 | Sprint 44 Flutter profile screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | ProfileViewModel, ProfileScreen, person icon, 11 tests, 277 total |
+| 61 | Sprint 45 Flutter collection screen | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ❌ staging | CollectionViewModel, CollectionScreen, sort/filter, 10 tests, 287 total |
+| 62 | Sprint 46 nav wiring | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | Collection→species, notif→submission, CORS, 2 tests, 289 total |
+| 63 | Sprint 47 CORS + config | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | CORS middleware, env config, render.yaml |
+| 64 | Sprint 48 APK build | ✅ PASS | ✅ ALL state docs | ✅ ALL PASS | ✅ COMMIT | Debug+release APK, app label, permissions, 289 total |
+| 65 | Sprint 49 bug hunt + doc | ✅ PASS | ✅ ALL state docs + PROJECT_COMPLETE.md | ✅ ALL PASS | ❌ no commit | Ruff 5→0, Mypy 21→0, Flutter 26→8, circular import fix, comprehensive doc |
+| 66 | Ground active handoff docs | PASS | CURRENT_TASK, NEXT_TASK, CURRENT_THINKING, BACKLOG, BUGS/RISKS, TECH_DEBT, TASK_LOG | PASS | no commit | Removed stale Tier 1/Tier 2 next-action guidance; full app tests not re-run |
+| 67 | V2 social game UI concept | PASS | CURRENT_TASK, NEXT_TASK, CURRENT_THINKING, BACKLOG, BUGS/RISKS, TECH_DEBT, TASK_LOG | PASS | no commit | Added archive + V1-screenshot-grounded high-level V2 UI concept; no app code |
+| 68 | V2 clickable HTML/CSS/JS prototype | PASS | CURRENT_TASK, NEXT_TASK, CURRENT_THINKING, BACKLOG, BUGS/RISKS, TECH_DEBT, TASK_LOG | PASS | no commit | Clickable dummy prototype added under docs/prototypes/v2-ui-html; no app code |
+| 69 | V2 prototype polish pass | PASS | CURRENT_TASK, NEXT_TASK, CURRENT_THINKING, BACKLOG, BUGS/RISKS, TECH_DEBT, TASK_LOG | PASS | no commit | Improved clickable dummy prototype visuals/interactions; no app code |

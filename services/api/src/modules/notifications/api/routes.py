@@ -5,7 +5,11 @@ from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
-from src.infrastructure.database.repositories import get_notifications, mark_notification_read, unread_notification_count
+from src.infrastructure.database.repositories import (
+    get_notifications,
+    mark_notification_read,
+    unread_notification_count,
+)
 from src.infrastructure.database.session import get_db
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
