@@ -53,10 +53,10 @@ def client(db_session):
     reset_rate_limit()
 
 
-def _seed(db):
+def _seed(db, visibility="public"):
     db.add(User(id=ALPHA))
     db.add(User(id=BETA))
-    sub = Submission(user_id=BETA, status="scored")
+    sub = Submission(user_id=BETA, status="scored", visibility=visibility)
     db.add(sub)
     db.flush()
     db.add(SubmissionAttribute(submission_id=sub.id, animal_context="wild", real_name="Sparrow"))
@@ -171,6 +171,18 @@ class TestComments:
         for i in range(10):
             assert client.post(url, json={"body": f"c{i}"}, headers=AUTH).status_code == 201
         assert client.post(url, json={"body": "spam"}, headers=AUTH).status_code == 429
+
+
+class TestVisibility:
+    def test_private_posts_hidden_from_feed(self, db_session, client):
+        _seed(db_session, visibility="private")
+        resp = client.get("/v1/feed", headers=AUTH)
+        assert resp.json()["items"] == []
+
+    def test_private_posts_hidden_from_public_profile(self, db_session, client):
+        _seed(db_session, visibility="private")
+        resp = client.get(f"/v1/users/{BETA}/profile", headers=AUTH)
+        assert resp.json()["recentCaptures"] == []
 
 
 class TestPublicProfile:

@@ -18,6 +18,7 @@ def create_submission(
     latitude: float | None = None,
     longitude: float | None = None,
     accuracy_meters: float | None = None,
+    visibility: str = "private",
 ) -> tuple:
     submission_id = f"sub_{uuid.uuid4().hex[:20]}"
 
@@ -26,6 +27,7 @@ def create_submission(
         user_id=user_id,
         primary_media_asset_id=media_asset_id,
         status="pending",
+        visibility=visibility,
     )
     db.add(sub)
 

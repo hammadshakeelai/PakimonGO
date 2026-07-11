@@ -8,6 +8,7 @@ from src.infrastructure.auth.dependencies import get_current_user
 from src.infrastructure.database.repositories import get_blocked_user_ids
 from src.infrastructure.database.repositories.story import (
     create_story,
+    delete_story,
     get_active_stories,
     get_story_views,
     mark_story_viewed,
@@ -60,6 +61,18 @@ def post_story(
         "createdAt": story.created_at.isoformat() if story.created_at else None,
         "expiresAt": story.expires_at.isoformat(),
     }
+
+
+@router.delete("/{story_id}")
+def remove_story(
+    story_id: str,
+    db: Session = Depends(get_db),
+    user: UserContext = Depends(get_current_user),
+) -> dict:
+    """Delete the caller's own story."""
+    if not delete_story(db, user.user_id, story_id):
+        raise HTTPException(status_code=404, detail="Story not found")
+    return {"status": "ok", "storyId": story_id}
 
 
 @router.post("/{story_id}/view")

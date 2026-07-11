@@ -53,6 +53,7 @@ def get_feed(
         .join(ScoreEvent, ScoreEvent.submission_id == Submission.id)
         .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
         .filter(Submission.status.in_(["scored", "capped"]))
+        .filter(Submission.visibility == "public")
         .filter(ScoreEvent.points.isnot(None))
     )
 

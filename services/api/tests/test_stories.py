@@ -106,6 +106,18 @@ class TestStories:
         # non-owner cannot see viewers
         assert client.get(f"/v1/stories/{story_id}/views", headers=AUTH_OTHER).status_code == 404
 
+    def test_owner_can_delete_story(self, db_session, client):
+        asset = _seed(db_session)
+        story_id = client.post(
+            "/v1/stories", json={"mediaAssetId": asset.id}, headers=AUTH
+        ).json()["storyId"]
+        client.post(f"/v1/stories/{story_id}/view", headers=AUTH_OTHER)
+
+        # only the owner can delete
+        assert client.delete(f"/v1/stories/{story_id}", headers=AUTH_OTHER).status_code == 404
+        assert client.delete(f"/v1/stories/{story_id}", headers=AUTH).status_code == 200
+        assert client.get("/v1/stories", headers=AUTH_OTHER).json()["groups"] == []
+
     def test_expired_stories_hidden(self, db_session, client):
         asset = _seed(db_session)
         db_session.add(

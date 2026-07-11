@@ -131,9 +131,15 @@ def create_submission_endpoint(
     caption = body.get("caption", "")
     tags = body.get("tags", [])
     foreground_location = body.get("foregroundLocation")
+    visibility = body.get("visibility", "private")
 
     if not media_asset_id:
         raise HTTPException(status_code=400, detail="Missing mediaAssetId")
+    if visibility not in ("private", "friends", "public"):
+        raise HTTPException(
+            status_code=400,
+            detail="visibility must be 'private', 'friends', or 'public'",
+        )
 
     cooldown = _submission_cooldown_seconds()
     if cooldown > 0:
@@ -169,6 +175,7 @@ def create_submission_endpoint(
         latitude=latitude,
         longitude=longitude,
         accuracy_meters=accuracy_meters,
+        visibility=visibility,
     )
 
     asset = get_media_asset(db, media_asset_id)

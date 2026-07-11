@@ -110,7 +110,7 @@ def run_demo_seed(db: Session) -> bool:
         complete_media_asset(db, asset.id, sha)
 
         sub = Submission(user_id=DEMO_USER_ID, primary_media_asset_id=asset.id,
-                         status="scored", visibility="private")
+                         status="scored", visibility="public")
         db.add(sub)
         db.flush()
         db.add(SubmissionAttribute(
@@ -186,7 +186,7 @@ def _seed_community(db: Session, storage) -> None:
         storage.generate_derivative_stubs(asset.id)
         complete_media_asset(db, asset.id, sha)
         sub = Submission(user_id=owner, primary_media_asset_id=asset.id,
-                         status="scored", visibility="private")
+                         status="scored", visibility="public")
         db.add(sub)
         db.flush()
         db.add(SubmissionAttribute(

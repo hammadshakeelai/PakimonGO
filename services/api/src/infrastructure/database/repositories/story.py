@@ -134,6 +134,21 @@ def get_story_views(db: Session, owner_id: str, story_id: str) -> tuple[list[dic
     return items, len(items)
 
 
+def delete_story(db: Session, owner_id: str, story_id: str) -> bool:
+    """Delete the owner's own story (and its views). False if not theirs."""
+    story = (
+        db.query(Story)
+        .filter(Story.id == story_id, Story.user_id == owner_id)
+        .first()
+    )
+    if story is None:
+        return False
+    db.query(StoryView).filter(StoryView.story_id == story_id).delete()
+    db.delete(story)
+    db.commit()
+    return True
+
+
 def count_active_stories(db: Session, user_id: str) -> int:
     return (
         db.query(func.count(Story.id))

@@ -2103,3 +2103,14 @@ pointed at prod with all fixes.
 156 API tests. V2 repo synced (backend identical; Flutter social UI
 lives there: optimistic reactions, comment sheet, story viewer/composer,
 cached images, infinite scroll — 165 Flutter tests).
+
+## 2026-07-11 (iter 3) — Real visibility + story delete + rank scopes
+
+1. Visibility now enforced end-to-end: create_submission stores the
+   chosen visibility; feed and public-profile queries show only
+   `public` rows. Private/Friends captures no longer leak publicly.
+   Capture screen defaults to Public (social); demo seed content is
+   public with an idempotent backfill for pre-existing rows.
+2. DELETE /v1/stories/{id} — owner can remove a story (+ its views).
+3. 159 API tests (visibility hidden-from-feed/profile, owner-only
+   story delete). Ported identically to v1.

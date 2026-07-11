@@ -110,6 +110,21 @@ def seed_social_wave(db: Session, storage) -> None:
     _seed_captures(db, storage)
     _seed_comments_reactions(db)
     _refresh_stories(db)
+    _ensure_public_visibility(db)
+
+
+def _ensure_public_visibility(db: Session) -> None:
+    """Demo content must stay on the public timeline — backfills rows
+    seeded before visibility was enforced (idempotent)."""
+    from demo_seed import COMMUNITY, DEMO_USER_ID
+    from src.infrastructure.database.models import Submission
+
+    owners = sorted({DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS})
+    db.query(Submission).filter(
+        Submission.user_id.in_(owners),
+        Submission.visibility != "public",
+    ).update({"visibility": "public"}, synchronize_session=False)
+    db.commit()
 
 
 def _asset_for_file(db: Session, file_name: str):
@@ -174,7 +189,7 @@ def _seed_captures(db: Session, storage) -> None:
         storage.generate_derivative_stubs(asset.id)
         complete_media_asset(db, asset.id, sha)
         sub = Submission(user_id=owner, primary_media_asset_id=asset.id,
-                         status="scored", visibility="private")
+                         status="scored", visibility="public")
         db.add(sub)
         db.flush()
         db.add(SubmissionAttribute(

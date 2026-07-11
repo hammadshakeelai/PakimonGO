@@ -71,6 +71,7 @@ def get_public_profile(db: Session, user_id: str, recent_limit: int = 12) -> dic
         .filter(
             Submission.user_id == user_id,
             Submission.status.in_(["scored", "capped"]),
+            Submission.visibility == "public",
             ScoreEvent.points.isnot(None),
             ~sensitive_subq,
         )
