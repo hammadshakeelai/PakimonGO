@@ -12,6 +12,39 @@ from ..models import (
 )
 
 
+def search_users(
+    db: Session, query: str, exclude_user_id: str | None = None, limit: int = 20
+) -> list[dict]:
+    """Find users whose id contains `query` (case-insensitive), ranked by
+    total points. Excludes the caller and soft-deleted accounts."""
+    q = (query or "").strip()
+    if not q:
+        return []
+    rows = (
+        db.query(
+            User.id,
+            User.trust_state,
+            func.coalesce(func.sum(ScoreEvent.points), 0).label("total"),
+        )
+        .outerjoin(Submission, Submission.user_id == User.id)
+        .outerjoin(
+            ScoreEvent,
+            (ScoreEvent.submission_id == Submission.id)
+            & ScoreEvent.points.isnot(None),
+        )
+        .filter(User.id.ilike(f"%{q}%"), User.deleted_at.is_(None))
+        .filter(User.id != (exclude_user_id or ""))
+        .group_by(User.id, User.trust_state)
+        .order_by(func.coalesce(func.sum(ScoreEvent.points), 0).desc())
+        .limit(limit)
+        .all()
+    )
+    return [
+        {"userId": r.id, "trustState": r.trust_state, "totalPoints": int(r.total)}
+        for r in rows
+    ]
+
+
 def get_or_create_user(db: Session, user_id: str) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:

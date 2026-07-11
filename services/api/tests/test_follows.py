@@ -117,6 +117,29 @@ class TestFollow:
         assert following["items"] == [BETA]
 
 
+class TestUserSearch:
+    def test_search_matches_and_excludes_self(self, db_session, client):
+        _users(db_session)
+        db_session.add(User(id="ranger_bilal"))
+        db_session.commit()
+        _scored(db_session, "ranger_bilal", points=80)
+        # alpha searches "ran" -> finds ranger_bilal, not itself
+        resp = client.get("/v1/users/search?q=ran", headers=AUTH_A)
+        ids = [u["userId"] for u in resp.json()["items"]]
+        assert "ranger_bilal" in ids
+        assert ALPHA not in ids
+        assert resp.json()["items"][0]["totalPoints"] == 80
+
+    def test_search_case_insensitive(self, db_session, client):
+        _users(db_session)
+        resp = client.get("/v1/users/search?q=BETA", headers=AUTH_A)
+        assert BETA in [u["userId"] for u in resp.json()["items"]]
+
+    def test_search_requires_query(self, db_session, client):
+        _users(db_session)
+        assert client.get("/v1/users/search?q=", headers=AUTH_A).status_code == 422
+
+
 class TestFriendsVisibilityAndScope:
     def test_friends_post_visible_only_to_followers(self, db_session, client):
         _users(db_session)

@@ -13,12 +13,25 @@ from src.infrastructure.database.repositories import (
     get_user_collection,
     is_following,
     list_follows,
+    search_users,
     unfollow_user,
     update_user,
 )
 from src.infrastructure.database.session import get_db
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.get("/search")
+def search(
+    q: str = Query(..., min_length=1, max_length=64),
+    limit: int = Query(default=20, ge=1, le=50),
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    """Find people by username to follow (excludes yourself)."""
+    items = search_users(db, q, exclude_user_id=current_user.user_id, limit=limit)
+    return {"items": items, "total": len(items)}
 
 
 @router.get("/me")

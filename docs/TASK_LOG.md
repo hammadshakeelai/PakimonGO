@@ -2140,3 +2140,11 @@ cached images, infinite scroll — 165 Flutter tests).
 3. Flutter: notification cards deep-link user-type notifications to the
    follower's profile ("View profile ›"); SocialRepository threaded
    through MapHud → Notifications.
+
+## 2026-07-12 (iter 9) — User search (find & follow people)
+
+1. GET /v1/users/search?q= — case-insensitive username match, ranked by
+   points, excludes self. 170 API tests (3 new).
+2. Flutter: SocialRepository.searchUsers; UserSearchScreen (debounced
+   search, inline optimistic follow, tap → profile); person-search icon
+   in the Feed header.
