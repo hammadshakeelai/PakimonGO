@@ -2078,3 +2078,28 @@ photos never render, leaderboard empty, captures mapped to wrong area.
 
 130 API + 162 Flutter tests, analyze clean. Rebuilt v0.2.0-alpha APKs
 pointed at prod with all fixes.
+
+## 2026-07-11 — Production social layer + internet demo content
+
+### Shipped
+
+1. Migration 005: reactions (unique per user+post, toggle semantics),
+   comments (soft delete), stories (24h expires_at), story_views.
+2. New modules: social (PUT reaction, comments CRUD w/ 10/min rate
+   limit) and stories (list grouped w/ seen flags, post, view, views).
+3. /v1/feed enriched with reactionCounts, myReaction, commentCount via
+   two grouped queries (no N+1). GET /v1/users/{id}/profile added.
+4. tools/fetch_demo_images.py: 17 CC-licensed wildlife photos from
+   iNaturalist -> assets/demo/wild/ + CREDITS.md (Commons API is
+   blocked on this network; iNaturalist carries license metadata).
+5. demo_seed_social.py wave: 6 new community users, 17 real-photo
+   submissions, seeded comments + reactions, self-refreshing 24h demo
+   stories (ring never goes empty on prod).
+6. Deployed and verified on prod: /v1/stories 401 (live), feed total 35
+   across 12 users with social aggregates present.
+
+### State
+
+156 API tests. V2 repo synced (backend identical; Flutter social UI
+lives there: optimistic reactions, comment sheet, story viewer/composer,
+cached images, infinite scroll — 165 Flutter tests).
