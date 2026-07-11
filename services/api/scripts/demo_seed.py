@@ -94,6 +94,7 @@ def run_demo_seed(db: Session) -> bool:
         # any community accounts added since the first deploy.
         _restore_files(db, storage)
         _seed_community(db, storage)
+        _seed_social(db, storage)
         return False
 
     for file_name, species, cute, context, points, lat, lng, caption in DEMO_CAPTURES:
@@ -144,9 +145,17 @@ def run_demo_seed(db: Session) -> bool:
         )
 
     _seed_community(db, storage)
+    _seed_social(db, storage)
 
     log.info("demo seed created %d captures for %s", len(DEMO_CAPTURES), DEMO_USER_ID)
     return True
+
+
+def _seed_social(db: Session, storage) -> None:
+    """Wave 2: real CC wildlife photos, comments, reactions, live stories."""
+    from demo_seed_social import seed_social_wave
+
+    seed_social_wave(db, storage)
 
 
 def _seed_community(db: Session, storage) -> None:
@@ -198,7 +207,10 @@ def _restore_files(db: Session, storage) -> None:
     """Re-copy demo image files for existing rows (ephemeral disk hosts)."""
     from src.infrastructure.database.models import MediaAsset
 
-    demo_owners = [DEMO_USER_ID] + sorted({c[1] for c in COMMUNITY})
+    from demo_seed_social import WAVE_OWNERS
+
+    demo_owners = sorted(
+        {DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS})
     assets = (
         db.query(MediaAsset)
         .filter(MediaAsset.owner_user_id.in_(demo_owners))

@@ -11,7 +11,11 @@ from src.infrastructure.database.models import (
     Submission,
     SubmissionAttribute,
 )
-from src.infrastructure.database.repositories import get_blocked_user_ids
+from src.infrastructure.database.repositories import (
+    get_blocked_user_ids,
+    get_comment_counts,
+    get_reaction_summary,
+)
 from src.infrastructure.database.session import get_db
 
 router = APIRouter(prefix="/feed", tags=["feed"])
@@ -72,6 +76,11 @@ def get_feed(
         .all()
     )
 
+    # Social aggregates for the page in two grouped queries (no N+1).
+    page_ids = [row.id for row in rows]
+    reactions = get_reaction_summary(db, page_ids, user.user_id if user else None)
+    comment_counts = get_comment_counts(db, page_ids)
+
     items = []
     for row in rows:
         area = None
@@ -89,6 +98,9 @@ def get_feed(
                 "points": row.points,
                 "area": area,
                 "createdAt": row.created_at.isoformat() if row.created_at else None,
+                "reactionCounts": reactions[row.id]["counts"],
+                "myReaction": reactions[row.id]["myReaction"],
+                "commentCount": comment_counts[row.id],
             }
         )
     return {

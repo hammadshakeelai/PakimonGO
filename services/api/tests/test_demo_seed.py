@@ -85,6 +85,33 @@ def test_seed_restores_missing_files(db_session, tmp_path):
     assert (originals / asset.id).exists()
 
 
+def test_social_wave_seeds_photos_comments_reactions_stories(db_session):
+    from datetime import datetime, timezone
+
+    from demo_seed_social import COMMENTS, REACTIONS, WAVE, WAVE_OWNERS
+    from src.infrastructure.database.models import Comment, Reaction, Story, User
+
+    run_demo_seed(db_session)
+
+    for owner in WAVE_OWNERS:
+        assert db_session.query(User).filter(User.id == owner).first() is not None
+    assert db_session.query(Submission).filter(
+        Submission.user_id.in_(WAVE_OWNERS)).count() == len(WAVE)
+    assert db_session.query(Comment).count() == len(COMMENTS)
+    assert db_session.query(Reaction).count() == len(REACTIONS)
+    # Every storyteller has one active story.
+    now = datetime.now(timezone.utc)
+    stories = db_session.query(Story).all()
+    assert len(stories) == 4
+    assert all(s.expires_at.replace(tzinfo=timezone.utc) > now for s in stories)
+
+    # Second run adds nothing new (stories still active, rows unchanged).
+    run_demo_seed(db_session)
+    assert db_session.query(Comment).count() == len(COMMENTS)
+    assert db_session.query(Reaction).count() == len(REACTIONS)
+    assert db_session.query(Story).count() == 4
+
+
 def test_feed_returns_seeded_timeline(db_session):
     """/v1/feed serves the public timeline with coarse areas only."""
     from fastapi.testclient import TestClient

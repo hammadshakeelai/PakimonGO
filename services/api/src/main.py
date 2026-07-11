@@ -16,6 +16,8 @@ from .modules.leaderboard.api.routes import router as leaderboard_router
 from .modules.media.api.routes import router as media_router
 from .modules.moderation.api.routes import router as moderation_router
 from .modules.notifications.api.routes import router as notification_router
+from .modules.social.api.routes import router as social_router
+from .modules.stories.api.routes import router as stories_router
 from .modules.submissions.api.routes import router as submission_router
 from .modules.users.api.routes import router as users_router
 
@@ -86,6 +88,8 @@ app.include_router(leaderboard_router, prefix="/v1")
 app.include_router(media_router, prefix="/v1")
 app.include_router(moderation_router, prefix="/v1")
 app.include_router(notification_router, prefix="/v1")
+app.include_router(social_router, prefix="/v1")
+app.include_router(stories_router, prefix="/v1")
 app.include_router(submission_router, prefix="/v1")
 app.include_router(users_router, prefix="/v1")
 

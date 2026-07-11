@@ -20,6 +20,20 @@ from .notification import (
     unread_notification_count,
 )
 from .score_event import create_score_event, get_latest_score_event
+from .social import (
+    create_comment,
+    get_comment_counts,
+    get_comments,
+    get_reaction_summary,
+    soft_delete_comment,
+    toggle_reaction,
+)
+from .story import (
+    create_story,
+    get_active_stories,
+    get_story_views,
+    mark_story_viewed,
+)
 from .sensitive_species import (
     create_sensitive_species,
     get_or_create_sensitive_species,
@@ -34,7 +48,7 @@ from .submission import (
     update_submission_status,
 )
 from .submission_list import get_submissions
-from .user import get_or_create_user, update_user
+from .user import get_or_create_user, get_public_profile, update_user
 
 __all__ = [
     "create_block",
@@ -59,6 +73,7 @@ __all__ = [
     "create_score_event",
     "get_latest_score_event",
     "get_or_create_user",
+    "get_public_profile",
     "update_user",
     "get_user_collection",
     "get_leaderboard",
@@ -67,4 +82,14 @@ __all__ = [
     "get_or_create_sensitive_species",
     "get_sensitive_species",
     "create_sensitive_species",
+    "create_comment",
+    "get_comment_counts",
+    "get_comments",
+    "get_reaction_summary",
+    "soft_delete_comment",
+    "toggle_reaction",
+    "create_story",
+    "get_active_stories",
+    "get_story_views",
+    "mark_story_viewed",
 ]
