@@ -4,6 +4,40 @@ from sqlalchemy.orm import Session
 
 from ..models import CaptureLocation, ScoreEvent, SensitiveSpecies, Submission, SubmissionAttribute, User
 
+# "Local" is a city-sized grid: 1 decimal of lat/lng ≈ 11 km.
+LOCAL_CELL_PRECISION = 1
+
+
+def get_user_local_cell(db: Session, user_id: str) -> tuple[float, float] | None:
+    """The city-sized cell (rounded lat/lng) of a user's most recent
+    located capture, or None if they have no geolocated captures."""
+    row = (
+        db.query(CaptureLocation.latitude, CaptureLocation.longitude)
+        .join(Submission, Submission.id == CaptureLocation.submission_id)
+        .filter(Submission.user_id == user_id)
+        .filter(CaptureLocation.latitude.isnot(None))
+        .order_by(Submission.created_at.desc())
+        .first()
+    )
+    if row is None or row[0] is None or row[1] is None:
+        return None
+    return round(row[0], LOCAL_CELL_PRECISION), round(row[1], LOCAL_CELL_PRECISION)
+
+
+def get_users_in_cell(db: Session, cell_lat: float, cell_lng: float) -> set[str]:
+    """All users with at least one capture in the given city-sized cell."""
+    rows = (
+        db.query(Submission.user_id)
+        .join(CaptureLocation, CaptureLocation.submission_id == Submission.id)
+        .filter(
+            func.round(CaptureLocation.latitude, LOCAL_CELL_PRECISION) == cell_lat,
+            func.round(CaptureLocation.longitude, LOCAL_CELL_PRECISION) == cell_lng,
+        )
+        .distinct()
+        .all()
+    )
+    return {r[0] for r in rows if r[0] is not None}
+
 
 def _representatives_for(db: Session, user_id: str) -> dict:
     """Latest scored submission per (species, context) group for a user.

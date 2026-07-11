@@ -1,4 +1,9 @@
-from .collection import get_leaderboard, get_user_collection
+from .collection import (
+    get_leaderboard,
+    get_user_collection,
+    get_user_local_cell,
+    get_users_in_cell,
+)
 from .media_asset import (
     complete_media_asset,
     create_media_asset,
@@ -87,6 +92,8 @@ __all__ = [
     "update_user",
     "get_user_collection",
     "get_leaderboard",
+    "get_user_local_cell",
+    "get_users_in_cell",
     "get_submissions",
     "is_sensitive_species",
     "get_or_create_sensitive_species",

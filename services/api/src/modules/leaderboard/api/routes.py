@@ -8,6 +8,8 @@ from src.infrastructure.database.repositories import (
     get_blocked_user_ids,
     get_following_ids,
     get_leaderboard,
+    get_user_local_cell,
+    get_users_in_cell,
 )
 from src.infrastructure.database.session import get_db
 
@@ -20,7 +22,7 @@ def get_leaderboard_endpoint(
     offset: int = Query(default=0, ge=0),
     sort_by: str = Query(default="totalScore", enum=["totalScore", "userId", "submissionCount"]),
     sort_order: str = Query(default="desc", enum=["asc", "desc"]),
-    scope: str = Query(default="global", pattern="^(global|friends)$"),
+    scope: str = Query(default="global", pattern="^(global|friends|local)$"),
     include_sensitive: bool = Query(
         default=False, description="Include sensitive species (requires elevated permissions)"
     ),
@@ -35,10 +37,19 @@ def get_leaderboard_endpoint(
     """
     exclude = get_blocked_user_ids(db, user.user_id) if user else None
     include_only = None
+    empty = {"entries": [], "pagination": {"limit": limit, "offset": offset, "total": 0}}
     if scope == "friends":
         if user is None:
-            return {"entries": [], "pagination": {"limit": limit, "offset": offset, "total": 0}}
+            return empty
         include_only = get_following_ids(db, user.user_id) | {user.user_id}
+    elif scope == "local":
+        if user is None:
+            return empty
+        cell = get_user_local_cell(db, user.user_id)
+        if cell is None:
+            # No geolocated captures yet — nothing to anchor a local ranking.
+            return empty
+        include_only = get_users_in_cell(db, cell[0], cell[1])
     entries, total = get_leaderboard(
         db=db,
         limit=limit,

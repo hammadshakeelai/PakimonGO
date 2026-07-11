@@ -55,7 +55,10 @@ def _users(db):
     db.commit()
 
 
-def _scored(db, user_id, visibility="public", species="Sparrow", points=25):
+def _scored(db, user_id, visibility="public", species="Sparrow", points=25,
+            lat=None, lng=None):
+    from src.infrastructure.database.models import CaptureLocation
+
     sub = Submission(user_id=user_id, status="scored", visibility=visibility)
     db.add(sub)
     db.flush()
@@ -63,6 +66,8 @@ def _scored(db, user_id, visibility="public", species="Sparrow", points=25):
                                real_name=species))
     db.add(ScoreEvent(submission_id=sub.id, user_id=user_id, ledger="wild",
                       points=points, event_type="scored", new_state="scored"))
+    if lat is not None and lng is not None:
+        db.add(CaptureLocation(submission_id=sub.id, latitude=lat, longitude=lng))
     db.commit()
     return sub
 
@@ -179,3 +184,20 @@ class TestFriendsVisibilityAndScope:
         board = client.get("/v1/leaderboard?scope=friends", headers=AUTH_A).json()
         ids = {e["userId"] for e in board["entries"]}
         assert ids == {ALPHA, BETA}  # self + followed, not stranger
+
+    def test_local_leaderboard_scope(self, db_session, client):
+        _users(db_session)
+        db_session.add(User(id="faraway"))
+        db_session.commit()
+        # alpha + beta in the same ~11km cell; faraway elsewhere.
+        _scored(db_session, ALPHA, points=10, lat=33.71, lng=73.06)
+        _scored(db_session, BETA, points=50, lat=33.73, lng=73.09)
+        _scored(db_session, "faraway", points=99, lat=31.52, lng=74.35)
+        board = client.get("/v1/leaderboard?scope=local", headers=AUTH_A).json()
+        ids = {e["userId"] for e in board["entries"]}
+        assert ids == {ALPHA, BETA}  # same city cell, not faraway
+
+    def test_local_scope_empty_without_captures(self, db_session, client):
+        _users(db_session)  # alpha has no geolocated captures
+        board = client.get("/v1/leaderboard?scope=local", headers=AUTH_A).json()
+        assert board["entries"] == []

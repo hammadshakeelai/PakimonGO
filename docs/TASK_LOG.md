@@ -2148,3 +2148,12 @@ cached images, infinite scroll — 165 Flutter tests).
 2. Flutter: SocialRepository.searchUsers; UserSearchScreen (debounced
    search, inline optimistic follow, tap → profile); person-search icon
    in the Feed header.
+
+## 2026-07-12 (iter 10) — Local leaderboard scope (city-cell clustering)
+
+1. get_user_local_cell (viewer's ~11km cell = 1-dec rounded lat/lng of
+   most recent located capture) + get_users_in_cell. Leaderboard
+   scope=local filters to same-cell users; empty if you have no
+   geolocated captures. 172 API tests (2 new).
+2. Flutter: Local chip enabled (last disabled control gone); fetches
+   scope=local server-side; empty state nudges you to capture nearby.
