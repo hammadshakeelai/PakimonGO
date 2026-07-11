@@ -36,15 +36,26 @@ def update_user(db: Session, user_id: str, age_band: str | None = None, home_reg
     return user
 
 
-def get_public_profile(db: Session, user_id: str, recent_limit: int = 12) -> dict | None:
+def get_public_profile(
+    db: Session, user_id: str, recent_limit: int = 12, viewer_id: str | None = None
+) -> dict | None:
     """Public view of another player: stats + recent non-sensitive captures.
 
     Exact locations are never included (privacy) — only species, points,
-    and media for the public feed treatment.
+    and media for the public feed treatment. Includes follower/following
+    counts and whether the viewer follows this user.
     """
+    from .follow import follow_counts, is_following
+
     user = db.query(User).filter(User.id == user_id, User.deleted_at.is_(None)).first()
     if user is None:
         return None
+    followers, following = follow_counts(db, user_id)
+    viewer_follows = (
+        is_following(db, viewer_id, user_id)
+        if viewer_id and viewer_id != user_id
+        else False
+    )
     totals = (
         db.query(func.coalesce(func.sum(ScoreEvent.points), 0), func.count(ScoreEvent.id))
         .join(Submission, Submission.id == ScoreEvent.submission_id)
@@ -86,6 +97,10 @@ def get_public_profile(db: Session, user_id: str, recent_limit: int = 12) -> dic
         "memberSince": user.created_at.isoformat() if user.created_at else None,
         "totalPoints": int(totals[0]) if totals else 0,
         "captureCount": int(totals[1]) if totals else 0,
+        "followerCount": followers,
+        "followingCount": following,
+        "isFollowing": viewer_follows,
+        "isSelf": viewer_id == user_id,
         "recentCaptures": [
             {
                 "submissionId": r.id,

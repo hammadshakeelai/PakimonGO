@@ -2114,3 +2114,14 @@ cached images, infinite scroll — 165 Flutter tests).
 2. DELETE /v1/stories/{id} — owner can remove a story (+ its views).
 3. 159 API tests (visibility hidden-from-feed/profile, owner-only
    story delete). Ported identically to v1.
+
+## 2026-07-11 (iter 4) — Follow system (social graph)
+
+1. Migration 006: follows(follower_id, followee_id, created_at) + reverse
+   index. follow.py repo (follow/unfollow/is_following/counts/lists).
+2. Routes: POST/DELETE /v1/users/{id}/follow, GET followers/following.
+   Public profile now returns followerCount/followingCount/isFollowing/
+   isSelf.
+3. Feed honors "friends" visibility (visible to people the viewer
+   follows) + scope=following param. Leaderboard scope=friends (followed
+   users + self). 166 API tests (7 new). Ported to v1.

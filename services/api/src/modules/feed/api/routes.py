@@ -14,6 +14,7 @@ from src.infrastructure.database.models import (
 from src.infrastructure.database.repositories import (
     get_blocked_user_ids,
     get_comment_counts,
+    get_following_ids,
     get_reaction_summary,
 )
 from src.infrastructure.database.session import get_db
@@ -25,15 +26,20 @@ router = APIRouter(prefix="/feed", tags=["feed"])
 def get_feed(
     limit: int = Query(default=20, ge=1, le=50),
     offset: int = Query(default=0, ge=0),
+    scope: str = Query(default="all", pattern="^(all|following)$"),
     db: Session = Depends(get_db),
     user=Depends(get_optional_user),
 ) -> dict:
-    """Public timeline: recent scored captures across all users.
+    """Timeline of recent scored captures.
 
     Photo-first feed items with species, points, and a coarse area label —
     exact coordinates never leave the server. Sensitive species are
-    excluded; users the requester has blocked are hidden (FR-MOD-003).
+    excluded; blocked users are hidden (FR-MOD-003). Shows public
+    captures plus "friends"-visibility captures from people the viewer
+    follows. ``scope=following`` narrows to followed users only.
     """
+    following = get_following_ids(db, user.user_id) if user else set()
+
     query = (
         db.query(
             Submission.id,
@@ -53,9 +59,26 @@ def get_feed(
         .join(ScoreEvent, ScoreEvent.submission_id == Submission.id)
         .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
         .filter(Submission.status.in_(["scored", "capped"]))
-        .filter(Submission.visibility == "public")
         .filter(ScoreEvent.points.isnot(None))
     )
+
+    # Public captures are visible to everyone; "friends" captures are
+    # visible to people the author follows back (i.e. the viewer follows
+    # the author). Private captures never appear.
+    if following:
+        query = query.filter(
+            (Submission.visibility == "public")
+            | (
+                (Submission.visibility == "friends")
+                & Submission.user_id.in_(following)
+            )
+        )
+    else:
+        query = query.filter(Submission.visibility == "public")
+
+    if scope == "following":
+        allowed = following | ({user.user_id} if user else set())
+        query = query.filter(Submission.user_id.in_(allowed))
 
     sensitive_subq = (
         db.query(SensitiveSpecies.scientific_name)

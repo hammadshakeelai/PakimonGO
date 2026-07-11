@@ -128,6 +128,7 @@ def get_leaderboard(
     sort_order: str = "desc",
     include_sensitive: bool = False,
     exclude_user_ids: set[str] | None = None,
+    include_only_user_ids: set[str] | None = None,
 ) -> tuple[list[dict], int]:
     query = (
         db.query(
@@ -154,6 +155,12 @@ def get_leaderboard(
     # FR-MOD-003: hide users the requester has blocked.
     if exclude_user_ids:
         query = query.filter(~User.id.in_(exclude_user_ids))
+
+    # Friends scope: restrict to a specific set (followed users + self).
+    if include_only_user_ids is not None:
+        if not include_only_user_ids:
+            return [], 0
+        query = query.filter(User.id.in_(include_only_user_ids))
 
     query = query.group_by(User.id, User.age_band, User.home_region)
 

@@ -6,9 +6,12 @@ from sqlalchemy.orm import Session
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
 from src.infrastructure.database.repositories import (
+    follow_user,
     get_or_create_user,
     get_public_profile,
     get_user_collection,
+    list_follows,
+    unfollow_user,
     update_user,
 )
 from src.infrastructure.database.session import get_db
@@ -48,10 +51,55 @@ def get_user_public_profile(
 
     No exact locations, no email — safe to show to any signed-in user.
     """
-    profile = get_public_profile(db, user_id)
+    profile = get_public_profile(db, user_id, viewer_id=current_user.user_id)
     if profile is None:
         raise HTTPException(status_code=404, detail="User not found")
     return profile
+
+
+@router.post("/{user_id}/follow", status_code=201)
+def follow(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    """FR-SOC-005: follow another player (idempotent)."""
+    if user_id == current_user.user_id:
+        raise HTTPException(status_code=400, detail="You cannot follow yourself")
+    if not follow_user(db, current_user.user_id, user_id):
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"status": "ok", "followeeId": user_id, "following": True}
+
+
+@router.delete("/{user_id}/follow")
+def unfollow(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    if not unfollow_user(db, current_user.user_id, user_id):
+        raise HTTPException(status_code=404, detail="You are not following this user")
+    return {"status": "ok", "followeeId": user_id, "following": False}
+
+
+@router.get("/{user_id}/followers")
+def followers(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    ids = list_follows(db, user_id, "followers")
+    return {"items": ids, "total": len(ids)}
+
+
+@router.get("/{user_id}/following")
+def following(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    ids = list_follows(db, user_id, "following")
+    return {"items": ids, "total": len(ids)}
 
 
 @router.get("/me/collection")

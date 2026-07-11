@@ -19,6 +19,15 @@ from .notification import (
     mark_notification_read,
     unread_notification_count,
 )
+from .follow import (
+    follow_counts,
+    follow_user,
+    get_follower_ids,
+    get_following_ids,
+    is_following,
+    list_follows,
+    unfollow_user,
+)
 from .score_event import create_score_event, get_latest_score_event
 from .social import (
     create_comment,
@@ -92,4 +101,11 @@ __all__ = [
     "get_active_stories",
     "get_story_views",
     "mark_story_viewed",
+    "follow_user",
+    "unfollow_user",
+    "is_following",
+    "get_following_ids",
+    "get_follower_ids",
+    "follow_counts",
+    "list_follows",
 ]

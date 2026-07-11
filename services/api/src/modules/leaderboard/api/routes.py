@@ -4,7 +4,11 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.dependencies import get_optional_user
-from src.infrastructure.database.repositories import get_blocked_user_ids, get_leaderboard
+from src.infrastructure.database.repositories import (
+    get_blocked_user_ids,
+    get_following_ids,
+    get_leaderboard,
+)
 from src.infrastructure.database.session import get_db
 
 router = APIRouter(prefix="/leaderboard", tags=["leaderboard"])
@@ -16,19 +20,25 @@ def get_leaderboard_endpoint(
     offset: int = Query(default=0, ge=0),
     sort_by: str = Query(default="totalScore", enum=["totalScore", "userId", "submissionCount"]),
     sort_order: str = Query(default="desc", enum=["asc", "desc"]),
+    scope: str = Query(default="global", pattern="^(global|friends)$"),
     include_sensitive: bool = Query(
         default=False, description="Include sensitive species (requires elevated permissions)"
     ),
     db: Session = Depends(get_db),
     user=Depends(get_optional_user),
 ):
-    """Get the global leaderboard with pagination and sorting.
+    """Get the leaderboard with pagination and sorting.
 
-    Aggregates total scores across all users. Excludes sensitive
-    species submissions by default, and users the requester has
-    blocked (FR-MOD-003). Public endpoint (no auth required).
+    Aggregates total scores across users. Excludes sensitive species and
+    blocked users (FR-MOD-003). ``scope=friends`` restricts to the
+    people the caller follows (plus themselves) and requires auth.
     """
     exclude = get_blocked_user_ids(db, user.user_id) if user else None
+    include_only = None
+    if scope == "friends":
+        if user is None:
+            return {"entries": [], "pagination": {"limit": limit, "offset": offset, "total": 0}}
+        include_only = get_following_ids(db, user.user_id) | {user.user_id}
     entries, total = get_leaderboard(
         db=db,
         limit=limit,
@@ -37,6 +47,7 @@ def get_leaderboard_endpoint(
         sort_order=sort_order,
         include_sensitive=include_sensitive,
         exclude_user_ids=exclude,
+        include_only_user_ids=include_only,
     )
     return {
         "entries": entries,

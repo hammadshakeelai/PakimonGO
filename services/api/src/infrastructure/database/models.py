@@ -251,6 +251,20 @@ class StoryView(Base):
     viewed_at = Column(DateTime(timezone=True), default=_utcnow)
 
 
+class Follow(Base):
+    """Directed social-graph edge: follower_id follows followee_id."""
+
+    __tablename__ = "follows"
+
+    follower_id = Column(String(36), ForeignKey("users.id"), primary_key=True)
+    followee_id = Column(String(36), ForeignKey("users.id"), primary_key=True)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+    __table_args__ = (
+        Index("ix_follows_followee", "followee_id", "follower_id"),
+    )
+
+
 class IdempotencyKey(Base):
     __tablename__ = "idempotency_keys"
 
