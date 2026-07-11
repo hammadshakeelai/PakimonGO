@@ -53,8 +53,10 @@ def test_seed_creates_full_demo_content(db_session, tmp_path):
     assert db_session.query(CaptureLocation).count() >= len(DEMO_CAPTURES)
     assert db_session.query(ScoreEvent).filter(
         ScoreEvent.user_id == DEMO_USER_ID).count() == len(DEMO_CAPTURES)
+    # At least one per capture; the demo user also receives follow
+    # notifications from the seeded social graph.
     assert db_session.query(Notification).filter(
-        Notification.user_id == DEMO_USER_ID).count() == len(DEMO_CAPTURES)
+        Notification.user_id == DEMO_USER_ID).count() >= len(DEMO_CAPTURES)
 
     assets = db_session.query(MediaAsset).filter(
         MediaAsset.owner_user_id == DEMO_USER_ID).all()
@@ -88,27 +90,47 @@ def test_seed_restores_missing_files(db_session, tmp_path):
 def test_social_wave_seeds_photos_comments_reactions_stories(db_session):
     from datetime import datetime, timezone
 
+    from demo_seed_graph import (
+        COMMENTS2,
+        FOLLOW_GRAPH,
+        REACTIONS2,
+        WAVE2,
+        WAVE2_OWNERS,
+    )
     from demo_seed_social import COMMENTS, REACTIONS, WAVE, WAVE_OWNERS
-    from src.infrastructure.database.models import Comment, Reaction, Story, User
+    from src.infrastructure.database.models import (
+        Comment,
+        Follow,
+        Notification,
+        Reaction,
+        Story,
+        User,
+    )
 
     run_demo_seed(db_session)
 
-    for owner in WAVE_OWNERS:
+    for owner in WAVE_OWNERS + WAVE2_OWNERS:
         assert db_session.query(User).filter(User.id == owner).first() is not None
+    both = list(set(WAVE_OWNERS) | set(WAVE2_OWNERS))
     assert db_session.query(Submission).filter(
-        Submission.user_id.in_(WAVE_OWNERS)).count() == len(WAVE)
-    assert db_session.query(Comment).count() == len(COMMENTS)
-    assert db_session.query(Reaction).count() == len(REACTIONS)
+        Submission.user_id.in_(both)).count() == len(WAVE) + len(WAVE2)
+    assert db_session.query(Comment).count() == len(COMMENTS) + len(COMMENTS2)
+    assert db_session.query(Reaction).count() == len(REACTIONS) + len(REACTIONS2)
+    # Follow graph seeded, each edge with a follower notification.
+    assert db_session.query(Follow).count() == len(FOLLOW_GRAPH)
+    assert db_session.query(Notification).filter(
+        Notification.notification_type == "new_follower").count() == len(FOLLOW_GRAPH)
     # Every storyteller has one active story.
     now = datetime.now(timezone.utc)
     stories = db_session.query(Story).all()
     assert len(stories) == 4
     assert all(s.expires_at.replace(tzinfo=timezone.utc) > now for s in stories)
 
-    # Second run adds nothing new (stories still active, rows unchanged).
+    # Second run adds nothing new (idempotent).
     run_demo_seed(db_session)
-    assert db_session.query(Comment).count() == len(COMMENTS)
-    assert db_session.query(Reaction).count() == len(REACTIONS)
+    assert db_session.query(Comment).count() == len(COMMENTS) + len(COMMENTS2)
+    assert db_session.query(Reaction).count() == len(REACTIONS) + len(REACTIONS2)
+    assert db_session.query(Follow).count() == len(FOLLOW_GRAPH)
     assert db_session.query(Story).count() == 4
 
 
@@ -136,8 +158,8 @@ def test_feed_returns_seeded_timeline(db_session):
             assert key in item
         # Exact coordinates never appear — only 2-decimal cells.
         assert "latitude" not in item and "longitude" not in item
-        users = {i["userId"] for i in data["items"]}
-        assert "pakimongo_official" in users
-        assert "wildlens_aisha" in users  # community accounts present
+        # Many community accounts contribute to the timeline.
+        assert data["pagination"]["total"] >= 40
+        assert len({i["userId"] for i in data["items"]}) >= 4
     finally:
         app.dependency_overrides.clear()

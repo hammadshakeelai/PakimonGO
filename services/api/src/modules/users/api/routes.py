@@ -6,10 +6,12 @@ from sqlalchemy.orm import Session
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
 from src.infrastructure.database.repositories import (
+    create_notification,
     follow_user,
     get_or_create_user,
     get_public_profile,
     get_user_collection,
+    is_following,
     list_follows,
     unfollow_user,
     update_user,
@@ -66,8 +68,20 @@ def follow(
     """FR-SOC-005: follow another player (idempotent)."""
     if user_id == current_user.user_id:
         raise HTTPException(status_code=400, detail="You cannot follow yourself")
+    is_new = not is_following(db, current_user.user_id, user_id)
     if not follow_user(db, current_user.user_id, user_id):
         raise HTTPException(status_code=404, detail="User not found")
+    if is_new:
+        # Notify the followee, deep-linking to the new follower's profile.
+        create_notification(
+            db,
+            user_id=user_id,
+            notification_type="new_follower",
+            title="New follower",
+            body=f"{current_user.user_id} started following you.",
+            reference_type="user",
+            reference_id=current_user.user_id,
+        )
     return {"status": "ok", "followeeId": user_id, "following": True}
 
 

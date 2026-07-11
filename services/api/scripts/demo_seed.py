@@ -207,10 +207,11 @@ def _restore_files(db: Session, storage) -> None:
     """Re-copy demo image files for existing rows (ephemeral disk hosts)."""
     from src.infrastructure.database.models import MediaAsset
 
+    from demo_seed_graph import WAVE2_OWNERS
     from demo_seed_social import WAVE_OWNERS
 
     demo_owners = sorted(
-        {DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS})
+        {DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS, *WAVE2_OWNERS})
     assets = (
         db.query(MediaAsset)
         .filter(MediaAsset.owner_user_id.in_(demo_owners))

@@ -109,6 +109,10 @@ def seed_social_wave(db: Session, storage) -> None:
         return
     _seed_captures(db, storage)
     _seed_comments_reactions(db)
+    # Second wave: more photographers, a follow graph, extra social content.
+    from demo_seed_graph import seed_graph_and_wave2
+
+    seed_graph_and_wave2(db, storage)
     _refresh_stories(db)
     _ensure_public_visibility(db)
 
@@ -117,9 +121,11 @@ def _ensure_public_visibility(db: Session) -> None:
     """Demo content must stay on the public timeline — backfills rows
     seeded before visibility was enforced (idempotent)."""
     from demo_seed import COMMUNITY, DEMO_USER_ID
+    from demo_seed_graph import WAVE2_OWNERS
     from src.infrastructure.database.models import Submission
 
-    owners = sorted({DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS})
+    owners = sorted(
+        {DEMO_USER_ID, *(c[1] for c in COMMUNITY), *WAVE_OWNERS, *WAVE2_OWNERS})
     db.query(Submission).filter(
         Submission.user_id.in_(owners),
         Submission.visibility != "public",
@@ -151,6 +157,12 @@ def _submission_for_file(db: Session, file_name: str):
 
 
 def _seed_captures(db: Session, storage) -> None:
+    _seed_wave_captures(db, storage, WAVE)
+
+
+def _seed_wave_captures(db: Session, storage, wave) -> None:
+    """Seed a list of (file, owner, species, cute, points, lat, lng, caption)
+    captures — creating owner users as needed. Idempotent per photo."""
     from src.infrastructure.database.models import (
         CaptureLocation,
         PublicLocationCell,
@@ -166,7 +178,7 @@ def _seed_captures(db: Session, storage) -> None:
     )
 
     seeded_owners = set()
-    for file_name, owner, species, cute, points, lat, lng, caption in WAVE:
+    for file_name, owner, species, cute, points, lat, lng, caption in wave:
         if owner not in seeded_owners:
             if db.query(User).filter(User.id == owner).first() is not None:
                 seeded_owners.add(owner)
@@ -211,9 +223,13 @@ def _seed_captures(db: Session, storage) -> None:
 
 
 def _seed_comments_reactions(db: Session) -> None:
+    _seed_comments_reactions_from(db, COMMENTS, REACTIONS)
+
+
+def _seed_comments_reactions_from(db: Session, comments, reactions) -> None:
     from src.infrastructure.database.models import Comment, Reaction
 
-    for file_name, commenter, body in COMMENTS:
+    for file_name, commenter, body in comments:
         sub = _submission_for_file(db, file_name)
         if sub is None:
             continue
@@ -226,7 +242,7 @@ def _seed_comments_reactions(db: Session) -> None:
         )
         if exists is None:
             db.add(Comment(submission_id=sub.id, user_id=commenter, body=body))
-    for file_name, reactor, kind in REACTIONS:
+    for file_name, reactor, kind in reactions:
         sub = _submission_for_file(db, file_name)
         if sub is None:
             continue

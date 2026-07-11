@@ -2125,3 +2125,18 @@ cached images, infinite scroll — 165 Flutter tests).
 3. Feed honors "friends" visibility (visible to people the viewer
    follows) + scope=following param. Leaderboard scope=friends (followed
    users + self). 166 API tests (7 new). Ported to v1.
+
+## 2026-07-12 (iter 6) — Follow notifications + lots more dummy data
+
+1. New follow → notification for the followee ("X started following you",
+   reference_type=user, reference_id=follower). Idempotent re-follows
+   don't re-notify. 167 API tests.
+2. Dummy data expansion: fetch_demo_images now pulls 30 CC species
+   photos (+13). New demo_seed_graph.py: 4 more photographers
+   (lens_farah/trekker_usman/birder_nadia/wildpk_kamran) with 13 new
+   posts (feed 30→47 public), a 27-edge follow graph (+27 follow
+   notifications), and 10 more comments / 16 more reactions. All
+   idempotent; verified counts on fresh + repeat seed.
+3. Flutter: notification cards deep-link user-type notifications to the
+   follower's profile ("View profile ›"); SocialRepository threaded
+   through MapHud → Notifications.

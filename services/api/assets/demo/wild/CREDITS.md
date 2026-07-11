@@ -22,3 +22,16 @@ Wildlife photos for demo/seed content, sourced from iNaturalist
 | indian_flapshell_turtle.jpg | Indian Flapshell Turtle (*Lissemys punctata*) | CC BY-SA | Davidvraju | [photo](https://www.inaturalist.org/photos/474241836) |
 | greater_flamingo.jpg | Greater Flamingo (*Phoenicopterus roseus*) | CC BY-NC | cog2022 | [photo](https://www.inaturalist.org/photos/187242272) |
 | grey_heron.jpg | Grey Heron (*Ardea cinerea*) | CC BY | Frank Sengpiel | [photo](https://www.inaturalist.org/photos/73516715) |
+| black_kite.jpg | Black Kite (*Milvus migrans*) | CC0 | Joshua S. Martin | [photo](https://www.inaturalist.org/photos/158802479) |
+| cattle_egret.jpg | Western Cattle-Egret (*Ardea ibis*) | CC BY-NC | Алексей Сизов | [photo](https://www.inaturalist.org/photos/278764160) |
+| common_kingfisher.jpg | Oriental Common Kingfisher (*Alcedo atthis bengalensis*) | CC BY-SA | Ryan Cheng | [photo](https://www.inaturalist.org/photos/616832908) |
+| indian_roller.jpg | Indochinese Roller (*Coracias affinis*) | CC BY-NC | Sam Hambly | [photo](https://www.inaturalist.org/photos/197472135) |
+| little_egret.jpg | Little Egret (*Egretta garzetta*) | CC BY | Bengt Nyman | [photo](https://www.inaturalist.org/photos/205293169) |
+| black_drongo.jpg | Peninsular black drongo (*Dicrurus macrocercus macrocercus*) | CC BY | sunnyjosef | [photo](https://www.inaturalist.org/photos/329612159) |
+| green_bee_eater.jpg | Asian Green Bee-eater (*Merops orientalis*) | CC BY-NC | Saurabh Agrawal | [photo](https://www.inaturalist.org/photos/7578971) |
+| red_wattled_lapwing.jpg | Red-wattled Lapwing (*Vanellus indicus*) | CC BY-NC | Matthieu Gauvain | [photo](https://www.inaturalist.org/photos/355435204) |
+| jungle_babbler.jpg | Jungle Babbler (*Argya striata*) | CC BY-NC | Karthik | [photo](https://www.inaturalist.org/photos/55685037) |
+| monitor_lizard.jpg | Bengal Monitor (*Varanus bengalensis*) | CC BY-NC | Dr Caesar Sengupta | [photo](https://www.inaturalist.org/photos/1813745) |
+| painted_stork.jpg | Painted Stork (*Mycteria leucocephala*) | CC BY-NC | Rujuta Vinod | [photo](https://www.inaturalist.org/photos/84838910) |
+| koel.jpg | Asian Koel (*Eudynamys scolopaceus*) | CC BY | sunnyjosef | [photo](https://www.inaturalist.org/photos/360494940) |
+| shikra.jpg | Indian shikra (*Tachyspiza badia dussumieri*) | CC BY-NC | Andy Frank | [photo](https://www.inaturalist.org/photos/342622026) |

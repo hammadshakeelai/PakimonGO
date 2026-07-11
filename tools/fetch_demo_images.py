@@ -52,6 +52,25 @@ SPECIES = [
     ("himalayan_ibex", "Capra sibirica"),
     ("greater_flamingo", "Phoenicopterus roseus"),
     ("grey_heron", "Ardea cinerea"),
+    # Expanded set for richer demo content.
+    ("black_kite", "Milvus migrans"),
+    ("cattle_egret", "Bubulcus ibis"),
+    ("common_kingfisher", "Alcedo atthis"),
+    ("purple_sunbird", "Cinnyris asiaticus"),
+    ("indian_roller", "Coracias benghalensis"),
+    ("little_egret", "Egretta garzetta"),
+    ("black_drongo", "Dicrurus macrocercus"),
+    ("green_bee_eater", "Merops orientalis"),
+    ("red_wattled_lapwing", "Vanellus indicus"),
+    ("jungle_babbler", "Argya striata"),
+    ("indian_pond_heron", "Ardeola grayii"),
+    ("wild_boar", "Sus scrofa"),
+    ("golden_jackal", "Canis aureus"),
+    ("mongoose", "Herpestes edwardsii"),
+    ("monitor_lizard", "Varanus bengalensis"),
+    ("painted_stork", "Mycteria leucocephala"),
+    ("koel", "Eudynamys scolopaceus"),
+    ("shikra", "Accipiter badius"),
 ]
 
 ACCEPTED = {"cc0", "cc-by", "cc-by-sa", "cc-by-nc"}

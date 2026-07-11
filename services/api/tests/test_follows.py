@@ -97,6 +97,17 @@ class TestFollow:
         _users(db_session)
         assert client.post("/v1/users/ghost/follow", headers=AUTH_A).status_code == 404
 
+    def test_new_follow_notifies_followee_once(self, db_session, client):
+        _users(db_session)
+        client.post(f"/v1/users/{BETA}/follow", headers=AUTH_A)
+        # re-follow (idempotent) must NOT create a second notification
+        client.post(f"/v1/users/{BETA}/follow", headers=AUTH_A)
+        notes = client.get("/v1/notifications", headers=AUTH_B).json()["items"]
+        follows = [n for n in notes if n["notificationType"] == "new_follower"]
+        assert len(follows) == 1
+        assert follows[0]["referenceType"] == "user"
+        assert follows[0]["referenceId"] == ALPHA
+
     def test_followers_and_following_lists(self, db_session, client):
         _users(db_session)
         client.post(f"/v1/users/{BETA}/follow", headers=AUTH_A)
