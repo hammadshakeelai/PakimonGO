@@ -2157,3 +2157,13 @@ cached images, infinite scroll — 165 Flutter tests).
    geolocated captures. 172 API tests (2 new).
 2. Flutter: Local chip enabled (last disabled control gone); fetches
    scope=local server-side; empty state nudges you to capture nearby.
+
+## 2026-07-12 (iter 11) — Real Groups (join/leave, members, group feed + leaderboard)
+
+1. Migration 007: groups + group_members. group.py repo (list/detail/
+   join/leave/members/counts/roster). New groups module: list, detail
+   (with isMember+memberCount), join/leave, members, group leaderboard
+   (reuses get_leaderboard include_only=roster), group feed (reuses
+   extracted build_feed_page with restrict_user_ids). 178 API tests (6 new).
+2. Seed: 3 groups (Islamabad Wildlife Squad/Margalla Trail Trackers/
+   Rawal Lake Birders) with demo-user memberships. Idempotent.

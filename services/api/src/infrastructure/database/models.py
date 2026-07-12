@@ -251,6 +251,33 @@ class StoryView(Base):
     viewed_at = Column(DateTime(timezone=True), default=_utcnow)
 
 
+class Group(Base):
+    """A wildlife community. Members share a feed, leaderboard, and roster."""
+
+    __tablename__ = "groups"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    name = Column(String(80), nullable=False)
+    description = Column(String(280), nullable=True)
+    cover_asset = Column(String(120), nullable=True)  # bundled dummy asset name
+    is_public = Column(Boolean, default=True)
+    created_by = Column(String(36), ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
+class GroupMember(Base):
+    __tablename__ = "group_members"
+
+    group_id = Column(String(36), ForeignKey("groups.id"), primary_key=True)
+    user_id = Column(String(36), ForeignKey("users.id"), primary_key=True)
+    role = Column(String(16), default="member")  # member | admin
+    joined_at = Column(DateTime(timezone=True), default=_utcnow)
+
+    __table_args__ = (
+        Index("ix_group_members_user", "user_id", "group_id"),
+    )
+
+
 class Follow(Base):
     """Directed social-graph edge: follower_id follows followee_id."""
 

@@ -115,8 +115,34 @@ REACTIONS2 = [
 ]
 
 
+# Groups: (name, description, cover_asset, [member owners])
+GROUPS = [
+    (
+        "Islamabad Wildlife Squad",
+        "Capturing the birds and beasts of the capital — safely.",
+        "markhor.jpg",
+        ["pakimongo_official", "ranger_bilal", "shutter_zara", "birder_nadia",
+         "lens_farah", "trekker_usman", "wildpk_kamran", "margalla_hiker",
+         "wetland_watch", "citylights_ali"],
+    ),
+    (
+        "Margalla Trail Trackers",
+        "Ridge hikers logging mammals and raptors on the Margalla trails.",
+        "golden_eagle.jpg",
+        ["ranger_bilal", "trekker_usman", "margalla_hiker", "shutter_zara"],
+    ),
+    (
+        "Rawal Lake Birders",
+        "Waterbirds, kingfishers, and wetland watch at Rawal Lake.",
+        "white_throated_kingfisher.jpg",
+        ["wetland_watch", "birder_nadia", "shutter_zara", "lens_farah",
+         "pakimongo_official"],
+    ),
+]
+
+
 def seed_graph_and_wave2(db: Session, storage) -> None:
-    """Second wave of posts + follow graph + extra social content."""
+    """Second wave of posts + follow graph + groups + extra social content."""
     from demo_seed_social import (
         _seed_comments_reactions_from,
         _seed_wave_captures,
@@ -125,6 +151,25 @@ def seed_graph_and_wave2(db: Session, storage) -> None:
     _seed_wave_captures(db, storage, WAVE2)
     _seed_comments_reactions_from(db, COMMENTS2, REACTIONS2)
     _seed_follow_graph(db)
+    _seed_groups(db)
+
+
+def _seed_groups(db: Session) -> None:
+    """Create demo groups and memberships (idempotent by group name)."""
+    from src.infrastructure.database.repositories.group import (
+        add_member,
+        create_group,
+        get_group_by_name,
+    )
+
+    for name, desc, cover, members in GROUPS:
+        group = get_group_by_name(db, name)
+        if group is None:
+            group = create_group(
+                db, name, description=desc, cover_asset=cover,
+                created_by=members[0] if members else None)
+        for i, owner in enumerate(members):
+            add_member(db, group.id, owner, role="admin" if i == 0 else "member")
 
 
 def _seed_follow_graph(db: Session) -> None:

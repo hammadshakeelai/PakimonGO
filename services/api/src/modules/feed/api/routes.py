@@ -38,6 +38,19 @@ def get_feed(
     captures plus "friends"-visibility captures from people the viewer
     follows. ``scope=following`` narrows to followed users only.
     """
+    return build_feed_page(db, user, limit, offset, scope=scope)
+
+
+def build_feed_page(
+    db: Session,
+    user,
+    limit: int,
+    offset: int,
+    scope: str = "all",
+    restrict_user_ids: set[str] | None = None,
+) -> dict:
+    """Shared feed builder. ``restrict_user_ids`` limits results to those
+    authors (used by the group feed)."""
     following = get_following_ids(db, user.user_id) if user else set()
 
     query = (
@@ -79,6 +92,11 @@ def get_feed(
     if scope == "following":
         allowed = following | ({user.user_id} if user else set())
         query = query.filter(Submission.user_id.in_(allowed))
+
+    if restrict_user_ids is not None:
+        if not restrict_user_ids:
+            return {"items": [], "pagination": {"limit": limit, "offset": offset, "total": 0}}
+        query = query.filter(Submission.user_id.in_(restrict_user_ids))
 
     sensitive_subq = (
         db.query(SensitiveSpecies.scientific_name)

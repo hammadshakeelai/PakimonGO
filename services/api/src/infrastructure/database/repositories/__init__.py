@@ -33,6 +33,15 @@ from .follow import (
     list_follows,
     unfollow_user,
 )
+from .group import (
+    get_group,
+    group_member_ids,
+    is_member,
+    join_group,
+    leave_group,
+    list_groups,
+    list_members,
+)
 from .score_event import create_score_event, get_latest_score_event
 from .social import (
     create_comment,
@@ -116,4 +125,11 @@ __all__ = [
     "get_follower_ids",
     "follow_counts",
     "list_follows",
+    "get_group",
+    "group_member_ids",
+    "is_member",
+    "join_group",
+    "leave_group",
+    "list_groups",
+    "list_members",
 ]
