@@ -2185,3 +2185,16 @@ cached images, infinite scroll — 165 Flutter tests).
    V2Dummy.groupQuests removed. 179 Flutter tests (1 new), analyze clean.
 4. models.py split: social models moved to models_social.py with
    re-exports (both files under 300 lines now).
+
+## 2026-07-13 (iter 13) - Daily capture streaks + score-reveal confetti
+
+1. streak.py repo: get_capture_streak computes current/best daily streak
+   from distinct UTC capture dates (alive through yesterday so it is not
+   shown broken before the player captures today) + todayDone. Exposed
+   on GET /v1/users/me and public profiles. 192 API tests (8 new).
+2. Flutter: StreakCard on own profile (flame, best, playful nudge copy),
+   flame streak row on other players profiles, hand-rolled ConfettiBurst
+   (no deps, one-shot, deterministic) fires the moment a score lands on
+   Score Reveal. profile_v2_screen split into profile_v2_parts.dart
+   (StreakCard/Achievements/FollowStat/StatTile/GridTile) - under 300
+   lines now. 184 Flutter tests (5 new), analyze clean.

@@ -44,6 +44,7 @@ from .group import (
 )
 from .quest import create_quest, get_quest_by_title, list_group_quests
 from .score_event import create_score_event, get_latest_score_event
+from .streak import get_capture_streak
 from .social import (
     create_comment,
     get_comment_counts,
@@ -136,4 +137,5 @@ __all__ = [
     "create_quest",
     "get_quest_by_title",
     "list_group_quests",
+    "get_capture_streak",
 ]

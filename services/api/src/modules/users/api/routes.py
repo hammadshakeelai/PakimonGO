@@ -8,6 +8,7 @@ from src.infrastructure.auth.dependencies import get_current_user
 from src.infrastructure.database.repositories import (
     create_notification,
     follow_user,
+    get_capture_streak,
     get_or_create_user,
     get_public_profile,
     get_user_collection,
@@ -53,6 +54,7 @@ def get_my_profile(
         "homeRegion": user.home_region,
         "trustState": user.trust_state,
         "createdAt": user.created_at.isoformat() if user.created_at else None,
+        "streak": get_capture_streak(db, user.id),
     }
 
 

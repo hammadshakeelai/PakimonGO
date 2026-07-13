@@ -79,6 +79,7 @@ def get_public_profile(
     counts and whether the viewer follows this user.
     """
     from .follow import follow_counts, is_following
+    from .streak import get_capture_streak
 
     user = db.query(User).filter(User.id == user_id, User.deleted_at.is_(None)).first()
     if user is None:
@@ -134,6 +135,7 @@ def get_public_profile(
         "followingCount": following,
         "isFollowing": viewer_follows,
         "isSelf": viewer_id == user_id,
+        "streak": get_capture_streak(db, user_id),
         "recentCaptures": [
             {
                 "submissionId": r.id,
