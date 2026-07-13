@@ -2198,3 +2198,15 @@ cached images, infinite scroll — 165 Flutter tests).
    Score Reveal. profile_v2_screen split into profile_v2_parts.dart
    (StreakCard/Achievements/FollowStat/StatTile/GridTile) - under 300
    lines now. 184 Flutter tests (5 new), analyze clean.
+
+## 2026-07-13 (iter 14) - Post detail screen with inline comments
+
+1. Flutter-only iteration (V2 repo): tapping a feed post photo opens
+   PostDetailScreen - same live post card up top (reactions/share still
+   work), whole conversation inline below, pinned comment composer
+   (optimistic post/delete, feed badge bumped live). Comment tap on the
+   embedded card focuses the composer instead of opening the sheet.
+2. Reuse extraction: CommentTile (shared by sheet + detail) and
+   PostReactionRow (shared pills) - feed_post_card.dart 316 -> 274
+   lines, clearing a TECH_DEBT item. 186 Flutter tests (2 new),
+   analyze clean. No backend change.
