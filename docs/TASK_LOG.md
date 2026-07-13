@@ -2210,3 +2210,16 @@ cached images, infinite scroll — 165 Flutter tests).
    PostReactionRow (shared pills) - feed_post_card.dart 316 -> 274
    lines, clearing a TECH_DEBT item. 186 Flutter tests (2 new),
    analyze clean. No backend change.
+
+## 2026-07-13 (iter 15) - Story quick reactions
+
+1. Migration 009 story_reactions (PK story+viewer; re-react replaces
+   emoji). react_to_story upsert; POST /v1/stories/{id}/react validates
+   emoji in {heart,fire,wow,clap}, 400 on own story, first reaction
+   notifies the owner (story_reaction, deep-links to reactor profile);
+   owner views list now carries each viewer reaction; delete_story
+   cleans reactions. 197 API tests (6 new).
+2. Flutter: StoryReactionBar (4 emoji, optimistic scale-up highlight,
+   rollback on failure) on others stories in the viewer; owner pill now
+   reads "Seen by N - M reacted". story_viewer.dart split via
+   story_viewer_parts.dart (300-line rule). 188 Flutter tests (2 new).

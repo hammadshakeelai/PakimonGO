@@ -5,9 +5,10 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import MediaAsset, Story, StoryView
+from ..models import MediaAsset, Story, StoryReaction, StoryView
 
 STORY_TTL_HOURS = 24
+STORY_REACTION_EMOJI = {"heart", "fire", "wow", "clap"}
 
 
 def _now() -> datetime:
@@ -109,8 +110,43 @@ def mark_story_viewed(db: Session, viewer_id: str, story_id: str) -> bool:
     return True
 
 
+def react_to_story(
+    db: Session, viewer_id: str, story_id: str, emoji: str
+) -> dict | None:
+    """Upsert a quick reaction to someone else's active story.
+
+    Returns None when the story is missing/expired, {"own": True} when
+    the viewer owns the story, otherwise {"ownerId", "isNew"} — isNew is
+    False when the viewer had already reacted (emoji is replaced)."""
+    story = (
+        db.query(Story)
+        .filter(Story.id == story_id, Story.expires_at > _now())
+        .first()
+    )
+    if story is None:
+        return None
+    if story.user_id == viewer_id:
+        return {"own": True}
+    row = (
+        db.query(StoryReaction)
+        .filter(
+            StoryReaction.story_id == story_id,
+            StoryReaction.viewer_id == viewer_id,
+        )
+        .first()
+    )
+    is_new = row is None
+    if row is None:
+        db.add(StoryReaction(story_id=story_id, viewer_id=viewer_id, emoji=emoji))
+    else:
+        row.emoji = emoji
+    db.commit()
+    return {"ownerId": story.user_id, "isNew": is_new}
+
+
 def get_story_views(db: Session, owner_id: str, story_id: str) -> tuple[list[dict], int] | None:
-    """Viewer list for the owner's own story. None if not theirs."""
+    """Viewer list (with any quick reactions) for the owner's own story.
+    None if not theirs."""
     story = (
         db.query(Story)
         .filter(Story.id == story_id, Story.user_id == owner_id)
@@ -124,10 +160,17 @@ def get_story_views(db: Session, owner_id: str, story_id: str) -> tuple[list[dic
         .order_by(StoryView.viewed_at.desc())
         .all()
     )
+    reactions = {
+        r.viewer_id: r.emoji
+        for r in db.query(StoryReaction)
+        .filter(StoryReaction.story_id == story_id)
+        .all()
+    }
     items = [
         {
             "viewerId": v.viewer_id,
             "viewedAt": v.viewed_at.isoformat() if v.viewed_at else None,
+            "reaction": reactions.get(v.viewer_id),
         }
         for v in rows
     ]
@@ -144,6 +187,7 @@ def delete_story(db: Session, owner_id: str, story_id: str) -> bool:
     if story is None:
         return False
     db.query(StoryView).filter(StoryView.story_id == story_id).delete()
+    db.query(StoryReaction).filter(StoryReaction.story_id == story_id).delete()
     db.delete(story)
     db.commit()
     return True

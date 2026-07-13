@@ -146,3 +146,62 @@ class TestStories:
     def test_missing_media_asset_id_400(self, db_session, client):
         _seed(db_session)
         assert client.post("/v1/stories", json={}, headers=AUTH).status_code == 400
+
+
+class TestStoryReactions:
+    def _story(self, db, client):
+        asset = _seed(db)
+        return client.post(
+            "/v1/stories", json={"mediaAssetId": asset.id}, headers=AUTH
+        ).json()["storyId"]
+
+    def test_react_notifies_owner_once(self, db_session, client):
+        story_id = self._story(db_session, client)
+        resp = client.post(
+            f"/v1/stories/{story_id}/react", json={"emoji": "fire"},
+            headers=AUTH_OTHER)
+        assert resp.status_code == 201
+        assert resp.json()["emoji"] == "fire"
+
+        notifs = client.get("/v1/notifications", headers=AUTH).json()["items"]
+        reactions = [n for n in notifs
+                     if n["notificationType"] == "story_reaction"]
+        assert len(reactions) == 1
+        assert reactions[0]["referenceId"] == BETA
+
+        # Re-reacting replaces the emoji without a second notification.
+        resp = client.post(
+            f"/v1/stories/{story_id}/react", json={"emoji": "heart"},
+            headers=AUTH_OTHER)
+        assert resp.status_code == 201
+        notifs = client.get("/v1/notifications", headers=AUTH).json()["items"]
+        assert len([n for n in notifs
+                    if n["notificationType"] == "story_reaction"]) == 1
+
+    def test_owner_sees_reactions_in_views(self, db_session, client):
+        story_id = self._story(db_session, client)
+        client.post(f"/v1/stories/{story_id}/view", headers=AUTH_OTHER)
+        client.post(f"/v1/stories/{story_id}/react", json={"emoji": "clap"},
+                    headers=AUTH_OTHER)
+        views = client.get(f"/v1/stories/{story_id}/views",
+                           headers=AUTH).json()["items"]
+        assert views[0]["viewerId"] == BETA
+        assert views[0]["reaction"] == "clap"
+
+    def test_cannot_react_to_own_story(self, db_session, client):
+        story_id = self._story(db_session, client)
+        resp = client.post(f"/v1/stories/{story_id}/react",
+                           json={"emoji": "wow"}, headers=AUTH)
+        assert resp.status_code == 400
+
+    def test_invalid_emoji_rejected(self, db_session, client):
+        story_id = self._story(db_session, client)
+        resp = client.post(f"/v1/stories/{story_id}/react",
+                           json={"emoji": "skull"}, headers=AUTH_OTHER)
+        assert resp.status_code == 400
+
+    def test_missing_story_404(self, db_session, client):
+        _seed(db_session)
+        resp = client.post("/v1/stories/ghost/react",
+                           json={"emoji": "fire"}, headers=AUTH_OTHER)
+        assert resp.status_code == 404

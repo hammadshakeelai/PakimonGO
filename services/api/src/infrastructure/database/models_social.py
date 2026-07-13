@@ -67,6 +67,18 @@ class StoryView(Base):
     viewed_at = Column(DateTime(timezone=True), default=_utcnow)
 
 
+class StoryReaction(Base):
+    """Quick emoji reaction to a story; one per viewer per story
+    (re-reacting replaces the emoji)."""
+
+    __tablename__ = "story_reactions"
+
+    story_id = Column(String(36), ForeignKey("stories.id"), primary_key=True)
+    viewer_id = Column(String(36), ForeignKey("users.id"), primary_key=True)
+    emoji = Column(String(16), nullable=False)  # heart | fire | wow | clap
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
 class Group(Base):
     """A wildlife community. Members share a feed, leaderboard, and roster."""
 

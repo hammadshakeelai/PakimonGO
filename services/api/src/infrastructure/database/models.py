@@ -214,5 +214,6 @@ from .models_social import (  # noqa: E402,F401
     GroupQuest,
     Reaction,
     Story,
+    StoryReaction,
     StoryView,
 )

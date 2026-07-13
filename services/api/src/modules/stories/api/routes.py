@@ -5,13 +5,18 @@ from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
-from src.infrastructure.database.repositories import get_blocked_user_ids
+from src.infrastructure.database.repositories import (
+    create_notification,
+    get_blocked_user_ids,
+)
 from src.infrastructure.database.repositories.story import (
+    STORY_REACTION_EMOJI,
     create_story,
     delete_story,
     get_active_stories,
     get_story_views,
     mark_story_viewed,
+    react_to_story,
 )
 from src.infrastructure.database.session import get_db
 from src.infrastructure.middleware.rate_limit import allow
@@ -85,6 +90,40 @@ def view_story(
     if not mark_story_viewed(db, user.user_id, story_id):
         raise HTTPException(status_code=404, detail="Story not found or expired")
     return {"status": "ok", "storyId": story_id}
+
+
+@router.post("/{story_id}/react", status_code=201)
+def react(
+    story_id: str,
+    payload: dict = Body(...),
+    db: Session = Depends(get_db),
+    user: UserContext = Depends(get_current_user),
+) -> dict:
+    """FR-SOC-008: quick emoji reaction to someone's story. Re-reacting
+    replaces the emoji; the first reaction notifies the owner."""
+    emoji = payload.get("emoji")
+    if emoji not in STORY_REACTION_EMOJI:
+        raise HTTPException(
+            status_code=400,
+            detail=f"emoji must be one of {sorted(STORY_REACTION_EMOJI)}",
+        )
+    result = react_to_story(db, user.user_id, story_id, emoji)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Story not found or expired")
+    if result.get("own"):
+        raise HTTPException(
+            status_code=400, detail="You cannot react to your own story")
+    if result["isNew"]:
+        create_notification(
+            db,
+            user_id=result["ownerId"],
+            notification_type="story_reaction",
+            title="Story reaction",
+            body=f"{user.user_id} reacted to your story.",
+            reference_type="user",
+            reference_id=user.user_id,
+        )
+    return {"status": "ok", "storyId": story_id, "emoji": emoji}
 
 
 @router.get("/{story_id}/views")
