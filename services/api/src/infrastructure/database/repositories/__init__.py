@@ -42,6 +42,7 @@ from .group import (
     list_groups,
     list_members,
 )
+from .quest import create_quest, get_quest_by_title, list_group_quests
 from .score_event import create_score_event, get_latest_score_event
 from .social import (
     create_comment,
@@ -132,4 +133,7 @@ __all__ = [
     "leave_group",
     "list_groups",
     "list_members",
+    "create_quest",
+    "get_quest_by_title",
+    "list_group_quests",
 ]

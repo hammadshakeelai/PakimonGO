@@ -2167,3 +2167,21 @@ cached images, infinite scroll — 165 Flutter tests).
    extracted build_feed_page with restrict_user_ids). 178 API tests (6 new).
 2. Seed: 3 groups (Islamabad Wildlife Squad/Margalla Trail Trackers/
    Rawal Lake Birders) with demo-user memberships. Idempotent.
+
+## 2026-07-13 (iter 12) - Real in-group Quests (last preview feature is now live)
+
+1. Migration 008: group_quests (kind captures|species|points, target,
+   starts_at/ends_at window). quest.py repo: list_group_quests computes
+   live progress from members' scored captures inside the window plus
+   the viewer's own contribution; expired quests are hidden. New route
+   GET /v1/groups/{id}/quests. 184 API tests (6 new).
+2. Seed: 6 weekly quests across the 3 demo groups, calibrated so some
+   read in-progress and some complete; expired windows re-arm on boot
+   (idempotent by title) so the tab never goes empty.
+3. Flutter: GroupRepository.getQuests; Quests tab renders real progress
+   bars, "x / y unit", "You: n" contribution, days-left/Complete! state.
+   group_screen.dart split (group_screen_parts.dart: GroupQuestCard,
+   GroupBoardCard, V2ChipRowLike) to satisfy the 300-line rule; unused
+   V2Dummy.groupQuests removed. 179 Flutter tests (1 new), analyze clean.
+4. models.py split: social models moved to models_social.py with
+   re-exports (both files under 300 lines now).

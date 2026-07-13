@@ -12,6 +12,7 @@ from src.infrastructure.database.repositories import (
     group_member_ids,
     join_group,
     leave_group,
+    list_group_quests,
     list_groups,
     list_members,
 )
@@ -96,6 +97,21 @@ def group_leaderboard(
         exclude_user_ids=get_blocked_user_ids(db, user.user_id),
     )
     return {"entries": entries, "pagination": {"limit": limit, "offset": 0, "total": total}}
+
+
+@router.get("/{group_id}/quests")
+def group_quests(
+    group_id: str,
+    db: Session = Depends(get_db),
+    user: UserContext = Depends(get_current_user),
+) -> dict:
+    """Active community challenges with live progress computed from the
+    members' scored captures inside each quest window."""
+    if get_group(db, group_id, user.user_id) is None:
+        raise HTTPException(status_code=404, detail="Group not found")
+    items = list_group_quests(
+        db, group_id, group_member_ids(db, group_id), viewer_id=user.user_id)
+    return {"items": items, "total": len(items)}
 
 
 @router.get("/{group_id}/feed")

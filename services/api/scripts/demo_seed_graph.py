@@ -115,6 +115,32 @@ REACTIONS2 = [
 ]
 
 
+# Community quests: (group name, title, description, kind, target).
+# Windows are re-armed on boot when expired, so demo groups always have
+# live challenges. Targets are calibrated against the seeded captures so
+# some quests read "in progress" and some "complete".
+QUESTS = [
+    ("Islamabad Wildlife Squad", "Capital Capture Blitz",
+     "Log 30 wild captures across the city as a squad this week.",
+     "captures", 30),
+    ("Islamabad Wildlife Squad", "Squad Species Sweep",
+     "Record 40 different species together before the week ends.",
+     "species", 40),
+    ("Margalla Trail Trackers", "Ridge Points Push",
+     "Bank 800 trail points as a team on the Margalla ridges.",
+     "points", 800),
+    ("Margalla Trail Trackers", "Trail Species Hunt",
+     "Find 8 different species along the trails.",
+     "species", 8),
+    ("Rawal Lake Birders", "Wetland Watch Week",
+     "Record 20 waterside captures around the lake.",
+     "captures", 20),
+    ("Rawal Lake Birders", "Lake Points Rally",
+     "Score 500 points from lakeside sightings.",
+     "points", 500),
+]
+
+
 # Groups: (name, description, cover_asset, [member owners])
 GROUPS = [
     (
@@ -152,6 +178,40 @@ def seed_graph_and_wave2(db: Session, storage) -> None:
     _seed_comments_reactions_from(db, COMMENTS2, REACTIONS2)
     _seed_follow_graph(db)
     _seed_groups(db)
+    _seed_quests(db)
+
+
+def _seed_quests(db: Session) -> None:
+    """Weekly community quests (idempotent by title). An expired quest is
+    re-armed with a fresh week so the demo never shows an empty tab."""
+    from datetime import datetime, timedelta, timezone
+
+    from src.infrastructure.database.repositories.group import get_group_by_name
+    from src.infrastructure.database.repositories.quest import (
+        create_quest,
+        get_quest_by_title,
+    )
+
+    now = datetime.now(timezone.utc)
+    for group_name, title, desc, kind, target in QUESTS:
+        group = get_group_by_name(db, group_name)
+        if group is None:
+            continue
+        quest = get_quest_by_title(db, group.id, title)
+        if quest is None:
+            create_quest(
+                db, group.id, title, target,
+                ends_at=now + timedelta(days=7),
+                description=desc, kind=kind,
+                starts_at=now - timedelta(days=7))
+            continue
+        ends = quest.ends_at
+        if ends is not None and ends.tzinfo is None:
+            ends = ends.replace(tzinfo=timezone.utc)
+        if ends is None or ends <= now:
+            quest.starts_at = now - timedelta(days=7)
+            quest.ends_at = now + timedelta(days=7)
+            db.commit()
 
 
 def _seed_groups(db: Session) -> None:

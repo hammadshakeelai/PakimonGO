@@ -46,32 +46,29 @@ re-run the required pre-task guard and doc/JSON/secret validation scripts.
 
 ## Active Task
 
-Current design pass: **PakimonGO V2 UI/product brainstorm and clickable
-HTML/CSS/JS prototype**. Use the V1 screenshots in
-`docs/assets/COMPLETE UI SCREENSHOTS - V1/`, the V2 concept panels in
-`docs/assets/V2 UI CONCEPT PANELS/`, and the clickable prototype in
-`docs/prototypes/v2-ui-html/index.html` before implementing any new
-Instagram/Facebook-like features. Do not restart completed Tier 1/Tier 2 work
-unless a regression is found.
+**V2 social-layer improvement loop (iters 1-12 shipped).** The V2 app
+(PakimonGO-V2 repo) is a full wildlife social network wired to this
+backend: posts with reactions/comments/share, 24h stories, follow graph,
+Following feed, user search, all 4 Rank scopes, follower lists, real
+Groups with member feed + leaderboard, and (iter 12) live in-group
+Quests with progress computed from members' captures. Every UI control
+is functional — no preview/dummy features remain. See the newest
+`docs/TASK_LOG.md` entries for the per-iteration record.
 
-The current prototype is a polished hardcoded phone shell with dummy state,
-route navigation, tabs, chips, modals, toasts, score reveal, feed reactions,
-profile/collection/rank views, group interactions, notification filters, and
-privacy-safe labels. It is still product-direction material, not accepted
-implementation scope.
+Backend state: migrations 001-008 (008 = group_quests), 184 API tests,
+demo seed is idempotent + self-refreshing (stories, quest windows).
 
 ## Current Next Action
 
-Recommended no-credential implementation path:
+Recommended no-credential implementation path (fun/game-feel focus):
 
-1. Review the V2 sections in `docs/ux/SOCIAL_GAME_UI_CONCEPT.md`, the generated
-   concept panels, and the polished prototype at
-   `docs/prototypes/v2-ui-html/index.html`; decide which ideas should become
-   accepted requirements or wireframes.
-2. Accessibility pass: semantic labels, screen reader review, tap-target checks,
-   and widget tests for critical screens.
-3. Loading shimmer/skeleton polish where the app still uses plain spinners.
-4. Automated real-device E2E plan and smoke scripts for camera/map/upload/scoring.
+1. Game-feel polish: score-reveal/quest-complete celebration moments,
+   streaks, playful empty states.
+2. Post detail screen (inline comments), story replies/reactions,
+   group create-from-UI with cover selection.
+3. Accessibility pass: semantic labels, screen reader review, tap-target
+   checks, and widget tests for critical screens.
+4. Loading shimmer/skeleton polish where the app still uses plain spinners.
 
 Credential or account-dependent path:
 

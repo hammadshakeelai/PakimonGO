@@ -7,11 +7,12 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Recommended next design action:** review the V2 brainstorm in
-`docs/ux/SOCIAL_GAME_UI_CONCEPT.md`, compare it against the V1 screenshots in
-`docs/assets/COMPLETE UI SCREENSHOTS - V1/`, inspect the polished clickable
-prototype at `docs/prototypes/v2-ui-html/index.html`, and choose the first V2
-wireframe pack.
+**Recommended next implementation (V2 improvement loop, iter 13+):**
+game-feel polish — quest-complete/score-reveal celebration moments,
+capture streaks, playful empty states — then post detail screen with
+inline comments, story replies, and group create-from-UI. The social
+layer itself (posts, stories, follows, search, groups, quests) shipped
+in iters 1-12; see `docs/TASK_LOG.md`.
 
 **Recommended next implementation after that:** accessibility hardening.
 
