@@ -1,91 +1,33 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:pakimon_go_app/core/network/api_client.dart';
-import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
-import 'package:pakimon_go_app/features/collection/presentation/collection_screen.dart';
-import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
-
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class _MockClient extends http.BaseClient {
-  final Map<String, http.Response> responses;
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:pakimon_go_app/core/network/api_client.dart';
+import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
+import 'package:pakimon_go_app/features/collection/domain/collection_viewmodel.dart';
 
-  _MockClient(this.responses);
+import 'collection_test_helpers.dart';
 
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final key = '${request.method} ${request.url}';
-    final resp = responses[key];
-    if (resp != null) {
-      return http.StreamedResponse(
-        http.ByteStream.fromBytes(resp.bodyBytes),
-        resp.statusCode,
-        headers: resp.headers,
-      );
-    }
-    return http.StreamedResponse(
-      http.ByteStream.fromBytes(utf8.encode('{"detail": "not found"}')),
-      404,
-    );
-  }
-}
+CollectionViewModel _vm(MockCollectionClient client) => CollectionViewModel(
+    repository: CaptureRepository(
+        client: ApiClient(client: client, baseUrl: 'http://test.com')));
 
-Map<String, dynamic> _collectionJson() => {
-      'userId': 'user-123',
-      'species': [
-        {
-          'species': 'Markhor',
-          'context': 'wild',
-          'totalPoints': 75,
-          'captureCount': 3,
-          'lastCaptured': '2026-07-03T10:00:00',
-          'submissionId': 'sub_markhor_latest',
-          'mediaAssetId': 'media_markhor_latest',
-          'publicLocation': {
-            'cellId': 'cell_33.68_73.05',
-            'cellLatitude': 33.68,
-            'cellLongitude': 73.05,
-          },
-        },
-        {
-          'species': 'Peacock',
-          'context': 'zoo',
-          'totalPoints': 5,
-          'captureCount': 5,
-          'lastCaptured': '2026-07-02T10:00:00',
-          'submissionId': null,
-          'mediaAssetId': null,
-          'publicLocation': null,
-        },
-      ],
-      'pagination': {'limit': 20, 'offset': 0, 'total': 2},
-    };
+http.Response _ok(Map<String, dynamic> body) => http.Response(
+    jsonEncode(body), 200,
+    headers: {'content-type': 'application/json'});
+
+const _listUrl =
+    'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc';
 
 void main() {
   group('CollectionViewModel', () {
     test('starts in loading state', () {
-      final client = _MockClient({});
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+      final vm = _vm(MockCollectionClient({}));
       expect(vm.state, CollectionLoadState.loading);
     });
 
     test('fetchCollection loads species', () async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+      final vm = _vm(MockCollectionClient({_listUrl: _ok(collectionJson())}));
       await vm.fetchCollection();
 
       expect(vm.state, CollectionLoadState.loaded);
@@ -96,11 +38,7 @@ void main() {
     });
 
     test('fetchCollection handles error', () async {
-      final client = _MockClient({});
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+      final vm = _vm(MockCollectionClient({}));
       await vm.fetchCollection();
 
       expect(vm.state, CollectionLoadState.error);
@@ -108,46 +46,24 @@ void main() {
     });
 
     test('fetchCollection shows empty state', () async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode({
-            'userId': 'user-123',
-            'species': [],
-            'pagination': {'limit': 20, 'offset': 0, 'total': 0},
-          }),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+      final vm = _vm(MockCollectionClient({
+        _listUrl: _ok({
+          'userId': 'user-123',
+          'species': [],
+          'pagination': {'limit': 20, 'offset': 0, 'total': 0},
+        }),
+      }));
       await vm.fetchCollection();
 
       expect(vm.state, CollectionLoadState.empty);
     });
 
     test('setSortBy re-fetches', () async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
+      final vm = _vm(MockCollectionClient({
+        _listUrl: _ok(collectionJson()),
         'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=species&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+            _ok(collectionJson()),
+      }));
       await vm.fetchCollection();
 
       vm.setSortBy('species');
@@ -155,157 +71,15 @@ void main() {
     });
 
     test('setContextFilter re-fetches', () async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
+      final vm = _vm(MockCollectionClient({
+        _listUrl: _ok(collectionJson()),
         'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc&context=wild':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
+            _ok(collectionJson()),
+      }));
       await vm.fetchCollection();
 
       vm.setContextFilter('wild');
       expect(vm.contextFilter, 'wild');
-    });
-  });
-
-  group('CollectionScreen', () {
-    testWidgets('shows loading indicator initially', (tester) async {
-      final client = _MockClient({});
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
-
-    testWidgets('shows species list after loading', (tester) async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      await tester.pumpAndSettle();
-      expect(find.text('Markhor'), findsOneWidget);
-      expect(find.text('Peacock'), findsOneWidget);
-    });
-
-    testWidgets('shows empty state', (tester) async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode({
-            'userId': 'user-123',
-            'species': [],
-            'pagination': {'limit': 20, 'offset': 0, 'total': 0},
-          }),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      await tester.pumpAndSettle();
-      expect(find.text('No species collected yet'), findsOneWidget);
-    });
-
-    testWidgets('shows error state with retry', (tester) async {
-      final client = _MockClient({});
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Retry'), findsOneWidget);
-    });
-
-    testWidgets('tapping species navigates to SpeciesDetailScreen',
-        (tester) async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Markhor'));
-      await tester.pumpAndSettle();
-      expect(find.text('Markhor'), findsAtLeast(1));
-      // Regression: the detail marker now carries the representative
-      // submission's coarse cell location instead of 0.0000.
-      expect(find.text('33.6800'), findsOneWidget);
-      expect(find.text('73.0500'), findsOneWidget);
-      expect(find.text('Photo not available'), findsNothing);
-    });
-
-    testWidgets(
-        'entry without representative photo/location degrades gracefully',
-        (tester) async {
-      final client = _MockClient({
-        'GET http://test.com/users/me/collection?limit=20&offset=0&sort_by=totalPoints&sort_order=desc':
-            http.Response(
-          jsonEncode(_collectionJson()),
-          200,
-          headers: {'content-type': 'application/json'},
-        ),
-      });
-      final repo = CaptureRepository(
-        client: ApiClient(client: client, baseUrl: 'http://test.com'),
-      );
-      final vm = CollectionViewModel(repository: repo);
-      await tester.pumpWidget(MaterialApp(
-        home: CollectionScreen(viewModel: vm),
-      ));
-      await tester.pumpAndSettle();
-
-      // Peacock has null mediaAssetId + publicLocation in the fixture.
-      await tester.tap(find.text('Peacock'));
-      await tester.pumpAndSettle();
-      expect(find.text('Photo not available'), findsNothing);
-      expect(find.textContaining('Latitude'), findsNothing);
-      expect(find.text('Hidden for privacy'), findsOneWidget);
     });
   });
 }

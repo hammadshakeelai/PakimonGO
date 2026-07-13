@@ -2269,3 +2269,14 @@ admin, opened as Joined); Margalla Quests tab live (Ridge Points Push
 640/800 pts 7d left; Trail Species Hunt 11/8 Complete!). Field Guide
 empty state clean post-split. Known emulator flakiness only (taps
 during story transitions); no app defects found.
+
+## 2026-07-14 (iter 20) - Reveal streak chip + zero file-size warnings
+
+1. Score Reveal now closes the capture -> streak loop: after points
+   land, RevealStreakChip fetches the fresh daily streak and celebrates
+   ("3-day streak - keep it burning!" / "Streak started - come back
+   tomorrow!"); hidden gracefully on fetch failure. 192 Flutter tests
+   (1 new).
+2. collection_test.dart (311) split into collection_test +
+   collection_screen_test + shared collection_test_helpers - the LAST
+   file over the 300-line rule anywhere in either repo tree is gone.
