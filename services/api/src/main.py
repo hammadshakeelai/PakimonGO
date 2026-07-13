@@ -14,6 +14,7 @@ from .infrastructure.middleware.version_middleware import VersionNegotiationMidd
 from .modules.feed.api.routes import router as feed_router
 from .modules.groups.api.routes import router as groups_router
 from .modules.leaderboard.api.routes import router as leaderboard_router
+from .modules.map.api.routes import router as map_router
 from .modules.media.api.routes import router as media_router
 from .modules.moderation.api.routes import router as moderation_router
 from .modules.notifications.api.routes import router as notification_router
@@ -87,6 +88,7 @@ app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
 app.include_router(feed_router, prefix="/v1")
 app.include_router(groups_router, prefix="/v1")
 app.include_router(leaderboard_router, prefix="/v1")
+app.include_router(map_router, prefix="/v1")
 app.include_router(media_router, prefix="/v1")
 app.include_router(moderation_router, prefix="/v1")
 app.include_router(notification_router, prefix="/v1")

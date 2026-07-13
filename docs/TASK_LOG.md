@@ -2321,3 +2321,15 @@ group_screen still under the 300-line rule (285).
    camera helpers to map_camera.dart (map_hud_screen 312 -> under 300).
    Full V2 lib sweep now reports zero files over 300. 201 Flutter
    tests (3 new), analyze clean.
+
+## 2026-07-14 (iter 25) - The living map (community sightings)
+
+1. GET /v1/map/sightings: recent PUBLIC scored captures at coarse ~1km
+   cells (2-decimal rounding, exact GPS never exposed), sensitive
+   species + blocked users excluded, payload mirrors the marker shape
+   so the mobile parser is unchanged. New map module registered.
+   204 API tests (4 new).
+2. Flutter: MapViewModel now blends community sightings into the HUD
+   map/Nearby Activity (own markers first, deduped; the community layer
+   is optional and non-fatal on failure). A fresh player no longer
+   opens onto an empty world. 203 Flutter tests (2 new).
