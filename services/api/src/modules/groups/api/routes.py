@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Body, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
@@ -9,6 +9,7 @@ from src.infrastructure.database.repositories import (
     get_blocked_user_ids,
     get_group,
     get_leaderboard,
+    get_or_create_user,
     group_member_ids,
     join_group,
     leave_group,
@@ -16,10 +17,21 @@ from src.infrastructure.database.repositories import (
     list_groups,
     list_members,
 )
+from src.infrastructure.database.repositories.group import (
+    add_member,
+    create_group,
+    get_group_by_name,
+)
 from src.infrastructure.database.session import get_db
+from src.infrastructure.middleware.rate_limit import allow
 from src.modules.feed.api.routes import build_feed_page
 
 router = APIRouter(prefix="/groups", tags=["groups"])
+
+MIN_NAME_LEN = 3
+MAX_NAME_LEN = 80
+MAX_DESC_LEN = 280
+GROUPS_PER_DAY = 5
 
 
 @router.get("")
@@ -30,6 +42,40 @@ def list_all(
     """All wildlife groups with membership + counts for the caller."""
     groups = list_groups(db, user.user_id)
     return {"items": groups, "total": len(groups)}
+
+
+@router.post("", status_code=201)
+def create(
+    payload: dict = Body(...),
+    db: Session = Depends(get_db),
+    user: UserContext = Depends(get_current_user),
+) -> dict:
+    """Start a new wildlife community; the creator becomes its admin."""
+    name = (payload.get("name") or "").strip()
+    description = payload.get("description")
+    if not (MIN_NAME_LEN <= len(name) <= MAX_NAME_LEN):
+        raise HTTPException(
+            status_code=400,
+            detail=f"name must be {MIN_NAME_LEN}-{MAX_NAME_LEN} characters",
+        )
+    if description is not None and (
+        not isinstance(description, str) or len(description) > MAX_DESC_LEN
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=f"description must be at most {MAX_DESC_LEN} chars",
+        )
+    if get_group_by_name(db, name) is not None:
+        raise HTTPException(
+            status_code=409, detail="A group with this name already exists")
+    if not allow(f"groupcreate:{user.user_id}", GROUPS_PER_DAY, 86400.0):
+        raise HTTPException(
+            status_code=429, detail="Too many new groups — try again tomorrow")
+    get_or_create_user(db, user.user_id)  # first action may be group creation
+    group = create_group(
+        db, name, description=description, created_by=user.user_id)
+    add_member(db, group.id, user.user_id, role="admin")
+    return get_group(db, group.id, user.user_id)
 
 
 @router.get("/{group_id}")

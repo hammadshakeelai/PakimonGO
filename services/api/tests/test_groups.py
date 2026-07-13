@@ -130,3 +130,43 @@ class TestGroups:
         feed = client.get(f"/v1/groups/{g.id}/feed", headers=AUTH_A).json()
         users = {i["userId"] for i in feed["items"]}
         assert users == {ALPHA}  # only members, not outsider
+
+
+class TestGroupCreation:
+    def test_create_group_makes_creator_admin(self, db_session, client):
+        from src.infrastructure.middleware.rate_limit import reset
+        reset()
+        _seed(db_session)
+        resp = client.post(
+            "/v1/groups",
+            json={"name": "Night Owls", "description": "Nocturnal spotters"},
+            headers=AUTH_A)
+        assert resp.status_code == 201
+        body = resp.json()
+        assert body["name"] == "Night Owls"
+        assert body["isMember"] is True
+        assert body["memberCount"] == 1
+
+        listing = client.get("/v1/groups", headers=AUTH_A).json()
+        assert listing["total"] == 2  # seed group + the new one
+
+        members = client.get(
+            f"/v1/groups/{body['groupId']}/members", headers=AUTH_A).json()
+        assert members["items"] == [ALPHA]
+
+    def test_duplicate_name_conflict(self, db_session, client):
+        from src.infrastructure.middleware.rate_limit import reset
+        reset()
+        _seed(db_session)
+        resp = client.post(
+            "/v1/groups", json={"name": "Islamabad Wildlife Squad"},
+            headers=AUTH_A)
+        assert resp.status_code == 409
+
+    def test_name_too_short_rejected(self, db_session, client):
+        from src.infrastructure.middleware.rate_limit import reset
+        reset()
+        _seed(db_session)
+        assert client.post(
+            "/v1/groups", json={"name": "ab"}, headers=AUTH_A
+        ).status_code == 400

@@ -2223,3 +2223,13 @@ cached images, infinite scroll — 165 Flutter tests).
    rollback on failure) on others stories in the viewer; owner pill now
    reads "Seen by N - M reacted". story_viewer.dart split via
    story_viewer_parts.dart (300-line rule). 188 Flutter tests (2 new).
+
+## 2026-07-13 (iter 16) - Create groups from the app
+
+1. POST /v1/groups: validated name (3-80) + description (<=280),
+   duplicate-name 409, rate limit 5/day, creator auto-added as admin
+   member (user row ensured first). 200 API tests (3 new).
+2. Flutter: GroupsListScreen "New group" FAB opens a create sheet
+   (own-controller StatefulWidget so the sheet exit animation is safe);
+   on success the list refreshes and the new group opens immediately.
+   189 Flutter tests (1 new), analyze clean.
