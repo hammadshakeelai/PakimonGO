@@ -2233,3 +2233,15 @@ cached images, infinite scroll — 165 Flutter tests).
    (own-controller StatefulWidget so the sheet exit animation is safe);
    on success the list refreshes and the new group opens immediately.
    189 Flutter tests (1 new), analyze clean.
+
+## 2026-07-13 (iter 17) - Real HUD streak + file-size debt cleared
+
+1. Map HUD header now shows the REAL daily streak (was V2Dummy
+   streakDays) - fetches profile at HUD init, flame lights when the
+   streak is alive, "Start a streak!" nudge otherwise; trust label from
+   real trustState. 2 new HUD tests.
+2. Debt sweep: field_guide_screen 336 -> 143 (field_guide_parts.dart:
+   GuideRings/GuideEntryCard/GuideLockedCard) and capture_review_screen
+   365 -> 242 (capture_review_parts.dart: CaptureHero/
+   LocationPrivacyNote/SafetyRulesWrap). ALL lib source files are now
+   at or under 300 lines. 191 Flutter tests, analyze clean.
