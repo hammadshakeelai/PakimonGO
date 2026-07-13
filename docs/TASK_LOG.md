@@ -2280,3 +2280,12 @@ during story transitions); no app defects found.
 2. collection_test.dart (311) split into collection_test +
    collection_screen_test + shared collection_test_helpers - the LAST
    file over the 300-line rule anywhere in either repo tree is gone.
+
+## 2026-07-14 (iter 21) - Game juice: haptics + On Fire badge
+
+1. HapticFeedback on the fun beats: post reaction pills (light), story
+   emoji reactions (light), group join/leave (light), confetti burst
+   (medium "party thump").
+2. Fifth profile achievement "On Fire" - earned at a 3-day best streak,
+   dimmed until then (real streak data from /users/me). 194 Flutter
+   tests (2 new), analyze clean.
