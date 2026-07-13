@@ -2297,3 +2297,14 @@ fires a one-shot confetti burst (with the medium haptic thump baked
 into ConfettiBurst) - once per screen visit, never re-firing when
 switching tabs back and forth. 194 Flutter tests, analyze clean,
 group_screen still under the 300-line rule (285).
+
+## 2026-07-14 (iter 23) - 3D map on the V2 HUD (v1 parity, user request)
+
+1. The V2 map now opens with a cinematic 3D camera over Islamabad
+   (zoom 15.5, pitch 60, slight bearing) so Mapbox Standard renders 3D
+   buildings/terrain from the first frame - the v1 AR-game look.
+2. Camera auto-fit gained v1-parity street bias via a pure, tested
+   cameraTierFor(spread): tight clusters 16/55deg, neighborhoods 14/55,
+   the demo-world spread 12.5/55 (was 11.5/flat - the 3D pitch never
+   actually triggered on real data before); wide spreads stay flat.
+   198 Flutter tests (4 new), analyze clean.
