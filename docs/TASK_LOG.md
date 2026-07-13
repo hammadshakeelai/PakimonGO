@@ -2333,3 +2333,9 @@ group_screen still under the 300-line rule (285).
    map/Nearby Activity (own markers first, deduped; the community layer
    is optional and non-fatal on failure). A fresh player no longer
    opens onto an empty world. 203 Flutter tests (2 new).
+
+## 2026-07-14 (iter 26) - Status-colored map markers (v1 parity)
+
+Marker circles on the living map are now colored by scoring status via
+the pure markerColorFor(): scored green, ai_evaluated orange, capped
+blue, unknown grey. 204 Flutter tests (1 new), analyze clean.
