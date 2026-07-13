@@ -2308,3 +2308,16 @@ group_screen still under the 300-line rule (285).
    the demo-world spread 12.5/55 (was 11.5/flat - the 3D pitch never
    actually triggered on real data before); wide spreads stay flat.
    198 Flutter tests (4 new), analyze clean.
+
+## 2026-07-14 (iter 24) - Rank hub podium + V2 tree size sweep
+
+1. Game-style top-3 podium above the leaderboard: gold center stand
+   (tallest, crowned), silver left, bronze right, avatars + points,
+   "You" highlighting; hidden under three entries. Shown for every
+   scope with enough rangers.
+2. Discovered v1's pre_task_check never scanned the V2 repo tree:
+   rank_hub_screen was 428 lines. Split into rank_hub_parts.dart
+   (RankPodium/RankRow/SeasonCard; screen 428 -> ~250) and moved the
+   camera helpers to map_camera.dart (map_hud_screen 312 -> under 300).
+   Full V2 lib sweep now reports zero files over 300. 201 Flutter
+   tests (3 new), analyze clean.
