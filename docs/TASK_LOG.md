@@ -2255,3 +2255,17 @@ cached images, infinite scroll — 165 Flutter tests).
 2. Launcher label cleaned "PakimonGO V2" -> "PakimonGO". APKs rebuilt
    and re-uploaded; resource-only change, all 191 Flutter tests remain
    green.
+
+## 2026-07-14 (iter 19) - Emulator verification tour of iters 12-18
+
+Pixel_9a + local API (fresh DB, migrations 001-009 from zero, demo seed)
++ debug APK. Verified on-device: paw launcher icon (splash + home dock);
+HUD real streak nudge ("Start a streak!") + real trust label; post
+detail opened from feed photo tap, inline comment posted (count synced
+back to feed) and Wow reaction persisted; story viewer emoji bar - two
+fire reactions confirmed server-side via owner views API (owners
+notified); group created from the app ("Emulator Explorers", creator
+admin, opened as Joined); Margalla Quests tab live (Ridge Points Push
+640/800 pts 7d left; Trail Species Hunt 11/8 Complete!). Field Guide
+empty state clean post-split. Known emulator flakiness only (taps
+during story transitions); no app defects found.
