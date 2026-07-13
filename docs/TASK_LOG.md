@@ -2289,3 +2289,11 @@ during story transitions); no app defects found.
 2. Fifth profile achievement "On Fire" - earned at a 3-day best streak,
    dimmed until then (real streak data from /users/me). 194 Flutter
    tests (2 new), analyze clean.
+
+## 2026-07-14 (iter 22) - Quest-complete celebration
+
+Opening a group Quests tab that shows at least one completed quest now
+fires a one-shot confetti burst (with the medium haptic thump baked
+into ConfettiBurst) - once per screen visit, never re-firing when
+switching tabs back and forth. 194 Flutter tests, analyze clean,
+group_screen still under the 300-line rule (285).
