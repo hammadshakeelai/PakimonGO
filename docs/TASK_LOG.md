@@ -2245,3 +2245,13 @@ cached images, infinite scroll — 165 Flutter tests).
    365 -> 242 (capture_review_parts.dart: CaptureHero/
    LocationPrivacyNote/SafetyRulesWrap). ALL lib source files are now
    at or under 300 lines. 191 Flutter tests, analyze clean.
+
+## 2026-07-13 (iter 18) - Brand identity: launcher icon + app name
+
+1. Custom launcher icon (lime paw print on deep forest green with a
+   soft glow, 22% rounded corners) generated programmatically at 8x
+   supersampling and written to all 5 Android mipmap densities
+   (48-192px). Generator script kept in session scratchpad.
+2. Launcher label cleaned "PakimonGO V2" -> "PakimonGO". APKs rebuilt
+   and re-uploaded; resource-only change, all 191 Flutter tests remain
+   green.
