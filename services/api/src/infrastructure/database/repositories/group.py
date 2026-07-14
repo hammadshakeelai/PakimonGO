@@ -3,7 +3,7 @@ from __future__ import annotations
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import Group, GroupMember, User
+from ..models import Group, GroupMember, Submission, User
 
 
 def member_count(db: Session, group_id: str) -> int:
@@ -29,12 +29,29 @@ def is_member(db: Session, group_id: str, user_id: str) -> bool:
     )
 
 
+def _cover_media_asset(db: Session, group_id: str) -> str | None:
+    """Live cover photo: the newest PUBLIC scored capture by any member."""
+    row = (
+        db.query(Submission.primary_media_asset_id)
+        .join(GroupMember, GroupMember.user_id == Submission.user_id)
+        .filter(
+            GroupMember.group_id == group_id,
+            Submission.visibility == "public",
+            Submission.status.in_(["scored", "capped"]),
+        )
+        .order_by(Submission.created_at.desc())
+        .first()
+    )
+    return row[0] if row else None
+
+
 def _to_dict(db: Session, g: Group, viewer_id: str | None) -> dict:
     return {
         "groupId": g.id,
         "name": g.name,
         "description": g.description,
         "coverAsset": g.cover_asset,
+        "coverMediaAssetId": _cover_media_asset(db, g.id),
         "isPublic": g.is_public,
         "memberCount": member_count(db, g.id),
         "isMember": is_member(db, g.id, viewer_id) if viewer_id else False,

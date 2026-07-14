@@ -170,3 +170,21 @@ class TestGroupCreation:
         assert client.post(
             "/v1/groups", json={"name": "ab"}, headers=AUTH_A
         ).status_code == 400
+
+
+class TestGroupCover:
+    def test_cover_is_latest_member_public_capture(self, db_session, client):
+        g = _seed(db_session)  # beta is a member
+        first = _scored(db_session, BETA, 30)
+        first.primary_media_asset_id = "asset_first"
+        latest = _scored(db_session, BETA, 55)
+        latest.primary_media_asset_id = "asset_latest"
+        db_session.commit()
+
+        detail = client.get(f"/v1/groups/{g.id}", headers=AUTH_A).json()
+        assert detail["coverMediaAssetId"] == "asset_latest"
+
+    def test_cover_none_without_member_captures(self, db_session, client):
+        g = _seed(db_session)
+        detail = client.get(f"/v1/groups/{g.id}", headers=AUTH_A).json()
+        assert detail["coverMediaAssetId"] is None

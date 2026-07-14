@@ -2339,3 +2339,13 @@ group_screen still under the 300-line rule (285).
 Marker circles on the living map are now colored by scoring status via
 the pure markerColorFor(): scored green, ai_evaluated orange, capped
 blue, unknown grey. 204 Flutter tests (1 new), analyze clean.
+
+## 2026-07-14 (iter 27) - Live group cover photos
+
+1. Group list/detail payloads gain coverMediaAssetId - the newest
+   PUBLIC scored capture by any member - so every community cover is a
+   real photo that evolves with its members activity. 206 API tests
+   (2 new).
+2. Flutter: groups list cards + the group hero render the live cover
+   via CachedNetworkImage with the bundled deer as a graceful fallback
+   (new/empty groups). 204 Flutter tests, analyze clean.
