@@ -2349,3 +2349,12 @@ blue, unknown grey. 204 Flutter tests (1 new), analyze clean.
 2. Flutter: groups list cards + the group hero render the live cover
    via CachedNetworkImage with the bundled deer as a graceful fallback
    (new/empty groups). 204 Flutter tests, analyze clean.
+
+## 2026-07-14 (iter 28) - First-run coach marks
+
+Welcome overlay on the first launch after login: the three beats of
+the game loop (capture wildlife / watch the living map / join the
+community), a "Lets go!" dismiss, and a wildlife-respect footer.
+Persisted via SharedPrefsCoachMarksStore (injectable in-memory store
+for tests, StartTabStore pattern); shown once, ever. 206 Flutter tests
+(2 new), analyze clean.
