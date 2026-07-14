@@ -2365,3 +2365,11 @@ pubspec bumped 2.0.0+1 -> 2.1.0+2; new GitHub release v2.1.0-alpha on
 PakimonGO-V2 with full release notes covering iters 12-28 (3D living
 map, quests, streaks, story reactions, post detail, group creation,
 live covers, podium, coach marks, branding) + the three fresh APKs.
+
+## 2026-07-14 (iter 30) - Profile grid tap-through + group refresh
+
+1. Tapping a capture in the own-profile grid now opens its detail
+   sheet (photo, species, points, coarse cell) - built directly from
+   the typed SubmissionResponse. 207 Flutter tests (1 new).
+2. GroupScreen gained pull-to-refresh (roster/board/feed/quests all
+   reload). Analyze clean.
