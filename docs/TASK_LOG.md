@@ -2390,3 +2390,15 @@ are away and resumes on return - this also fixes a latent bug where
 the timer could complete behind the pushed screen and pop the wrong
 route. UserProfileScreen.open now returns the push future. 209 Flutter
 tests (1 new), analyze clean.
+
+## 2026-07-16 (iter 33) - Species emoji on the living map
+
+Every sighting now wears its species: pure speciesEmojiFor() maps
+genus/keyword to a family emoji (raptor, owl, flamingo, waterbird,
+parrot, songbird, butterfly, lizard, turtle, fox, deer, goat, monkey -
+paw fallback), rasterized to PNG via TextPainter (Mapbox glyphs cannot
+render color emoji) and drawn as tappable PointAnnotations above the
+status-colored circles, with per-emoji byte caching. Caught a real
+substring bug in review: "Capra falconeri" (markhor) contains "falco" -
+goat check now runs before raptors. 212 Flutter tests (3 new; gotcha:
+dart:ui toImage in widget tests needs tester.runAsync). Analyze clean.
