@@ -2381,3 +2381,12 @@ The feed's first load now shows three pulsing post-shaped skeletons
 opacity pulse, zero dependencies) instead of a bare spinner. 208
 Flutter tests (1 new; note: repeating animations must be pumped with
 fixed frames, never pumpAndSettle), analyze clean.
+
+## 2026-07-16 (iter 32) - Story swipe-up to poster profile
+
+Swiping up in the story viewer opens the poster profile (with a subtle
+"^ Profile" hint on others stories). The story timer pauses while you
+are away and resumes on return - this also fixes a latent bug where
+the timer could complete behind the pushed screen and pop the wrong
+route. UserProfileScreen.open now returns the push future. 209 Flutter
+tests (1 new), analyze clean.
