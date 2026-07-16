@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import Comment, Reaction, Submission
+from ..models import Comment, CommentLike, Reaction, Submission
 
 REACTION_KINDS = {"wow", "cute", "rare", "safe_shot"}
 MAX_COMMENT_LEN = 500
@@ -108,23 +108,83 @@ def create_comment(
 
 
 def get_comments(
-    db: Session, submission_id: str, limit: int = 50, offset: int = 0
+    db: Session,
+    submission_id: str,
+    limit: int = 50,
+    offset: int = 0,
+    viewer_id: str | None = None,
 ) -> tuple[list[dict], int]:
     query = db.query(Comment).filter(
         Comment.submission_id == submission_id, Comment.deleted_at.is_(None)
     )
     total = query.count()
     rows = query.order_by(Comment.created_at.asc()).limit(limit).offset(offset).all()
+    comment_ids = [c.id for c in rows]
+    like_counts: dict[str, int] = {}
+    my_likes: set[str] = set()
+    if comment_ids:
+        for cid, count in (
+            db.query(CommentLike.comment_id, func.count(CommentLike.user_id))
+            .filter(CommentLike.comment_id.in_(comment_ids))
+            .group_by(CommentLike.comment_id)
+            .all()
+        ):
+            like_counts[cid] = count
+        if viewer_id:
+            my_likes = {
+                r[0]
+                for r in db.query(CommentLike.comment_id)
+                .filter(
+                    CommentLike.user_id == viewer_id,
+                    CommentLike.comment_id.in_(comment_ids),
+                )
+                .all()
+            }
     items = [
         {
             "commentId": c.id,
             "userId": c.user_id,
             "body": c.body,
             "createdAt": c.created_at.isoformat() if c.created_at else None,
+            "likeCount": like_counts.get(c.id, 0),
+            "myLike": c.id in my_likes,
         }
         for c in rows
     ]
     return items, total
+
+
+def toggle_comment_like(
+    db: Session, user_id: str, comment_id: str
+) -> dict | None:
+    """Toggle the caller's heart on a comment. Returns the fresh state,
+    or None when the comment is missing/deleted."""
+    comment = (
+        db.query(Comment)
+        .filter(Comment.id == comment_id, Comment.deleted_at.is_(None))
+        .first()
+    )
+    if comment is None:
+        return None
+    existing = (
+        db.query(CommentLike)
+        .filter(CommentLike.comment_id == comment_id, CommentLike.user_id == user_id)
+        .first()
+    )
+    if existing is None:
+        db.add(CommentLike(comment_id=comment_id, user_id=user_id))
+        liked = True
+    else:
+        db.delete(existing)
+        liked = False
+    db.commit()
+    count = (
+        db.query(func.count(CommentLike.user_id))
+        .filter(CommentLike.comment_id == comment_id)
+        .scalar()
+        or 0
+    )
+    return {"liked": liked, "likeCount": count}
 
 
 def soft_delete_comment(db: Session, user_id: str, comment_id: str) -> bool:

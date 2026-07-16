@@ -200,3 +200,44 @@ class TestPublicProfile:
     def test_unknown_user_404(self, db_session, client):
         _seed(db_session)
         assert client.get("/v1/users/ghost/profile", headers=AUTH).status_code == 404
+
+
+class TestCommentLikes:
+    def _comment(self, db, client):
+        sub = _seed(db)
+        return client.post(
+            f"/v1/submissions/{sub.id}/comments",
+            json={"body": "What a shot!"}, headers=AUTH_OTHER,
+        ).json()["commentId"]
+
+    def test_toggle_heart_on_and_off(self, db_session, client):
+        cid = self._comment(db_session, client)
+        on = client.post(f"/v1/comments/{cid}/like", headers=AUTH).json()
+        assert on["liked"] is True
+        assert on["likeCount"] == 1
+
+        off = client.post(f"/v1/comments/{cid}/like", headers=AUTH).json()
+        assert off["liked"] is False
+        assert off["likeCount"] == 0
+
+    def test_comments_carry_like_state(self, db_session, client):
+        sub = _seed(db_session)
+        cid = client.post(
+            f"/v1/submissions/{sub.id}/comments",
+            json={"body": "What a shot!"}, headers=AUTH_OTHER,
+        ).json()["commentId"]
+        client.post(f"/v1/comments/{cid}/like", headers=AUTH)
+
+        items = client.get(
+            f"/v1/submissions/{sub.id}/comments", headers=AUTH).json()["items"]
+        assert items[0]["likeCount"] == 1
+        assert items[0]["myLike"] is True
+
+        other = client.get(
+            f"/v1/submissions/{sub.id}/comments", headers=AUTH_OTHER).json()["items"]
+        assert other[0]["likeCount"] == 1
+        assert other[0]["myLike"] is False
+
+    def test_missing_comment_404(self, db_session, client):
+        assert client.post(
+            "/v1/comments/ghost/like", headers=AUTH).status_code == 404

@@ -2402,3 +2402,13 @@ status-colored circles, with per-emoji byte caching. Caught a real
 substring bug in review: "Capra falconeri" (markhor) contains "falco" -
 goat check now runs before raptors. 212 Flutter tests (3 new; gotcha:
 dart:ui toImage in widget tests needs tester.runAsync). Analyze clean.
+
+## 2026-07-17 (iter 34) - Comment hearts
+
+Migration 010 comment_likes (one heart per user per comment, toggled).
+get_comments now carries likeCount + myLike (batched, no N+1);
+POST /v1/comments/{id}/like. Flutter: heart with live count on every
+CommentTile (sheet + post detail), optimistic toggle with rollback.
+209 API tests (3 new) + 214 Flutter tests (2 new), analyze clean.
+(Notifications pull-to-refresh was already in place - queue item
+closed as done.)

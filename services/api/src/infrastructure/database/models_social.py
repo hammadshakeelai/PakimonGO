@@ -42,6 +42,16 @@ class Comment(Base):
     )
 
 
+class CommentLike(Base):
+    """Heart on a comment; one per user per comment (tap again removes)."""
+
+    __tablename__ = "comment_likes"
+
+    comment_id = Column(String(36), ForeignKey("comments.id"), primary_key=True)
+    user_id = Column(String(36), ForeignKey("users.id"), primary_key=True)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
 class Story(Base):
     """24-hour story; expiry is enforced by filtering expires_at > now."""
 

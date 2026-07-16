@@ -14,6 +14,7 @@ from src.infrastructure.database.repositories.social import (
     get_reaction_summary,
     get_submission_owner,
     soft_delete_comment,
+    toggle_comment_like,
     toggle_reaction,
 )
 from src.infrastructure.database.session import get_db
@@ -81,7 +82,8 @@ def list_comments(
     db: Session = Depends(get_db),
     user: UserContext = Depends(get_current_user),
 ) -> dict:
-    items, total = get_comments(db, submission_id, limit=limit, offset=offset)
+    items, total = get_comments(
+        db, submission_id, limit=limit, offset=offset, viewer_id=user.user_id)
     return {
         "items": items,
         "pagination": {"limit": limit, "offset": offset, "total": total},
@@ -126,6 +128,19 @@ def post_comment(
         "body": comment.body,
         "createdAt": comment.created_at.isoformat() if comment.created_at else None,
     }
+
+
+@router.post("/comments/{comment_id}/like", status_code=201)
+def like_comment(
+    comment_id: str,
+    db: Session = Depends(get_db),
+    user: UserContext = Depends(get_current_user),
+) -> dict:
+    """FR-SOC-009: toggle a heart on a comment."""
+    result = toggle_comment_like(db, user.user_id, comment_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return {"commentId": comment_id, **result}
 
 
 @router.delete("/comments/{comment_id}")

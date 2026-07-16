@@ -208,6 +208,7 @@ class IdempotencyKey(Base):
 # so `from ..models import Comment` etc. keeps working everywhere.
 from .models_social import (  # noqa: E402,F401
     Comment,
+    CommentLike,
     Follow,
     Group,
     GroupMember,
