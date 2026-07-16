@@ -2427,3 +2427,14 @@ a minute, driven by the scroll listener - no polling timers) detects
 fresher captures upstream and floats a "New captures" pill; tapping it
 scrolls to the top and refreshes. hasNewer clears on any full refresh.
 217 Flutter tests (2 new), analyze clean.
+
+## 2026-07-17 (iter 37) - Quest-complete notifications
+
+When a scored capture pushes a group quest to (or past) its target,
+every member gets a "Quest complete!" notification (type
+quest_complete, reference group) - fired from the scoring worker,
+never blocking scoring, deduped once per quest window (scoped to
+starts_at so re-armed weekly quests celebrate again). Notifications
+deep-link "View group" straight into the group page (GroupRepository
+threaded shell -> HUD -> notifications). 211 API tests (2 new) + 217
+Flutter tests, analyze clean.

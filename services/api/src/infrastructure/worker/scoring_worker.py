@@ -89,6 +89,16 @@ def process_score_job(job: Job, scoring_service: AIScoringService | None = None)
                 reference_type="submission",
                 reference_id=submission_id,
             )
+            # This capture may have pushed a group quest over the line —
+            # celebrate with the whole squad (never blocks scoring).
+            try:
+                from src.infrastructure.database.repositories.quest import (
+                    notify_completed_quests,
+                )
+
+                notify_completed_quests(db, user_id)
+            except Exception:  # noqa: BLE001
+                pass
     finally:
         db.close()
 

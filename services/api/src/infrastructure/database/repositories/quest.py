@@ -5,7 +5,15 @@ from datetime import datetime, timezone
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import GroupQuest, ScoreEvent, Submission, SubmissionAttribute
+from ..models import (
+    Group,
+    GroupMember,
+    GroupQuest,
+    Notification,
+    ScoreEvent,
+    Submission,
+    SubmissionAttribute,
+)
 
 QUEST_KINDS = {"captures", "species", "points"}
 
@@ -79,6 +87,60 @@ def list_group_quests(
             }
         )
     return items
+
+
+def notify_completed_quests(db: Session, user_id: str) -> int:
+    """Called after one of ``user_id``'s captures is scored: any active
+    quest in their groups that has now reached its target notifies every
+    member (once per quest window — deduped against the notification
+    log, scoped to the quest's starts_at so re-armed weekly quests can
+    celebrate again). Returns the number of notifications created."""
+    from .group import group_member_ids
+    from .notification import create_notification
+
+    group_ids = [
+        r[0]
+        for r in db.query(GroupMember.group_id)
+        .filter(GroupMember.user_id == user_id)
+        .all()
+    ]
+    if not group_ids:
+        return 0
+    now = datetime.now(timezone.utc)
+    quests = (
+        db.query(GroupQuest)
+        .filter(GroupQuest.group_id.in_(group_ids), GroupQuest.ends_at > now)
+        .all()
+    )
+    sent = 0
+    for quest in quests:
+        members = group_member_ids(db, quest.group_id)
+        if _measure(db, quest, members) < quest.target:
+            continue
+        marker = f'"{quest.title}"'
+        already = db.query(Notification.id).filter(
+            Notification.notification_type == "quest_complete",
+            Notification.reference_id == quest.group_id,
+            Notification.body.like(f"{marker}%"),
+        )
+        if quest.starts_at is not None:
+            already = already.filter(Notification.created_at >= quest.starts_at)
+        if already.first() is not None:
+            continue
+        group = db.query(Group).filter(Group.id == quest.group_id).first()
+        group_name = group.name if group else "your group"
+        for member in members:
+            create_notification(
+                db,
+                user_id=member,
+                notification_type="quest_complete",
+                title="Quest complete! 🎉",
+                body=f"{marker} is done — {group_name} pulled it off!",
+                reference_type="group",
+                reference_id=quest.group_id,
+            )
+            sent += 1
+    return sent
 
 
 def create_quest(

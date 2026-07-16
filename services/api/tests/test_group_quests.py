@@ -151,3 +151,39 @@ class TestGroupQuests:
     def test_missing_group_404(self, db_session, client):
         _seed_group(db_session)
         assert client.get("/v1/groups/ghost/quests", headers=AUTH_A).status_code == 404
+
+
+class TestQuestCompleteNotifications:
+    def test_squad_notified_once_when_target_reached(self, db_session, client):
+        from src.infrastructure.database.models import Notification
+        from src.infrastructure.database.repositories.quest import (
+            notify_completed_quests,
+        )
+
+        g = _seed_group(db_session)  # alpha + beta members
+        _week_quest(db_session, g.id, "captures", 2)
+
+        _scored(db_session, ALPHA, 30, species="Markhor")
+        assert notify_completed_quests(db_session, ALPHA) == 0  # 1/2
+
+        _scored(db_session, BETA, 40, species="Red Fox")
+        assert notify_completed_quests(db_session, BETA) == 2  # both members
+
+        notifs = db_session.query(Notification).filter(
+            Notification.notification_type == "quest_complete").all()
+        assert {n.user_id for n in notifs} == {ALPHA, BETA}
+        assert all(n.reference_type == "group" for n in notifs)
+        assert all(n.reference_id == g.id for n in notifs)
+
+        # Overshooting later never re-fires for the same window.
+        _scored(db_session, ALPHA, 20, species="Hoopoe")
+        assert notify_completed_quests(db_session, ALPHA) == 0
+
+    def test_non_member_captures_never_notify(self, db_session, client):
+        from src.infrastructure.database.repositories.quest import (
+            notify_completed_quests,
+        )
+
+        _seed_group(db_session)
+        _scored(db_session, GAMMA, 99)
+        assert notify_completed_quests(db_session, GAMMA) == 0
