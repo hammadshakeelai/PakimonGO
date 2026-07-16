@@ -2438,3 +2438,11 @@ starts_at so re-armed weekly quests celebrate again). Notifications
 deep-link "View group" straight into the group page (GroupRepository
 threaded shell -> HUD -> notifications). 211 API tests (2 new) + 217
 Flutter tests, analyze clean.
+
+## 2026-07-17 (iter 38) - Add to Story from the Score Reveal
+
+One tap after scoring sends the fresh capture to your 24h story
+(caption = species), button flips to On-your-story, error snackbar on
+failure. New RevealActions part keeps score_reveal_screen under the
+300-line rule (298); SocialRepository threaded shell -> capture review
+-> reveal. 218 Flutter tests (1 new), analyze clean.
