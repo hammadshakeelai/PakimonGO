@@ -2419,3 +2419,11 @@ Instagram parity: double-tapping any post photo fires a Wow reaction
 (never un-reacts) with a scaling star burst + medium haptic. New
 shared TapBurst widget (single tap still opens the post detail; the
 gesture arena disambiguates). 215 Flutter tests (1 new), analyze clean.
+
+## 2026-07-17 (iter 36) - Feed new-posts pill
+
+While browsing deep in the feed, a throttled head-compare (at most once
+a minute, driven by the scroll listener - no polling timers) detects
+fresher captures upstream and floats a "New captures" pill; tapping it
+scrolls to the top and refreshes. hasNewer clears on any full refresh.
+217 Flutter tests (2 new), analyze clean.
