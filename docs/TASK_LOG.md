@@ -2373,3 +2373,11 @@ live covers, podium, coach marks, branding) + the three fresh APKs.
    the typed SubmissionResponse. 207 Flutter tests (1 new).
 2. GroupScreen gained pull-to-refresh (roster/board/feed/quests all
    reload). Analyze clean.
+
+## 2026-07-16 (iter 31) - Feed skeleton shimmer
+
+The feed's first load now shows three pulsing post-shaped skeletons
+(avatar + name bars, photo block, reaction pill row - one shared
+opacity pulse, zero dependencies) instead of a bare spinner. 208
+Flutter tests (1 new; note: repeating animations must be pumped with
+fixed frames, never pumpAndSettle), analyze clean.
