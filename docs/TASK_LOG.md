@@ -2412,3 +2412,10 @@ CommentTile (sheet + post detail), optimistic toggle with rollback.
 209 API tests (3 new) + 214 Flutter tests (2 new), analyze clean.
 (Notifications pull-to-refresh was already in place - queue item
 closed as done.)
+
+## 2026-07-17 (iter 35) - Double-tap to Wow
+
+Instagram parity: double-tapping any post photo fires a Wow reaction
+(never un-reacts) with a scaling star burst + medium haptic. New
+shared TapBurst widget (single tap still opens the post detail; the
+gesture arena disambiguates). 215 Flutter tests (1 new), analyze clean.
