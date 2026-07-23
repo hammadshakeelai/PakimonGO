@@ -2474,3 +2474,16 @@ file (a plugin with auto-running SessionStart/SessionEnd bash hooks), not
 a flaky outage. Correct path is the real /plugin marketplace add + /plugin
 install flow, which needs the user's own scope-selection approval - left
 as an instruction for the user rather than forced.
+
+## 2026-07-24 (iter 40) - Accessibility pass part 2: selected-state on reactions
+
+Follow-up to iter 39. PostReactionRow (Wow/Cute/Rare/Safe on every post)
+and StoryReactionBar (heart/fire/wow/clap on stories) changed color/scale
+when you had reacted, but never told assistive tech which one was yours -
+both now wrap each pill in Semantics(button, selected, label) with
+ExcludeSemantics on the decorative icon/text beneath it, keyed for
+testing (reaction_$kind / story_react_semantics_$kind). This also
+corrects an overstated iter-39 tech-debt note: double-tap-to-Wow was never
+the only way to react - PostReactionRow already gave every post a fully
+tappable, text-labeled button row; it just was not marked selected.
+224 V2 Flutter tests (2 new), analyze clean.

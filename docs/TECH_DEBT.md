@@ -78,18 +78,22 @@ Current debt items:
 
 - Area: V2 Flutter app (PakimonGO-V2 repo) + shared collection_screen.dart.
 - Introduced: iter 39 (2026-07-24) closed the icon-button/tooltip and
-  bottom-nav-selected-state gaps, but did not attempt a full pass.
+  bottom-nav-selected-state gaps. Iter 40 (same day) closed the "selected
+  reaction" gap on PostReactionRow and StoryReactionBar (both now expose
+  `Semantics(selected:)` instead of only a visual color/scale change).
+  Correction to the original iter-39 note: double-tap-to-Wow already had a
+  non-gesture fallback (the persisted PostReactionRow buttons below every
+  photo) - it just wasn't marked "selected" for assistive tech, which iter
+  40 fixed. No new gesture-only dead end was found.
 - Reason: scoped to the lowest-risk, most-used surfaces first (nav, HUD
-  header, comments, story viewer, profile, collection) since this ships to
-  a public prod app every cycle unattended.
+  header, comments, story viewer, profile, collection, reactions) since
+  this ships to a public prod app every cycle unattended.
 - Risk: still open - Mapbox map markers (PointAnnotations drawn as raw PNG
-  bytes) have no semantic exposure at all; the double-tap-to-Wow gesture on
-  feed photos has no single-tap/long-press alternative for screen-reader
-  users; no color-contrast audit has been run against WCAG AA.
-- Removal plan: next accessibility iteration - add a talkback-reachable
-  Wow action (e.g. a long-press context action or an explicit button) and
-  investigate Mapbox annotation semantics or a fallback list view for map
-  sightings.
+  bytes) have no semantic exposure at all, so the living map has no
+  screen-reader path; no color-contrast audit has been run against WCAG AA.
+- Removal plan: next accessibility iteration - investigate Mapbox
+  annotation semantics or a fallback list view for map sightings, then a
+  contrast pass over V2Tokens' dark palette.
 - Owner: V2 improvement loop.
 - Review date: next accessibility-focused iteration.
 
