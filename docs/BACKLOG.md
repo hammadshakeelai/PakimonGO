@@ -49,7 +49,9 @@ and larger post-launch features.
   reactions, group quests, notification filters, rank scopes, report/block, and
   appeal.
 - Accessibility pass across mobile screens: semantic labels, screen-reader
-  order, tap targets, and widget tests.
+  order, tap targets, and widget tests. Partially done (iter 39, 2026-07-24):
+  bottom nav selected-state + icon-button tooltips. Still open: Mapbox
+  marker semantics, a non-gesture Wow alternative, WCAG contrast audit.
 - Loading shimmer/skeleton states where the app still uses generic spinners.
 - Automated real-device E2E plan and scripts for camera, map, upload, auth, and
   scoring.

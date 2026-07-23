@@ -121,6 +121,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     icon: Icon(vm.sortOrder == 'desc'
                         ? Icons.arrow_downward
                         : Icons.arrow_upward),
+                    tooltip: vm.sortOrder == 'desc'
+                        ? 'Sorted descending, tap for ascending'
+                        : 'Sorted ascending, tap for descending',
                     onPressed: () => vm.setSortOrder(
                         vm.sortOrder == 'desc' ? 'asc' : 'desc'),
                   ),

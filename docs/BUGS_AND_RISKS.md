@@ -84,6 +84,26 @@ scripts.
 - Keep V2 social/game UI ideas in concept/design until they are reviewed against
   V1 screenshots, safety, moderation, privacy, and traceability gates.
 
+## R-001: CronCreate auto-resume timer does not survive session end
+
+- Area: agent-driven autonomous continuation loop (V2 improvement iterations).
+- Severity: Medium (breaks the "keep going unattended" workflow, not the product).
+- Likelihood: Certain - confirmed on 2026-07-24 by a 7-day gap in TASK_LOG.md
+  between iter 38 (2026-07-17) and iter 39, with no cron firing in between.
+- Detection: `CronList` returned no scheduled jobs on resume, even though a
+  one-shot timer was armed at the end of iter 38. CronCreate's own tool
+  description states jobs are session-only and are deleted when the session
+  ends - they do not persist across a closed CLI window/session boundary.
+- Mitigation: for genuine unattended multi-day continuation, use the
+  `RemoteTrigger`/`schedule` cloud-routine mechanism instead (runs in
+  Anthropic's cloud, independent of any local session), not `CronCreate`.
+  Creating a recurring cloud routine with push access to a public repo is a
+  standing-configuration decision that needs the user's explicit sign-off
+  (repo scope, cadence, model) - proposed to the user, not created silently.
+- Owner: agent loop driver.
+- Status: open - local CronCreate re-armed for same-session continuity only;
+  cloud routine setup pending user confirmation.
+
 ## Risk Entry Template
 
 ```md

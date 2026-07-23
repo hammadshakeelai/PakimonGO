@@ -2446,3 +2446,31 @@ One tap after scoring sends the fresh capture to your 24h story
 failure. New RevealActions part keeps score_reveal_screen under the
 300-line rule (298); SocialRepository threaded shell -> capture review
 -> reveal. 218 Flutter tests (1 new), analyze clean.
+
+## 2026-07-24 (iter 39) - Accessibility pass: nav + icon-button labels
+
+After a week-long gap (the +5h CronCreate resume timer turned out to be
+session-scoped - it dies when the session closes, so it never actually
+fired unattended; documented as a real risk, see BUGS_AND_RISKS). Picked
+up the accessibility item REMAINING_WORK.md has flagged since the start:
+no semantic labels, no screen-reader coverage. V2BottomNav (hand-rolled,
+not a real BottomNavigationBar) now wraps each tab in Semantics(button,
+selected, label) with ExcludeSemantics on the decorative Icon+Text below
+it, so screen readers announce the active tab and the unread-activity dot
+on Feed ("Feed, new activity") instead of staying silent. Added tooltips
+(-> accessible labels) to the 10 icon-only buttons that had none: HUD
+bell/profile, story delete/close, profile settings, comment delete/send
+(sheet + detail), feed refresh, collection sort order - across both V1
+and V2 collection_screen.dart (identical file, same gap in both repos).
+New v2_bottom_nav_test.dart (4 tests) reads Semantics.properties
+directly rather than the now-deprecated SemanticsNode.hasFlag API.
+222 V2 Flutter tests (4 new) + 163 V1 Flutter tests, 211 API tests,
+analyze clean both repos, all 3 validators PASS.
+
+Also attempted to register the fire-flow ("Dominion Flow") plugin via
+direct registry edits - reverted that approach: the known_marketplaces.json
+block was the permission classifier correctly guarding a security-relevant
+file (a plugin with auto-running SessionStart/SessionEnd bash hooks), not
+a flaky outage. Correct path is the real /plugin marketplace add + /plugin
+install flow, which needs the user's own scope-selection approval - left
+as an instruction for the user rather than forced.

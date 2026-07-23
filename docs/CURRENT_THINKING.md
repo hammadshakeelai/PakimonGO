@@ -23,11 +23,16 @@ suite, no durable production object storage, no moderator console or appeals
 workflow, no privacy policy/terms, no app-store package, no production release
 Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
-**Testing posture:** the latest task log records 145 backend tests, 69 scoring
-tests, 162 Flutter tests, and clean Flutter analysis. Treat those as the last
-recorded full-suite counts unless you re-run the suites in the current turn.
-This repo can still hide issues behind mocks; the emulator walkthrough already
-proved that.
+**Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
+scoring tests, 162 Flutter tests. The V2 improvement loop (see
+`docs/TASK_LOG.md` iters 1-39) has since grown this to 211 API tests, 222 V2
+Flutter tests, and 163 V1 Flutter tests as of 2026-07-24, with `flutter
+analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
+Treat those as the last recorded full-suite counts unless you re-run the
+suites in the current turn. This repo can still hide issues behind mocks; the
+emulator walkthrough already proved that, and the accessibility pass (iter
+39) is itself evidence that widget-test-only coverage had missed real
+screen-reader gaps for a long time.
 
 ## Key Insight
 

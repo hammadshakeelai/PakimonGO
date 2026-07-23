@@ -74,6 +74,25 @@ Current debt items:
   documented.
 - Any temporary scoring or moderation rule must include an expiry review date.
 
+## TD-001: Accessibility pass is partial
+
+- Area: V2 Flutter app (PakimonGO-V2 repo) + shared collection_screen.dart.
+- Introduced: iter 39 (2026-07-24) closed the icon-button/tooltip and
+  bottom-nav-selected-state gaps, but did not attempt a full pass.
+- Reason: scoped to the lowest-risk, most-used surfaces first (nav, HUD
+  header, comments, story viewer, profile, collection) since this ships to
+  a public prod app every cycle unattended.
+- Risk: still open - Mapbox map markers (PointAnnotations drawn as raw PNG
+  bytes) have no semantic exposure at all; the double-tap-to-Wow gesture on
+  feed photos has no single-tap/long-press alternative for screen-reader
+  users; no color-contrast audit has been run against WCAG AA.
+- Removal plan: next accessibility iteration - add a talkback-reachable
+  Wow action (e.g. a long-press context action or an explicit button) and
+  investigate Mapbox annotation semantics or a fallback list view for map
+  sightings.
+- Owner: V2 improvement loop.
+- Review date: next accessibility-focused iteration.
+
 ## Debt Entry Template
 
 ```md
