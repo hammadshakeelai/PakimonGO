@@ -3,12 +3,12 @@
 ## Current Bugs
 
 No known blocking bugs are recorded after the latest emulator walkthrough and
-moderation/map hardening pass.
+moderation/map hardening pass. See R-002 below for a real local-dev-only bug
+found and fixed during the 2026-07-25 verification pass.
 
-Latest recorded automated suite in `docs/TASK_LOG.md`: 145 backend tests, 69
-scoring tests, 162 Flutter tests, and `flutter analyze` clean. This file update
-did not re-run those full suites; it re-ran the pre-task guard and validation
-scripts.
+Latest recorded automated suite in `docs/TASK_LOG.md` (iter 44, 2026-07-25):
+211 API tests, 78 scoring tests, 270 V2 + 163 V1 Flutter tests, and
+`flutter analyze` clean on both repos.
 
 ## Repository Health Notes
 
@@ -136,6 +136,15 @@ scripts.
   `alembic stamp head`; re-verified `/v1/leaderboard`, `/v1/feed`,
   `/v1/users/me/collection`, and `/v1/notifications` all return real data
   locally after the fix.
+- Caveat: the `alembic stamp head` marks the dev DB as "at migration 010"
+  because `create_all()` built its schema from the current `models.py` -
+  it does not prove `models.py` and the migration chain (001-010) agree
+  on every column/constraint, only that `create_all()`'s idea of the
+  schema now matches what's on disk. If they've drifted, a future
+  migration 011 would apply against a dev DB shaped slightly differently
+  than one built by replaying 001-010 from scratch on a fresh file. Low
+  risk (Postgres prod runs the real migration chain, not `create_all()`),
+  but worth knowing the stamp is asserted, not independently verified.
 - Owner: local dev tooling.
 - Status: fixed 2026-07-25 (iter 43) - script no longer silently swallows
   this failure mode; a future contributor whose `python` lacks the deps

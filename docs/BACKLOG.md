@@ -58,6 +58,12 @@ and larger post-launch features.
   screens/components should still get semantic labels and a
   `contrastRatio()` check as a matter of course going forward.
 - Loading shimmer/skeleton states where the app still uses generic spinners.
+  DONE for the highest-traffic data screens (iter 44, 2026-07-25): feed
+  (pre-existing), rank hub, notifications, groups list all use content-shaped
+  pulsing skeletons now via shared/widgets/v2/skeleton.dart. Remaining
+  spinners (profile, map error retry, comment sheet, capture review, etc.)
+  are lower-traffic or already have a dedicated empty/error state - revisit
+  only if one reads as jarring in practice.
 - Automated real-device E2E plan and scripts for camera, map, upload, auth, and
   scoring.
 - Moderator console, appeals, takedown/restore workflow, audit review, and

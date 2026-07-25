@@ -25,8 +25,11 @@ Last recorded in `docs/TASK_LOG.md` on 2026-07-06:
   rows, leaderboard filtering, and a Blocked Users screen.
 - Map now uses coarse public locations, Mapbox Standard 3D styling, annotations,
   auto-fit camera behavior, and a capture FAB.
-- Latest recorded automated suite: 145 backend tests, 69 scoring tests, 162
-  Flutter tests, and `flutter analyze` clean.
+- Latest recorded automated suite as of 2026-07-06: 145 backend tests, 69
+  scoring tests, 162 Flutter tests, and `flutter analyze` clean. This is a
+  dated historical snapshot, not the current count - see "Active Task"
+  below for the latest (211 API / 78 scoring / 270 V2 + 163 V1 Flutter as
+  of iter 44, 2026-07-25).
 
 This doc update did not re-run the full backend/scoring/Flutter suites. It did
 re-run the required pre-task guard and doc/JSON/secret validation scripts.

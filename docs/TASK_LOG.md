@@ -2565,3 +2565,36 @@ docs:
   is a blocked action - a secrets file, correctly guarded), so the map
   rendered via the existing `StylizedMapWorld()` fallback rather than the
   real Mapbox surface; that fallback path itself worked correctly.
+
+## 2026-07-25 (iter 44) - Loading shimmers replace bare spinners
+
+Rank hub, notifications, and groups list each showed a plain
+`CircularProgressIndicator` on first load; the feed screen already had a
+proper content-shaped pulsing skeleton, so this brought the other three
+data screens up to the same standard. Extracted the shared pulse/box
+primitives (`SkeletonPulse`, `SkeletonBox`) out of `feed_skeleton.dart`
+into `shared/widgets/v2/skeleton.dart` so all four skeletons share one
+`AnimationController` implementation instead of four near-identical
+copies - `RankBoardSkeleton` (podium blocks + ranked rows),
+`NotificationsSkeleton`, and `GroupsListSkeleton` all build on it.
+Splitting `groups_list_screen.dart`'s create-group bottom sheet out into
+its own file (`create_group_sheet.dart`) was needed along the way - the
+skeleton wiring pushed the screen to 305 lines, over the 300-line limit;
+now 207/101 across the two files. 266 V2 Flutter tests (4 new), analyze
+clean.
+
+Follow-up the same iteration, from a second-opinion review of this exact
+change: the first pass only tested the skeleton widgets standalone, not
+that the real screens actually show them during a genuine loading state
+(the one part of the edit that mattered most, and the one part left
+unverified). Added `loading_state_wiring_test.dart` - a hanging mock
+HTTP client keeps `isLoading` true across pumps for RankHubScreen and
+NotificationsV2Screen, and GroupsListScreen's `_loading` is true from
+`initState` - asserting each shows its skeleton and never a bare
+`CircularProgressIndicator`. Also caught and fixed a real overflow bug
+this surfaced: `NotificationsSkeleton` and `GroupsListSkeleton` had
+fixed-pixel-width bars (160/220/140/90) inside an `Expanded` column,
+which would overflow on narrow (~320dp) phones; both now use
+`double.infinity` plus `FractionallySizedBox` for the shorter second
+line instead of a hardcoded width. Added a 320dp-surface test to lock
+that in. 270 V2 Flutter tests (4 more), analyze clean.
