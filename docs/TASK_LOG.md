@@ -2598,3 +2598,26 @@ which would overflow on narrow (~320dp) phones; both now use
 `double.infinity` plus `FractionallySizedBox` for the shorter second
 line instead of a hardcoded width. Added a 320dp-surface test to lock
 that in. 270 V2 Flutter tests (4 more), analyze clean.
+
+## 2026-07-25 (iter 44, cont'd) - Verified the core game loop end-to-end
+
+The emulator walkthrough earlier this session only covered read paths
+(map, feed, rank, notifications) - the actual capture -> submit -> score
+loop was never exercised, which is more untested surface than any single
+feature. Pushed a generated JPEG to the emulator (`adb push` +
+`MEDIA_SCANNER_SCAN_FILE` broadcast; `MSYS_NO_PATHCONV=1` was needed to
+stop Git Bash mangling `/sdcard/...` paths into Windows paths), picked it
+from the gallery via the app's "pick from gallery" affordance, filled in
+a species guess, and tapped "Submit for Score Reveal" against the
+repaired local backend. Full round-trip worked: upload-intent ->
+complete-upload -> submission -> precheck -> score event -> Score Reveal
+screen ("Wild Capture!", Corvus splendens, 25 pts, status: scored, streak
+started). Confirmed via `GET /v1/submissions` that it persisted
+correctly server-side (correct species/points/status, total count
+incremented). The core game loop is genuinely working end to end, not
+just its read paths.
+
+Note for future emulator sessions: `uiautomator dump` + `pull` gives
+exact element bounds for `input tap` - much more reliable than estimating
+tap coordinates from a screenshot's displayed-vs-actual pixel ratio,
+which produced several missed taps this session before switching to it.
