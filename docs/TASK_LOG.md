@@ -2527,3 +2527,41 @@ external package needed) and `test/core/theme/contrast_test.dart` so a
 future color-token edit can't silently regress this. 262 V2 Flutter
 tests (34 new), analyze clean. This closes every item in TD-001 -
 see docs/TECH_DEBT.md for the full closure note.
+
+## 2026-07-25 (iter 43) - End-to-end verification: backend + emulator walkthrough
+
+User asked to verify the backend and a running app in an emulator - "heavy
+doubts" it actually worked. Ran a full, grounded check rather than trusting
+docs:
+
+- Render prod: `/health/live` and `/health/ready` (database: connected)
+  both 200; `/v1/feed` and `/v1/leaderboard` returned real seeded data.
+  Prod is healthy.
+- Backend test suites: 211/211 API tests, 78/78 scoring-rules tests, both
+  green (run with the Anaconda interpreter - see fix below).
+- Found and fixed a real local-only bug: `run_local.ps1`'s seed step had
+  been silently failing (bare `python` on this machine resolves to an
+  unrelated tool's venv missing sqlalchemy) and the script printed a false
+  "Seed completed" message on any failure, leaving `pakimongo_dev.db`
+  stale since 2026-07-07 - missing every table from migrations 004-010.
+  Repaired the DB (`Base.metadata.create_all()` + `alembic stamp head`)
+  and hardened the script: a preflight dependency check with an
+  actionable error message, and the seed step now fails loudly instead of
+  lying. Recorded as R-002 in `docs/BUGS_AND_RISKS.md`.
+- Built the V2 app and ran it on an Android emulator (Pixel_9a) against
+  the repaired local backend (`flutter run`'s attached debug session
+  dropped mid-launch with no app-side crash in logcat - a sandboxed-shell
+  artifact, not a real bug; switched to `flutter build apk --debug` +
+  `adb install` + `adb shell am start`, which is more robust for a
+  one-off verification run anyway). Logged in with the built-in dev
+  User-ID field (`seed_user_alpha`) and walked through the real running
+  app: Map/HUD (live markers, streak, notification badge), the iter-41
+  "View all sightings" screen (correctly showed all 6 markers vs. the
+  bottom sheet's 3), the marker detail sheet, Feed (reactions, points),
+  Rank/leaderboard (matched the API response exactly), and Notifications
+  (same 4 items as the API). Every screen checked rendered real backend
+  data correctly - no dummy/broken paths found in the core loop.
+- No Mapbox token was available in this session (reading the token file
+  is a blocked action - a secrets file, correctly guarded), so the map
+  rendered via the existing `StylizedMapWorld()` fallback rather than the
+  real Mapbox surface; that fallback path itself worked correctly.

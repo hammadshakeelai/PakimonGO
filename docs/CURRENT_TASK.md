@@ -63,6 +63,15 @@ Backend state: migrations 001-010 (010 = comment_likes), 211 API tests,
 262 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
+**Iter 43 (2026-07-25):** full end-to-end verification at the user's
+request - Render prod confirmed healthy, backend test suites re-run
+green, a real local-dev bug found and fixed (`run_local.ps1` was silently
+masking a failed seed step - see `docs/BUGS_AND_RISKS.md` R-002), and the
+V2 app built + ran on an Android emulator against the repaired local
+backend with a full manual walkthrough (login, map/HUD, the new
+all-sightings list, feed, leaderboard, notifications) - all confirmed
+working against real data, no broken paths found.
+
 ## Current Next Action
 
 Recommended no-credential implementation path (fun/game-feel focus):

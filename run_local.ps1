@@ -40,12 +40,29 @@ Write-Host "  DB: $DbFile" -ForegroundColor Gray
 Write-Host "  PYTHONPATH: $SrcDir" -ForegroundColor Gray
 Write-Host ""
 
+# Preflight: `python` on PATH can resolve to an unrelated environment (a
+# different tool's virtualenv, etc.) that is missing this API's
+# dependencies. That used to fail the seed step below silently - see
+# docs/BUGS_AND_RISKS.md - so check for it up front with a clear message
+# instead of a buried traceback.
+python -c "import fastapi, sqlalchemy, uvicorn" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    $pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
+    Write-Host "ERROR: 'python' ($pythonPath) is missing fastapi/sqlalchemy/uvicorn." -ForegroundColor Red
+    Write-Host "  Install them with: pip install -r services/api/requirements.txt" -ForegroundColor Red
+    Write-Host "  or activate the environment that already has them first." -ForegroundColor Red
+    exit 1
+}
+
 if (-not $SkipSeed) {
     Write-Host "Seeding database..." -ForegroundColor Yellow
-    python -c "import sys; sys.path.insert(0, '$SrcDir'); exec(open('$SeedDir/seed.py').read())" 2>&1
+    $seedOutput = python -c "import sys; sys.path.insert(0, '$SrcDir'); exec(open('$SeedDir/seed.py').read())" 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "Seed completed (database may already have data)" -ForegroundColor Green
+        Write-Host "ERROR: seed step failed - the database schema may now be incomplete:" -ForegroundColor Red
+        Write-Host $seedOutput -ForegroundColor Red
+        exit 1
     }
+    Write-Host "Seed completed." -ForegroundColor Green
 }
 
 Write-Host ""

@@ -104,6 +104,43 @@ scripts.
 - Status: open - local CronCreate re-armed for same-session continuity only;
   cloud routine setup pending user confirmation.
 
+## R-002: run_local.ps1 silently masked a failed seed step, leaving the local dev DB schema stale
+
+- Area: local dev backend bootstrap (`run_local.ps1`, `services/api/scripts/seed.py`).
+- Severity: Medium - did not affect the deployed Render/Postgres backend
+  (verified healthy: `/health/live`, `/health/ready` both 200, `database:
+  connected`, `/v1/feed` and `/v1/leaderboard` return real data). Local-only,
+  but it meant the documented Quick Start command in `CLAUDE.md` silently
+  produced a broken local database.
+- Likelihood: Confirmed 2026-07-25 while verifying the app end-to-end
+  (emulator + local backend) at the user's request. `services/api/pakimongo_dev.db`
+  was last successfully bootstrapped 2026-07-07 - before migrations 004-010
+  (blocks, social, follows, groups, quests, story_reactions, comment_likes)
+  existed - so `GET /v1/leaderboard` 500'd locally with `sqlite3.OperationalError:
+  no such table: blocks`.
+- Detection: `run_local.ps1`'s seed step (`python -c "...exec(seed.py)..."`)
+  had been failing with `ModuleNotFoundError: No module named 'sqlalchemy'`
+  every run, because bare `python` on this machine's PATH resolves to an
+  unrelated tool's virtualenv without this API's dependencies - but the
+  script caught any nonzero exit code and printed "Seed completed (database
+  may already have data)" regardless, so the failure was invisible.
+  `seed.py` itself calls `Base.metadata.create_all()`, which is how the
+  schema was meant to stay current between migrations; it just never ran.
+- Mitigation: fixed `run_local.ps1` to (1) preflight-check that `python` can
+  import fastapi/sqlalchemy/uvicorn before doing anything, printing a clear
+  actionable error (with the resolved interpreter path and the
+  `pip install -r services/api/requirements.txt` fix) instead of proceeding,
+  and (2) stop masking seed failures - a failed seed step now prints the
+  real error and exits nonzero instead of claiming success. Manually
+  repaired the existing stale dev DB via `Base.metadata.create_all()` +
+  `alembic stamp head`; re-verified `/v1/leaderboard`, `/v1/feed`,
+  `/v1/users/me/collection`, and `/v1/notifications` all return real data
+  locally after the fix.
+- Owner: local dev tooling.
+- Status: fixed 2026-07-25 (iter 43) - script no longer silently swallows
+  this failure mode; a future contributor whose `python` lacks the deps
+  gets a clear message instead of a stale, silently-broken database.
+
 ## Risk Entry Template
 
 ```md
