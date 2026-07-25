@@ -52,7 +52,11 @@ Current debt items:
   (`git status` shows it modified after nearly every local test run).
   This is expected local-dev churn, not a real change - do not stage it
   into unrelated commits; if it ever needs a genuine update, commit it
-  alone with a clear message.
+  alone with a clear message. Confirmed 2026-07-26: it also gets touched
+  by just running `tools/qa/pre_task_check.py`/`validate_docs.py` with no
+  pytest or server involved at all (290816 -> 299008 bytes, one SQLite
+  page) - so seeing it dirty after a doc-only session is normal, not a
+  sign something unexpected happened.
 
 ## Decision Debt
 
