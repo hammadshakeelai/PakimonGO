@@ -4,8 +4,8 @@
 
 Original sprint packets through Sprint 46 are complete, and post-sprint
 hardening has continued beyond that structure. Latest recorded suite in
-`docs/TASK_LOG.md` (as of iter 45, 2026-07-25): 211 API tests, 78 scoring
-tests, 280 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
+`docs/TASK_LOG.md` (as of iter 46, 2026-07-25): 216 API tests, 78 scoring
+tests, 285 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
 repos. (The 145/69/162 figures were the pre-V2-loop sprint-era baseline.)
 
 Current debt items:
@@ -111,35 +111,41 @@ Current debt items:
 - Owner: V2 improvement loop.
 - Review date: closed 2026-07-25 (iter 42).
 
-## TD-002: Map HUD header shows a placeholder "Lvl N" badge, not a real level
+## TD-002: Map HUD header showed a placeholder "Lvl N" badge — CLOSED (iter 46, 2026-07-25)
 
-- Area: V2 Flutter app (PakimonGO-V2 repo), `map_hud_screen.dart`'s
-  `_hudRow` (`PhotoAvatar(levelBadge: 'Lvl ${V2Dummy.level}')`).
+- Area: backend `services/api/src/modules/users/api/routes.py` +
+  `infrastructure/database/repositories/user.py`; V2 Flutter app
+  (PakimonGO-V2 repo), `map_hud_screen.dart`'s `_hudRow`.
 - Introduced: original V2 panel-prototype build; surfaced explicitly
   during the iter 45 (2026-07-25) "de-fake the live UI" pass, which fixed
-  the two more severe cases (mission strip, Rank Hub season card) found
-  by the same review but scoped this one out as smaller and requiring a
+  the two more severe cases (mission strip, Rank Hub season card) in that
+  same iteration but scoped this one out as smaller and requiring a
   backend response change rather than a client-only fix.
-- Reason: `GET /v1/users/me` does not currently return the viewer's
-  total lifetime points, so there is no real value to derive a level
-  from without a backend change first. The avatar photo itself is not
-  counted as fake - no avatar-upload feature exists anywhere in the app,
-  so a placeholder image there is a legitimate default asset (the same
-  pattern as `V2Dummy.groupHero` for groups without a cover photo), not
-  fabricated user state.
-- Risk: Low - a static number in a small HUD badge, not a progress claim
-  with a fake countdown (the season card's bug) or fake feature content
-  (the mission strip's bug). Cosmetically inconsistent with the real,
-  live-computed tier ladder `SeasonCard.tiers` already shows on the Rank
-  Hub for the same user.
-- Removal plan: add total points to the `/v1/users/me` response
-  (`services/api/src/modules/users/api/routes.py` - the leaderboard
-  repository already computes this per user), add the field to
-  `UserProfileResponse`, and derive the badge from `SeasonCard.tiers`
-  client-side (tier index, not a fabricated number) for consistency with
-  the Rank Hub.
+- Fix (iter 46): added `get_user_total_points(db, user_id)` to
+  `repositories/user.py` (sums `ScoreEvent.points` for the user's
+  submissions - same semantics `get_leaderboard` ranks by, but as a
+  single-user query rather than reusing the paginated/sensitive-filtered
+  leaderboard query, which would have undercounted a user's own real
+  total). Added `"totalPoints"` to the `GET /v1/users/me` response.
+  Client: added `totalPoints` to `UserProfileResponse`, and a new
+  `levelForPoints()` helper (`features/v2/domain/level.dart`) - a
+  deliberately separate, uncapped points-per-level formula (50 pts/level)
+  rather than reusing `SeasonCard.tiers` (that ladder has only 5 named
+  tiers and would make the HUD number stall at "Lvl 5" forever past 1500
+  points, which reads as broken progress on a HUD element whose whole
+  point is to keep climbing). `map_hud_screen.dart`'s `_hudRow` now shows
+  `levelForPoints(profile.totalPoints)` instead of `V2Dummy.level`;
+  removed the now-dead `V2Dummy.level` field.
+- Reason it was low-risk while open: a static number in a small HUD
+  badge, not a progress claim with a fake countdown (the season card's
+  bug) or fake feature content (the mission strip's bug).
+- Verification: 5 new backend tests (`test_user_total_points.py`) +
+  5 new Flutter tests (`level_test.dart` for the pure formula,
+  `hud_streak_test.dart` for the real wiring, including a "no
+  ProfileViewModel yet -> Lvl 1" case) - 216 API tests (was 211), 285 V2
+  Flutter tests (was 280).
 - Owner: V2 improvement loop.
-- Review date: opened 2026-07-25 (iter 45).
+- Review date: opened 2026-07-25 (iter 45), closed 2026-07-25 (iter 46).
 
 ## TD-003: The 300-line file-size rule has no automated check in PakimonGO-V2
 

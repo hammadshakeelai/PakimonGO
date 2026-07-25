@@ -12,6 +12,7 @@ from src.infrastructure.database.repositories import (
     get_or_create_user,
     get_public_profile,
     get_user_collection,
+    get_user_total_points,
     is_following,
     list_follows,
     search_users,
@@ -43,7 +44,7 @@ def get_my_profile(
     """Get the current user's profile.
 
     Auto-creates a user row on first access. Returns userId,
-    email, ageBand, homeRegion, trustState, and status.
+    email, ageBand, homeRegion, trustState, status, and totalPoints.
     """
     user = get_or_create_user(db, current_user.user_id)
     return {
@@ -55,6 +56,7 @@ def get_my_profile(
         "trustState": user.trust_state,
         "createdAt": user.created_at.isoformat() if user.created_at else None,
         "streak": get_capture_streak(db, user.id),
+        "totalPoints": get_user_total_points(db, user.id),
     }
 
 

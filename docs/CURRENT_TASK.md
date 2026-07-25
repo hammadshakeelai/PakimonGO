@@ -63,15 +63,14 @@ record.
 
 Every core UI control is functional. As of iter 45, the map HUD's mission
 strip and the Rank Hub's season card no longer show fabricated content
-either — see below. One known cosmetic gap remains: the HUD header's
-"Lvl N" badge and avatar are still a placeholder image/number
-(`V2Dummy.avatarAsset`/`V2Dummy.level`), because no per-user avatar upload
-exists and `/v1/users/me` does not yet return total points for the client
-to derive a real tier/level from — tracked as new tech debt (see
-`docs/TECH_DEBT.md`).
+either, and as of iter 46 the HUD header's "Lvl N" badge is real too
+(derived from actual lifetime points) - see below. The avatar image
+itself stays a placeholder asset (no per-user avatar upload exists
+anywhere in the app - the same legitimate default-asset pattern as
+`V2Dummy.groupHero`), which is not counted as fake user state.
 
-Backend state: migrations 001-010 (010 = comment_likes), 211 API tests,
-280 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+Backend state: migrations 001-010 (010 = comment_likes), 216 API tests,
+285 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 **Iter 43 (2026-07-25):** full end-to-end verification at the user's
@@ -114,25 +113,33 @@ a real `MissionViewModel`); both are fixed, with an end-to-end join-flow
 test verified to fail without the fix and pass with it. 280 V2 Flutter
 tests green (was 270), `flutter analyze` clean.
 
+**Iter 46 (2026-07-25):** closed `docs/TECH_DEBT.md` TD-002 - the map
+HUD's "Lvl N" badge was the one hardcoded number iter 45 had scoped out
+as needing a backend change. Added `GET /v1/users/me`'s `totalPoints`
+field (backed by a new single-user `get_user_total_points()` query -
+deliberately not a reuse of the paginated/sensitive-filtered
+`get_leaderboard` query, which would have undercounted a user's own real
+total) and a client-side `levelForPoints()` formula (50 pts/level,
+uncapped) kept deliberately separate from `SeasonCard.tiers` (that
+5-tier ladder would make an "always climbing" HUD number stall at "Lvl
+5" forever past 1500 points). 216 API tests (was 211), 285 V2 Flutter
+tests (was 280), `flutter analyze` clean on both repos.
+
 ## Current Next Action
 
 Items 1-4 from the prior version of this list (game-feel polish, post
 detail/story replies/group creation, accessibility pass, loading
-shimmers) are all done - see `docs/TASK_LOG.md` iters 36-45. Recommended
+shimmers) are all done - see `docs/TASK_LOG.md` iters 36-45. The HUD
+"Lvl N" badge (former item 1 here) is also done as of iter 46. Recommended
 no-credential path from here:
 
-1. Give the HUD header a real "Lvl N" badge: add total lifetime points
-   to the `GET /v1/users/me` response (backend, small change - the
-   leaderboard repository already computes this) and derive the level
-   from `SeasonCard.tiers` client-side, the same real-data pattern iter
-   45 used for the Rank Hub. Replaces the last hardcoded HUD number
-   (`V2Dummy.level`); the avatar photo itself can stay a placeholder
-   asset (no avatar-upload feature exists, same as `V2Dummy.groupHero`).
-2. Priority 1 from the Next Work Queue below: review
+1. Priority 1 from the Next Work Queue below: review
    `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the HTML prototype, and decide
    which remaining concept ideas become real requirements vs. backlog.
-3. Moderator console/appeals tooling (no credential needed, larger scope
+2. Moderator console/appeals tooling (no credential needed, larger scope
    - see Next Work Queue item 7).
+3. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
+   file-size check of its own - add a small script inside that repo.
 
 Credential or account-dependent path:
 

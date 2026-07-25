@@ -2725,3 +2725,44 @@ file-size check of its own (this repo's validator only scans its own
 tree). The blocked V2 release-APK task (GitHub Releases page is empty)
 remains blocked on a production Mapbox token and a release signing
 keystore - both need the user to supply/generate them.
+
+## 2026-07-25 (iter 46) - Closed TD-002: real "Lvl N" HUD badge
+
+The one item iter 45 scoped out as needing a backend change. Added
+`get_user_total_points(db, user_id)` to `repositories/user.py` - sums
+`ScoreEvent.points` for a user's submissions, same semantics
+`get_leaderboard` ranks by. Deliberately a new single-user query rather
+than reusing `get_leaderboard` itself: that query is paginated, grouped
+across all users, and (by default) excludes sensitive-species score
+events from public exposure - reusing it for "my own total" would have
+silently undercounted a user's real lifetime score whenever any of
+their captures involved a sensitive species. Added `"totalPoints"` to
+`GET /v1/users/me`'s response. Left `get_public_profile`'s existing
+inline totals query untouched (it already computes sum+count together
+in one query for a different need - splitting it to reuse the new
+helper would just be an efficiency regression for no benefit).
+
+Client: added `totalPoints` to `UserProfileResponse`, and a new
+`levelForPoints()` pure function (`features/v2/domain/level.dart`,
+50 points/level, uncapped). Deliberately did NOT reuse `SeasonCard.tiers`
+for this, even though it was the originally planned approach (see
+iter 45's TD-002 entry): that ladder has exactly 5 named tiers, so a
+tier-index "level" would cap at "Lvl 5" forever past 1500 lifetime
+points - a visible downgrade from the old hardcoded "Lvl 23" in a
+prominent HUD spot, and the opposite of "ultra supreme" feel for anyone
+who plays long enough to matter. An open-ended points-per-level formula
+keeps the number climbing, which is the actual point of a level badge;
+the named tier ladder stays exactly as-is for its own real job (the
+Rank Hub's narrative rank label). `map_hud_screen.dart`'s `_hudRow` now
+shows `levelForPoints(profile.totalPoints)`; removed the now-dead
+`V2Dummy.level`.
+
+Verification: `test_user_total_points.py` (5 tests: zero for a
+brand-new user, sums multiple score events, ignores other users' points,
+`/v1/users/me` includes the real total for both a scored and a
+brand-new user). `level_test.dart` (3 tests on the pure formula) +
+2 new `hud_streak_test.dart` cases (a real totalPoints value produces
+the matching "Lvl N" text and not the old hardcoded "Lvl 23"; no
+ProfileViewModel wired yet still reads "Lvl 1", not a crash or blank).
+216 API tests (was 211), 285 V2 Flutter tests (was 280), `flutter
+analyze` clean on both repos, all 3 v1 doc/JSON/secret validators pass.

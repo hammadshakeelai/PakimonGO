@@ -7,26 +7,27 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Status as of iter 45 (2026-07-25):** iters 1-38 shipped the full social
+**Status as of iter 46 (2026-07-25):** iters 1-38 shipped the full social
 layer (posts, stories, follows, search, groups, quests), game-feel polish
 (streaks, confetti, haptics, coach marks, feed skeleton, double-tap Wow,
 new-posts pill), and living-map/3D-camera work. Iters 39-42 ran the full
 accessibility pass to completion (`docs/TECH_DEBT.md` TD-001 closed).
 Iter 44 added loading skeletons to the remaining spinner screens. Iter 45
 de-faked the map HUD mission strip and the Rank Hub season card - the
-last two live-path screens still showing fabricated content to every
-real user - and fixed a genuinely vacuous regression test along the way.
-See `docs/TASK_LOG.md` for the full per-iteration record.
+two most severe live-path screens still showing fabricated content to
+every real user - and fixed a genuinely vacuous regression test (twice)
+along the way. Iter 46 closed the remaining TD-002 gap: the HUD's
+"Lvl N" badge is now derived from a real `totalPoints` field added to
+`GET /v1/users/me`. See `docs/TASK_LOG.md` for the full per-iteration
+record.
 
 **Recommended next implementation:**
-1. Give the HUD header a real "Lvl N" badge instead of the last
-   remaining hardcoded HUD number (`V2Dummy.level`): add total lifetime
-   points to `GET /v1/users/me` (small backend change - the leaderboard
-   repository already computes this per user) and derive the level from
-   `SeasonCard.tiers` client-side. See `docs/TECH_DEBT.md` TD-002.
-2. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
+1. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
    HTML prototype, and decide which remaining concept ideas become real
    requirements vs. backlog.
+2. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
+   file-size check of its own - add a lightweight script inside that repo
+   rather than reaching across repos from this one's validator.
 3. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
@@ -40,8 +41,10 @@ Why this is the grounded default:
 - It needs no new cloud credentials.
 - It directly supports "ultra supreme, super fun" game feel — the
   standing directive behind this whole improvement loop.
-- It's the concrete, scoped tail of the same "no fake data in the live
-  app" thread iter 45 just worked through, rather than a new direction.
+- With TD-002 closed, the "no fake data in the live app" thread iters
+  45-46 worked through has no more concrete, scoped items left in it -
+  the natural next step is a new direction (the social/game UI concept
+  review) or a process-hygiene item (TD-003).
 - The new social/game UI ideas are intentionally concept backlog, not code scope
   yet.
 
@@ -75,7 +78,7 @@ Avoid treating these as the next task unless a regression is found:
 | 1 | Promote/trim V2 social UI concept | No | Review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md`, `docs/assets/V2 UI CONCEPT PANELS/README.md`, and the polished prototype at `docs/prototypes/v2-ui-html/index.html`; decide which ideas become requirements, V2 wireframes, or future backlog. |
 | 2 | Accessibility pass | No | DONE (iters 39-42, `docs/TECH_DEBT.md` TD-001 closed). |
 | 3 | Loading shimmers/skeletons | No | DONE (iter 44). |
-| 3b | Real "Lvl N" HUD badge | No | Add total points to `GET /v1/users/me`, derive level from `SeasonCard.tiers`. See TD-002. |
+| 3b | Real "Lvl N" HUD badge | No | DONE (iter 46). TD-002 closed. |
 | 4 | Real-device E2E testing | Device/account | Cover camera, map, upload, scoring, auth, and main navigation on a physical Android device. |
 | 5 | Release keystore/Firebase SHA-1 | Yes | Register release SHA-1 so production Google sign-in works outside debug builds. |
 | 6 | Durable object storage | Yes | Configure S3/GCS or equivalent; local storage is not production-safe. |

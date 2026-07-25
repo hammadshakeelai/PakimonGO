@@ -73,7 +73,13 @@ from .submission import (
     update_submission_status,
 )
 from .submission_list import get_submissions
-from .user import get_or_create_user, get_public_profile, search_users, update_user
+from .user import (
+    get_or_create_user,
+    get_public_profile,
+    get_user_total_points,
+    search_users,
+    update_user,
+)
 
 __all__ = [
     "create_block",
@@ -99,6 +105,7 @@ __all__ = [
     "get_latest_score_event",
     "get_or_create_user",
     "get_public_profile",
+    "get_user_total_points",
     "search_users",
     "update_user",
     "get_user_collection",

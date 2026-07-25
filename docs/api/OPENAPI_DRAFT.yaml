@@ -835,6 +835,9 @@ components:
           type: string
           format: date-time
           nullable: true
+        totalPoints:
+          type: integer
+          description: Sum of every real ScoreEvent point value for this user.
     CollectionResponse:
       type: object
       required: [userId, species]

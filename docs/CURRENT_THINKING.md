@@ -25,7 +25,7 @@ Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
 **Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
 scoring tests, 162 Flutter tests. The V2 improvement loop (see
-`docs/TASK_LOG.md` iters 1-45) has since grown this to 211 API tests, 280 V2
+`docs/TASK_LOG.md` iters 1-46) has since grown this to 216 API tests, 285 V2
 Flutter tests, and 163 V1 Flutter tests as of 2026-07-25, with `flutter
 analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
 Treat those as the last recorded full-suite counts unless you re-run the

@@ -12,6 +12,19 @@ from ..models import (
 )
 
 
+def get_user_total_points(db: Session, user_id: str) -> int:
+    """A user's real lifetime score: every ScoreEvent tied to any of their
+    submissions with a non-null point value, regardless of submission
+    status/visibility (mirrors the sum `get_leaderboard` ranks by)."""
+    total = (
+        db.query(func.coalesce(func.sum(ScoreEvent.points), 0))
+        .join(Submission, Submission.id == ScoreEvent.submission_id)
+        .filter(Submission.user_id == user_id, ScoreEvent.points.isnot(None))
+        .scalar()
+    )
+    return int(total or 0)
+
+
 def search_users(
     db: Session, query: str, exclude_user_id: str | None = None, limit: int = 20
 ) -> list[dict]:
