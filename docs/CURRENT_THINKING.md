@@ -84,6 +84,19 @@ general lesson: when a fix depends on a fork in server-side control flow
 (sync vs. async here), a single green test on one branch does not
 verify the other branch, and the doc claiming the bug is "fixed" needs
 to name which branch was actually exercised - not just "it now updates."
+The same iteration then found a second layer of the identical pattern
+one level down: the fix for the async branch was itself only correct
+while the screen that scheduled it stayed mounted. `setState()` after
+`dispose()` throws, and a delayed `Future` scheduled in `initState`
+(this codebase's standard "check again in a few seconds" pattern) has
+no guarantee the widget is still alive when it fires - a user backing
+out of a screen mid-poll is not an edge case, it is the default way
+users behave once they've seen a headline number. A test that only
+waits on the reveal screen cannot see this; the discriminating test has
+to actively navigate away (`tester.pageBack()`) before advancing the
+clock. Any future delayed-refresh pattern in this codebase should be
+checked against "what if the widget is gone before this fires" as a
+matter of course, not just "does the happy path update."
 
 ## Key Insight
 

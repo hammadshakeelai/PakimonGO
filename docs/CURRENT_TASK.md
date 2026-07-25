@@ -77,7 +77,7 @@ feed - see `docs/TECH_DEBT.md` TD-004 (needs a `/v1/feed` response
 change, not just a client fix).
 
 Backend state: migrations 001-010 (010 = comment_likes), 216 API tests,
-290 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+291 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 **Iter 43 (2026-07-25):** full end-to-end verification at the user's
@@ -173,10 +173,17 @@ poll (scheduled 3s auto-check + manual "Check score" retry) detects the
 pending->scored/capped transition - i.e. where the worker's real result
 actually lands. Both refresh points now coexist: iter 47's immediate
 fire covers capped submissions (never pending, so `_refresh()` never
-runs for them); this iteration's covers wild ones. 290 V2 Flutter tests
-(was 289), `flutter analyze` clean. See `docs/TASK_LOG.md` iter 49 for
-the full verification record (empirically confirmed to fail without the
-fix).
+runs for them); this iteration's covers wild ones. A same-iteration
+advisor review then caught a second gap: the refresh's first `setState`
+call ran unguarded by `mounted`, so backing out of Score Reveal before
+the scheduled 3s auto-check fired threw ("setState() called after
+dispose()") and skipped the profile/mission refresh entirely - fixed by
+guarding that `setState` and computing the pending->resolved transition
+from the fetched response directly rather than through `_isPending`, so
+the shared viewmodels refresh correctly even after the screen that
+scheduled the check is gone. 291 V2 Flutter tests (was 289), `flutter
+analyze` clean. See `docs/TASK_LOG.md` iter 49 for the full verification
+record (both gaps empirically confirmed to fail before their fixes).
 
 ## Current Next Action
 

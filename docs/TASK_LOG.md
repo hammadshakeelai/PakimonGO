@@ -2902,6 +2902,32 @@ real UI: submit -> asserts the HUD's immediate post-submit total is the
 stale 0 -> pumps forward 4s to fire the screen's scheduled auto-refresh
 -> asserts the total is now 25. Confirmed empirically to fail (stays at
 0) with the new `ScoreRevealScreen` refresh call removed, and pass with
-it restored. 290 V2 Flutter tests (was 289), `flutter analyze` clean.
-Correction to iter 47's claim: the HUD staleness fix was only complete
-for the capped path until this iteration; it now covers both.
+it restored. Correction to iter 47's claim: the HUD staleness fix was
+only complete for the capped path until this iteration; it now covers
+both.
+
+A same-iteration advisor review of this fix caught a second, sharper gap
+before it shipped: `_refresh()`'s very first line, `setState(() =>
+_refreshing = true)`, ran unguarded by `mounted` - if the user backs out
+of Score Reveal before the scheduled 3-second auto-check fires (which
+disposes the screen's `State`), that `setState` throws ("setState()
+called after dispose()"), and the function never reaches the repo call
+or the profile/mission refresh at all. Worse, even a guarded version
+would have stayed broken: the pending->resolved transition check read
+the `_isPending` getter, which only updates inside the `mounted`-gated
+setState - so on an unmounted screen the transition would never be
+detected even if the throw were fixed. This is the scenario where the
+bug is most visible: the HUD is genuinely on screen (user already back
+on the Map tab) showing the stale total, and nothing in the delayed
+Future would ever correct it. Fixed by (1) guarding the first `setState`
+with `if (mounted)` instead of calling it unconditionally, and (2)
+computing the resolved/pending transition directly from the freshly
+fetched `updated` response rather than through `_isPending`/`_submission`,
+so the profile/mission refresh fires regardless of whether the screen
+that scheduled it is still mounted - the viewmodels are shared app-wide
+and deliberately outlive this screen. New test: same wild-path script,
+but calls `tester.pageBack()` right after submitting (disposing
+`ScoreRevealScreen`) before advancing the clock past the 3s mark -
+confirmed empirically to fail (`setState() called after dispose()`,
+total stuck at the stale value) against the pre-fix code, pass after.
+291 V2 Flutter tests (was 289), `flutter analyze` clean on both repos.
