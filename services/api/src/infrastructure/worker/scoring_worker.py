@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -7,9 +8,12 @@ from sqlalchemy.orm import Session
 from src.infrastructure.database.repositories import create_notification
 from src.infrastructure.database.repositories import create_score_event
 from src.infrastructure.database.repositories import get_media_asset
+from src.infrastructure.database.repositories import get_submissions_pending_scoring
 from src.infrastructure.database.repositories import update_submission_status
 from src.infrastructure.database.session import get_session_local
 from src.infrastructure.queue.queue import Job, InMemoryJobQueue
+
+MAX_JOB_ATTEMPTS = 3
 
 _score_pkg = Path(__file__).resolve().parents[5] / "packages" / "scoring-rules" / "src"
 sys.path.insert(0, str(_score_pkg))
@@ -104,11 +108,93 @@ def process_score_job(job: Job, scoring_service: AIScoringService | None = None)
 
 
 def process_pending_jobs(queue: InMemoryJobQueue, scoring_service: AIScoringService | None = None) -> int:
+    """Drain whatever is queued right now (not jobs added mid-drain by a
+    retry below - those wait for the next poll tick, so a persistently
+    failing job can't spin this loop instead of backing off)."""
     count = 0
-    while True:
+    for _ in range(queue.pending_count):
         job = queue.dequeue()
         if job is None:
             break
-        process_score_job(job, scoring_service)
+        try:
+            process_score_job(job, scoring_service)
+        except Exception:  # noqa: BLE001
+            # A single bad job (transient vision-provider error, etc.) must
+            # never take down the worker loop - every future submission
+            # would silently stop scoring forever, with no queue drained.
+            traceback.print_exc()
+            _handle_job_failure(queue, job)
         count += 1
     return count
+
+
+def _handle_job_failure(queue: InMemoryJobQueue, job: Job) -> None:
+    attempt = job.payload.get("retry_count", 0) + 1
+    if attempt < MAX_JOB_ATTEMPTS:
+        # retry_count travels in the payload, not on the Job itself -
+        # enqueue() always mints a fresh Job with a fresh id/retry_count,
+        # so carrying it any other way would silently reset it to 0 forever.
+        queue.enqueue(job.job_type, {**job.payload, "retry_count": attempt})
+        return
+    _mark_submission_for_review(job)
+
+
+def _mark_submission_for_review(job: Job) -> None:
+    """Exhausted retries: park the submission in the existing REVIEW state
+    (a valid transition from ai_evaluated - no new terminal state needed)
+    instead of leaving it silently stuck at ai_evaluated forever."""
+    submission_id = job.payload.get("submission_id", "")
+    user_id = job.payload.get("user_id")
+    if not submission_id:
+        return
+    try:
+        db: Session = get_session_local()()
+        try:
+            update_submission_status(db, submission_id, "review")
+            create_score_event(
+                db=db,
+                submission_id=submission_id,
+                user_id=user_id,
+                ledger="scoring_failed",
+                points=None,
+                event_type="review",
+                previous_state="ai_evaluated",
+                new_state="review",
+            )
+            if user_id:
+                create_notification(
+                    db=db,
+                    user_id=user_id,
+                    notification_type="submission_scored",
+                    title="Submission needs another look",
+                    body="We couldn't automatically score this one - it's "
+                         "been queued for review.",
+                    reference_type="submission",
+                    reference_id=submission_id,
+                )
+        finally:
+            db.close()
+    except Exception:  # noqa: BLE001
+        # Best-effort: even this must never re-crash the worker loop.
+        traceback.print_exc()
+
+
+def recover_orphaned_jobs(queue: InMemoryJobQueue) -> int:
+    """Re-enqueue submissions left at ai_evaluated by a server restart that
+    lost the previous process's in-memory queue. Call once at process
+    startup, before the poll loop begins."""
+    db: Session = get_session_local()()
+    try:
+        rows = get_submissions_pending_scoring(db)
+        for sub, attr in rows:
+            queue.enqueue("score_submission", {
+                "submission_id": sub.id,
+                "media_asset_id": sub.primary_media_asset_id,
+                "animal_context": attr.animal_context if attr else "unknown",
+                "explanation_category": "normal",
+                "user_id": sub.user_id,
+                "retry_count": 0,
+            })
+        return len(rows)
+    finally:
+        db.close()

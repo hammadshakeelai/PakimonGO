@@ -35,8 +35,16 @@ Current debt items:
   multi-instance deployment needs a shared limiter such as Redis.
 - User-facing moderation exists, but moderator console, appeals,
   takedown/restore tooling, and staffing workflows are still unbuilt.
-- The scoring worker is still in-process and lacks persistent queueing, retries,
-  and dead-letter handling.
+- The scoring worker's queue is still in-process (dies with the server - a real
+  broker like Redis/SQS would fix this properly). 2026-07-26: closed the worse
+  half of this gap - one failing job used to silently end the poll loop
+  forever (no try/except at all around per-job processing), so a single
+  transient error meant every later submission stopped scoring with no crash
+  and no log. Now jobs retry (bounded, backed off one poll tick at a time) and
+  land in the existing `review` ScoreState after exhausting retries instead of
+  vanishing; a startup recovery pass re-enqueues anything a previous process
+  left stuck at `ai_evaluated`. See `docs/REMAINING_WORK.md`'s Key
+  Architectural Gaps table for the residual narrow window this doesn't cover.
 - `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` contains the V2 social/game UI brainstorm
   and candidate ideas that are not yet accepted requirements or traced test
   cases.

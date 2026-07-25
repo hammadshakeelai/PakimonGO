@@ -88,6 +88,23 @@ def get_submission(db: Session, submission_id: str) -> tuple | None:
     return sub, attr
 
 
+def get_submissions_pending_scoring(db: Session) -> list[tuple]:
+    """Submissions durably marked ai_evaluated (queued for async AI scoring)
+    that never actually got scored - e.g. the in-memory job queue was lost to
+    a server restart before the worker reached them. Status is written to the
+    DB before the job is enqueued, so any row still here at boot is an orphan
+    from a previous process's queue, not one in normal flight. Every row here
+    has explanation_category "normal" - it's the only precheck path that
+    reaches ai_evaluated (see precheck.run_precheck).
+    """
+    return (
+        db.query(Submission, SubmissionAttribute)
+        .join(SubmissionAttribute, SubmissionAttribute.submission_id == Submission.id)
+        .filter(Submission.status == "ai_evaluated")
+        .all()
+    )
+
+
 def get_last_submission_time(db: Session, user_id: str | None) -> datetime | None:
     """Return the created_at of the user's most recent submission, or None.
 

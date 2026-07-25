@@ -3048,3 +3048,96 @@ part of V2 edits going forward" - a workflow habit, not a one-time
 artifact. All 3 of V2's QA scripts (`validate_docs.py`,
 `pre_task_check.py`, `scan_secrets.py`) now pass when run from the V2
 checkout, and this record is the reminder to keep running them there.
+
+## 2026-07-26 — Scoring worker: fix a silent-death bug, add bounded retries + review fallback + boot recovery
+
+Picked up "Tier 3 architectural gap: scoring worker is in-process, no
+persistence/retries/DLQ" from `docs/REMAINING_WORK.md` — a Tier item the
+user asked to keep tackling after a status check. Investigation found the
+real risk was worse than the doc's framing: `main.py`'s `_poll()` ran
+`while True: process_pending_jobs(queue)` with **no try/except anywhere**.
+`process_score_job` has a `try/finally` (for DB cleanup) but no `except`,
+so any exception during scoring — a transient vision-provider error, a bad
+media file, anything — propagated all the way out of the daemon thread's
+target function and silently ended it. Python doesn't crash the process
+when a thread dies unhandled; it just stops existing. Every submission
+after that point would sit at `ai_evaluated` forever, un-scored, with no
+crash and no log line pointing at why, until someone manually restarted
+the server. That's a full-pipeline-halt bug hiding inside what the docs
+called a merely "no DLQ" gap.
+
+An `advisor()` call before writing code caught two mistakes in the first
+plan and one thing worth flagging, not blocking:
+1. Original plan put `retry_count` on the `Job` dataclass. Wrong —
+   `InMemoryJobQueue.enqueue()` always mints a brand-new `Job` with a
+   fresh id and default field values, so re-enqueuing a failed job would
+   silently reset the counter to 0 every time, defeating max-retries
+   forever. Fixed: `retry_count` travels inside the job's `payload` dict
+   instead, which `enqueue()` already copies through verbatim.
+2. Flagged a timing risk in changing `process_pending_jobs` from
+   "drain until empty" to "drain today's snapshot count" (needed so a
+   retried job waits for the next poll tick instead of being immediately
+   re-drained in the same call, which would spin tight on a persistent
+   failure instead of backing off). Verified empirically first: bare
+   `TestClient(app)` (no `with` block, as every existing test file uses
+   it) does NOT trigger FastAPI's lifespan startup at all — confirmed via
+   a thread-count check before/after a request — so the background poll
+   thread never actually runs during the test suite. The snapshot-drain
+   change was safe to make with zero risk of racing a second consumer.
+3. Not fixed, logged as known-narrow: `process_score_job` does
+   `update_submission_status(...)` then `create_score_event(...)` as two
+   separate commits. Dying between them leaves a row at `status=scored`
+   with no ScoreEvent — invisible to the new recovery scan (which only
+   looks for `status=ai_evaluated`). Real but narrow; not addressed this
+   pass. Documented honestly in `REMAINING_WORK.md` rather than claiming
+   the fix makes loss impossible.
+
+**What shipped** (`services/api/src/`):
+- `infrastructure/worker/scoring_worker.py`: `process_pending_jobs` now
+  isolates each job's exception (`traceback.print_exc()` + continue,
+  never propagate) and snapshots the drain count up front. On failure,
+  `_handle_job_failure` re-enqueues with `retry_count` incremented (up to
+  `MAX_JOB_ATTEMPTS = 3`), then `_mark_submission_for_review` transitions
+  the submission to the *existing* `review` ScoreState (`AI_EVALUATED ->
+  REVIEW` was already a declared valid transition — no enum/migration
+  change needed) with a ScoreEvent and a user notification, instead of
+  leaving it stuck at `ai_evaluated` forever. New `recover_orphaned_jobs`
+  re-enqueues any submission a *previous* process left at `ai_evaluated`
+  — safe because that status is written to the DB before the (lost-on-
+  restart) in-memory enqueue happens, so any such row at boot is
+  necessarily an orphan, not one in normal flight.
+- `infrastructure/database/repositories/submission.py` (+`__init__.py`):
+  new `get_submissions_pending_scoring` — every row here has
+  `explanation_category="normal"` by construction (the only precheck
+  path that reaches `ai_evaluated`; see `precheck.run_precheck`), so
+  recovery doesn't need to reconstruct or guess it.
+- `main.py`: `_start_worker_thread` calls `recover_orphaned_jobs` once at
+  startup (before the poll loop begins) and the poll loop itself now has
+  a last-resort try/except too — defense in depth on top of the
+  per-job isolation, so this loop truly cannot die.
+- New `tests/test_scoring_worker.py` (3 tests): a flaky scoring service
+  proves one failing job doesn't block a healthy one in the same batch
+  and gets retried on the next tick; an always-failing service proves
+  exactly `MAX_JOB_ATTEMPTS` calls lands the submission in `review`; a
+  submission put at `ai_evaluated` with nothing in a fresh queue instance
+  proves `recover_orphaned_jobs` finds and re-processes it. All 3
+  verified failing against the pre-fix code first (real `RuntimeError`
+  propagating out of `process_pending_jobs`, exactly the bug being
+  fixed) before confirming they pass against the fix.
+- **Applied identically to the PakimonGO-V2 repo's copy** of this same
+  backend (`services/api/src/` is otherwise byte-identical between the
+  two repos for every file this touched, confirmed by diff before
+  copying) — the scoring pipeline is core, shared code; leaving V2 on
+  the old silently-dies behavior while v1 had the fix would be exactly
+  the kind of drift worth avoiding. V2's `repositories/__init__.py` has
+  one pre-existing unrelated difference from v1 (missing
+  `get_user_total_points`, not touched here) — only this change's
+  specific addition was applied there, not a full file overwrite.
+
+Verification: v1's 221 API tests (218 + 3 new) pass, run twice back to
+back with no flakiness; V2's 214 (211 + 3 new) likewise, twice. Both
+repos' `pre_task_check.py`/`validate_docs.py`/`validate_json_examples.py`/
+`scan_secrets.py` all PASS. `packages/scoring-rules` 78 tests unaffected
+(untouched package). `docs/REMAINING_WORK.md`, `docs/TECH_DEBT.md`,
+`docs/BUGS_AND_RISKS.md` updated with the honest before/after and the one
+residual gap that's still open.

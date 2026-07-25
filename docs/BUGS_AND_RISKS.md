@@ -62,7 +62,12 @@ verification.
   and scoring together.
 - No iOS build has been attempted.
 - Local/default storage is not durable production object storage.
-- In-process scoring worker has no persistent queue, retry policy, or DLQ.
+- In-process scoring worker's queue still dies with the server (needs a real
+  broker for true durability). 2026-07-26: added bounded retries, a `review`
+  fallback instead of silent loss, and boot-time recovery of orphaned jobs -
+  see `docs/TECH_DEBT.md` and `docs/REMAINING_WORK.md`. The bug this closed
+  was worse than "no DLQ": a single failing job used to permanently kill the
+  poll loop with no crash or log, silently stopping all future scoring.
 - Push notifications are not implemented; notifications are still in-app polling.
 - AI scoring costs may grow quickly with image volume.
 - Animal recognition accuracy may be weak for local species, mixed animals,

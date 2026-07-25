@@ -70,6 +70,7 @@ from .submission import (
     get_all_submission_sha256s,
     get_last_submission_time,
     get_submission,
+    get_submissions_pending_scoring,
     update_submission_status,
 )
 from .submission_list import get_submissions
@@ -101,6 +102,7 @@ __all__ = [
     "get_last_submission_time",
     "update_submission_status",
     "get_submission",
+    "get_submissions_pending_scoring",
     "create_score_event",
     "get_latest_score_event",
     "get_or_create_user",

@@ -25,15 +25,35 @@ from .modules.users.api.routes import router as users_router
 
 
 def _start_worker_thread():
-    from src.infrastructure.worker.scoring_worker import process_pending_jobs
+    from src.infrastructure.worker.scoring_worker import (
+        process_pending_jobs,
+        recover_orphaned_jobs,
+    )
     from src.infrastructure.queue.queue import get_queue
 
     _POLL_INTERVAL = 0.5
     queue = get_queue()
 
+    try:
+        # Re-enqueue anything left mid-flight by a previous process (the
+        # in-memory queue does not survive a restart; the submission's DB
+        # status does).
+        recover_orphaned_jobs(queue)
+    except Exception:  # never block startup on recovery
+        import traceback
+
+        traceback.print_exc()
+
     def _poll():
         while True:
-            process_pending_jobs(queue)
+            try:
+                process_pending_jobs(queue)
+            except Exception:  # noqa: BLE001
+                # process_pending_jobs already isolates per-job failures;
+                # this is a last-resort guard so this loop truly never dies.
+                import traceback
+
+                traceback.print_exc()
             import time
             time.sleep(_POLL_INTERVAL)
 
