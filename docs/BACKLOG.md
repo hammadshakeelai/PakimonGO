@@ -64,6 +64,14 @@ and larger post-launch features.
   spinners (profile, map error retry, comment sheet, capture review, etc.)
   are lower-traffic or already have a dedicated empty/error state - revisit
   only if one reads as jarring in practice.
+- De-fake remaining preview surfaces flagged by review. DONE for the two
+  most severe cases (iter 45, 2026-07-25): the map HUD mission strip
+  (was hardcoded dummy quest text tagged " preview" - now real group-quest
+  data via `MissionViewModel`) and the Rank Hub season card (was a fully
+  fabricated "Season 2 · Ends in 24d 6h" - now a permanent Rank Tier card
+  with no fake countdown). Remaining: the HUD's "Lvl N" badge is still a
+  placeholder number - see `docs/TECH_DEBT.md` TD-002 (needs total points
+  added to `GET /v1/users/me` first).
 - Automated real-device E2E plan and scripts for camera, map, upload, auth, and
   scoring.
 - Moderator console, appeals, takedown/restore workflow, audit review, and
@@ -132,7 +140,8 @@ and larger post-launch features.
 - Make `.github/workflows/docs-validation.yml` a required branch check once
   repository settings are configured.
 - Add max-file-size warning workflow once code ownership requires automated
-  enforcement beyond `pre_task_check.py`.
+  enforcement beyond `pre_task_check.py`. PakimonGO-V2 (separate repo) has
+  no such check at all yet - see `docs/TECH_DEBT.md` TD-003.
 - Add full visible conversation text to
   `docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt` after
   user provides an export.

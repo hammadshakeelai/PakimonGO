@@ -2621,3 +2621,85 @@ Note for future emulator sessions: `uiautomator dump` + `pull` gives
 exact element bounds for `input tap` - much more reliable than estimating
 tap coordinates from a screenshot's displayed-vs-actual pixel ratio,
 which produced several missed taps this session before switching to it.
+
+## 2026-07-25 (iter 45) - De-faked the last two live-path preview surfaces
+
+A second-opinion review of everything shipped so far flagged that
+`CURRENT_TASK.md`'s "no preview/dummy features remain" claim was false:
+two screens still showed fabricated content to every real logged-in
+user, not just in a legitimate `vm == null`/`_isLive` fallback branch.
+
+**Mission strip (map HUD).** `mission_strip.dart` always rendered
+`V2Dummy.missionTitle` ("Find a bird near a park"), a hardcoded 78%
+progress bar, and a violet " preview" tag, regardless of the viewer's
+actual state. There was no server-side "daily mission" to show instead -
+but there IS a real group-quest system already (`GroupRepository.
+listGroups` + `getQuests`, backed by `GET /v1/groups/{id}/quests` with
+live `progress`/`target`/`secondsLeft`/`completed`), already used by
+`GroupQuestCard` on the group screen. Added `MissionViewModel`
+(`features/v2/domain/mission_viewmodel.dart`): fetches the viewer's
+membered groups, fetches each one's quests, and picks the soonest-ending
+incomplete quest across all of them (falling back to a completed one
+only if nothing incomplete exists), tagging the winning quest dict with
+its `groupId`/`groupName` so the HUD can deep-link straight to that
+group. Rewrote `MissionStrip` to render four honest states: a loading
+skeleton (reusing `SkeletonPulse`/`SkeletonBox`), a real quest card
+(title, live progress bar, real "Xd left"/"ending soon"/"Complete!"
+countdown matching `GroupQuestCard`'s wording, tap -> that `GroupScreen`),
+a "join a squad to unlock quests" prompt (tap -> `GroupsListScreen`) when
+the viewer has no group, and "no active squad quest right now" when they
+do but nothing's active - never fake data. Wired `MissionViewModel`
+through `v2_shell.dart` (constructed alongside `GroupRepository`) and
+`map_hud_screen.dart` (fetch on init, dispose listener, two new
+navigation handlers). Removed the now-dead `V2Dummy.missionTitle/
+missionProgressLabel/missionProgress/missionSide` fields.
+
+**Rank Hub season card.** Showed `'${V2Dummy.seasonName} · ${V2Dummy.
+seasonEnds}'` ("Wild Chronicles · Ends in 24d 6h") and a "Season 2" label
+on `SeasonCard` - fully fabricated; there is no time-boxed season on the
+backend at all (confirmed: no season table or endpoint exists). The tier
+ladder underneath it (SCOUT/RANGER I/RANGER II/GUARDIAN/LEGEND) was
+already real, computed live from the viewer's actual `totalScore` off
+the leaderboard. Dropped the fake season name/countdown and "Season N"
+label; reframed the header copy as "Your lifetime rank, from every
+scored capture" and the card itself as a permanent Rank Tier progress
+card - no fabricated end date, since there's nothing to end. Also split
+`rank_hub_parts.dart`, which had drifted to 310 lines (over the
+CLAUDE.md 300-line rule, unnoticed until this review), moving
+`SeasonCard` into its own `season_card.dart` (227 lines left in
+`rank_hub_parts.dart`). Deleted the now-unused `V2Dummy.leaderboard`,
+`V2Dummy.missions`, and `V2Dummy.season*` fields these two fixes left
+dead.
+
+**Test-quality fix, same review.** The iter 44 "skeletons do not overflow
+on a narrow (320dp-wide) phone surface" test was itself vacuous: mounting
+the skeletons directly (no surrounding list padding) left ~248-272dp
+available, comfortably more than the old fixed-width (220/160/140/90)
+boxes, so it would have passed against the pre-fix buggy code. Verified
+this empirically by temporarily reverting the skeletons to their old
+hardcoded widths and re-running the test at 320dp, 280dp, and even
+250dp - zero exceptions fired at any width, because `tester.
+takeException()` only ever catches a RenderFlex *main-axis* (Row)
+overflow; a fixed-width child exceeding its parent Column's *cross-axis*
+width is silently clamped down by `BoxConstraints.enforce()` instead of
+overflowing or throwing, so no device width could ever have made the old
+test fail. Replaced it with a test that asserts the actual `width`
+property on every text-line `SkeletonBox` equals `double.infinity` (not
+a fixed pixel value) - confirmed this DOES fail against the reverted old
+code (`Expected: <Infinity> Actual: <220.0>`) before restoring the real
+fix and confirming it passes.
+
+Also added `mission_strip_test.dart` (7 tests: `MissionViewModel`'s
+cross-group quest ranking and empty/no-group states, plus `MissionStrip`
+rendering for all three real states and its tap targets).
+
+Net: 277 V2 Flutter tests (was 270), `flutter analyze` clean, no backend
+changes needed (only read existing endpoints). Two new tech-debt items
+opened for follow-up, not fixed this iteration (see `docs/TECH_DEBT.md`
+TD-002, TD-003): the HUD header's "Lvl N" badge is still a placeholder
+number because `/v1/users/me` doesn't return total points yet (small,
+well-scoped backend change), and PakimonGO-V2 has no automated 300-line
+file-size check of its own (this repo's validator only scans its own
+tree). The blocked V2 release-APK task (GitHub Releases page is empty)
+remains blocked on a production Mapbox token and a release signing
+keystore - both need the user to supply/generate them.

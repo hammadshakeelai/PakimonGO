@@ -25,7 +25,7 @@ Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
 **Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
 scoring tests, 162 Flutter tests. The V2 improvement loop (see
-`docs/TASK_LOG.md` iters 1-42) has since grown this to 211 API tests, 262 V2
+`docs/TASK_LOG.md` iters 1-45) has since grown this to 211 API tests, 277 V2
 Flutter tests, and 163 V1 Flutter tests as of 2026-07-25, with `flutter
 analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
 Treat those as the last recorded full-suite counts unless you re-run the
@@ -37,7 +37,14 @@ whole map's worth of markers with no semantic exposure at all (closed in
 iter 41 by adding a non-map list view, since native Mapbox annotations
 cannot carry Semantics) and an untested color palette (iter 42 proved it
 was already AA-compliant and locked that in with a regression test rather
-than leaving it as an unverified assumption).
+than leaving it as an unverified assumption). Iter 45 found a subtler case
+of the same pattern: a test can *look* like a regression guard (asserting
+`tester.takeException()` is null after shrinking the surface) while never
+actually being capable of failing, because `takeException()` only catches
+main-axis `RenderFlex` overflow, not a fixed-width child silently clamped
+down by `BoxConstraints.enforce()` in a Column's cross axis. A passing
+test proves nothing on its own — reverting the fix and re-running it is
+the only way to know whether it would have caught the bug.
 
 ## Key Insight
 

@@ -4,8 +4,8 @@
 
 Original sprint packets through Sprint 46 are complete, and post-sprint
 hardening has continued beyond that structure. Latest recorded suite in
-`docs/TASK_LOG.md` (as of iter 44, 2026-07-25): 211 API tests, 78 scoring
-tests, 270 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
+`docs/TASK_LOG.md` (as of iter 45, 2026-07-25): 211 API tests, 78 scoring
+tests, 277 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
 repos. (The 145/69/162 figures were the pre-V2-loop sprint-era baseline.)
 
 Current debt items:
@@ -110,6 +110,61 @@ Current debt items:
 - Removal plan: n/a - closed.
 - Owner: V2 improvement loop.
 - Review date: closed 2026-07-25 (iter 42).
+
+## TD-002: Map HUD header shows a placeholder "Lvl N" badge, not a real level
+
+- Area: V2 Flutter app (PakimonGO-V2 repo), `map_hud_screen.dart`'s
+  `_hudRow` (`PhotoAvatar(levelBadge: 'Lvl ${V2Dummy.level}')`).
+- Introduced: original V2 panel-prototype build; surfaced explicitly
+  during the iter 45 (2026-07-25) "de-fake the live UI" pass, which fixed
+  the two more severe cases (mission strip, Rank Hub season card) found
+  by the same review but scoped this one out as smaller and requiring a
+  backend response change rather than a client-only fix.
+- Reason: `GET /v1/users/me` does not currently return the viewer's
+  total lifetime points, so there is no real value to derive a level
+  from without a backend change first. The avatar photo itself is not
+  counted as fake - no avatar-upload feature exists anywhere in the app,
+  so a placeholder image there is a legitimate default asset (the same
+  pattern as `V2Dummy.groupHero` for groups without a cover photo), not
+  fabricated user state.
+- Risk: Low - a static number in a small HUD badge, not a progress claim
+  with a fake countdown (the season card's bug) or fake feature content
+  (the mission strip's bug). Cosmetically inconsistent with the real,
+  live-computed tier ladder `SeasonCard.tiers` already shows on the Rank
+  Hub for the same user.
+- Removal plan: add total points to the `/v1/users/me` response
+  (`services/api/src/modules/users/api/routes.py` - the leaderboard
+  repository already computes this per user), add the field to
+  `UserProfileResponse`, and derive the badge from `SeasonCard.tiers`
+  client-side (tier index, not a fabricated number) for consistency with
+  the Rank Hub.
+- Owner: V2 improvement loop.
+- Review date: opened 2026-07-25 (iter 45).
+
+## TD-003: The 300-line file-size rule has no automated check in PakimonGO-V2
+
+- Area: cross-repo tooling. `tools/qa/validate_docs.py`'s
+  `check_file_sizes()` only walks `SOURCE_ROOTS` inside this (v1) repo;
+  PakimonGO-V2 is a separate git repository with no `tools/qa/` of its
+  own, so CLAUDE.md rule #8 ("source files stay <=300 lines") is enforced
+  in the V2 Flutter app entirely by an agent/contributor remembering to
+  run `wc -l` by hand.
+- Introduced: always true since PakimonGO-V2 was split into its own repo;
+  surfaced during the iter 45 (2026-07-25) review, which found
+  `rank_hub_parts.dart` had already drifted to 310 lines unnoticed (fixed
+  same iter - see the closed history below) and noted two earlier close
+  calls (`map_hud_parts.dart` at 337, `groups_list_screen.dart` at 305)
+  that were only caught by manual inspection during iters 41 and 44.
+- Risk: Low-medium - it's a discipline/maintainability rule, not a
+  correctness one, but it has already silently slipped at least three
+  times, meaning it will keep slipping without tooling.
+- Removal plan: add an equivalent lightweight size-check script inside
+  PakimonGO-V2 itself (that repo has no CI/validator suite yet at all),
+  rather than reaching across repos from this validator, which would be
+  fragile (depends on a specific sibling-checkout layout that isn't
+  guaranteed).
+- Owner: V2 improvement loop.
+- Review date: opened 2026-07-25 (iter 45).
 
 ## Debt Entry Template
 
