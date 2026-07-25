@@ -64,18 +64,20 @@ record.
 Every core UI control is functional. As of iter 45, the map HUD's mission
 strip and the Rank Hub's season card no longer show fabricated content
 either, as of iter 46 the HUD header's "Lvl N" badge is real too (derived
-from actual lifetime points), and as of iter 48 the Profile screen's
-"verified" checkmark and fake motto tagline are fixed/removed - see
-below. The avatar image itself stays a placeholder asset (no per-user
-avatar upload exists anywhere in the app - the same legitimate
-default-asset pattern as `V2Dummy.groupHero`), which is not counted as
-fake user state. One known live-path fake remains open: `feed_post_card.
-dart` shows the same unconditional "verified" checkmark next to every
-poster in the feed - see `docs/TECH_DEBT.md` TD-004 (needs a `/v1/feed`
-response change, not just a client fix).
+from actual lifetime points), as of iter 48 the Profile screen's
+"verified" checkmark and fake motto tagline are fixed/removed, and as of
+iter 49 the HUD's real points/level refresh correctly after a **wild**
+capture too (iter 47 only fixed the capped/zoo/pet path) - see below.
+The avatar image itself stays a placeholder asset (no per-user avatar
+upload exists anywhere in the app - the same legitimate default-asset
+pattern as `V2Dummy.groupHero`), which is not counted as fake user
+state. One known live-path fake remains open: `feed_post_card.dart` shows
+the same unconditional "verified" checkmark next to every poster in the
+feed - see `docs/TECH_DEBT.md` TD-004 (needs a `/v1/feed` response
+change, not just a client fix).
 
 Backend state: migrations 001-010 (010 = comment_likes), 216 API tests,
-289 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+290 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 **Iter 43 (2026-07-25):** full end-to-end verification at the user's
@@ -158,6 +160,23 @@ every feed poster, but needs a backend `/v1/feed` change (`FeedItem` has
 no trust-state field at all) - opened as `docs/TECH_DEBT.md` TD-004
 rather than expanding this iteration's scope. 289 V2 Flutter tests (was
 286), `flutter analyze` clean.
+
+**Iter 49 (2026-07-26):** corrected an incomplete fix from iter 47.
+`CaptureReviewScreen`'s immediate post-submit `fetchProfile()`/
+`fetchMission()` only reads the real new total on the **capped**
+(zoo/pet/duplicate) path, which is scored synchronously - for a **wild**
+capture (the highest-point, most-used path) `POST /submissions` returns
+before the async worker has written a `ScoreEvent`, so that immediate
+fire still saw the pre-capture total. Fixed by also firing both
+refreshes from `ScoreRevealScreen._refresh()`, at the point its existing
+poll (scheduled 3s auto-check + manual "Check score" retry) detects the
+pending->scored/capped transition - i.e. where the worker's real result
+actually lands. Both refresh points now coexist: iter 47's immediate
+fire covers capped submissions (never pending, so `_refresh()` never
+runs for them); this iteration's covers wild ones. 290 V2 Flutter tests
+(was 289), `flutter analyze` clean. See `docs/TASK_LOG.md` iter 49 for
+the full verification record (empirically confirmed to fail without the
+fix).
 
 ## Current Next Action
 

@@ -6,9 +6,12 @@ No known blocking bugs are recorded after the latest emulator walkthrough and
 moderation/map hardening pass. See R-002 below for a real local-dev-only bug
 found and fixed during the 2026-07-25 verification pass.
 
-Latest recorded automated suite in `docs/TASK_LOG.md` (iter 48, 2026-07-25):
-216 API tests, 78 scoring tests, 289 V2 + 163 V1 Flutter tests, and
-`flutter analyze` clean on both repos.
+Latest recorded automated suite in `docs/TASK_LOG.md` (iter 49, 2026-07-26):
+216 API tests, 78 scoring tests, 290 V2 + 163 V1 Flutter tests, and
+`flutter analyze` clean on both repos. Iter 49 fixed a real gap in iter
+47's HUD-refresh fix: it only refreshed the real points/level total
+after a capped (zoo/pet/duplicate) capture, not a wild one - see
+`docs/TASK_LOG.md` iter 49 for the fix and empirical verification.
 
 ## Repository Health Notes
 

@@ -2858,3 +2858,50 @@ for a `trustState: 'verified'` profile, hides for `'neutral'` - confirmed
 empirically to fail against the old unconditional icon before the fix -
 and the motto text is gone). 289 V2 Flutter tests (was 286), `flutter
 analyze` clean.
+
+## 2026-07-26 (iter 49) - Iter 47's HUD refresh fix missed the main capture path
+
+Advisor review of iter 47-48 flagged a gap before it shipped further:
+iter 47's fix fires `profileViewModel.fetchProfile()`/`missionViewModel.
+fetchMission()` immediately after `createSubmission()` returns, inside
+`CaptureReviewScreen._submit()`. Per the backend scoring flow
+(`CLAUDE.md`: "capped paths scored sync, wild enqueued -> worker thread
+processes async"), that immediate fire only sees the correct new total
+for the **capped** path (zoo/pet/duplicate - scored synchronously, so the
+`ScoreEvent` row already exists when `POST /submissions` returns). For a
+**wild** capture - the highest-point, most common path, the one the
+whole game loop is built around - `POST /submissions` returns
+`status: 'ai_evaluated'` with no `ScoreEvent` written yet; the immediate
+fire reads the *pre-capture* total, and nothing fired the refresh again
+once the worker actually scored it. `capture_refresh_test.dart`'s
+iter-47 test couldn't have caught this: it hardcodes
+`scoreState: {status: 'scored', ...}` on the mock `POST /submissions`
+response, which only ever exercises the sync path. The test was genuine
+for what it asserted; it just asserted the easier case and the iter-47
+prose overclaimed ("isn't left showing stale pre-capture numbers")
+without qualifying which path that covered.
+
+Fix: `ScoreRevealScreen` (`score_reveal_screen.dart`) now also takes
+`profileViewModel`/`missionViewModel` and fires the same two refreshes
+from inside `_refresh()`, at the exact point a pending->scored/capped
+transition is detected (the screen already polls once via a scheduled
+`Future.delayed(3s)` plus a manual "Check score" retry - this is where
+the worker's real result actually lands). `CaptureReviewScreen` now
+passes its `profileViewModel`/`missionViewModel` through to
+`ScoreRevealScreen` at the one call site that constructs it. The
+iter-47 immediate-fire in `_submit()` stays - it's the only refresh path
+for capped submissions, since those are never pending and `_refresh()`
+never runs for them.
+
+Verification: new test in `capture_refresh_test.dart` scripts
+`POST /submissions` to return `ai_evaluated` (no points) and
+`GET /submissions/{id}` to later return `scored, 60pts`, with
+`GET /users/me` answering 0 pts on its first call and 25 on every call
+after (simulating the DB sum before/after the worker runs). Drives the
+real UI: submit -> asserts the HUD's immediate post-submit total is the
+stale 0 -> pumps forward 4s to fire the screen's scheduled auto-refresh
+-> asserts the total is now 25. Confirmed empirically to fail (stays at
+0) with the new `ScoreRevealScreen` refresh call removed, and pass with
+it restored. 290 V2 Flutter tests (was 289), `flutter analyze` clean.
+Correction to iter 47's claim: the HUD staleness fix was only complete
+for the capped path until this iteration; it now covers both.

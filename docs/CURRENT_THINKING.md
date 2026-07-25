@@ -70,6 +70,20 @@ had the DB default recorded as `"normal"` instead of `"neutral"`) -
 changing the client to match the doc would have broken a working check.
 Docs describe intent at the time they were written; only the code and
 the data it actually produces are ground truth for what's true now.
+Iter 49 caught a variant of the same discipline gap one step earlier:
+iter 47's fix (refresh the HUD's real total right after submit) was
+verified against a test that hardcoded `status: 'scored'` on the mock
+`POST /submissions` response - which is only true for the capped
+(zoo/pet/duplicate) path. A wild capture - per `CLAUDE.md`'s own
+documented scoring flow, "capped paths scored sync, wild enqueued" -
+returns before the worker writes any `ScoreEvent`, so the same fix read
+a stale total for the app's main, highest-value path. The test passed
+and was genuinely non-vacuous for what it checked; it just checked the
+easier of two paths without the surrounding prose noticing the gap. The
+general lesson: when a fix depends on a fork in server-side control flow
+(sync vs. async here), a single green test on one branch does not
+verify the other branch, and the doc claiming the bug is "fixed" needs
+to name which branch was actually exercised - not just "it now updates."
 
 ## Key Insight
 

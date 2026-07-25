@@ -7,7 +7,7 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Status as of iter 48 (2026-07-25):** iters 1-38 shipped the full social
+**Status as of iter 49 (2026-07-26):** iters 1-38 shipped the full social
 layer (posts, stories, follows, search, groups, quests), game-feel polish
 (streaks, confetti, haptics, coach marks, feed skeleton, double-tap Wow,
 new-posts pill), and living-map/3D-camera work. Iters 39-42 ran the full
@@ -16,11 +16,13 @@ Iter 44 added loading skeletons to the remaining spinner screens. Iter 45
 de-faked the map HUD mission strip and the Rank Hub season card, iter 46
 closed TD-002 (real HUD "Lvl N" badge), iter 47 fixed the HUD streak/
 level actually going stale after a capture (not just the badge itself
-being real), and iter 48 removed a fake profile "motto" tagline and
-fixed an unconditional "verified" checkmark on the Profile screen (the
-same bug still open on the Feed screen - TD-004, needs a backend
-`/v1/feed` change). See `docs/TASK_LOG.md` for the full per-iteration
-record.
+being real) - but iter 49 found that fix only covered the capped
+(zoo/pet/duplicate) path, not the wild-capture path where the worker
+scores async, and closed that gap too - and iter 48 removed a fake
+profile "motto" tagline and fixed an unconditional "verified" checkmark
+on the Profile screen (the same bug still open on the Feed screen -
+TD-004, needs a backend `/v1/feed` change). See `docs/TASK_LOG.md` for
+the full per-iteration record.
 
 **Recommended next implementation:**
 1. TD-004 (`docs/TECH_DEBT.md`): enrich `GET /v1/feed` with each
