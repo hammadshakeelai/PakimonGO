@@ -58,14 +58,21 @@ a caveat attached to a recommendation:
    user ever reopens it.
 
 None of these three should be started without the user picking one, and
-#3 should never be started without the user bringing it up first. If an
-agent lands here with the directive to keep going and no fresh user
-input, the lowest-risk unblocked technical work is finishing the file-
-size cleanup TD-003 deliberately deferred: `map_hud_screen.dart` (361
-lines), `group_screen.dart` (314), `story_viewer.dart` (314),
-`api_models.dart` (304), `mission_strip_test.dart` (359) in the
-PakimonGO-V2 repo - all WARN-level, none blocking, genuinely optional,
-but real and available without a product/policy call.
+#3 should never be started without the user bringing it up first.
+
+**2026-07-26 update:** the file-size cleanup this section used to point
+to as the fallback unblocked item is done. All 5 files
+(`map_hud_screen.dart`, `group_screen.dart`, `story_viewer.dart`,
+`api_models.dart`, `mission_strip_test.dart` in the PakimonGO-V2 repo)
+are split under the 300-line rule; `validate_docs.py` there now reports
+`warnings_over_300=0` for the first time. See that repo's
+`docs/TECH_DEBT.md` (2026-07-26 entry) for the per-file split detail.
+**This means there is currently no known unblocked, no-credential,
+no-product-decision engineering item left in either repo.** An agent
+landing here with the directive to keep going and no fresh user input
+should re-derive one from a fresh read of both repos' `BUGS_AND_RISKS.md`/
+`TECH_DEBT.md`/source tree rather than assume this list is still
+current - it was exhausted, not just trimmed.
 
 ## Sprint 2-26 Complete
 
