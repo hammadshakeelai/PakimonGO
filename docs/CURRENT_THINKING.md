@@ -25,16 +25,19 @@ Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
 **Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
 scoring tests, 162 Flutter tests. The V2 improvement loop (see
-`docs/TASK_LOG.md` iters 1-41) has since grown this to 211 API tests, 228 V2
+`docs/TASK_LOG.md` iters 1-42) has since grown this to 211 API tests, 262 V2
 Flutter tests, and 163 V1 Flutter tests as of 2026-07-25, with `flutter
 analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
 Treat those as the last recorded full-suite counts unless you re-run the
 suites in the current turn. This repo can still hide issues behind mocks; the
 emulator walkthrough already proved that, and the accessibility pass (iters
-39-41) is itself evidence that widget-test-only coverage had missed real
-screen-reader gaps for a long time — including a whole map's worth of
-markers with no semantic exposure at all (closed in iter 41 by adding a
-non-map list view, since native Mapbox annotations cannot carry Semantics).
+39-42, now closed per TD-001) is itself evidence that widget-test-only
+coverage had missed real screen-reader gaps for a long time — including a
+whole map's worth of markers with no semantic exposure at all (closed in
+iter 41 by adding a non-map list view, since native Mapbox annotations
+cannot carry Semantics) and an untested color palette (iter 42 proved it
+was already AA-compliant and locked that in with a regression test rather
+than leaving it as an unverified assumption).
 
 ## Key Insight
 

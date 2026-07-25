@@ -49,11 +49,14 @@ and larger post-launch features.
   reactions, group quests, notification filters, rank scopes, report/block, and
   appeal.
 - Accessibility pass across mobile screens: semantic labels, screen-reader
-  order, tap targets, and widget tests. Mostly done: bottom nav
-  selected-state + icon-button tooltips (iter 39), reaction selected-state
-  (iter 40), non-map sightings list replacing the semantics-incapable
-  Mapbox markers (iter 41, 2026-07-25). Still open: WCAG-AA contrast audit
-  over the V2 dark theme tokens.
+  order, tap targets, and widget tests. DONE as of iter 42 (2026-07-25):
+  bottom nav selected-state + icon-button tooltips (iter 39), reaction
+  selected-state (iter 40), non-map sightings list replacing the
+  semantics-incapable Mapbox markers (iter 41), WCAG-AA contrast audit
+  with a regression test (iter 42, all pairings already passed). See
+  `docs/TECH_DEBT.md` TD-001 (closed) for the full record. New
+  screens/components should still get semantic labels and a
+  `contrastRatio()` check as a matter of course going forward.
 - Loading shimmer/skeleton states where the app still uses generic spinners.
 - Automated real-device E2E plan and scripts for camera, map, upload, auth, and
   scoring.

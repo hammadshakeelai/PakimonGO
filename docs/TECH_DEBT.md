@@ -74,7 +74,7 @@ Current debt items:
   documented.
 - Any temporary scoring or moderation rule must include an expiry review date.
 
-## TD-001: Accessibility pass is partial
+## TD-001: Accessibility pass — CLOSED (iter 42, 2026-07-25)
 
 - Area: V2 Flutter app (PakimonGO-V2 repo) + shared collection_screen.dart.
 - Introduced: iter 39 (2026-07-24) closed the icon-button/tooltip and
@@ -89,18 +89,26 @@ Current debt items:
   Flutter widgets, and structurally cannot carry Semantics, so the fix is
   a full non-map path instead - AllSightingsScreen lists every marker the
   map knows about (not just the "Nearby Activity" sheet's top 3), each row
-  independently focusable/tappable, reached via a "View all" action.
+  independently focusable/tappable, reached via a "View all" action. Iter
+  42 (same day) ran the WCAG AA contrast audit: every foreground the theme
+  paints as text/icons (text, muted, green, lime, amber, red, blue,
+  violet), checked against every background surface (bg, surface, card,
+  card2), plus button-label text and the one reduced-opacity text spot
+  (amber@0.8 in the score reveal) - all 34 pairings already clear 4.5:1,
+  no token values needed to change. Locked in with a contrast-ratio
+  utility (`core/theme/contrast.dart`) and a test
+  (`test/core/theme/contrast_test.dart`) so a future color edit can't
+  silently regress it.
 - Reason: scoped to the lowest-risk, most-used surfaces first (nav, HUD
-  header, comments, story viewer, profile, collection, reactions, map)
-  since this ships to a public prod app every cycle unattended.
-- Risk: still open - no color-contrast audit has been run against WCAG AA
-  over the V2 dark theme tokens (V2Tokens palette).
-- Removal plan: next accessibility iteration - contrast pass over
-  V2Tokens' dark palette (amber/lime/blue/violet against surface colors),
-  fixing any pairing under the AA 4.5:1 (text) / 3:1 (large text, icons)
-  thresholds.
+  header, comments, story viewer, profile, collection, reactions, map,
+  color palette) since this ships to a public prod app every cycle
+  unattended.
+- Risk: none open under this ticket. Any *new* screen/component should
+  still get semantic labels and be checked against `contrastRatio()`
+  before shipping - this closes the backlog item, not the discipline.
+- Removal plan: n/a - closed.
 - Owner: V2 improvement loop.
-- Review date: next accessibility-focused iteration.
+- Review date: closed 2026-07-25 (iter 42).
 
 ## Debt Entry Template
 

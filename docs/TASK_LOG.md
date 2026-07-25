@@ -2508,3 +2508,22 @@ over the 300-line limit; now 211/134/126 across the three files).
 
 Remaining per TD-001: no WCAG-AA color-contrast audit has been run
 against the V2 dark theme tokens - next candidate.
+
+## 2026-07-25 (iter 42) - WCAG AA contrast audit closes TD-001
+
+Computed WCAG 2.1 relative luminance + contrast ratio for every color
+the V2 dark theme actually paints as text or an icon (text, muted,
+green/primary, lime, amber, red/error, and the two V2Tokens-only
+accents blue/violet) against every surface it can land on (bg,
+surface, card, card2) - 32 pairings, plus inkOnGreen button-label text
+on its three button fills, plus the one place a foreground color is
+used at reduced opacity as real text (amber@0.8 in the score-reveal
+" pts" suffix, composited over the semi-opaque GlassCard fill). All 34
+checks clear the stricter 4.5:1 "normal text" AA threshold (which also
+clears the 3:1 large-text/icon bar) with real margin - the tightest
+was 5.32:1 (red/error on card2). No token value needed to change.
+Added `core/theme/contrast.dart` (WCAG luminance/ratio helpers, no
+external package needed) and `test/core/theme/contrast_test.dart` so a
+future color-token edit can't silently regress this. 262 V2 Flutter
+tests (34 new), analyze clean. This closes every item in TD-001 -
+see docs/TECH_DEBT.md for the full closure note.

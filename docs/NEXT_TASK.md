@@ -7,20 +7,23 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Status as of iter 41 (2026-07-25):** iters 1-38 shipped the full social
+**Status as of iter 42 (2026-07-25):** iters 1-38 shipped the full social
 layer (posts, stories, follows, search, groups, quests), game-feel polish
 (streaks, confetti, haptics, coach marks, feed skeleton, double-tap Wow,
-new-posts pill), and living-map/3D-camera work. Iters 39-41 ran the
-accessibility pass: nav + icon-button labels, reaction selected-state, and
-a non-map sightings list replacing the semantics-incapable Mapbox markers.
-See `docs/TECH_DEBT.md` TD-001 and `docs/BACKLOG.md` for exactly what's
-left. See `docs/TASK_LOG.md` for the full per-iteration record.
+new-posts pill), and living-map/3D-camera work. Iters 39-42 ran the full
+accessibility pass to completion: nav + icon-button labels, reaction
+selected-state, a non-map sightings list replacing the semantics-incapable
+Mapbox markers, and a WCAG-AA contrast audit (all pairings already
+passed, locked in with a regression test). `docs/TECH_DEBT.md` TD-001 is
+now closed. See `docs/TASK_LOG.md` for the full per-iteration record.
 
-**Recommended next implementation (accessibility pass, part 4):**
-1. A WCAG-AA color-contrast pass over the V2 dark theme tokens
-   (`core/theme/v2_tokens.dart` — amber/lime/blue/violet against surface
-   colors), fixing any pairing under the AA 4.5:1 (text) / 3:1 (large
-   text, icons) thresholds. This is the last open item in TD-001.
+**Recommended next implementation (loading shimmers/skeletons):**
+1. Replace the remaining plain `CircularProgressIndicator` loading states
+   across V2 screens (feed, rank hub, notifications, profile, groups)
+   with skeleton/shimmer placeholders shaped like the real content, for
+   perceived-performance polish. `feed_screen.dart` already has a feed
+   skeleton (iter-era work) — use it as the reference pattern and extend
+   the same approach to the other data screens.
 2. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
@@ -32,10 +35,10 @@ left. See `docs/TASK_LOG.md` for the full per-iteration record.
 Why this is the grounded default:
 
 - It needs no new cloud credentials.
-- It directly supports app-store quality and safer use by younger users.
-- `docs/REMAINING_WORK.md` still lists accessibility as unfinished.
-- The latest task log already points to "loading shimmers, accessibility" after
-  moderation and map polish landed.
+- It directly supports "ultra supreme, super fun" game feel — the
+  standing directive behind this whole improvement loop.
+- `docs/REMAINING_WORK.md` and the Next Work Queue below both still list
+  loading shimmers as open, no-credential-needed polish.
 - The new social/game UI ideas are intentionally concept backlog, not code scope
   yet.
 
