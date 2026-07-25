@@ -2972,8 +2972,23 @@ after. Full suites re-run clean: 218 API tests (was 216), 293 V2 Flutter
 tests (was 291), `flutter analyze` clean on both repos, all 3 v1
 validators PASS.
 
+Confirmed one detail before calling the backend fix done: the route
+returns `row.trust_state or "neutral"`, so
+`test_feed_shows_neutral_trust_state_by_default` could in principle be
+passing on the `or "neutral"` coalesce rather than on the DB actually
+storing `"neutral"`. Checked directly - inserting a bare `User(id=...)`
+and reloading it confirms SQLAlchemy's column `default="neutral"` really
+does get written at flush/commit, so the test guards the real default
+path, not just the coalesce fallback (which exists for the outer-joined
+`NULL` case where a submission's `user_id` doesn't resolve to a row).
+
 TD-004 closed. Per `docs/NEXT_TASK.md`'s recommended list, the "no fake
 data in the live app" thread that ran iters 45-49 has no further scoped
-items left in it - the next candidate is a new direction (the V2 social
-UI concept review) or a process-hygiene item (TD-003, the missing
-300-line check in the PakimonGO-V2 repo).
+items left in it. Of the two candidates left on that list, chose TD-003
+(the missing 300-line check in the PakimonGO-V2 repo) over the V2 social
+UI concept review - the concept review needs a product decision about
+which brainstormed ideas become real requirements, which
+`docs/CURRENT_THINKING.md`'s own Near-Term Bias says is the user's call
+to make, not something to promote autonomously. TD-003 is self-contained
+and has a v1 implementation (`tools/qa/validate_docs.py`'s
+`check_file_sizes()`) to model.

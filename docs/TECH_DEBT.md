@@ -47,6 +47,12 @@ Current debt items:
   cropped concept-panel textures. Accepted screens need real Flutter widgets,
   approved assets, accessibility labels, state management, tests, and traced
   requirements.
+- `services/api/pakimongo_dev.db` is a tracked binary dev-seed database.
+  Running the backend or its pytest suite locally regularly dirties it
+  (`git status` shows it modified after nearly every local test run).
+  This is expected local-dev churn, not a real change - do not stage it
+  into unrelated commits; if it ever needs a genuine update, commit it
+  alone with a clear message.
 
 ## Decision Debt
 

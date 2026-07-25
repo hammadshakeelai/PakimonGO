@@ -82,7 +82,13 @@ and larger post-launch features.
   scoring.
 - Moderator console, appeals, takedown/restore workflow, audit review, and
   staffing model.
-- OpenAPI cleanup if placeholder v2 entries remain.
+- OpenAPI cleanup: `docs/api/OPENAPI_DRAFT.yaml` has no entry at all for
+  `/v1/feed`, `/v1/submissions/{id}/reaction`, `/v1/submissions/{id}/comments`,
+  `/v1/stories`, or the groups/quests endpoints - the whole V2 social layer
+  is undocumented in the spec, not just a placeholder needing a tweak.
+  Found while adding `trustState` to the feed response (iter 49); the
+  `UserProfile.trustState` enum itself was also stale until that iter
+  (fixed).
 - Error analytics integration plan.
 
 ### Credential / Account-Dependent Work
