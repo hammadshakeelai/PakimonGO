@@ -84,16 +84,21 @@ Current debt items:
   Correction to the original iter-39 note: double-tap-to-Wow already had a
   non-gesture fallback (the persisted PostReactionRow buttons below every
   photo) - it just wasn't marked "selected" for assistive tech, which iter
-  40 fixed. No new gesture-only dead end was found.
+  40 fixed. No new gesture-only dead end was found. Iter 41 (2026-07-25)
+  closed the Mapbox marker gap: PointAnnotations are native GL layers, not
+  Flutter widgets, and structurally cannot carry Semantics, so the fix is
+  a full non-map path instead - AllSightingsScreen lists every marker the
+  map knows about (not just the "Nearby Activity" sheet's top 3), each row
+  independently focusable/tappable, reached via a "View all" action.
 - Reason: scoped to the lowest-risk, most-used surfaces first (nav, HUD
-  header, comments, story viewer, profile, collection, reactions) since
-  this ships to a public prod app every cycle unattended.
-- Risk: still open - Mapbox map markers (PointAnnotations drawn as raw PNG
-  bytes) have no semantic exposure at all, so the living map has no
-  screen-reader path; no color-contrast audit has been run against WCAG AA.
-- Removal plan: next accessibility iteration - investigate Mapbox
-  annotation semantics or a fallback list view for map sightings, then a
-  contrast pass over V2Tokens' dark palette.
+  header, comments, story viewer, profile, collection, reactions, map)
+  since this ships to a public prod app every cycle unattended.
+- Risk: still open - no color-contrast audit has been run against WCAG AA
+  over the V2 dark theme tokens (V2Tokens palette).
+- Removal plan: next accessibility iteration - contrast pass over
+  V2Tokens' dark palette (amber/lime/blue/violet against surface colors),
+  fixing any pairing under the AA 4.5:1 (text) / 3:1 (large text, icons)
+  thresholds.
 - Owner: V2 improvement loop.
 - Review date: next accessibility-focused iteration.
 

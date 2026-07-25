@@ -2487,3 +2487,24 @@ corrects an overstated iter-39 tech-debt note: double-tap-to-Wow was never
 the only way to react - PostReactionRow already gave every post a fully
 tappable, text-labeled button row; it just was not marked selected.
 224 V2 Flutter tests (2 new), analyze clean.
+
+## 2026-07-25 (iter 41) - Accessibility pass part 3: non-map path to sightings
+
+Closed the bigger of the two TD-001 risks: the living map's Mapbox
+PointAnnotations (species-emoji + colored-circle markers) are native
+layers drawn straight to the GL surface, not Flutter widgets - they
+cannot carry Semantics at all, so a screen-reader user had zero path to
+"what's on the map" beyond the 3 rows already surfaced in the
+"Nearby Activity" sheet. Those 3 rows now expose
+Semantics(button, label: "species, status, N points") with
+ExcludeSemantics on the decorative thumbnail/text beneath, and a new
+"View all" action opens AllSightingsScreen - every sighting the map
+knows about (not just the first 3), each one an independently focusable,
+tappable row that opens the same marker detail sheet. Split
+map_hud_parts.dart's MarkerSheet/TrailQuietPanel out into
+map_marker_sheet.dart (was 337 lines after the accessibility additions,
+over the 300-line limit; now 211/134/126 across the three files).
+228 V2 Flutter tests (4 new), analyze clean, all 3 validators PASS.
+
+Remaining per TD-001: no WCAG-AA color-contrast audit has been run
+against the V2 dark theme tokens - next candidate.

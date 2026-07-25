@@ -46,19 +46,21 @@ re-run the required pre-task guard and doc/JSON/secret validation scripts.
 
 ## Active Task
 
-**V2 social-layer improvement loop (iters 1-39 shipped).** The V2 app
+**V2 social-layer improvement loop (iters 1-41 shipped).** The V2 app
 (PakimonGO-V2 repo) is a full wildlife social network wired to this
 backend: posts with reactions/comments/share, 24h stories, follow graph,
 Following feed, user search, all 4 Rank scopes, follower lists, real
 Groups with member feed + leaderboard + quests, living map with 3D camera
-and species markers, streaks/confetti/haptics/coach marks, and (iter 39)
-the start of an accessibility pass (bottom-nav semantics, icon-button
-tooltips — see `docs/TECH_DEBT.md` TD-001 for what's still open). Every
-core UI control is functional — no preview/dummy features remain. See
-the newest `docs/TASK_LOG.md` entries for the per-iteration record.
+and species markers, streaks/confetti/haptics/coach marks, and an
+accessibility pass across iters 39-41 (bottom-nav semantics, icon-button
+tooltips, reaction selected-state, non-map sightings list for the
+Mapbox markers — see `docs/TECH_DEBT.md` TD-001 for the one item still
+open: a WCAG-AA contrast audit). Every core UI control is functional —
+no preview/dummy features remain. See the newest `docs/TASK_LOG.md`
+entries for the per-iteration record.
 
 Backend state: migrations 001-010 (010 = comment_likes), 211 API tests,
-222 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+228 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 ## Current Next Action

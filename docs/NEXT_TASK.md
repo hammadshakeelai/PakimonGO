@@ -7,26 +7,27 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Status as of iter 39 (2026-07-24):** iters 1-38 shipped the full social
+**Status as of iter 41 (2026-07-25):** iters 1-38 shipped the full social
 layer (posts, stories, follows, search, groups, quests), game-feel polish
 (streaks, confetti, haptics, coach marks, feed skeleton, double-tap Wow,
-new-posts pill), and living-map/3D-camera work. Iter 39 started the
-accessibility pass — see `docs/TECH_DEBT.md` TD-001 and `docs/BACKLOG.md`
-for exactly what's left. See `docs/TASK_LOG.md` for the full per-iteration
-record.
+new-posts pill), and living-map/3D-camera work. Iters 39-41 ran the
+accessibility pass: nav + icon-button labels, reaction selected-state, and
+a non-map sightings list replacing the semantics-incapable Mapbox markers.
+See `docs/TECH_DEBT.md` TD-001 and `docs/BACKLOG.md` for exactly what's
+left. See `docs/TASK_LOG.md` for the full per-iteration record.
 
-**Recommended next implementation (accessibility pass, part 2):**
-1. A non-gesture way to react (double-tap-to-Wow currently has no
-   single-tap/long-press/button fallback for screen-reader users).
-2. Semantic exposure — or a fallback list view — for the Mapbox living-map
-   markers, which currently have none.
-3. A WCAG-AA color-contrast pass over the V2 dark theme tokens.
-4. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
+**Recommended next implementation (accessibility pass, part 4):**
+1. A WCAG-AA color-contrast pass over the V2 dark theme tokens
+   (`core/theme/v2_tokens.dart` — amber/lime/blue/violet against surface
+   colors), fixing any pairing under the AA 4.5:1 (text) / 3:1 (large
+   text, icons) thresholds. This is the last open item in TD-001.
+2. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
    stopped firing for a week. Needs the user's explicit sign-off on repo
    scope, cadence, and model before creating a recurring routine with push
-   access.
+   access — the user has explicitly declined this once already ("skip
+   this all"); do not raise it again unprompted.
 
 Why this is the grounded default:
 
