@@ -27,17 +27,25 @@ and iter 49 closed the matching bug on the Feed screen too (TD-004:
 
 **Status check: no known live-path fake data remains in the app.** The
 "de-fake the live UI" thread that ran iters 45-49 has no further scoped
-items in it. The recommended next implementation is a new direction:
+items in it. TD-003 also turned out already closed on inspection -
+PakimonGO-V2's `tools/qa/validate_docs.py`/`pre_task_check.py` already
+had a working file-size check (since Sprints 22-25); the real gap was
+that this improvement loop only ever ran v1's validators, never V2's own
+copy. Fixed that (excluded `.dart_tool` build output from the scan,
+split the 2 files this loop's own edits had pushed over 300 lines) and
+closed TD-003 with a corrected removal condition: run V2's own
+validators for V2 edits going forward, the same as v1's for v1 edits.
+
+The recommended next implementation is a new direction:
 
 1. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
    HTML prototype, and decide which remaining concept ideas become real
-   requirements vs. backlog.
-2. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
-   file-size check of its own - add a lightweight script inside that repo
-   rather than reaching across repos from this one's validator.
-3. Moderator console/appeals tooling (no credential needed, larger scope
+   requirements vs. backlog. This one genuinely needs the user's product
+   judgment, not autonomous promotion - see `docs/CURRENT_THINKING.md`'s
+   Near-Term Bias.
+2. Moderator console/appeals tooling (no credential needed, larger scope
    - see Next Work Queue item 7).
-4. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
+3. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
    stopped firing for a week. Needs the user's explicit sign-off on repo
@@ -50,10 +58,10 @@ Why this is the grounded default:
 - It needs no new cloud credentials.
 - It directly supports "ultra supreme, super fun" game feel — the
   standing directive behind this whole improvement loop.
-- With TD-002 and TD-004 both closed, the "no fake data in the live app"
-  thread iters 45-49 worked through has no more concrete, scoped items
-  left in it - the natural next step is a new direction (the social/game
-  UI concept review) or a process-hygiene item (TD-003).
+- With TD-002, TD-003, and TD-004 all closed, there is no remaining
+  concrete, scoped, no-credential item left except the social/game UI
+  concept review - which needs the user's sign-off before it becomes code
+  scope, not something to decide autonomously.
 - The new social/game UI ideas are intentionally concept backlog, not code scope
   yet.
 

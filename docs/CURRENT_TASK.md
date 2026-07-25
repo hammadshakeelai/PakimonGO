@@ -202,22 +202,44 @@ before their fixes and pass after. 218 API tests (was 216), 293 V2
 Flutter tests (was 289), `flutter analyze` clean on both repos, all 3 v1
 validators PASS.
 
+**Iter 49 continued - closed TD-003, but not by building anything:**
+before writing the "missing" script TD-003 described, checked whether it
+really was missing - `git log` inside the PakimonGO-V2 checkout showed
+`tools/qa/validate_docs.py` and `pre_task_check.py`, complete with a
+working `check_file_sizes()`, have existed there since Sprints 22-25.
+TD-003's premise was wrong. The real gap: this whole 49-iteration
+improvement loop only ever ran the **v1** repo's validators; V2's
+identical copy of the same check simply was never invoked against V2's
+own edits. Running it for the first time found 8 files over 300 lines,
+2 of them introduced by this very iteration
+(`score_reveal_screen.dart` 333 lines, `capture_refresh_test.dart` 315
+lines). Fixed a false-positive in the check itself (it flagged a Flutter
+build artifact under `.dart_tool` - excluded, matching
+`pre_task_check.py`'s existing exclusion list), split the 2 self-caused
+files (`score_reveal_screen.dart` -> +`score_reveal_parts.dart`;
+`capture_refresh_test.dart` -> +`capture_refresh_test_harness.dart`,
+extracting ~100 lines of duplicated test scaffolding), and left the 5
+pre-existing, untouched-this-session warnings logged as known debt.
+293 V2 Flutter tests (unchanged - pure refactor), `flutter analyze`
+clean, all 3 of V2's own QA scripts now pass when run from the V2
+checkout. TD-003 closed with a corrected removal condition: run V2's own
+validators for V2 edits going forward, not "build a script."
+
 ## Current Next Action
 
 Items 1-4 from the prior version of this list (game-feel polish, post
 detail/story replies/group creation, accessibility pass, loading
 shimmers) are all done - see `docs/TASK_LOG.md` iters 36-45. The HUD
-"Lvl N" badge (former item 1 here) is also done as of iter 46, and TD-004
-(former item 1 here) is done as of iter 49. Recommended no-credential
-path from here:
+"Lvl N" badge (former item 1 here) is done as of iter 46, TD-004 is done
+as of iter 49, and TD-003 is done (reframed, not built) as of iter 49.
+Recommended no-credential path from here:
 
 1. Priority 1 from the Next Work Queue below: review
    `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the HTML prototype, and decide
    which remaining concept ideas become real requirements vs. backlog.
+   This one needs the user's product judgment, not autonomous promotion.
 2. Moderator console/appeals tooling (no credential needed, larger scope
    - see Next Work Queue item 7).
-3. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
-   file-size check of its own - add a small script inside that repo.
 
 Credential or account-dependent path:
 

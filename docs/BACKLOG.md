@@ -151,9 +151,11 @@ and larger post-launch features.
   a recurring issue.
 - Make `.github/workflows/docs-validation.yml` a required branch check once
   repository settings are configured.
-- Add max-file-size warning workflow once code ownership requires automated
-  enforcement beyond `pre_task_check.py`. PakimonGO-V2 (separate repo) has
-  no such check at all yet - see `docs/TECH_DEBT.md` TD-003.
+- Add max-file-size warning workflow (CI, not just local) once code
+  ownership requires it. PakimonGO-V2 (separate repo) already has a
+  local `validate_docs.py`/`pre_task_check.py` file-size check (TD-003,
+  closed iter 49) - what's still missing is a CI gate, in both repos, not
+  the local check itself.
 - Add full visible conversation text to
   `docs/conversation-archive/raw/FULL_CONVERSATION_COPY_PASTE_HERE.txt` after
   user provides an export.

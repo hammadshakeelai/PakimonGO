@@ -2992,3 +2992,59 @@ which brainstormed ideas become real requirements, which
 to make, not something to promote autonomously. TD-003 is self-contained
 and has a v1 implementation (`tools/qa/validate_docs.py`'s
 `check_file_sizes()`) to model.
+
+## 2026-07-26 (iter 49 cont'd) - TD-003 was already stale: the check existed, it just was never run
+
+Before building the "missing" script TD-003 described, checked whether
+it was actually missing - `git log -- tools/qa/validate_docs.py` inside
+the PakimonGO-V2 checkout shows the file (with a working
+`check_file_sizes()`) has existed there since Sprints 22-25, long before
+TD-003 was opened in iter 45. The ticket's premise was wrong. The real
+gap: this entire 49-iteration V2 improvement loop has only ever run the
+**v1** repo's validators (`python tools/qa/validate_docs.py` from the v1
+checkout, whose `ROOT` resolves to the v1 tree) - V2's identical copy of
+the same script has been sitting there correct and simply never invoked
+against V2's own edits.
+
+Running it for the first time surfaced a real, current problem: 8 files
+over 300 lines, two of them introduced by this very iteration -
+`score_reveal_screen.dart` (333 lines, after adding the wild-capture
+refresh fix earlier this iteration) and `capture_refresh_test.dart` (315
+lines, after adding its two new regression tests). Also found the check
+itself has a false-positive bug: it was flagging
+`.dart_tool/flutter_build/dart_plugin_registrant.dart`, a Flutter build
+artifact, because `check_file_sizes()` never excludes generated
+directories - `pre_task_check.py`'s own file-size check already
+excludes `.dart_tool`/`build`/`.pytest_cache`, so brought
+`validate_docs.py` in line with it (8 -> 7 real warnings).
+
+Fixed the two self-inflicted ones: `score_reveal_screen.dart` had its
+score-summary card (avatar + species/points/status) and its dummy-only
+breakdown-tile row extracted into a new `score_reveal_parts.dart`
+(`ScoreSummaryCard`, `BreakdownRow`) - 333 -> 243 lines, new file 138
+lines. `capture_refresh_test.dart`'s three tests shared ~100 lines of
+near-identical mock-client/media-service/location-service scaffolding
+(the exact duplication advisor flagged before starting this cleanup) -
+extracted into `capture_refresh_test_harness.dart`
+(`MockClient`, `jsonResponse`, `uploadPipelineResponses()`,
+`wildCaptureClient()`, `MockCaptureMediaService`, `NullLocationService`)
+- 315 -> 168 lines, harness 101 lines. Both are pure refactors (no
+behavior change), verified by re-running the exact same tests before and
+after: all still pass, 293 V2 Flutter tests unchanged, `flutter analyze`
+clean.
+
+Left the remaining 5 pre-existing warnings alone this iteration
+(`group_screen.dart` 314, `map_hud_screen.dart` 361, `story_viewer.dart`
+314, `api_models.dart` 304, `mission_strip_test.dart` 359) - all are
+WARN-level (>300, not >500 FAIL), none were touched this session, and
+splitting untouched files for no reason other than the count is unscoped
+churn with its own regression risk. Logged in `docs/TECH_DEBT.md` TD-003
+as known, accepted debt for whichever future iteration next has a real
+reason to be in one of those files.
+
+TD-003 closed with a corrected removal condition: not "the script
+exists" (it always did) but "V2's own validators are actually run as
+part of V2 edits going forward" - a workflow habit, not a one-time
+artifact. All 3 of V2's QA scripts (`validate_docs.py`,
+`pre_task_check.py`, `scan_secrets.py`) now pass when run from the V2
+checkout, and this record is the reminder to keep running them there.

@@ -153,30 +153,63 @@ Current debt items:
 - Owner: V2 improvement loop.
 - Review date: opened 2026-07-25 (iter 45), closed 2026-07-25 (iter 46).
 
-## TD-003: The 300-line file-size rule has no automated check in PakimonGO-V2
+## TD-003: The 300-line check exists in PakimonGO-V2 but was never being run — CLOSED (iter 49, 2026-07-26)
 
-- Area: cross-repo tooling. `tools/qa/validate_docs.py`'s
-  `check_file_sizes()` only walks `SOURCE_ROOTS` inside this (v1) repo;
-  PakimonGO-V2 is a separate git repository with no `tools/qa/` of its
-  own, so CLAUDE.md rule #8 ("source files stay <=300 lines") is enforced
-  in the V2 Flutter app entirely by an agent/contributor remembering to
-  run `wc -l` by hand.
-- Introduced: always true since PakimonGO-V2 was split into its own repo;
-  surfaced during the iter 45 (2026-07-25) review, which found
-  `rank_hub_parts.dart` had already drifted to 310 lines unnoticed (fixed
-  same iter - see the closed history below) and noted two earlier close
-  calls (`map_hud_parts.dart` at 337, `groups_list_screen.dart` at 305)
-  that were only caught by manual inspection during iters 41 and 44.
-- Risk: Low-medium - it's a discipline/maintainability rule, not a
-  correctness one, but it has already silently slipped at least three
-  times, meaning it will keep slipping without tooling.
-- Removal plan: add an equivalent lightweight size-check script inside
-  PakimonGO-V2 itself (that repo has no CI/validator suite yet at all),
-  rather than reaching across repos from this validator, which would be
-  fragile (depends on a specific sibling-checkout layout that isn't
-  guaranteed).
+- Area: PakimonGO-V2 repo, `tools/qa/validate_docs.py`,
+  `tools/qa/pre_task_check.py`.
+- **Correction to the original framing (opened iter 45, 2026-07-25):**
+  this ticket originally claimed PakimonGO-V2 "has no `tools/qa/` of its
+  own" and needed a script built from scratch. That was wrong - checking
+  before building (iter 49) found `tools/qa/validate_docs.py` and
+  `tools/qa/pre_task_check.py` already exist in that repo, complete with
+  a `check_file_sizes()` function, and have since Sprints 22-25 (`git log`
+  confirms, well before this ticket was opened). The real problem was
+  never a missing script: this session's workflow only ever ran the
+  **v1** repo's validators (`ROOT = Path(__file__).resolve().parents[2]`
+  resolves to whichever repo the script lives in, and every `python
+  tools/qa/validate_docs.py` call this whole improvement loop was run
+  from the v1 checkout) - so V2's own copy of the same check has been
+  sitting there, correct, and simply never invoked against V2's edits
+  for all of iters 1-49.
+- Consequence found by finally running it: 8 files over 300 lines,
+  including 2 introduced by this session's own iter-49 edits
+  (`score_reveal_screen.dart` grew to 333 lines adding the wild-capture
+  refresh fix; `capture_refresh_test.dart` grew to 315 adding its two new
+  regression tests) - proof the rule really had been silently slipping,
+  exactly as the original ticket suspected, just for the reason of an
+  unrun check rather than a nonexistent one.
+- Fix: (1) `check_file_sizes()` was flagging
+  `.dart_tool/flutter_build/dart_plugin_registrant.dart`, a Flutter build
+  artifact, as a false positive - `pre_task_check.py`'s own file-size
+  check already excluded `.dart_tool`/`build`/`.pytest_cache`, so
+  `validate_docs.py` was made consistent with it. (2) Split the two
+  files this session had pushed over the limit:
+  `score_reveal_screen.dart` (333 -> 243 lines) had its score-summary
+  card and dummy breakdown-tile row extracted into a new
+  `score_reveal_parts.dart` (138 lines); `capture_refresh_test.dart`
+  (315 -> 168 lines) had its ~100 lines of duplicated mock-client/media-
+  service/location-service scaffolding extracted into
+  `capture_refresh_test_harness.dart` (101 lines), shared by all three
+  tests. (3) Left the 5 remaining pre-existing warnings
+  (`group_screen.dart` 314, `map_hud_screen.dart` 361,
+  `story_viewer.dart` 314, `api_models.dart` 304, `mission_strip_test.dart`
+  359) untouched this iteration - all are >300 WARN, not >500 FAIL, none
+  were touched this session, and splitting files with no other reason to
+  open them this iteration is unscoped churn with its own regression
+  risk. Logged here as known, accepted warnings for a future iteration
+  that has its own reason to be in those files.
+- Verification: 293 V2 Flutter tests (unchanged count - these were pure
+  refactors, not new behavior), `flutter analyze` clean, all 3 of V2's
+  own QA scripts (`validate_docs.py`, `pre_task_check.py`,
+  `scan_secrets.py`) now PASS when run from the V2 checkout.
+- Removal condition met: V2's own `validate_docs.py`/`pre_task_check.py`
+  now need to be run from the V2 checkout as part of every V2 edit going
+  forward, the same way v1's validators are run for v1 edits - this is a
+  workflow correction, not a one-time fix, so future iterations touching
+  the V2 repo should include this step.
 - Owner: V2 improvement loop.
-- Review date: opened 2026-07-25 (iter 45).
+- Review date: opened 2026-07-25 (iter 45), reframed and closed
+  2026-07-26 (iter 49).
 
 ## TD-004: Feed shows an unconditional "verified" checkmark for every poster — CLOSED (iter 49, 2026-07-26)
 
