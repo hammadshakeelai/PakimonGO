@@ -71,7 +71,7 @@ to derive a real tier/level from — tracked as new tech debt (see
 `docs/TECH_DEBT.md`).
 
 Backend state: migrations 001-010 (010 = comment_likes), 211 API tests,
-277 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+280 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 **Iter 43 (2026-07-25):** full end-to-end verification at the user's
@@ -105,7 +105,14 @@ fixed-width code at any width tried, because Flutter clamps a
 fixed-width child to its parent's constraints in a Column's cross axis
 instead of throwing - verified empirically, then replaced with a test
 that asserts the actual `width` property and does fail against the old
-code). 277 V2 Flutter tests green (was 270), `flutter analyze` clean.
+code). A same-iteration follow-up review then caught a real dead end in
+the mission strip's own empty state (joining a group and backing out
+never refreshed the strip - `GroupsListScreen.open` didn't return its
+push `Future` for the caller to chain a refetch onto) and a matching
+wiring-test gap (the new tests never mounted `MapHudScreen` itself with
+a real `MissionViewModel`); both are fixed, with an end-to-end join-flow
+test verified to fail without the fix and pass with it. 280 V2 Flutter
+tests green (was 270), `flutter analyze` clean.
 
 ## Current Next Action
 

@@ -2693,7 +2693,29 @@ Also added `mission_strip_test.dart` (7 tests: `MissionViewModel`'s
 cross-group quest ranking and empty/no-group states, plus `MissionStrip`
 rendering for all three real states and its tap targets).
 
-Net: 277 V2 Flutter tests (was 270), `flutter analyze` clean, no backend
+**Follow-up the same iteration**, from a second-opinion review of this
+exact change: it found a real dead end - the "join a squad to unlock
+quests" empty state's tap target pushed `GroupsListScreen` but never
+refetched afterward, so a user who actually joined a group and backed
+out still saw "join a squad." `GroupsListScreen.open` now returns the
+push's `Future` so callers can chain onto it; `MapHudScreen`'s
+`_openGroups`/`_openQuestGroup` both refetch `MissionViewModel` on
+return. It also caught the exact same wiring-test gap iter 44's
+skeleton work had: the new tests only exercised `MissionViewModel` and
+`MissionStrip` in isolation, never `MapHudScreen` actually wiring the
+two together. Added a test mounting the real screen with a real
+`MissionViewModel` (not handed one pre-fetched), and a full end-to-end
+test driving the actual join flow (HUD -> "join a squad" ->
+`GroupsListScreen` -> `GroupScreen` -> tap Join -> back out twice) that
+asserts the strip's rendered content changes - the first version of this
+test call-counted `GET /groups` requests instead of checking rendered
+output, which turned out to still pass with the refetch fix removed
+(because `GroupsListScreen` itself also calls `GET /groups` in its own
+`initState`, for an unrelated reason) - re-verified empirically (fails
+without the fix, passes with it) after rewriting it to assert on
+`find.text(...)` instead.
+
+Net: 280 V2 Flutter tests (was 270), `flutter analyze` clean, no backend
 changes needed (only read existing endpoints). Two new tech-debt items
 opened for follow-up, not fixed this iteration (see `docs/TECH_DEBT.md`
 TD-002, TD-003): the HUD header's "Lvl N" badge is still a placeholder

@@ -5,7 +5,7 @@
 Original sprint packets through Sprint 46 are complete, and post-sprint
 hardening has continued beyond that structure. Latest recorded suite in
 `docs/TASK_LOG.md` (as of iter 45, 2026-07-25): 211 API tests, 78 scoring
-tests, 277 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
+tests, 280 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
 repos. (The 145/69/162 figures were the pre-V2-loop sprint-era baseline.)
 
 Current debt items:

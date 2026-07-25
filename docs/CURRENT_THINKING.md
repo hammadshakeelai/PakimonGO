@@ -25,7 +25,7 @@ Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
 **Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
 scoring tests, 162 Flutter tests. The V2 improvement loop (see
-`docs/TASK_LOG.md` iters 1-45) has since grown this to 211 API tests, 277 V2
+`docs/TASK_LOG.md` iters 1-45) has since grown this to 211 API tests, 280 V2
 Flutter tests, and 163 V1 Flutter tests as of 2026-07-25, with `flutter
 analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
 Treat those as the last recorded full-suite counts unless you re-run the
@@ -44,7 +44,13 @@ actually being capable of failing, because `takeException()` only catches
 main-axis `RenderFlex` overflow, not a fixed-width child silently clamped
 down by `BoxConstraints.enforce()` in a Column's cross axis. A passing
 test proves nothing on its own — reverting the fix and re-running it is
-the only way to know whether it would have caught the bug.
+the only way to know whether it would have caught the bug. The same
+iteration hit it a second time from a different angle: a test that
+counted calls to `GET /groups` to prove a refetch happened still passed
+with the refetch removed, because an unrelated screen (`GroupsListScreen`)
+happened to call the same endpoint in its own `initState` for its own
+reasons. Counting calls to a shared endpoint doesn't prove which caller
+made them; asserting on rendered output (`find.text(...)`) does.
 
 ## Key Insight
 
