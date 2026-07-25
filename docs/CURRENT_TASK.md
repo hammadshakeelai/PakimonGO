@@ -63,14 +63,19 @@ record.
 
 Every core UI control is functional. As of iter 45, the map HUD's mission
 strip and the Rank Hub's season card no longer show fabricated content
-either, and as of iter 46 the HUD header's "Lvl N" badge is real too
-(derived from actual lifetime points) - see below. The avatar image
-itself stays a placeholder asset (no per-user avatar upload exists
-anywhere in the app - the same legitimate default-asset pattern as
-`V2Dummy.groupHero`), which is not counted as fake user state.
+either, as of iter 46 the HUD header's "Lvl N" badge is real too (derived
+from actual lifetime points), and as of iter 48 the Profile screen's
+"verified" checkmark and fake motto tagline are fixed/removed - see
+below. The avatar image itself stays a placeholder asset (no per-user
+avatar upload exists anywhere in the app - the same legitimate
+default-asset pattern as `V2Dummy.groupHero`), which is not counted as
+fake user state. One known live-path fake remains open: `feed_post_card.
+dart` shows the same unconditional "verified" checkmark next to every
+poster in the feed - see `docs/TECH_DEBT.md` TD-004 (needs a `/v1/feed`
+response change, not just a client fix).
 
 Backend state: migrations 001-010 (010 = comment_likes), 216 API tests,
-285 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
+289 V2 + 163 V1 Flutter tests, demo seed is idempotent + self-refreshing
 (stories, quest windows).
 
 **Iter 43 (2026-07-25):** full end-to-end verification at the user's
@@ -125,6 +130,35 @@ uncapped) kept deliberately separate from `SeasonCard.tiers` (that
 5" forever past 1500 points). 216 API tests (was 211), 285 V2 Flutter
 tests (was 280), `flutter analyze` clean on both repos.
 
+**Iter 47 (2026-07-25):** the HUD's real streak/level (iter 46) turned
+out to only refresh when the user opened the Profile screen, never right
+after the capture that actually changed the score - `fetchProfile()` ran
+exactly once, in `MapHudScreen.initState()`, which never re-runs since
+the Map tab lives in an `IndexedStack` and is built once at launch.
+`CaptureReviewScreen` now refreshes the shared `ProfileViewModel`/
+`MissionViewModel` in the background immediately after a successful
+submission, before Score Reveal even opens. Also gave `CaptureHero` an
+`errorBuilder` for corrupt/unreadable photo bytes (V1's capture screen
+already had this; V2's never got it - found while writing the
+first-ever widget test for `CaptureReviewScreen`). 286 V2 Flutter tests
+(was 285), `flutter analyze` clean.
+
+**Iter 48 (2026-07-25):** removed a fake "Explorer. Observer. Protector."
+motto line under every real user's name/email on the Profile screen (no
+backend "bio" field exists to back it - the honest fix is removing it,
+not inventing a different fake), and fixed an unconditional "verified"
+checkmark next to the name that showed for every user regardless of
+actual trust state. Before touching the checkmark, verified `'verified'`
+is a real, reachable value (seed scripts explicitly set it for demo
+users) rather than trusting `docs/api/OPENAPI_DRAFT.yaml`'s stale
+`trustState` enum, which doesn't list it - avoided breaking an
+already-correct check elsewhere by "fixing" it to match a wrong doc.
+Deferred: `feed_post_card.dart` has the same unconditional checkmark for
+every feed poster, but needs a backend `/v1/feed` change (`FeedItem` has
+no trust-state field at all) - opened as `docs/TECH_DEBT.md` TD-004
+rather than expanding this iteration's scope. 289 V2 Flutter tests (was
+286), `flutter analyze` clean.
+
 ## Current Next Action
 
 Items 1-4 from the prior version of this list (game-feel polish, post
@@ -133,10 +167,14 @@ shimmers) are all done - see `docs/TASK_LOG.md` iters 36-45. The HUD
 "Lvl N" badge (former item 1 here) is also done as of iter 46. Recommended
 no-credential path from here:
 
-1. Priority 1 from the Next Work Queue below: review
+1. TD-004 (`docs/TECH_DEBT.md`): enrich `GET /v1/feed` with each poster's
+   trust state so `feed_post_card.dart`'s unconditional "verified"
+   checkmark can be gated on real data, matching the iter 48 profile-screen
+   fix.
+2. Priority 1 from the Next Work Queue below: review
    `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the HTML prototype, and decide
    which remaining concept ideas become real requirements vs. backlog.
-2. Moderator console/appeals tooling (no credential needed, larger scope
+3. Moderator console/appeals tooling (no credential needed, larger scope
    - see Next Work Queue item 7).
 3. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
    file-size check of its own - add a small script inside that repo.

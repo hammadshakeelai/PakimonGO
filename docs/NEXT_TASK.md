@@ -7,28 +7,32 @@ Tier 2 implementation items are recorded as done in `docs/REMAINING_WORK.md`:
 Postgres wiring, Flutter error handling, onboarding, age gate, Firebase auth,
 Groq vision, rate limiting, and APK optimization.
 
-**Status as of iter 46 (2026-07-25):** iters 1-38 shipped the full social
+**Status as of iter 48 (2026-07-25):** iters 1-38 shipped the full social
 layer (posts, stories, follows, search, groups, quests), game-feel polish
 (streaks, confetti, haptics, coach marks, feed skeleton, double-tap Wow,
 new-posts pill), and living-map/3D-camera work. Iters 39-42 ran the full
 accessibility pass to completion (`docs/TECH_DEBT.md` TD-001 closed).
 Iter 44 added loading skeletons to the remaining spinner screens. Iter 45
-de-faked the map HUD mission strip and the Rank Hub season card - the
-two most severe live-path screens still showing fabricated content to
-every real user - and fixed a genuinely vacuous regression test (twice)
-along the way. Iter 46 closed the remaining TD-002 gap: the HUD's
-"Lvl N" badge is now derived from a real `totalPoints` field added to
-`GET /v1/users/me`. See `docs/TASK_LOG.md` for the full per-iteration
+de-faked the map HUD mission strip and the Rank Hub season card, iter 46
+closed TD-002 (real HUD "Lvl N" badge), iter 47 fixed the HUD streak/
+level actually going stale after a capture (not just the badge itself
+being real), and iter 48 removed a fake profile "motto" tagline and
+fixed an unconditional "verified" checkmark on the Profile screen (the
+same bug still open on the Feed screen - TD-004, needs a backend
+`/v1/feed` change). See `docs/TASK_LOG.md` for the full per-iteration
 record.
 
 **Recommended next implementation:**
-1. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
+1. TD-004 (`docs/TECH_DEBT.md`): enrich `GET /v1/feed` with each
+   poster's trust state so `feed_post_card.dart`'s unconditional
+   "verified" checkmark can be gated on real data.
+2. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
    HTML prototype, and decide which remaining concept ideas become real
    requirements vs. backlog.
-2. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
+3. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
    file-size check of its own - add a lightweight script inside that repo
    rather than reaching across repos from this one's validator.
-3. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
+4. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
    stopped firing for a week. Needs the user's explicit sign-off on repo

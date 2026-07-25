@@ -2766,3 +2766,95 @@ the matching "Lvl N" text and not the old hardcoded "Lvl 23"; no
 ProfileViewModel wired yet still reads "Lvl 1", not a crash or blank).
 216 API tests (was 211), 285 V2 Flutter tests (was 280), `flutter
 analyze` clean on both repos, all 3 v1 doc/JSON/secret validators pass.
+
+## 2026-07-25 (iter 47) - HUD streak/level went stale after a capture
+
+A second-opinion review of iter 46 asked the right question before
+building further on the level badge: does it actually update after a
+capture, or only when the user happens to open Profile? Traced it:
+`ProfileViewModel.fetchProfile()` is called exactly once, in
+`MapHudScreen.initState()` - and `MapHudScreen` is index 0 of an
+`IndexedStack` in `V2Shell`, so it's built once at app launch and never
+remounts on tab switches. The only OTHER call site is
+`ProfileV2Screen.initState()` (a real `Navigator.push`, re-created every
+visit) - and since both screens share the same `_profileVm` instance,
+opening Profile does refresh the HUD's streak/level as a side effect
+(the shared `ChangeNotifier` notifies `MapHudScreen`'s already-registered
+listener) - but nothing refreshes it right after the capture that
+actually changed the score. A user who captures, watches the Score
+Reveal, and returns straight to the Map tab would see their pre-capture
+streak/level until they separately opened Profile - the same class of
+staleness bug as iter 45's mission-strip dead end, one screen over, and
+it now also affects the brand-new Lvl badge from iter 46.
+
+Fix: `CaptureReviewScreen` now takes `profileViewModel`/`missionViewModel`
+(wired from `V2Shell`, the same instances `MapHudScreen` already listens
+to) and fires `fetchProfile()`/`fetchMission()` in the background
+(not awaited) immediately after a submission succeeds, before navigating
+to Score Reveal - so both are already refreshing while the user is still
+looking at their score, not gated behind any further navigation.
+
+Building the first-ever widget test for `CaptureReviewScreen` (none
+existed) surfaced a real, unrelated robustness gap along the way:
+`CaptureHero`'s `Image.memory` had no `errorBuilder`, so a photo with
+unreadable bytes (a real possibility - corrupt files, decode failures on
+some devices) would show Flutter's raw error output instead of a graceful
+fallback. `capture_screen.dart` (the V1 capture flow) already had this
+exact `errorBuilder` -> broken-image-icon pattern; `CaptureHero` just
+never got it. Fixed to match.
+
+Verification: `capture_refresh_test.dart` drives the actual UI (pick
+photo -> tap submit -> mock upload-intent/upload/complete/create-
+submission chain resolves) and asserts the shared `ProfileViewModel`/
+`MissionViewModel` end up refreshed (`GET /groups` called,
+`profileVm.profile?.totalPoints` reflects the new total) without the
+user ever opening Profile - confirmed to fail (missing the `GET /groups`
+call) with the two `fetchProfile()`/`fetchMission()` lines removed, and
+pass with them restored. 286 V2 Flutter tests (was 285), `flutter
+analyze` clean.
+
+## 2026-07-25 (iter 48) - Removed a fake "verified" badge and a fake bio line
+
+Advisor's closing note on iter 46 flagged one more grep worth doing:
+`V2Dummy.playerMotto`/`playerHandle`/`streakDays` were still in the
+dummy-data file, and `profile_v2_screen.dart:130` rendered `playerMotto`
+unconditionally (not behind any `vm == null` guard) - a fake "Explorer.
+Observer. Protector." tagline under every real user's name and email.
+Removed it outright (no backend "bio" field exists to replace it with
+something real - the honest fix is removing the fabrication, not
+inventing a different one). Also found, right next to it, an unconditional
+`Icon(Icons.verified)` checkmark shown for every user regardless of
+actual trust state.
+
+Before touching that checkmark, checked whether `'verified'` was even a
+real, reachable value - `docs/api/OPENAPI_DRAFT.yaml`'s `trustState` enum
+only lists `[trusted, normal, low, restricted]`, which would have made
+`'verified'` a dead comparison everywhere it's used (also true in
+`map_hud_screen.dart` and the V1 `profile_screen.dart`, both of which
+already gate on `trustState == 'verified'`). Grepped the actual seed
+scripts instead of trusting the stale OpenAPI doc: `seed.py` and both
+`demo_seed*.py` files explicitly set `trust_state="verified"` for the
+demo/seeded users, so `'verified'` is real and reachable for exactly the
+accounts this app is built around - the OpenAPI enum is what's stale
+(also missing the DB's actual default, `"neutral"`, which it lists as
+`"normal"`). Confirming this first avoided a real regression: the
+instinctive "fix" would have been changing `'verified'` to `'trusted'`
+to match the documented enum, which would have broken a check that
+already works correctly for the demo account. The bug was never the
+comparison value - it was `profile_v2_screen.dart` not checking
+`trustState` at all. Gated the checkmark on `profile?.trustState ==
+'verified'`, matching the pattern already correct elsewhere.
+
+Deferred, not fixed this iteration: `feed_post_card.dart` shows the same
+unconditional `Icons.verified` next to every poster's name in the feed -
+a more visible instance of the same bug, but `FeedItem` has no
+trust-state field at all, so fixing it needs a `/v1/feed` response
+change (enrich each item with the poster's trust state), not just a
+client-side conditional. Bigger, separately-scoped work - see
+`docs/TECH_DEBT.md` TD-004.
+
+Verification: `profile_v2_verified_test.dart` (3 tests: checkmark shows
+for a `trustState: 'verified'` profile, hides for `'neutral'` - confirmed
+empirically to fail against the old unconditional icon before the fix -
+and the motto text is gone). 289 V2 Flutter tests (was 286), `flutter
+analyze` clean.

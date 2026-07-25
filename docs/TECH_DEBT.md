@@ -4,8 +4,8 @@
 
 Original sprint packets through Sprint 46 are complete, and post-sprint
 hardening has continued beyond that structure. Latest recorded suite in
-`docs/TASK_LOG.md` (as of iter 46, 2026-07-25): 216 API tests, 78 scoring
-tests, 285 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
+`docs/TASK_LOG.md` (as of iter 48, 2026-07-25): 216 API tests, 78 scoring
+tests, 289 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
 repos. (The 145/69/162 figures were the pre-V2-loop sprint-era baseline.)
 
 Current debt items:
@@ -171,6 +171,32 @@ Current debt items:
   guaranteed).
 - Owner: V2 improvement loop.
 - Review date: opened 2026-07-25 (iter 45).
+
+## TD-004: Feed shows an unconditional "verified" checkmark for every poster
+
+- Area: V2 Flutter app (PakimonGO-V2 repo), `feed_post_card.dart` (the
+  main social feed's post-header row).
+- Introduced: original V2 panel-prototype build; surfaced during the
+  iter 48 (2026-07-25) profile-screen de-fake pass, which found and fixed
+  the identical bug on `profile_v2_screen.dart` (an unconditional
+  `Icon(Icons.verified)` next to the viewer's own name) but scoped this
+  one out because it needs a backend change, not just a client fix.
+- Reason: `Icon(Icons.verified, ...)` is rendered next to every post's
+  `item.userId` with no condition at all - implying every poster in the
+  feed is verified. Unlike the profile-screen version, this can't be
+  fixed client-side: `FeedItem` (`features/v2/domain/feed_viewmodel.dart`)
+  has no trust-state field, and `GET /v1/feed` doesn't return one either.
+- Risk: Medium - more visible than the profile-screen instance (shows
+  once per post, every time the feed is viewed, for every poster) and
+  slightly more misleading (implies every member of the community has
+  been vetted).
+- Removal plan: enrich the `/v1/feed` response with each poster's
+  `trustState` (a join against `User` alongside whatever the feed query
+  already joins), add the field to `FeedItem`/`FeedItem.fromJson`, and
+  gate the checkmark on `item.trustState == 'verified'` the same way
+  `profile_v2_screen.dart` now does.
+- Owner: V2 improvement loop.
+- Review date: opened 2026-07-25 (iter 48).
 
 ## Debt Entry Template
 

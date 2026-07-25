@@ -25,7 +25,7 @@ Firebase SHA-1, no push notifications, and no persistent scoring queue.
 
 **Testing posture:** the V1 sprint-era baseline was 145 backend tests, 69
 scoring tests, 162 Flutter tests. The V2 improvement loop (see
-`docs/TASK_LOG.md` iters 1-46) has since grown this to 216 API tests, 285 V2
+`docs/TASK_LOG.md` iters 1-48) has since grown this to 216 API tests, 289 V2
 Flutter tests, and 163 V1 Flutter tests as of 2026-07-25, with `flutter
 analyze` clean on both repos and all 3 doc/JSON/secret validators passing.
 Treat those as the last recorded full-suite counts unless you re-run the
@@ -50,7 +50,26 @@ counted calls to `GET /groups` to prove a refetch happened still passed
 with the refetch removed, because an unrelated screen (`GroupsListScreen`)
 happened to call the same endpoint in its own `initState` for its own
 reasons. Counting calls to a shared endpoint doesn't prove which caller
-made them; asserting on rendered output (`find.text(...)`) does.
+made them; asserting on rendered output (`find.text(...)`) does. Iter 47
+generalized the lesson one step further: before extending a just-shipped
+feature (the HUD level badge), ask whether the thing underneath it
+already refreshes correctly, rather than assuming it does because the
+feature itself works in isolation. `ProfileViewModel.fetchProfile()`
+turned out to run exactly once per app launch (`MapHudScreen.initState`,
+never re-entered because that screen lives in an `IndexedStack`) - so the
+real streak/level was quietly stale after every capture until the user
+happened to open Profile. The fix belonged in the capture flow itself
+(refresh on submit success), not in the HUD. Iter 48 was the other side
+of the same discipline: `docs/api/OPENAPI_DRAFT.yaml`'s `trustState` enum
+didn't list `'verified'` as a valid value, which made the obvious "fix"
+for a stale-looking check look like changing it to a documented enum
+value (`'trusted'`) instead. Grepping the actual seed scripts first
+showed `'verified'` is genuinely set for the demo users and the OpenAPI
+doc was the thing that was wrong (it was also missing `totalPoints` and
+had the DB default recorded as `"normal"` instead of `"neutral"`) -
+changing the client to match the doc would have broken a working check.
+Docs describe intent at the time they were written; only the code and
+the data it actually produces are ground truth for what's true now.
 
 ## Key Insight
 
