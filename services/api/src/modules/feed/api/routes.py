@@ -10,6 +10,7 @@ from src.infrastructure.database.models import (
     SensitiveSpecies,
     Submission,
     SubmissionAttribute,
+    User,
 )
 from src.infrastructure.database.repositories import (
     get_blocked_user_ids,
@@ -66,11 +67,13 @@ def build_feed_page(
             ScoreEvent.points,
             CaptureLocation.latitude,
             CaptureLocation.longitude,
+            User.trust_state,
         )
         .select_from(Submission)
         .join(SubmissionAttribute, SubmissionAttribute.submission_id == Submission.id)
         .join(ScoreEvent, ScoreEvent.submission_id == Submission.id)
         .join(CaptureLocation, CaptureLocation.submission_id == Submission.id, isouter=True)
+        .join(User, User.id == Submission.user_id, isouter=True)
         .filter(Submission.status.in_(["scored", "capped"]))
         .filter(ScoreEvent.points.isnot(None))
     )
@@ -132,6 +135,7 @@ def build_feed_page(
             {
                 "submissionId": row.id,
                 "userId": row.user_id,
+                "trustState": row.trust_state or "neutral",
                 "mediaAssetId": row.primary_media_asset_id,
                 "species": row.real_name,
                 "cuteName": row.cute_name,

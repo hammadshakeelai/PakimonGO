@@ -7,14 +7,14 @@ moderation/map hardening pass. See R-002 below for a real local-dev-only bug
 found and fixed during the 2026-07-25 verification pass.
 
 Latest recorded automated suite in `docs/TASK_LOG.md` (iter 49, 2026-07-26):
-216 API tests, 78 scoring tests, 291 V2 + 163 V1 Flutter tests, and
+218 API tests, 78 scoring tests, 293 V2 + 163 V1 Flutter tests, and
 `flutter analyze` clean on both repos. Iter 49 fixed two real gaps in
-iter 47's HUD-refresh fix: it only refreshed the real points/level total
-after a capped (zoo/pet/duplicate) capture, not a wild one, and the fix
-for that was itself unsafe if the user navigated away from Score Reveal
-before its scheduled auto-check fired (an unguarded `setState` after
-dispose) - see `docs/TASK_LOG.md` iter 49 for both fixes and their
-empirical verification.
+iter 47's HUD-refresh fix (it only refreshed the real points/level total
+after a capped capture, not a wild one, and the fix for that was itself
+unsafe if the user navigated away before its scheduled auto-check fired)
+and closed TD-004 (the Feed screen's unconditional "verified" checkmark)
+- see `docs/TASK_LOG.md` iter 49 for all three fixes and their empirical
+verification.
 
 ## Repository Health Notes
 

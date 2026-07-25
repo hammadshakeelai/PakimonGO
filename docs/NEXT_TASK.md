@@ -18,22 +18,25 @@ closed TD-002 (real HUD "Lvl N" badge), iter 47 fixed the HUD streak/
 level actually going stale after a capture (not just the badge itself
 being real) - but iter 49 found that fix only covered the capped
 (zoo/pet/duplicate) path, not the wild-capture path where the worker
-scores async, and closed that gap too - and iter 48 removed a fake
-profile "motto" tagline and fixed an unconditional "verified" checkmark
-on the Profile screen (the same bug still open on the Feed screen -
-TD-004, needs a backend `/v1/feed` change). See `docs/TASK_LOG.md` for
-the full per-iteration record.
+scores async, and closed that gap too (plus a related unmount-safety
+gap in the fix itself), iter 48 removed a fake profile "motto" tagline
+and fixed an unconditional "verified" checkmark on the Profile screen,
+and iter 49 closed the matching bug on the Feed screen too (TD-004:
+`GET /v1/feed` now returns each poster's real `trustState`). See
+`docs/TASK_LOG.md` for the full per-iteration record.
 
-**Recommended next implementation:**
-1. TD-004 (`docs/TECH_DEBT.md`): enrich `GET /v1/feed` with each
-   poster's trust state so `feed_post_card.dart`'s unconditional
-   "verified" checkmark can be gated on real data.
-2. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
+**Status check: no known live-path fake data remains in the app.** The
+"de-fake the live UI" thread that ran iters 45-49 has no further scoped
+items in it. The recommended next implementation is a new direction:
+
+1. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
    HTML prototype, and decide which remaining concept ideas become real
    requirements vs. backlog.
-3. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
+2. TD-003 (`docs/TECH_DEBT.md`): PakimonGO-V2 has no automated 300-line
    file-size check of its own - add a lightweight script inside that repo
    rather than reaching across repos from this one's validator.
+3. Moderator console/appeals tooling (no credential needed, larger scope
+   - see Next Work Queue item 7).
 4. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
    — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
    session-scoped and does not survive a closed session, so it silently
@@ -47,10 +50,10 @@ Why this is the grounded default:
 - It needs no new cloud credentials.
 - It directly supports "ultra supreme, super fun" game feel — the
   standing directive behind this whole improvement loop.
-- With TD-002 closed, the "no fake data in the live app" thread iters
-  45-46 worked through has no more concrete, scoped items left in it -
-  the natural next step is a new direction (the social/game UI concept
-  review) or a process-hygiene item (TD-003).
+- With TD-002 and TD-004 both closed, the "no fake data in the live app"
+  thread iters 45-49 worked through has no more concrete, scoped items
+  left in it - the natural next step is a new direction (the social/game
+  UI concept review) or a process-hygiene item (TD-003).
 - The new social/game UI ideas are intentionally concept backlog, not code scope
   yet.
 
@@ -85,6 +88,7 @@ Avoid treating these as the next task unless a regression is found:
 | 2 | Accessibility pass | No | DONE (iters 39-42, `docs/TECH_DEBT.md` TD-001 closed). |
 | 3 | Loading shimmers/skeletons | No | DONE (iter 44). |
 | 3b | Real "Lvl N" HUD badge | No | DONE (iter 46). TD-002 closed. |
+| 3c | Feed's unconditional "verified" checkmark | No | DONE (iter 49). TD-004 closed. |
 | 4 | Real-device E2E testing | Device/account | Cover camera, map, upload, scoring, auth, and main navigation on a physical Android device. |
 | 5 | Release keystore/Firebase SHA-1 | Yes | Register release SHA-1 so production Google sign-in works outside debug builds. |
 | 6 | Durable object storage | Yes | Configure S3/GCS or equivalent; local storage is not production-safe. |

@@ -830,7 +830,12 @@ components:
         trustState:
           type: string
           nullable: true
-          enum: [trusted, normal, low, restricted]
+          enum: [neutral, verified]
+          description: >-
+            The only two values the code actually produces: `neutral` is
+            the DB column default for every normal account, `verified` is
+            set for demo/seed accounts. No moderation-tier values
+            (trusted/low/restricted) are implemented anywhere yet.
         createdAt:
           type: string
           format: date-time

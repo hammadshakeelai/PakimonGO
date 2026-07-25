@@ -4,8 +4,8 @@
 
 Original sprint packets through Sprint 46 are complete, and post-sprint
 hardening has continued beyond that structure. Latest recorded suite in
-`docs/TASK_LOG.md` (as of iter 49, 2026-07-26): 216 API tests, 78 scoring
-tests, 291 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
+`docs/TASK_LOG.md` (as of iter 49, 2026-07-26): 218 API tests, 78 scoring
+tests, 293 V2 + 163 V1 Flutter tests, and clean Flutter analysis on both
 repos. (The 145/69/162 figures were the pre-V2-loop sprint-era baseline.)
 
 Current debt items:
@@ -172,31 +172,46 @@ Current debt items:
 - Owner: V2 improvement loop.
 - Review date: opened 2026-07-25 (iter 45).
 
-## TD-004: Feed shows an unconditional "verified" checkmark for every poster
+## TD-004: Feed shows an unconditional "verified" checkmark for every poster — CLOSED (iter 49, 2026-07-26)
 
-- Area: V2 Flutter app (PakimonGO-V2 repo), `feed_post_card.dart` (the
-  main social feed's post-header row).
+- Area: backend `services/api/src/modules/feed/api/routes.py`; V2
+  Flutter app (PakimonGO-V2 repo), `feed_post_card.dart` (the main
+  social feed's post-header row) and `feed_viewmodel.dart`.
 - Introduced: original V2 panel-prototype build; surfaced during the
   iter 48 (2026-07-25) profile-screen de-fake pass, which found and fixed
   the identical bug on `profile_v2_screen.dart` (an unconditional
   `Icon(Icons.verified)` next to the viewer's own name) but scoped this
   one out because it needs a backend change, not just a client fix.
-- Reason: `Icon(Icons.verified, ...)` is rendered next to every post's
-  `item.userId` with no condition at all - implying every poster in the
-  feed is verified. Unlike the profile-screen version, this can't be
-  fixed client-side: `FeedItem` (`features/v2/domain/feed_viewmodel.dart`)
-  has no trust-state field, and `GET /v1/feed` doesn't return one either.
-- Risk: Medium - more visible than the profile-screen instance (shows
-  once per post, every time the feed is viewed, for every poster) and
-  slightly more misleading (implies every member of the community has
-  been vetted).
-- Removal plan: enrich the `/v1/feed` response with each poster's
-  `trustState` (a join against `User` alongside whatever the feed query
-  already joins), add the field to `FeedItem`/`FeedItem.fromJson`, and
-  gate the checkmark on `item.trustState == 'verified'` the same way
-  `profile_v2_screen.dart` now does.
+- Fix (iter 49): `build_feed_page()` now joins `User` (outer join on
+  `Submission.user_id`) and returns each item's `trustState` (defaulting
+  to `"neutral"` if the join misses). `FeedItem` gained a `trustState`
+  field (default `'neutral'`, so every existing test constructor stayed
+  valid without changes), and `feed_post_card.dart`'s checkmark is now
+  gated on `item.trustState == 'verified'`, matching the iter-48
+  profile-screen pattern exactly. While in the same file, also fixed
+  `docs/api/OPENAPI_DRAFT.yaml`'s `UserProfile.trustState` enum - it
+  still listed `[trusted, normal, low, restricted]`, none of which the
+  code has ever produced; the two real, reachable values are `neutral`
+  (the DB column default) and `verified` (set only by the seed scripts).
+  Replaced the invented moderation-tier values with the real enum rather
+  than leaving speculative values that caused the exact "which one is
+  right" confusion iter 48 had to work around.
+- Reason it was medium risk while open: more visible than the
+  profile-screen instance (shows once per post, every time the feed is
+  viewed, for every poster) and slightly more misleading (implies every
+  member of the community has been vetted).
+- Verification: 2 new backend tests (`test_social.py` -
+  `test_feed_shows_neutral_trust_state_by_default`,
+  `test_feed_shows_verified_trust_state_for_a_verified_poster`) and 2 new
+  Flutter tests (`feed_post_card_test.dart` - checkmark shows for a
+  verified poster, hides for a neutral one, mirroring iter 48's
+  show/hide pair rather than only testing the show case). Both pairs
+  confirmed empirically to fail against the pre-fix code (backend:
+  `KeyError: 'trustState'`; Flutter: unconditional icon found when none
+  expected) and pass after. 218 API tests (was 216), 293 V2 Flutter tests
+  (was 291).
 - Owner: V2 improvement loop.
-- Review date: opened 2026-07-25 (iter 48).
+- Review date: opened 2026-07-25 (iter 48), closed 2026-07-26 (iter 49).
 
 ## Debt Entry Template
 

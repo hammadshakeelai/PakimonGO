@@ -2931,3 +2931,49 @@ but calls `tester.pageBack()` right after submitting (disposing
 confirmed empirically to fail (`setState() called after dispose()`,
 total stuck at the stale value) against the pre-fix code, pass after.
 291 V2 Flutter tests (was 289), `flutter analyze` clean on both repos.
+
+## 2026-07-26 (iter 49 cont'd) - Closed TD-004: feed's unconditional "verified" checkmark
+
+Continued the same iteration into the top item on `docs/NEXT_TASK.md`'s
+recommended list: `feed_post_card.dart` showed `Icon(Icons.verified)`
+next to every poster's name with no condition at all, the same bug iter
+48 fixed on the Profile screen - but this one needed a backend change,
+since `GET /v1/feed` never returned a trust-state field.
+
+Backend: `build_feed_page()` (`modules/feed/api/routes.py`) now outer-joins
+`User` on `Submission.user_id` and returns `"trustState": row.trust_state
+or "neutral"` per item - one extra column on an existing query, not a new
+join risk or an N+1 (the group feed reuses this same function and picks
+up the field for free). Flutter: `FeedItem` gained a `trustState` field
+defaulting to `'neutral'` (so all seven existing `FeedItem(...)` test
+call sites needed no changes), and `feed_post_card.dart`'s checkmark is
+now wrapped in `if (item.trustState == 'verified')`, matching the
+iter-48 profile-screen pattern exactly.
+
+While already in `docs/api/OPENAPI_DRAFT.yaml` for this change, also
+fixed the `UserProfile.trustState` enum iter 48 had flagged but left
+alone: it listed `[trusted, normal, low, restricted]`, none of which any
+code path has ever produced. Grepped for every place `trust_state` is
+actually set or read (the `User` model's column default, the four demo
+seed scripts) and confirmed the only two real values are `neutral`
+(default) and `verified` (seed-only) - no moderation-tier system exists
+anywhere yet. Replaced the invented enum with the real one and added a
+note explaining why, rather than leaving a second stale enum in the
+codebase now that a second field references it.
+
+Verification: 2 new backend tests (`test_social.py`) - default-neutral
+and explicit-verified posters - confirmed to fail with `KeyError:
+'trustState'` before the fix, pass after. 2 new Flutter tests
+(`feed_post_card_test.dart`), following iter 48's lesson to test both
+directions instead of only the positive case - "shows for verified"
+and "hides for non-verified" - the hide case confirmed to fail (icon
+found when none expected) against the pre-fix unconditional icon, pass
+after. Full suites re-run clean: 218 API tests (was 216), 293 V2 Flutter
+tests (was 291), `flutter analyze` clean on both repos, all 3 v1
+validators PASS.
+
+TD-004 closed. Per `docs/NEXT_TASK.md`'s recommended list, the "no fake
+data in the live app" thread that ran iters 45-49 has no further scoped
+items left in it - the next candidate is a new direction (the V2 social
+UI concept review) or a process-hygiene item (TD-003, the missing
+300-line check in the PakimonGO-V2 repo).

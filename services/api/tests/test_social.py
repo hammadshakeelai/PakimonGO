@@ -53,9 +53,12 @@ def client(db_session):
     reset_rate_limit()
 
 
-def _seed(db, visibility="public"):
+def _seed(db, visibility="public", poster_trust_state=None):
     db.add(User(id=ALPHA))
-    db.add(User(id=BETA))
+    beta_kwargs = {"id": BETA}
+    if poster_trust_state is not None:
+        beta_kwargs["trust_state"] = poster_trust_state
+    db.add(User(**beta_kwargs))
     sub = Submission(user_id=BETA, status="scored", visibility=visibility)
     db.add(sub)
     db.flush()
@@ -127,6 +130,18 @@ class TestReactions:
         assert item["reactionCounts"] == {"wow": 2}
         assert item["myReaction"] == "wow"
         assert item["commentCount"] == 0
+
+    def test_feed_shows_neutral_trust_state_by_default(self, db_session, client):
+        _seed(db_session)
+        resp = client.get("/v1/feed", headers=AUTH)
+        assert resp.json()["items"][0]["trustState"] == "neutral"
+
+    def test_feed_shows_verified_trust_state_for_a_verified_poster(
+        self, db_session, client
+    ):
+        _seed(db_session, poster_trust_state="verified")
+        resp = client.get("/v1/feed", headers=AUTH)
+        assert resp.json()["items"][0]["trustState"] == "verified"
 
 
 class TestComments:

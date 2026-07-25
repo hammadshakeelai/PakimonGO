@@ -65,17 +65,19 @@ and larger post-launch features.
   are lower-traffic or already have a dedicated empty/error state - revisit
   only if one reads as jarring in practice.
 - De-fake remaining preview surfaces flagged by review. DONE (iters
-  45-48, 2026-07-25): the map HUD mission strip (was hardcoded dummy
-  quest text tagged " preview" - now real group-quest data via
-  `MissionViewModel`), the Rank Hub season card (was a fully fabricated
-  "Season 2 · Ends in 24d 6h" - now a permanent Rank Tier card with no
-  fake countdown), the HUD's "Lvl N" badge (was a hardcoded number - now
-  derived from a real `totalPoints` field added to `GET /v1/users/me`,
-  and iter 47 fixed it actually refreshing after a capture instead of
-  only when Profile was opened), and the Profile screen's fake "motto"
-  tagline + unconditional "verified" checkmark (iter 48). `docs/TECH_DEBT.md`
-  TD-002 closed; TD-004 open (same checkmark bug on the Feed screen,
-  needs a backend `/v1/feed` change).
+  45-49, 2026-07-25 to 2026-07-26): the map HUD mission strip (was
+  hardcoded dummy quest text tagged " preview" - now real group-quest
+  data via `MissionViewModel`), the Rank Hub season card (was a fully
+  fabricated "Season 2 · Ends in 24d 6h" - now a permanent Rank Tier
+  card with no fake countdown), the HUD's "Lvl N" badge (was a
+  hardcoded number - now derived from a real `totalPoints` field added
+  to `GET /v1/users/me`, with iter 47/49 fixing it actually refreshing
+  after both the capped-sync and wild-async capture paths, including an
+  unmount-safety fix), and the Profile screen's fake "motto" tagline +
+  unconditional "verified" checkmark (iter 48), plus the identical
+  checkmark bug on the Feed screen (iter 49, `GET /v1/feed` now returns
+  each poster's real `trustState`). `docs/TECH_DEBT.md` TD-002 and
+  TD-004 both closed. No known live-path fake data remains in the app.
 - Automated real-device E2E plan and scripts for camera, map, upload, auth, and
   scoring.
 - Moderator console, appeals, takedown/restore workflow, audit review, and
