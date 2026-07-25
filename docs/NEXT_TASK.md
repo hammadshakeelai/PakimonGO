@@ -36,34 +36,36 @@ split the 2 files this loop's own edits had pushed over 300 lines) and
 closed TD-003 with a corrected removal condition: run V2's own
 validators for V2 edits going forward, the same as v1's for v1 edits.
 
-The recommended next implementation is a new direction:
+**Honest handoff state: no unblocked no-credential implementation item
+remains.** All three items previously listed here need a user decision
+before any of them can become autonomous implementation work, not just
+a caveat attached to a recommendation:
 
-1. Priority 1 below: review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md` and the
-   HTML prototype, and decide which remaining concept ideas become real
-   requirements vs. backlog. This one genuinely needs the user's product
-   judgment, not autonomous promotion - see `docs/CURRENT_THINKING.md`'s
-   Near-Term Bias.
-2. Moderator console/appeals tooling (no credential needed, larger scope
-   - see Next Work Queue item 7).
-3. `RemoteTrigger`/cloud-routine setup for genuine unattended continuation
-   — see `docs/BUGS_AND_RISKS.md` R-001: the local CronCreate timer is
-   session-scoped and does not survive a closed session, so it silently
-   stopped firing for a week. Needs the user's explicit sign-off on repo
-   scope, cadence, and model before creating a recurring routine with push
-   access — the user has explicitly declined this once already ("skip
-   this all"); do not raise it again unprompted.
+1. Review `docs/ux/SOCIAL_GAME_UI_CONCEPT.md`/the HTML prototype and
+   decide which concept ideas become real requirements - a **product**
+   decision (which features, for whom, at what cost to scope).
+2. Moderator console/appeals tooling (Next Work Queue item 7, marked
+   "No/Maybe" credential, "after scoping" - scoping itself requires
+   deciding who counts as a moderator, which actions are reversible, what
+   the appeals SLA is, and whether a takedown hides or deletes - the
+   `User` model has only `status`/`trust_state`, no role/permission
+   concept exists anywhere yet). This is a **policy** decision for a
+   13+ app with real enforcement consequences, not a UI/architecture
+   one - the same class of call as #1, with more weight.
+3. `RemoteTrigger`/cloud-routine setup - explicitly **declined by the
+   user already** ("skip this all"); do not raise it again unprompted.
+   See `docs/BUGS_AND_RISKS.md` R-001 for the gap this would close if the
+   user ever reopens it.
 
-Why this is the grounded default:
-
-- It needs no new cloud credentials.
-- It directly supports "ultra supreme, super fun" game feel — the
-  standing directive behind this whole improvement loop.
-- With TD-002, TD-003, and TD-004 all closed, there is no remaining
-  concrete, scoped, no-credential item left except the social/game UI
-  concept review - which needs the user's sign-off before it becomes code
-  scope, not something to decide autonomously.
-- The new social/game UI ideas are intentionally concept backlog, not code scope
-  yet.
+None of these three should be started without the user picking one, and
+#3 should never be started without the user bringing it up first. If an
+agent lands here with the directive to keep going and no fresh user
+input, the lowest-risk unblocked technical work is finishing the file-
+size cleanup TD-003 deliberately deferred: `map_hud_screen.dart` (361
+lines), `group_screen.dart` (314), `story_viewer.dart` (314),
+`api_models.dart` (304), `mission_strip_test.dart` (359) in the
+PakimonGO-V2 repo - all WARN-level, none blocking, genuinely optional,
+but real and available without a product/policy call.
 
 ## Sprint 2-26 Complete
 
