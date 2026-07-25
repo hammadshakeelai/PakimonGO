@@ -64,7 +64,15 @@ Current debt items:
   by just running `tools/qa/pre_task_check.py`/`validate_docs.py` with no
   pytest or server involved at all (290816 -> 299008 bytes, one SQLite
   page) - so seeing it dirty after a doc-only session is normal, not a
-  sign something unexpected happened.
+  sign something unexpected happened. **This also means `git stash` is
+  unsafe in this repo**: this file is usually locked (a lingering local
+  python/uvicorn process), so `git stash pop` fails to unlink it and
+  aborts, leaving your real source edits stuck in the stash and your
+  working tree reverted to HEAD. Confirmed 2026-07-26 the hard way. If
+  you need to stash, recover with `git checkout stash@{0} -- <the
+  specific files you changed>` (skip the db file entirely) rather than
+  `git stash pop`, then `git stash drop` once you've verified the
+  recovered files are correct.
 
 ## Decision Debt
 
