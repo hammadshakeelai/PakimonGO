@@ -211,6 +211,14 @@ checkmark).
   the original's own metadata is no longer part of the public attack
   surface. Re-encoding the original too (dropping its EXIF at save time)
   remains a reasonable future hardening step but is not urgent given (1).
+  Separately: any `public`/`thumbnail` derivative generated *before* this
+  fix, via the old silent `shutil.copy2` fallback, is a byte-for-byte copy
+  of an EXIF-intact original and is still served today (fix (1) blocks
+  `originals/`, not pre-existing `public/`/`thumbs/` files that already
+  contain the leak). Only relevant if real (non-seed/demo) user photos
+  had ever hit that fallback path in a deployed environment - worth a
+  one-time audit of `public/`/`thumbs/` before treating any pre-2026-07-27
+  media as safe, not something fixed by this commit alone.
 - Owner: media upload pipeline.
 - Status: fixed 2026-07-27, both repos (v1 + V2), tests passing.
 

@@ -333,6 +333,25 @@ paths:
                 $ref: "#/components/schemas/UserProfile"
         "404":
           $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Delete current user's account
+      operationId: deleteMyAccount
+      x-status: implemented
+      description: >
+        Soft-delete: scrubs ageBand/homeRegion, marks the account deactivated,
+        and best-effort revokes the Firebase identity. Past submissions,
+        comments, reactions, and stories remain attached to the deactivated
+        account rather than being cascade-deleted, since removing them would
+        touch other users' content (e.g. their reactions on this user's
+        posts). Idempotent - calling it again on an already-deleted account
+        still returns 204.
+      responses:
+        "204":
+          description: Account deactivated
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /users/me/collection:
     get:
       summary: Get current user species collection
@@ -615,6 +634,16 @@ components:
           example:
             code: NOT_FOUND
             message: "Resource not found"
+            requestId: "req_abc123"
+    Unauthorized:
+      description: Missing or invalid authorization
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+          example:
+            code: UNAUTHORIZED
+            message: "Missing or invalid authorization"
             requestId: "req_abc123"
     ValidationError:
       description: Validation error
