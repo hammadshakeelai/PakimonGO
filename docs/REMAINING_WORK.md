@@ -56,7 +56,7 @@ These must be done before any real user touches the app.
 | Loading shimmer animations | 1-2 days | Currently `CircularProgressIndicator` everywhere |
 | Dark mode | 1-2 days | ✅ DONE — light + dark M3 themes, `ThemeController` (system/light/dark, persisted) via `ThemeScope`, toggle in Profile. 5 tests (incl. a load-vs-setMode race fix). |
 | Accessibility | 2-3 days | No semantic labels, no screen reader testing |
-| API docs cleanup | 0.5 day | OpenAPI has placeholder v2 entries |
+| ~~API docs cleanup~~ ✅ DONE | 0.5 day | Removed the 2 fake `/v2/health/*` paths from `docs/api/OPENAPI_DRAFT.yaml` (2026-07-27) - they documented endpoints that don't exist and would 404 if called; no route anywhere reads `request.state.api_version`, so `VersionNegotiationMiddleware` accepting an `Accept-Version: v2` header doesn't mean v2 is real. `x-versions.supported` corrected to `[v1]` with a note explaining why. Applied identically to PakimonGO-V2's copy (diverged elsewhere but this section was byte-identical). |
 | Release APK optimization | 1 day | 105.8MB → target <60MB |
 | Error analytics | 1 day | Crashlytics or Sentry integration |
 | Flutter analyze warnings | 1 day | ✅ DONE — `flutter analyze` clean (0 issues) |

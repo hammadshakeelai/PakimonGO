@@ -7,8 +7,14 @@ info:
     Endpoints marked `x-status: planned` are future features not yet implemented.
     This is a living document — update when new endpoints are added.
   x-versions:
-    supported: [v1, v2]
+    supported: [v1]
     default: v1
+    note: >
+      VersionNegotiationMiddleware reads an Accept-Version header and will
+      echo v2 back without rejecting it, but no route or handler branches
+      on request.state.api_version - there is no v2 behavior anywhere in
+      the app. Treat "v2" as unimplemented, not "supported": a real v2
+      would need actual routes, not just the header round-trip.
 servers:
   - url: https://api.pakimongo.example/v1
     description: Placeholder production URL
@@ -17,40 +23,6 @@ servers:
 security:
   - bearerAuth: []
 paths:
-  /v2/health/live:
-    get:
-      summary: Liveness check (v2)
-      operationId: healthLiveV2
-      x-status: placeholder
-      security: []
-      responses:
-        "200":
-          description: Service is alive (v2 format)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: ok
-  /v2/health/ready:
-    get:
-      summary: Readiness check (v2)
-      operationId: healthReadyV2
-      x-status: placeholder
-      security: []
-      responses:
-        "200":
-          description: Service is ready (v2 format)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: ok
   /health/live:
     get:
       summary: Liveness check

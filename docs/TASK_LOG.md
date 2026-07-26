@@ -3141,3 +3141,23 @@ repos' `pre_task_check.py`/`validate_docs.py`/`validate_json_examples.py`/
 (untouched package). `docs/REMAINING_WORK.md`, `docs/TECH_DEBT.md`,
 `docs/BUGS_AND_RISKS.md` updated with the honest before/after and the one
 residual gap that's still open.
+
+## 2026-07-27 — OpenAPI cleanup: remove the fake /v2/health/* placeholder paths
+
+Picked up the last Tier 5 "no-credential" item from REMAINING_WORK.md
+after the emulator verification pass confirmed the app itself (map, feed,
+rank, login) all work correctly end to end against the real local
+backend. `docs/api/OPENAPI_DRAFT.yaml` documented `/v2/health/live` and
+`/v2/health/ready` with `x-status: placeholder`, plus `x-versions:
+supported: [v1, v2]` - but grepping the actual FastAPI app confirmed
+there is no `/v2/` route registered anywhere, and
+`VersionNegotiationMiddleware` writes `request.state.api_version` but
+nothing ever reads it - the header round-trip is completely inert.
+Calling either documented v2 path for real would 404. Removed both fake
+paths, corrected `x-versions.supported` to `[v1]` with an inline note
+explaining why the middleware existing doesn't mean v2 is real. Applied
+identically to PakimonGO-V2's copy of this doc - the opening section
+(where these paths lived) was byte-identical between the two repos even
+though the rest of the file has diverged with each repo's own later
+endpoint additions. `validate_docs.py`'s openapi check now reports
+paths=20 (was 22) in both repos; all other validators unaffected.
