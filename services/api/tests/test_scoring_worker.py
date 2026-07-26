@@ -142,3 +142,30 @@ def test_recover_orphaned_jobs_reenqueues_a_submission_stuck_at_ai_evaluated():
 
     process_pending_jobs(recovery_queue)
     assert _status(submission_id) == "scored"
+
+
+def test_a_crash_between_status_update_and_score_event_is_atomic_not_split(monkeypatch):
+    """The status flip and the ScoreEvent write must land in one
+    transaction - otherwise a crash between them leaves a submission at
+    e.g. status="scored" with no ScoreEvent to explain it, invisible to
+    recover_orphaned_jobs (which only scans for status=ai_evaluated)."""
+    _flush_singleton_queue()
+    submission_id = _create_wild_submission("f5")
+    queue = get_queue()
+
+    import src.infrastructure.worker.scoring_worker as worker_mod
+
+    def _boom(*args, **kwargs):
+        raise RuntimeError("simulated crash after the status update commits")
+
+    monkeypatch.setattr(worker_mod, "create_score_event", _boom)
+    process_pending_jobs(queue)
+
+    # Must not be split: if the status update had committed on its own
+    # (the pre-fix behavior), this would already read "scored" with no
+    # event to back it up.
+    assert _status(submission_id) == "ai_evaluated"
+
+    monkeypatch.undo()
+    _flush_singleton_queue()
+    assert _status(submission_id) == "scored"

@@ -66,12 +66,19 @@ def get_all_submission_sha256s(db: Session, exclude_media_asset_id: str | None =
     return {r[0] for r in query.all() if r[0]}
 
 
-def update_submission_status(db: Session, submission_id: str, status: str) -> None:
+def update_submission_status(
+    db: Session, submission_id: str, status: str, commit: bool = True
+) -> None:
+    """commit=False lets a caller pair this with a following create_score_event
+    call so both land in one transaction - otherwise a crash between the two
+    separate commits can leave a submission at e.g. status="scored" with no
+    ScoreEvent to explain it (see scoring_worker.process_score_job)."""
     sub = db.query(Submission).filter(Submission.id == submission_id).first()
     if sub:
         sub.status = status
         sub.updated_at = datetime.now(timezone.utc)
-        db.commit()
+        if commit:
+            db.commit()
 
 
 def get_submission(db: Session, submission_id: str) -> tuple | None:

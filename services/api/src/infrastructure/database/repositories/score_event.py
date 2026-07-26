@@ -16,7 +16,11 @@ def create_score_event(
     previous_state: str | None = None,
     new_state: str | None = None,
     actor: str = "system",
+    commit: bool = True,
 ) -> ScoreEvent:
+    """commit=False lets a caller pair this with a preceding
+    update_submission_status(..., commit=False) call so both land in one
+    transaction (see that function's docstring)."""
     event = ScoreEvent(
         submission_id=submission_id,
         user_id=user_id,
@@ -30,8 +34,9 @@ def create_score_event(
         actor=actor,
     )
     db.add(event)
-    db.commit()
-    db.refresh(event)
+    if commit:
+        db.commit()
+        db.refresh(event)
     return event
 
 

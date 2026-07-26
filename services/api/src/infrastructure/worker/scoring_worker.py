@@ -62,7 +62,10 @@ def process_score_job(job: Job, scoring_service: AIScoringService | None = None)
         )
 
         new_state = "scored" if explanation_category == "normal" else "capped"
-        update_submission_status(db, submission_id, new_state)
+        # commit=False: land the status flip and the score event in one
+        # transaction, so a crash between them can't leave the submission
+        # at e.g. "scored" with no ScoreEvent to explain it.
+        update_submission_status(db, submission_id, new_state, commit=False)
 
         create_score_event(
             db=db,
@@ -150,7 +153,7 @@ def _mark_submission_for_review(job: Job) -> None:
     try:
         db: Session = get_session_local()()
         try:
-            update_submission_status(db, submission_id, "review")
+            update_submission_status(db, submission_id, "review", commit=False)
             create_score_event(
                 db=db,
                 submission_id=submission_id,
