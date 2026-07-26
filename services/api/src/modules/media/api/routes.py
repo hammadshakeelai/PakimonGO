@@ -124,14 +124,19 @@ def complete_upload(
     if not media_asset_id:
         raise HTTPException(status_code=400, detail="Missing mediaAssetId")
 
-    asset = complete_media_asset(db, media_asset_id, sha256)
-    if asset is None:
+    pending = get_media_asset(db, media_asset_id)
+    if pending is None or pending.sha256 != sha256:
         raise HTTPException(status_code=404, detail="Upload intent not found or SHA mismatch")
 
     try:
         deriv_urls = _storage.generate_derivative_stubs(media_asset_id)
     except FileNotFoundError:
-        deriv_urls = {"thumbnail": None, "public": None}  # type: ignore[dict-item]
+        deriv_urls = {"thumbnail": None, "public": None, "exif_stripped": False}
+
+    exif_stripped = bool(deriv_urls.get("exif_stripped", False))
+    asset = complete_media_asset(db, media_asset_id, sha256, exif_stripped=exif_stripped)
+    if asset is None:
+        raise HTTPException(status_code=404, detail="Upload intent not found or SHA mismatch")
 
     return {
         "status": "ok",
@@ -139,7 +144,7 @@ def complete_upload(
         "derivatives": {
             "thumbnailUrl": deriv_urls.get("thumbnail"),
             "derivativeUrl": deriv_urls.get("public"),
-            "exifStripped": True,
+            "exifStripped": exif_stripped,
         },
     }
 
@@ -170,17 +175,22 @@ def get_media_derivatives(
     return {
         "thumbnailUrl": thumb_path,
         "derivativeUrl": pub_path,
-        "exifStripped": True,
+        "exifStripped": bool(derivs) and all(d.exif_stripped for d in derivs),
     }
 
 
 @router.get("/files/{subdir:path}/{filename}")
 def serve_file(subdir: str, filename: str):
-    """Serve a stored file (original, thumbnail, or public derivative).
+    """Serve a stored derivative (thumbnail or public size).
 
-    Public endpoint (no auth required). Subdir must be one of
-    originals/, thumbs/, or public/.
+    Public endpoint (no auth required) - deliberately excludes originals/:
+    mediaAssetId is exposed in public API responses (profiles, feed), and
+    the original may carry EXIF (e.g. a phone's embedded GPS) that the
+    public/thumbnail derivatives have stripped. Serving originals here
+    would let anyone with a mediaAssetId undo that.
     """
+    if subdir not in ("thumbs", "public"):
+        raise HTTPException(status_code=404, detail="File not found")
     path = _storage.get_path(f"{subdir}/{filename}")
     if path is None:
         raise HTTPException(status_code=404, detail="File not found")

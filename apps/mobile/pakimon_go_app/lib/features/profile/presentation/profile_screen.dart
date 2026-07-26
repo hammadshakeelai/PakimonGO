@@ -7,6 +7,7 @@ import 'package:pakimon_go_app/features/capture/data/capture_repository.dart';
 import 'package:pakimon_go_app/features/moderation/domain/blocked_users_viewmodel.dart';
 import 'package:pakimon_go_app/features/moderation/presentation/blocked_users_screen.dart';
 import 'package:pakimon_go_app/features/profile/domain/profile_viewmodel.dart';
+import 'package:pakimon_go_app/features/profile/presentation/delete_account_button.dart';
 import 'package:pakimon_go_app/shared/widgets/error_retry_view.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -280,6 +281,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
+        ),
+        const SizedBox(height: 12),
+        DeleteAccountButton(
+          viewModel: widget.viewModel,
+          authService: widget.authService,
         ),
         const SizedBox(height: 16),
         Center(

@@ -82,6 +82,26 @@ def update_user(db: Session, user_id: str, age_band: str | None = None, home_reg
     return user
 
 
+def delete_user_account(db: Session, user_id: str) -> User | None:
+    """Soft-delete: scrub this user's own PII (age band, home region) and
+    mark the account deleted. The row itself is kept rather than hard-deleted
+    so submissions/comments/reactions/etc. that reference this user_id stay
+    valid - deleting the row would either violate those FKs or force a
+    cascade into other users' content (e.g. their reactions on this user's
+    posts), which is a much larger and riskier change than account deletion
+    calls for."""
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        return None
+    user.status = "deleted"
+    user.age_band = None
+    user.home_region = None
+    user.deleted_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
 def get_public_profile(
     db: Session, user_id: str, recent_limit: int = 12, viewer_id: str | None = None
 ) -> dict | None:

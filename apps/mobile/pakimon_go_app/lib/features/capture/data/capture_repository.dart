@@ -97,6 +97,8 @@ class CaptureRepository {
     return UserProfileResponse.fromJson(response);
   }
 
+  Future<void> deleteAccount() => _client.delete('/users/me');
+
   Future<CollectionResult> getCollection({
     int limit = 20,
     int offset = 0,

@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 
 from src.infrastructure.auth.adapter import UserContext
 from src.infrastructure.auth.dependencies import get_current_user
+from src.infrastructure.auth.firebase_adapter import revoke_firebase_user
 from src.infrastructure.database.repositories import (
     create_notification,
+    delete_user_account,
     follow_user,
     get_capture_streak,
     get_or_create_user,
@@ -197,3 +199,23 @@ def patch_my_profile(
         "trustState": user.trust_state,
         "createdAt": user.created_at.isoformat() if user.created_at else None,
     }
+
+
+@router.delete("/me", status_code=204)
+def delete_my_account(
+    db: Session = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user),
+):
+    """Permanently delete the current account (Play/App Store requirement).
+
+    Scrubs this user's own PII and deactivates the account; past
+    submissions/comments/reactions from this user_id remain (attributed to
+    a deactivated account) rather than being cascade-deleted, since that
+    would touch other users' content (e.g. their reactions on this user's
+    posts) that account deletion isn't meant to destroy. Also best-effort
+    revokes the Firebase identity so the same sign-in can't be reused.
+    """
+    user = delete_user_account(db, current_user.user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    revoke_firebase_user(current_user.user_id)

@@ -6,15 +6,13 @@ No known blocking bugs are recorded after the latest emulator walkthrough and
 moderation/map hardening pass. See R-002 below for a real local-dev-only bug
 found and fixed during the 2026-07-25 verification pass.
 
-Latest recorded automated suite in `docs/TASK_LOG.md` (iter 49, 2026-07-26):
-218 API tests, 78 scoring tests, 293 V2 + 163 V1 Flutter tests, and
-`flutter analyze` clean on both repos. Iter 49 fixed two real gaps in
-iter 47's HUD-refresh fix (it only refreshed the real points/level total
-after a capped capture, not a wild one, and the fix for that was itself
-unsafe if the user navigated away before its scheduled auto-check fired)
-and closed TD-004 (the Feed screen's unconditional "verified" checkmark)
-- see `docs/TASK_LOG.md` iter 49 for all three fixes and their empirical
-verification.
+Latest recorded automated suite (2026-07-27, after the account-deletion
+and media-privacy fixes below): v1 - 229 API tests, 78 scoring tests, 167
+Flutter tests. V2 - 222 API tests, 316 Flutter tests. `flutter analyze`
+clean on both repos. See `docs/TASK_LOG.md` for the full history of
+earlier iterations (iter 49 fixed two real gaps in iter 47's HUD-refresh
+fix and closed TD-004, the Feed screen's unconditional "verified"
+checkmark).
 
 ## Repository Health Notes
 
@@ -160,6 +158,61 @@ verification.
 - Status: fixed 2026-07-25 (iter 43) - script no longer silently swallows
   this failure mode; a future contributor whose `python` lacks the deps
   gets a clear message instead of a stale, silently-broken database.
+
+## R-003: original photo (with EXIF, e.g. phone GPS) was publicly fetchable via a mediaAssetId already exposed in public API responses
+
+- Area: media upload/serving (`modules/media/api/routes.py`,
+  `infrastructure/storage/local_storage.py`).
+- Severity: High - a real, exploitable privacy exposure for a 13+ app,
+  not a theoretical one. The full chain existed end-to-end: public
+  endpoints (`GET /v1/users/{id}/profile`'s `recentCaptures`, the public
+  feed/map) already return `mediaAssetId` for anyone's captures; `GET
+  /v1/media/files/originals/{mediaAssetId}` required no authentication and
+  served the raw uploaded bytes; those bytes were saved to disk unmodified
+  by `save_original` (no metadata stripped). A phone photo's embedded EXIF
+  GPS - a fairly common default - would reveal the exact real-world
+  location (e.g. a minor's home) to any stranger who read the mediaAssetId
+  off a public profile.
+- Likelihood: Certain (not probabilistic) - confirmed by direct code
+  reading, not inference. Found 2026-07-27 while auditing what a
+  from-scratch privacy policy could honestly claim, after noticing
+  `exifStripped: true` was a hardcoded literal in two API responses rather
+  than a computed value.
+- Detection: `complete_media_asset` set `exif_stripped=True` on both
+  `MediaDerivative` rows unconditionally, before `generate_derivative_stubs`
+  even ran; the route's `exifStripped` fields in `complete-upload` and
+  `GET /derivatives/{id}` were separately hardcoded `True`. Meanwhile
+  `generate_derivative_stubs`'s only metadata-stripping path was Pillow
+  re-encoding to WEBP - its `except Exception` fallback silently
+  `shutil.copy2`'d the raw original (full EXIF, full resolution) into the
+  "public" and "thumbnail" derivatives instead. And `serve_file` allowed
+  `subdir="originals"` with no allowlist at all, publicly serving the
+  never-processed original itself.
+- Mitigation (2026-07-27): (1) `serve_file` now allowlists only
+  `thumbs`/`public` - `originals/` 404s unconditionally, closing the leak
+  by itself regardless of anything else. (2) `exif_stripped` is now a real
+  computed outcome threaded from `generate_derivative_stubs` through
+  `complete_media_asset` into the `MediaDerivative` rows and both API
+  responses - never a hardcoded literal. (3) The silent copy2 fallback is
+  gone: if Pillow is missing or re-encoding fails, no derivative is served
+  at all (`thumbnailUrl`/`derivativeUrl: null`, `exifStripped: false`)
+  rather than a metadata-intact "safe" copy. Applied identically to both
+  repos (shared backend code, verified byte-identical before/after via
+  diff, per this session's established pattern). 8 new/updated tests
+  across `test_media_derivative.py` and `test_cloud_storage.py` in both
+  repos, including one that specifically reverts fix (1) and confirms the
+  test fails with the exploit path open, then re-confirms it passes with
+  the fix restored.
+- Caveat: the original file on disk still retains its EXIF as-is (fix (3)
+  only stops silently leaking it via a mislabeled "stripped" derivative;
+  it does not re-encode the original itself). This is an accepted,
+  documented tradeoff, not an oversight - fix (1) means the original is no
+  longer reachable by anyone without direct server/filesystem access, so
+  the original's own metadata is no longer part of the public attack
+  surface. Re-encoding the original too (dropping its EXIF at save time)
+  remains a reasonable future hardening step but is not urgent given (1).
+- Owner: media upload pipeline.
+- Status: fixed 2026-07-27, both repos (v1 + V2), tests passing.
 
 ## Risk Entry Template
 

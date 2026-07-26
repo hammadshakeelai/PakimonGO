@@ -57,3 +57,34 @@ class FirebaseAuthAdapter:
             email=claims.get("email"),
             auth_provider="firebase",
         )
+
+
+def revoke_firebase_user(user_id: str) -> None:
+    """Best-effort: delete the Firebase Auth account on account deletion, so
+    the same sign-in can't be reused and Firebase-side profile data (email,
+    display name, photo) is removed too.
+
+    No-op unless AUTH_PROVIDER=firebase *and* a service account is
+    configured - the credential-free verifier path above (project-id-only,
+    used on hosts like Render without GOOGLE_APPLICATION_CREDENTIALS) has no
+    admin privileges to delete a user with, so there is nothing to call.
+    Never raises: this must not block the DB-side deletion that already
+    happened by the time this runs.
+    """
+    import os
+
+    if os.environ.get("AUTH_PROVIDER", "fake").lower() != "firebase":
+        return
+    if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        return
+    try:
+        import firebase_admin
+        from firebase_admin import auth as fb_auth
+
+        try:
+            firebase_admin.get_app()
+        except ValueError:
+            firebase_admin.initialize_app()
+        fb_auth.delete_user(user_id)
+    except Exception:  # noqa: BLE001
+        pass

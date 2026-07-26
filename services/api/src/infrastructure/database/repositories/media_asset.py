@@ -47,7 +47,9 @@ def update_media_asset_storage_key(db: Session, media_asset_id: str, storage_key
     return asset
 
 
-def complete_media_asset(db: Session, media_asset_id: str, sha256: str) -> MediaAsset | None:
+def complete_media_asset(
+    db: Session, media_asset_id: str, sha256: str, exif_stripped: bool = False
+) -> MediaAsset | None:
     asset = get_media_asset(db, media_asset_id)
     if asset is None or asset.sha256 != sha256:
         return None
@@ -58,7 +60,7 @@ def complete_media_asset(db: Session, media_asset_id: str, sha256: str) -> Media
         media_asset_id=media_asset_id,
         size_label="thumbnail",
         storage_key=f"thumbs/{media_asset_id}.webp",
-        exif_stripped=True,
+        exif_stripped=exif_stripped,
         visibility_state="public",
     )
     db.add(deriv)
@@ -67,7 +69,7 @@ def complete_media_asset(db: Session, media_asset_id: str, sha256: str) -> Media
         media_asset_id=media_asset_id,
         size_label="public",
         storage_key=f"public/{media_asset_id}.webp",
-        exif_stripped=True,
+        exif_stripped=exif_stripped,
         visibility_state="public",
     )
     db.add(deriv_public)

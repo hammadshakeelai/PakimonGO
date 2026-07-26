@@ -34,7 +34,7 @@ These must be done before any real user touches the app.
 | # | Task | Effort | Details |
 |---|------|--------|---------|
 | 12 | **iOS build** | 1-2 weeks | Not started. Needs macOS + Xcode, iOS adaptation, camera/map permissions rework, TestFlight. |
-| 13 | **Privacy policy + terms** | 1 week | Required for store submission. Must cover data collection, location use, AI processing, minors, account deletion. |
+| 13 | **Privacy policy + terms** 🟡 drafted | 1 week | Draft covering data collection, location use, AI processing, minors, account deletion is at `docs/PRIVACY_POLICY_DRAFT.md` — needs your legal entity name/contact + real legal review before publishing. Account deletion itself (`DELETE /v1/users/me` + in-app button) is now built (2026-07-27). |
 | 14 | **Moderation tools** | 2-3 weeks | 🟡 User-facing half DONE: report submission/user (6 reasons, audited), block/unblock with leaderboard filtering, Blocked Users screen (FR-MOD-001..003, 009). Moderator console/appeals still unbuilt. |
 | 15 | **App store review prep** | 1 week | Screenshots, descriptions, age rating, privacy questionnaire, test accounts for reviewers. |
 
@@ -72,6 +72,7 @@ These must be done before any real user touches the app.
 | **No background location** | FR-PERM-003 forbids it, but no map features work without at least foreground location. |
 | **Notifications are fire-and-forget** | No push notifications. Only in-app polling via GET /v1/notifications. |
 | ~~DB migrations broken/incomplete on Postgres~~ 🟡 improved | Migrations now apply cleanly on Postgres and cover all 12 model tables (fixed a broken partial index + the missing `sensitive_species` table). Still not auto-run at API startup — run `alembic upgrade head` on deploy. |
+| ~~Original photo (with EXIF) publicly fetchable~~ ✅ FIXED | `GET /v1/media/files/originals/{id}` needed no auth and served the raw upload untouched — combined with `mediaAssetId` already being public (profiles/feed), a phone's embedded GPS in a photo's EXIF was reachable by anyone. Fixed 2026-07-27: `originals/` no longer served at all (404); `exifStripped` is now a real computed flag, not a hardcoded `true`; the silent copy-on-failure fallback that used to leak raw EXIF-intact bytes as a "stripped" derivative is gone. See `docs/BUGS_AND_RISKS.md` R-003 for the full exploit chain. |
 
 ## Effort Totals
 

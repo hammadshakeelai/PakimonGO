@@ -3161,3 +3161,101 @@ identically to PakimonGO-V2's copy of this doc - the opening section
 though the rest of the file has diverged with each repo's own later
 endpoint additions. `validate_docs.py`'s openapi check now reports
 paths=20 (was 22) in both repos; all other validators unaffected.
+
+## 2026-07-27 — Account deletion, launch-checklist reconciliation, and a real media-privacy fix
+
+Picked up after "make everything final for release" - reconciled
+`docs/LAUNCH_CHECKLIST.md` (V2) against actual current state (it cited
+151/112 tests; real counts are far higher) and, while verifying what a
+privacy policy could honestly claim, found and fixed a real, exploitable
+privacy bug rather than just writing paperwork around it.
+
+**Account deletion** (both repos): the checklist's Goal 4 required
+covering account deletion in the privacy policy, but no deletion endpoint
+existed - `GET/PATCH /v1/users/me` were there, no `DELETE`. Added
+`delete_user_account(db, user_id)` (soft-delete: scrubs `age_band`/
+`home_region`, sets `status="deleted"`, `deleted_at`) and
+`DELETE /v1/users/me`, plus a best-effort `revoke_firebase_user` (only
+fires when `AUTH_PROVIDER=firebase` and a service account is configured -
+the credential-free verifier path has no admin rights to revoke with).
+Deliberately a soft delete, not a cascade: the `User` row is kept so
+existing submissions/comments/reactions/stories that reference the
+user_id stay valid, rather than either violating those FKs or cascading
+into *other users'* content (their reactions/comments on this user's
+posts). `search_users`/`get_public_profile` already filtered
+`deleted_at IS NOT NULL` - the write side was the actual gap. Flutter:
+`CaptureRepository.deleteAccount()`, `ProfileViewModel.deleteAccount()`,
+and a shared `DeleteAccountButton` widget (confirm dialog -> delete ->
+logout, or a SnackBar on failure) used by both v1's `ProfileScreen` and
+V2's `ProfileV2Screen`. 4 new API tests + 2 new ViewModel tests + 4-6
+widget tests per repo, all passing; discovered along the way that the
+delete button sits below the sliver list's default cache extent in the
+test viewport, so widget tests need `tester.dragUntilVisible` before
+tapping it - a real device has no such issue, only the fixed test
+viewport does.
+
+**Media privacy fix** (both repos, R-003/R-001 in `BUGS_AND_RISKS.md`):
+while writing the privacy policy, noticed `exifStripped: true` was a
+hardcoded literal in two API responses, not a computed value. Tracing
+why led to a real, fully-exploitable bug: `GET /v1/users/{id}/profile`
+and the public feed already expose `mediaAssetId` for anyone's captures;
+`GET /v1/media/files/originals/{mediaAssetId}` required no auth at all
+and served the raw uploaded bytes untouched. A phone photo's embedded
+EXIF GPS - a common default - would reveal a user's exact real-world
+location to any stranger who read a mediaAssetId off a public profile.
+Compounding it: `generate_derivative_stubs`'s only real metadata-stripping
+path was a Pillow re-encode to WEBP; its `except Exception` fallback
+silently `shutil.copy2`'d the raw, EXIF-intact original into the "public"
+derivative instead of failing loudly. Fixed: (1) `serve_file` now
+allowlists only `thumbs`/`public` - `originals/` 404s unconditionally,
+closing the leak by itself; (2) `exif_stripped` is a real outcome threaded
+from storage through `complete_media_asset` into both `MediaDerivative`
+rows and both API responses, never a literal; (3) the silent copy2
+fallback is gone - Pillow failure or absence now means no derivative at
+all (`null` URLs, `exifStripped: false`) instead of a metadata-intact one
+mislabeled as safe. Verified the fix is real, not just tests passing: 
+temporarily reverted the `serve_file` allowlist and confirmed the new
+`test_original_file_is_not_publicly_servable` test genuinely fails against
+the old behavior, then restored and re-confirmed green. 2 existing tests
+that unknowingly depended on the old silent-copy behavior (`shutil.copy2`
+producing a non-null derivative from bytes Pillow can't even decode) were
+updated to upload a genuinely Pillow-decodable JPEG instead, so they now
+exercise the real re-encode path rather than the fallback. The original
+file's own EXIF is still intact on disk - that's a documented, accepted
+tradeoff (fix (1) means it's no longer reachable by anyone without direct
+server access), not an oversight; re-encoding the original too remains a
+reasonable but non-urgent future step.
+
+**Docs**: `docs/PRIVACY_POLICY_DRAFT.md` and `docs/STORE_LISTING_DRAFT.md`
+added to both repos - grounded in the app's actual verified data
+practices (coarse ~111m location cells via `round(lat/lng, 3)`, not the
+"2-decimal" figure previously in long-term memory - corrected there too;
+Groq/Google Vision as AI subprocessors; Firebase auth; Mapbox; the new
+account-deletion behavior including the honest caveat that uploaded
+photos aren't deleted from storage yet). Legal entity name and contact
+address are explicit `[TODO]`s - invented placeholders would be worse
+than an obvious gap. `docs/LAUNCH_CHECKLIST.md` (both repos) corrected:
+stale test counts, the scoring-worker line (already has retries/
+atomicity from 2026-07-26, still non-durable across a restart - that
+part was and remains true), account deletion checked off, and pointers
+to the two new draft docs.
+
+Also split `test/features/profile/profile_test.dart` (v1) into
+`profile_viewmodel_test.dart` + `profile_screen_test.dart`, and split a
+`DeleteAccountButton` widget out of both `profile_screen.dart` (v1) and
+`profile_v2_screen.dart` (V2) - both had drifted just over the 300-line
+guideline from the new feature.
+
+Final verification, both repos: v1 - 229 API tests, 78 rules tests, 167
+Flutter tests, `flutter analyze` clean. V2 - 222 API tests, 316 Flutter
+tests, `flutter analyze` clean. All 4 validators (`pre_task_check`,
+`validate_docs`, `validate_json_examples`, `scan_secrets`) PASS in both
+repos, zero file-size warnings.
+
+**Not done, and deliberately not attempted**: generating a release
+keystore. It's a one-way action (lose it and the app can never be
+updated under that package name again on Play) and its very next step
+(registering the SHA-1 in Firebase) needs the user's own console access
+regardless - this is a decision for the user to make, not something to
+do silently even though the `keytool` command itself needs no
+credentials.

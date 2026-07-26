@@ -10,8 +10,10 @@ class StorageProvider:
         """Save original file, return storage key."""
         raise NotImplementedError
 
-    def generate_derivative_stubs(self, asset_id: str) -> dict[str, str]:
-        """Generate derivative stubs (thumbnail, public) and return URLs."""
+    def generate_derivative_stubs(self, asset_id: str) -> dict[str, object]:
+        """Generate derivative stubs (thumbnail, public) and return URLs plus
+        an `exif_stripped: bool` reflecting whether metadata was actually
+        removed - callers must not assume True without checking it."""
         raise NotImplementedError
 
     def get_url(self, key: str) -> str | None:

@@ -33,6 +33,12 @@ class ProfileViewModel extends ChangeNotifier {
   String? _saveError;
   String? get saveError => _saveError;
 
+  bool _isDeleting = false;
+  bool get isDeleting => _isDeleting;
+
+  String? _deleteError;
+  String? get deleteError => _deleteError;
+
   Future<void> fetchProfile() async {
     _state = ProfileLoadState.loading;
     _error = null;
@@ -80,6 +86,26 @@ class ProfileViewModel extends ChangeNotifier {
     } catch (e) {
       _saveError = e.toString();
       _isSaving = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteAccount() async {
+    _isDeleting = true;
+    _deleteError = null;
+    notifyListeners();
+
+    try {
+      await _repository.deleteAccount();
+      _isDeleting = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _deleteError = e is ApiException
+          ? e.message
+          : 'Something went wrong. Please try again.';
+      _isDeleting = false;
       notifyListeners();
       return false;
     }

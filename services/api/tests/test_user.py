@@ -48,3 +48,51 @@ def test_patch_me_partial_update():
 def test_patch_me_requires_auth():
     resp = client.patch("/v1/users/me", json={"ageBand": "25-34"})
     assert resp.status_code == 401
+
+
+def test_delete_me_requires_auth():
+    resp = client.delete("/v1/users/me")
+    assert resp.status_code == 401
+
+
+def test_delete_me_scrubs_pii_and_deactivates():
+    headers = {"Authorization": "Bearer test_user_to_delete"}
+    client.get("/v1/users/me", headers=headers)  # auto-create
+    client.patch("/v1/users/me", json={
+        "ageBand": "18-24",
+        "homeRegion": "PK-IS",
+    }, headers=headers)
+
+    resp = client.delete("/v1/users/me", headers=headers)
+    assert resp.status_code == 204
+
+    me = client.get("/v1/users/me", headers=headers).json()
+    assert me["status"] == "deleted"
+    assert me["ageBand"] is None
+    assert me["homeRegion"] is None
+
+
+def test_delete_me_is_idempotent():
+    headers = {"Authorization": "Bearer test_user_delete_twice"}
+    client.get("/v1/users/me", headers=headers)  # auto-create
+    first = client.delete("/v1/users/me", headers=headers)
+    second = client.delete("/v1/users/me", headers=headers)
+    assert first.status_code == 204
+    assert second.status_code == 204
+
+
+def test_deleted_user_excluded_from_search():
+    headers = {"Authorization": "Bearer test_user_findme_deleted"}
+    client.get("/v1/users/me", headers=headers)  # auto-create
+    other_headers = {"Authorization": "Bearer test_user_searcher"}
+    before = client.get(
+        "/v1/users/search", params={"q": "findme_deleted"}, headers=other_headers
+    ).json()
+    assert before["total"] == 1
+
+    client.delete("/v1/users/me", headers=headers)
+
+    after = client.get(
+        "/v1/users/search", params={"q": "findme_deleted"}, headers=other_headers
+    ).json()
+    assert after["total"] == 0

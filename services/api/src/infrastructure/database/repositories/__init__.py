@@ -75,6 +75,7 @@ from .submission import (
 )
 from .submission_list import get_submissions
 from .user import (
+    delete_user_account,
     get_or_create_user,
     get_public_profile,
     get_user_total_points,
@@ -105,6 +106,7 @@ __all__ = [
     "get_submissions_pending_scoring",
     "create_score_event",
     "get_latest_score_event",
+    "delete_user_account",
     "get_or_create_user",
     "get_public_profile",
     "get_user_total_points",

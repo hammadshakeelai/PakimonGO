@@ -1,8 +1,10 @@
+import io
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pytest
+from PIL import Image
 
 from src.infrastructure.storage.cloud_storage import (
     S3StorageProvider,
@@ -43,6 +45,8 @@ class TestS3StorageProvider:
         urls = provider.generate_derivative_stubs("asset-123")
         assert urls["thumbnail"] == "https://test-bucket.s3.us-west-2/thumbs/asset-123.webp"
         assert urls["public"] == "https://test-bucket.s3.us-west-2/public/asset-123.webp"
+        # Stub does no real re-encoding, so it must not claim otherwise.
+        assert urls["exif_stripped"] is False
 
     def test_get_path_returns_none(self):
         provider = S3StorageProvider.__new__(S3StorageProvider)
@@ -57,6 +61,7 @@ class TestGCSStorageProvider:
         urls = provider.generate_derivative_stubs("asset-123")
         assert urls["thumbnail"] == "https://storage.googleapis.com/test-bucket/thumbs/asset-123.webp"
         assert urls["public"] == "https://storage.googleapis.com/test-bucket/public/asset-123.webp"
+        assert urls["exif_stripped"] is False
 
     def test_get_path_returns_none(self):
         provider = GCSStorageProvider.__new__(GCSStorageProvider)
@@ -81,9 +86,11 @@ class TestMediaRoutesWithCloudStorage:
         assert resp.status_code == 200
         media_id = resp.json()["mediaAssetId"]
 
+        buf = io.BytesIO()
+        Image.new("RGB", (32, 32), color=(90, 140, 200)).save(buf, "JPEG")
         upload = client.put(
             f"/v1/media/upload/{media_id}",
-            files={"file": ("test.jpg", b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 64, "image/jpeg")},
+            files={"file": ("test.jpg", buf.getvalue(), "image/jpeg")},
             headers=auth,
         )
         assert upload.status_code == 200

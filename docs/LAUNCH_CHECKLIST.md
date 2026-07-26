@@ -13,7 +13,8 @@ finishing the app, ordered by goal. Check items off as you go.
 - **Real AI scoring** via Groq (free tier, no billing) — live-verified (bear → *Ursus arctos*)
 - Mapbox map (local dev token), submission rate limiting, offline/error + Retry on every screen, dark mode
 - Upload security (size + image-type + ownership), APK optimization (arm64 ≈ 40 MB, −62%)
-- Runs on **real PostgreSQL** (migrations fixed + verified); 151 Flutter tests, 112 API tests, `flutter analyze` clean
+- Runs on **real PostgreSQL** (migrations fixed + verified); 167 Flutter tests, 229 API tests, `flutter analyze` clean
+- **Account deletion** — `DELETE /v1/users/me` + a "Delete My Account" button in Profile (soft-delete: scrubs age band/region, deactivates, best-effort revokes the Firebase identity)
 
 You have already provisioned: **Mapbox token**, **Groq key**, **Firebase project** (`pakimongo`, debug SHA-1 registered), **Docker**.
 
@@ -52,14 +53,15 @@ You have already provisioned: **Mapbox token**, **Groq key**, **Firebase project
 ## 🎯 Goal 3 — Production hardening (before real users at scale)
 
 - [ ] **Cloud storage**: create an **S3 or GCS** bucket + credentials; set `STORAGE_PROVIDER=s3`/`gcs`. (Local disk works for testing but not across servers.)
-- [ ] Consider moving the **scoring worker** off in-process (Redis / Cloud Tasks) — currently it dies with the server (no retries).
+- [ ] Consider moving the **scoring worker** off in-process (Redis / Cloud Tasks) — the queue/worker thread still lose their pending jobs on a process restart. (This is narrower than it used to be: a failing job no longer kills the poll loop forever — it retries up to 3 times, then the submission lands in a `review` state with a notification instead of vanishing, and a boot-time recovery pass re-enqueues anything left mid-flight by a prior restart. What's still missing is *durability across a restart of the in-flight queue itself*, which only a real broker fixes.)
 - [ ] Multi-instance **rate limiting** would need a shared store (Redis) — today it's a single-instance DB cooldown.
 
 ## 🎯 Goal 4 — Google Play submission (production)
 
-- [ ] **Privacy policy + Terms** (required). Must cover data collection, location use, AI processing, **minors**, and account deletion. (Your onboarding/age-gate copy is a starting point.)
+- [ ] **Privacy policy + Terms** (required). Must cover data collection, location use, AI processing, **minors**, and account deletion. A draft covering all of this against the app's actual data practices is at `docs/PRIVACY_POLICY_DRAFT.md` — it still needs your legal entity name/contact filled in and a real legal review before publishing.
+- [x] **Account deletion** — `DELETE /v1/users/me` + an in-app "Delete My Account" button (Profile screen) exist now; no separate web page is needed for the Play Store's account-deletion requirement.
 - [x] **Moderation tools (user-facing)** — report + block flows are **built** (report submissions/users, block/unblock, leaderboard filtering, audit log). A moderator review console + appeals remain post-launch work.
-- [ ] Play Console ($25 one-time): create the app, store listing, screenshots, feature graphic, **content/age rating**, and the **Data Safety** form.
+- [ ] Play Console ($25 one-time): create the app, store listing, screenshots, feature graphic, **content/age rating**, and the **Data Safety** form. Draft short/long description + feature bullets are at `docs/STORE_LISTING_DRAFT.md`.
 - [ ] Upload the signed **AAB** (Goal 1 keystore) with Play App Signing; add reviewer test accounts.
 
 ## 🎯 Goal 5 — iOS (separate track — needs a Mac; I can't do this remotely)
